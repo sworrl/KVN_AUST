@@ -574,13 +574,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 <div class="bingo-setup" id="bingoSetup">
   <button class="bs-close" onclick="toggleBingoSetup()">&times;</button>
   <h3>Bingo Categories</h3>
-  <div style="margin-bottom:10px;display:flex;align-items:center;gap:8px;background:var(--card2);padding:8px 12px;border-radius:8px;border:1px solid #2a2a40">
-    <label style="font-size:.72rem;color:#ccc;cursor:pointer;display:flex;align-items:center;gap:6px">
-      <input type="checkbox" id="bingoPerLetterToggle" onchange="togglePerLetter(this.checked)" style="accent-color:var(--accent)">
-      Assign categories per B-I-N-G-O letter
-    </label>
-  </div>
-  <div style="font-size:.6rem;color:var(--muted);margin-bottom:8px" id="bingoModeDesc">Categories are shuffled randomly across all squares (default).</div>
+  <div style="font-size:.6rem;color:var(--muted);margin-bottom:8px">All categories are shuffled randomly across the 24 squares each game.</div>
   <div id="bingoSetupList"></div>
   <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">
     <button class="nav-btn primary" style="font-size:.75rem;padding:6px 16px" onclick="toggleBingoSetup();showToast('Bingo categories saved!')">Done</button>
@@ -819,7 +813,7 @@ const ALL_FORMATS=[
 ];
 
 // Empty - bingo-categories.json is required
-const BINGO={B:[],I:[],N:[],G:[],O:[]};
+const BINGO_CATS=[];
 
 const FREE_SPACE_PHRASES=["Lemme Tag that Freespace","You Know I Had to Click It....","Free real estate, baby.","The one square you don't gotta earn.","Everybody gets one.","That's the gimme.","Center stage, no audition needed.","The participation trophy of bingo.","Click it or ticket.","This one's on the house.","Freebie secured.","The only guaranteed W."];
 
@@ -847,36 +841,39 @@ const WHEEL_COLORS=['#b8860b','#2e8b57','#daa520','#1565c0','#c62828','#6a1b9a',
 //  BINGO CATEGORIES (localStorage)
 // ═══════════════════════════════════
 const BINGO_CACHE_KEY='kvn_bingo_cats';
-let BINGO_LIVE=JSON.parse(JSON.stringify(BINGO)); // mutable working copy
+let BINGO_LIVE=[...BINGO_CATS]; // mutable flat list
 
 function loadBingoCategories(){
   // 1. Check localStorage first (user's custom edits take priority)
   try{
     const cached=JSON.parse(localStorage.getItem(BINGO_CACHE_KEY)||'null');
-    if(cached&&typeof cached==='object'){
-      let ok=true;
-      for(const k of ['B','I','N','G','O']){if(!Array.isArray(cached[k])||cached[k].length<5){ok=false;break}}
-      if(ok){BINGO_LIVE=cached;return}
-    }
+    // Support both old format (object with B/I/N/G/O) and new format (flat array)
+    if(Array.isArray(cached)&&cached.length>=24){BINGO_LIVE=cached;return}
+    if(cached&&typeof cached==='object'&&cached.categories&&cached.categories.length>=24){BINGO_LIVE=cached.categories;return}
+    // Migrate old per-letter format
+    if(cached&&cached.B&&Array.isArray(cached.B)){BINGO_LIVE=[...cached.B,...cached.I,...cached.N,...cached.G,...cached.O];saveBingoCategories();return}
   }catch{}
-  // 2. Try fetching bingo-categories.json from same directory (works from file:// AND https://)
+  // 2. Try fetching bingo-categories.json
   fetchBingoJSON();
 }
 
 function parseBingoData(data){
-  let ok=true;
-  for(const k of ['B','I','N','G','O']){if(!Array.isArray(data[k])||data[k].length<5){ok=false;break}}
-  if(ok){
-    BINGO_LIVE=data;
+  // Accept flat array or object with .categories array or old B/I/N/G/O format
+  let cats=null;
+  if(Array.isArray(data)&&data.length>=24)cats=data;
+  else if(data&&data.categories&&Array.isArray(data.categories)&&data.categories.length>=24)cats=data.categories;
+  else if(data&&data.B&&Array.isArray(data.B))cats=[...data.B,...(data.I||[]),...(data.N||[]),...(data.G||[]),...(data.O||[])];
+  if(cats&&cats.length>=24){
+    BINGO_LIVE=cats;
     buildBingo();
-    console.log('Loaded bingo categories ('+Object.values(data).flat().length+' total)');
+    console.log('Loaded bingo categories ('+cats.length+' total)');
     return true;
   }
   return false;
 }
 
 function showBingoWarning(){
-  if(BINGO_LIVE.B.length>=5)return;
+  if(BINGO_LIVE.length>=24)return;
   const warn=document.createElement('div');
   warn.style.cssText='position:fixed;top:224px;left:50%;transform:translateX(-50%);z-index:999;background:rgba(243,156,18,.9);color:#111;padding:8px 18px;border-radius:8px;font-size:.75rem;font-weight:700;text-align:center;max-width:90vw';
   warn.innerHTML='bingo-categories.json not found. Place it next to this HTML file for full categories. <a href="https://github.com/sworrl/KVN_AUST" target="_blank" style="color:#1565c0">Download from GitHub</a> <button onclick="this.parentElement.remove()" style="margin-left:8px;background:none;border:none;font-size:1rem;cursor:pointer">&times;</button>';
@@ -1871,25 +1868,18 @@ function loadBingoState(){
 function pickBingoCategories(){
   const cols=['B','I','N','G','O'];
   bingoPicked={};
-  if(bingoPerLetter){
-    // Per-letter mode: each column draws from its own pool
-    for(const c of cols){const p=[...BINGO_LIVE[c]];shuffle(p);bingoPicked[c]=p.slice(0,5)}
-  }else{
-    // Fully random: pool ALL categories from every letter, shuffle, deal 24
-    let allCats=[];
-    for(const c of cols)allCats.push(...BINGO_LIVE[c]);
-    // Deduplicate
-    allCats=[...new Set(allCats)];
-    shuffle(allCats);
-    const picked=allCats.slice(0,24);// 24 non-free cells
-    // Distribute into 5 columns of 5 (center is free)
-    let idx=0;
-    for(const c of cols)bingoPicked[c]=[];
-    for(let row=0;row<5;row++){
-      for(let ci=0;ci<5;ci++){
-        if(row===2&&ci===2)bingoPicked[cols[ci]].push('FREE SPACE');// placeholder, not used
-        else bingoPicked[cols[ci]].push(picked[idx++]);
-      }
+  // Shuffle all categories, pick 24
+  let pool=[...BINGO_LIVE];
+  pool=[...new Set(pool)]; // deduplicate
+  shuffle(pool);
+  const picked=pool.slice(0,24);
+  // Distribute into 5 columns of 5 (center is free)
+  let idx=0;
+  for(const c of cols)bingoPicked[c]=[];
+  for(let row=0;row<5;row++){
+    for(let ci=0;ci<5;ci++){
+      if(row===2&&ci===2)bingoPicked[cols[ci]].push('FREE SPACE');
+      else bingoPicked[cols[ci]].push(picked[idx++]||'???');
     }
   }
 }
@@ -2219,23 +2209,21 @@ function toggleBingoSetup(){
 
 function renderBingoSetup(){
   const list=document.getElementById('bingoSetupList');
-  const cols=['B','I','N','G','O'];const colors=['var(--g1)','var(--g2)','var(--g3)','var(--g4)','var(--g5)'];
-  list.innerHTML=cols.map((c,ci)=>{
-    return`<h4 style="color:${colors[ci]}">${c}</h4>`+
-      BINGO_LIVE[c].map((cat,i)=>
-        `<div class="bs-cat"><input value="${esc(cat)}" onchange="updateBingoCat('${c}',${i},this.value)"><button onclick="removeBingoCat('${c}',${i})">&#10005;</button></div>`
-      ).join('')+
-      `<button class="bs-add" onclick="addBingoCat('${c}')">+ Add to ${c}</button>`;
-  }).join('');
+  list.innerHTML=`<div style="font-size:.65rem;color:var(--muted);margin-bottom:6px">${BINGO_LIVE.length} categories</div>`+
+    BINGO_LIVE.map((cat,i)=>
+      `<div class="bs-cat"><input value="${esc(cat)}" onchange="updateBingoCat(${i},this.value)"><button onclick="removeBingoCat(${i})">&#10005;</button></div>`
+    ).join('')+
+    `<button class="bs-add" onclick="addBingoCat()">+ Add Category</button>`;
 }
 
-function updateBingoCat(col,idx,val){BINGO_LIVE[col][idx]=val;saveBingoCategories()}
-function removeBingoCat(col,idx){if(BINGO_LIVE[col].length<=5){showToast('Need at least 5 per column','warn');return}BINGO_LIVE[col].splice(idx,1);saveBingoCategories();renderBingoSetup()}
-function addBingoCat(col){BINGO_LIVE[col].push('New category');saveBingoCategories();renderBingoSetup()}
-function resetBingoToDefaults(){BINGO_LIVE=JSON.parse(JSON.stringify(BINGO));saveBingoCategories();renderBingoSetup();showToast('Reset to defaults')}
+function updateBingoCat(idx,val){BINGO_LIVE[idx]=val;saveBingoCategories()}
+function removeBingoCat(idx){if(BINGO_LIVE.length<=24){showToast('Need at least 24 categories','warn');return}BINGO_LIVE.splice(idx,1);saveBingoCategories();renderBingoSetup()}
+function addBingoCat(){BINGO_LIVE.push('New category');saveBingoCategories();renderBingoSetup()}
+function resetBingoToDefaults(){BINGO_LIVE=[...BINGO_CATS];saveBingoCategories();renderBingoSetup();showToast('Reset to defaults')}
 function exportBingoJSON(){
-  const blob=new Blob([JSON.stringify(BINGO_LIVE,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kvn-bingo-categories.json';a.click();showToast('Exported!');
+  const out={categories:BINGO_LIVE};
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bingo-categories.json';a.click();showToast('Exported!');
 }
 function importBingoJSON(input){
   const file=input.files[0];if(!file)return;
@@ -2243,8 +2231,11 @@ function importBingoJSON(input){
   reader.onload=e=>{
     try{
       const data=JSON.parse(e.target.result);
-      for(const k of ['B','I','N','G','O']){if(!Array.isArray(data[k])||data[k].length<5)throw new Error(`Column ${k} needs 5+ items`)}
-      BINGO_LIVE=data;saveBingoCategories();renderBingoSetup();showToast('Imported!');
+      let cats=Array.isArray(data)?data:data.categories||null;
+      // Support old B/I/N/G/O format
+      if(!cats&&data.B)cats=[...data.B,...(data.I||[]),...(data.N||[]),...(data.G||[]),...(data.O||[])];
+      if(!cats||cats.length<24)throw new Error('Need at least 24 categories');
+      BINGO_LIVE=cats;saveBingoCategories();renderBingoSetup();showToast('Imported!');
     }catch(err){showToast('Import failed: '+err.message,'err');logError('error','Bingo import: '+err.message)}
   };
   reader.readAsText(file);input.value='';
@@ -2274,19 +2265,15 @@ checkForUpdates();
 
 <!-- ═══ EMBEDDED BINGO CATEGORIES (fallback when JSON can't be loaded) ═══ -->
 <script type="application/json" id="embedded-bingo-cats">
-{"B":["Fever dream","Conspiracy theory","Future world leader","\"I've been to this place\"","Possibly a crime","Unhinged rambler","5 seconds of nothing","Intimate family moment","Test upload","Security cam footage","Zoom call","Pet video","Car ride","Baby's first steps","Drunk recording","Potential cult leader","Feels like a deep web video","Dial 911","Tweaker","Ancient artifact (2005-2006)"],
-"I":["Foreign language (to me)","Randomly nsfw","Potential serial killer","Actual wisdom / insight","Wholesome content","Someone's backyard","Late night thoughts","Accidental upload","Mirror selfie video","Garage band","Phone left recording","Cooking attempt","Parking lot footage","Dark room vibes","Toddler with phone","I learned something new","Recurring character","AMV","Happy human","Sad human"],
-"N":["Actual talent","Rabbit-hole channel","New sport unlocked","Creepy","Karaoke session","School presentation","Minecraft gameplay","Unboxing something weird","Dance practice","Cat content","Screen recording","Birthday party","Storm footage","Toy review","Tutorial attempt","Randomly creepy / unnerving","School project / presentation","Church / office production","Concert footage","Just plain weird / WTF"],
-"G":["Good music","May be mentally unwell","Channel has 20,000+ uploads","School assignment / project","Bass boosted / distorted audio","Nature footage","Religious content","Stop motion","Someone's commute","Dashcam clip","Foreign news","Gaming rage","Exercise video","Magic trick","Time lapse","Channel has 5,000+ uploads","Gameplay of an obscure game","Innovative idea / technology","Same uploader in 2 searches","New lead discovery"],
-"O":["Random food spotted","Old meme","Gives me Nostalgia","Life-hack","Jump scare","Vintage quality","Before 2010 energy","Someone singing","Hotel room tour","Construction site","Wedding footage","Elevator music","Walmart adventure","Drone footage","Soundcheck","Random animal spotted","Home video","Underrated creator","Liminality","No context but makes sense"]}
+{"categories":["Fever dream","Conspiracy theory","Future world leader","\"I've been to this place\"","Possibly a crime","Unhinged rambler","5 seconds of nothing","Intimate family moment","Test upload","Security cam footage","Zoom call","Pet video","Car ride","Baby's first steps","Drunk recording","Potential cult leader","Feels like a deep web video","Dial 911","Tweaker","Ancient artifact (2005-2006)","Foreign language (to me)","Randomly nsfw","Potential serial killer","Actual wisdom / insight","Wholesome content","Someone's backyard","Late night thoughts","Accidental upload","Mirror selfie video","Garage band","Phone left recording","Cooking attempt","Parking lot footage","Dark room vibes","Toddler with phone","I learned something new","Recurring character","AMV","Happy human","Sad human","Actual talent","Rabbit-hole channel","New sport unlocked","Creepy","Karaoke session","School presentation","Minecraft gameplay","Unboxing something weird","Dance practice","Cat content","Screen recording","Birthday party","Storm footage","Toy review","Tutorial attempt","Randomly creepy / unnerving","School project / presentation","Church / office production","Concert footage","Just plain weird / WTF","Good music","May be mentally unwell","Channel has 20,000+ uploads","School assignment / project","Bass boosted / distorted audio","Nature footage","Religious content","Stop motion","Someone's commute","Dashcam clip","Foreign news","Gaming rage","Exercise video","Magic trick","Time lapse","Channel has 5,000+ uploads","Gameplay of an obscure game","Innovative idea / technology","Same uploader in 2 searches","New lead discovery","Random food spotted","Old meme","Gives me Nostalgia","Life-hack","Jump scare","Vintage quality","Before 2010 energy","Someone singing","Hotel room tour","Construction site","Wedding footage","Elevator music","Walmart adventure","Drone footage","Soundcheck","Random animal spotted","Home video","Underrated creator","Liminality","No context but makes sense","Potential undiscovered 9/11 video"]}
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.4.6",
-  "build": "2026-03-28T07:00:00",
-  "changelog": "Fix SVG export, remove easter eggs, fix export buttons",
+  "version": "1.5.0",
+  "build": "2026-03-28T07:30:00",
+  "changelog": "Flat category list, 101 categories, SVG fix, export improvements",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }

@@ -1,9 +1,8 @@
 {
-  "_description": "Bingo categories for YouTube's Recycle Bin by KVN AUST. Edit freely - add, remove, reorder. The app picks 24 random categories per game (or 5 per column if per-letter mode is enabled).",
+  "_description": "Bingo categories for YouTube's Recycle Bin by KVN AUST. Edit freely - add, remove, reorder. The app picks 24 random categories per game.",
   "_source": "Compiled from KVN AUST's original bingo cards, BingoBaker community variants, and fan contributions.",
-  "_format": "Each key (B, I, N, G, O) is a column. In random mode, all categories are pooled together. In per-letter mode, each column draws from its own list.",
 
-  "B": [
+  "categories": [
     "Fever dream",
     "Conspiracy theory",
     "Future world leader",
@@ -23,10 +22,7 @@
     "Feels like a deep web video",
     "Dial 911",
     "Tweaker",
-    "Ancient artifact (2005-2006)"
-  ],
-
-  "I": [
+    "Ancient artifact (2005-2006)",
     "Foreign language (to me)",
     "Randomly nsfw",
     "Potential serial killer",
@@ -46,10 +42,7 @@
     "Recurring character",
     "AMV",
     "Happy human",
-    "Sad human"
-  ],
-
-  "N": [
+    "Sad human",
     "Actual talent",
     "Rabbit-hole channel",
     "New sport unlocked",
@@ -69,10 +62,7 @@
     "School project / presentation",
     "Church / office production",
     "Concert footage",
-    "Just plain weird / WTF"
-  ],
-
-  "G": [
+    "Just plain weird / WTF",
     "Good music",
     "May be mentally unwell",
     "Channel has 20,000+ uploads",
@@ -92,10 +82,7 @@
     "Gameplay of an obscure game",
     "Innovative idea / technology",
     "Same uploader in 2 searches",
-    "New lead discovery"
-  ],
-
-  "O": [
+    "New lead discovery",
     "Random food spotted",
     "Old meme",
     "Gives me Nostalgia",
@@ -115,6 +102,7 @@
     "Home video",
     "Underrated creator",
     "Liminality",
-    "No context but makes sense"
+    "No context but makes sense",
+    "Potential undiscovered 9/11 video"
   ]
 }
