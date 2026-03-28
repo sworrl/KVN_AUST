@@ -22,8 +22,7 @@ YouTube hosts over 20 billion videos. 93% have under 1,000 views. 30% have under
 - **No-repeat spinner** - By default, the spinner won't land on a format already used this game. Red dots mark used formats on the wheel. Configurable in Settings.
 - **Exports** - Bingo card as SVG (with KVN AUST social links), game summary as text file
 - Bingo categories editable, exportable/importable as JSON, cached in localStorage
-- Categories randomly pooled across all squares by default, or assignable per B-I-N-G-O column
-- 100 bingo categories compiled from KVN AUST's originals and community fan variants
+- 101 bingo categories compiled from KVN AUST's originals and community fan variants, randomly pooled each game
 - Game > Round history persisted with multi-metric scoring
 - Mosaic of KVN AUST's profile image visible through bingo cells
 - 50 unique SVG daub stamp designs (no repeats per game)
@@ -50,7 +49,7 @@ When the app is hosted on a web server, it automatically fetches the latest form
 
 ## Bingo Categories
 
-`bingo-categories.json` is a simple, human-readable JSON file containing 100 bingo square categories organized by B-I-N-G-O column. Compiled from KVN AUST's original bingo cards and community fan variants (BingoBaker, GitHub contributions).
+`bingo-categories.json` is a simple, human-readable JSON file containing 101 bingo square categories as a flat list. Compiled from KVN AUST's original bingo cards and community fan variants (BingoBaker, GitHub contributions).
 
 KVN or contributors can edit this file directly - add, remove, or reorder categories. **This file is required** - the HTML contains a fallback copy embedded at the bottom, but the external JSON is the source of truth.
 
@@ -59,7 +58,7 @@ KVN or contributors can edit this file directly - add, remove, or reorder catego
 - **When running offline (file://)**: place `bingo-categories.json` in the same folder as the HTML
 - **User edits via Setup Bingo panel**: saved to localStorage and take priority
 
-By default, categories are pooled randomly across all squares. Users can enable "per-letter mode" in Setup Bingo to assign categories to specific B-I-N-G-O columns.
+All categories are shuffled randomly across the 24 squares each game. Edit the list via the Setup Bingo panel or directly in the JSON file.
 
 ## Contributing
 
