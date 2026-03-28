@@ -43,17 +43,17 @@ Download `kvnaust-recyclebin.html` and open it in any browser. Works on Windows,
 
 KVN AUST maintains a [Google Doc](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) (the "Recycle Bin Map") listing all known default filename formats that surface zero-view YouTube uploads. The community continuously adds new formats to this doc.
 
-When the app is hosted on a web server, it automatically fetches the latest formats from this Google Doc every 30 minutes and caches them locally. New formats appear on the spinner without any code changes. When running offline from a file, the app uses 75+ formats hardcoded in the HTML.
+When the app is hosted on a web server, it automatically fetches the latest formats from this Google Doc every 30 minutes and caches them locally. New formats appear on the spinner without any code changes. When running offline from a file, the app uses a small set of core formats as fallback.
 
 ## Bingo Categories
 
 `bingo-categories.json` is a simple, human-readable JSON file containing all bingo square categories organized by B-I-N-G-O column. Compiled from KVN AUST's original bingo cards and community fan variants.
 
-KVN or contributors can edit this file directly - add, remove, or reorder categories.
+KVN or contributors can edit this file directly - add, remove, or reorder categories. **This file is required** - the HTML contains no hardcoded categories.
 
 - **When hosted**: the app fetches `bingo-categories.json` at load time
 - **When hosted on falcontechnix.com**: the server can override with user-saved categories from the database
-- **When running offline (file://)**: the app uses hardcoded defaults embedded in the HTML
+- **When running offline (file://)**: place `bingo-categories.json` in the same folder as the HTML. If missing, an amber warning banner appears with a link to download it
 - **User edits via Setup Bingo panel**: saved to localStorage and take priority
 
 By default, categories are pooled randomly across all squares. Users can enable "per-letter mode" in Setup Bingo to assign categories to specific B-I-N-G-O columns.
