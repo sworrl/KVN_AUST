@@ -121,7 +121,7 @@ The community-maintained list of every known default filename keyphrase that acc
 ```html
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.6.1",    <-- bump this
+  "version": "1.7.1",    <-- bump this
   "build": "2026-03-28",  <-- update date
   ...
 }
