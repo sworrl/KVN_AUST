@@ -508,8 +508,8 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
   <div id="summary-screen" class="screen">
     <div class="summary-wrap"><div class="summary-title">Game Summary</div><div id="summaryList"></div><div class="summary-avg" id="summaryAvg"></div>
       <div class="summary-actions" style="flex-wrap:wrap">
-        <button class="nav-btn" onclick="exportBingoSVG()">Bingo Card</button>
-        <button class="nav-btn" onclick="exportSummaryText()">Game Summary</button>
+        <button class="nav-btn" onclick="exportBingoSVG()">Export Bingo Card (SVG)</button>
+        <button class="nav-btn" onclick="exportSummaryText()">Export Game Summary (TXT)</button>
         <button class="nav-btn primary" onclick="newSession()">New Game</button>
       </div></div>
   </div>
@@ -823,7 +823,7 @@ const BINGO={B:[],I:[],N:[],G:[],O:[]};
 
 const FREE_SPACE_PHRASES=["Lemme Tag that Freespace","You Know I Had to Click It....","Free real estate, baby.","The one square you don't gotta earn.","Everybody gets one.","That's the gimme.","Center stage, no audition needed.","The participation trophy of bingo.","Click it or ticket.","This one's on the house.","Freebie secured.","The only guaranteed W."];
 
-const EASTER_EGGS=["The algorithm didn't want you to find this... but here we are.","Somewhere, a Ring doorbell camera just uploaded a masterpiece.","You just accessed a video that 0 humans have ever clicked on. Historic.","This is the YouTube equivalent of finding a $20 bill in your coat pocket.","A random family's 2009 birthday party has been CHOSEN.","The Recycle Bin giveth, and the Recycle Bin taketh away.","Plot twist: this video is actually someone's college thesis.","Congratulations, you are now the world's foremost expert on this video.","KVN AUST would be proud. Actually, KVN AUST IS proud.","This video has been waiting its entire life for this moment. Don't let it down."];
+const EASTER_EGGS=["BINGO!"];
 
 // ═══════════════════════════════════
 //  STATE
@@ -2092,7 +2092,7 @@ function exportBingoSVG(){
   let svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`;
   svg+=`<rect width="${w}" height="${h}" rx="12" fill="#161625"/>`;
   // Title
-  svg+=`<text x="${w/2}" y="${pad+28}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="18" fill="#e74c3c">YouTube's Recycle Bin [KVN AUST]</text>`;
+  svg+=`<text x="${w/2}" y="${pad+28}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="18" fill="#e74c3c">YouTube&apos;s Recycle Bin [KVN AUST]</text>`;
   // Letters
   for(let i=0;i<5;i++){
     const x=pad+i*(cw+gap)+cw/2;
@@ -2132,7 +2132,7 @@ function exportBingoSVG(){
   svg+=`<a href="https://x.com/MingKasterMK" target="_blank">`;
   svg+=`<text x="${w/2+52}" y="${fy+13}" font-family="Inter,sans-serif" font-weight="700" font-size="11" fill="#aaa">@MingKasterMK</text></a>`;
   // Subtle branding line
-  svg+=`<text x="${w/2}" y="${fy+32}" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#555">YouTube's Recycle Bin &middot; youtu.be/@KVNAUST</text>`;
+  svg+=`<text x="${w/2}" y="${fy+32}" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#555">YouTube&apos;s Recycle Bin &#183; youtu.be/@KVNAUST</text>`;
   svg+=`</svg>`;
   const blob=new Blob([svg],{type:'image/svg+xml'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kvnaust-bingo-'+new Date().toISOString().slice(0,10)+'.svg';a.click();
@@ -2284,9 +2284,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.4.5",
-  "build": "2026-03-28T06:30:00",
-  "changelog": "Fix save & re-randomize, clear URL on all saves",
+  "version": "1.4.6",
+  "build": "2026-03-28T07:00:00",
+  "changelog": "Fix SVG export, remove easter eggs, fix export buttons",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
