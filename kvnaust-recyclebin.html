@@ -683,7 +683,7 @@ async function checkForUpdates(){
     // Only read first 5KB to find the version JSON (don't download the whole file)
     const text=await r.text();
     // Match version specifically from the embedded app-version-data block
-    const m=text.match(/id="app-version-data"[^>]*>\s*\{[^}]*"version"\s*:\s*"([^"]+)"/);
+    const m=text.match(/id="app-version-data"[\s\S]*?"version"\s*:\s*"(\d+\.\d+\.\d+)"/);
     if(m&&m[1]&&m[1]!==APP_VERSION){
       // OUTDATED - bright red blinking
       badge.textContent=`UPDATE AVAILABLE: v${m[1]}`;
