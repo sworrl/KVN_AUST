@@ -796,28 +796,62 @@ function loadBingoCategories(){
   fetchBingoJSON();
 }
 
+function parseBingoData(data){
+  let ok=true;
+  for(const k of ['B','I','N','G','O']){if(!Array.isArray(data[k])||data[k].length<5){ok=false;break}}
+  if(ok){
+    BINGO_LIVE=data;
+    buildBingo();
+    console.log('Loaded bingo categories ('+Object.values(data).flat().length+' total)');
+    return true;
+  }
+  return false;
+}
+
+function showBingoWarning(){
+  if(BINGO_LIVE.B.length>=5)return;
+  const warn=document.createElement('div');
+  warn.style.cssText='position:fixed;top:224px;left:50%;transform:translateX(-50%);z-index:999;background:rgba(243,156,18,.9);color:#111;padding:8px 18px;border-radius:8px;font-size:.75rem;font-weight:700;text-align:center;max-width:90vw';
+  warn.innerHTML='bingo-categories.json not found. Place it next to this HTML file for full categories. <a href="https://github.com/sworrl/KVN_AUST" target="_blank" style="color:#1565c0">Download from GitHub</a> <button onclick="this.parentElement.remove()" style="margin-left:8px;background:none;border:none;font-size:1rem;cursor:pointer">&times;</button>';
+  document.body.appendChild(warn);
+}
+
 async function fetchBingoJSON(){
+  // Method 1: fetch() - works from https://, fails from file://
   try{
     const r=await fetch('bingo-categories.json?_='+Date.now());
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const data=await r.json();
-    let ok=true;
-    for(const k of ['B','I','N','G','O']){if(!Array.isArray(data[k])||data[k].length<5){ok=false;break}}
-    if(ok){
-      BINGO_LIVE=data;
-      buildBingo();
-      console.log('Loaded bingo categories from JSON ('+Object.values(data).flat().length+' total)');
-    }else throw new Error('Malformed');
-  }catch(e){
-    console.log('bingo-categories.json:',e.message);
-    // Show in-page warning if using minimal fallback
-    if(BINGO_LIVE.B.length<5){
-      const warn=document.createElement('div');
-      warn.style.cssText='position:fixed;top:224px;left:50%;transform:translateX(-50%);z-index:999;background:rgba(243,156,18,.9);color:#111;padding:8px 18px;border-radius:8px;font-size:.75rem;font-weight:700;text-align:center;max-width:90vw';
-      warn.innerHTML='bingo-categories.json not found. Place it next to this HTML file for full categories. <a href="https://github.com/sworrl/KVN_AUST" target="_blank" style="color:#1565c0">Download from GitHub</a> <button onclick="this.parentElement.remove()" style="margin-left:8px;background:none;border:none;font-size:1rem;cursor:pointer">&times;</button>';
-      document.body.appendChild(warn);
+    if(r.ok){const data=await r.json();if(parseBingoData(data))return}
+  }catch{}
+
+  // Method 2: XMLHttpRequest (sync) - works from file:// in most browsers
+  try{
+    const xhr=new XMLHttpRequest();
+    xhr.open('GET','bingo-categories.json',false);// synchronous
+    xhr.send();
+    if(xhr.status===200||xhr.status===0){// status 0 = file:// success
+      const data=JSON.parse(xhr.responseText);
+      if(parseBingoData(data))return;
     }
-  }
+  }catch{}
+
+  // Method 3: dynamic script tag as last resort
+  try{
+    await new Promise((resolve,reject)=>{
+      // Create a global callback the script can use
+      window._bingoCatsLoaded=function(data){if(parseBingoData(data))resolve();else reject()};
+      const s=document.createElement('script');
+      s.src='bingo-categories.js';
+      s.onerror=reject;
+      s.onload=resolve;
+      document.head.appendChild(s);
+      setTimeout(reject,3000);
+    });
+    return;
+  }catch{}
+
+  // All methods failed
+  console.log('bingo-categories.json: could not load');
+  showBingoWarning();
 }
 
 function saveBingoCategories(){
