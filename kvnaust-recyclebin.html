@@ -1293,7 +1293,7 @@ async function fetchDocFormats(){
 
   // Also fetch from GitHub MD (recycle-bin-map) as secondary source
   try{
-    const r2=await fetch(`${RAW_URL}/recycle-bin-map/README.md?_=${Date.now()}`);
+    const r2=await fetch(`${RAW_URL}/FORMAT-MAP.md?_=${Date.now()}`);
     if(r2&&r2.ok){
       const md=await r2.text();
       const existing=new Set(ALL_FORMATS.map(f=>f.label));
@@ -1982,7 +1982,7 @@ function closeCredits(){document.getElementById('creditsOverlay').classList.remo
 
 async function fetchCredits(){
   try{
-    const r=await fetch(`${RAW_URL}/recycle-bin-map/README.md?_=${Date.now()}`);
+    const r=await fetch(`${RAW_URL}/FORMAT-MAP.md?_=${Date.now()}`);
     if(!r.ok)throw new Error('HTTP '+r.status);
     const md=await r.text();
     // Extract contributors section
@@ -1996,7 +1996,7 @@ async function fetchCredits(){
       creditsLoaded=true;
     }
   }catch(e){
-    document.getElementById('creditsList').innerHTML='<div style="text-align:center;color:#555">Could not load contributors. <a href="'+REPO_URL+'/blob/main/recycle-bin-map/README.md" target="_blank" style="color:#7e9cd8">View on GitHub</a></div>';
+    document.getElementById('creditsList').innerHTML='<div style="text-align:center;color:#555">Could not load contributors. <a href="'+REPO_URL+'/blob/main/FORMAT-MAP.md" target="_blank" style="color:#7e9cd8">View on GitHub</a></div>';
   }
 }
 
@@ -2395,8 +2395,8 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.6.0",
-  "build": "2026-03-28T09:30:00",
+  "version": "1.6.1",
+  "build": "2026-03-28T10:00:00",
   "changelog": "Flat category list, 101 categories, SVG fix, export improvements",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"

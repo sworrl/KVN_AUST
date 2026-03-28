@@ -1,87 +1,143 @@
-# YouTube's Recycle Bin - KVN AUST
+<h1 align="center">
+  <br>
+  YouTube's Recycle Bin
+  <br>
+  <sub>Interactive Game Tool for KVN AUST</sub>
+  <br>
+</h1>
 
-A single-file interactive web tool for [KVN AUST](https://www.youtube.com/@KVNAUST)'s "YouTube's Recycle Bin" video series.
+<p align="center">
+  <a href="https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"><img src="https://img.shields.io/badge/PLAY_NOW-falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
+</p>
 
-**Live Version**: [falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html) - always up to date, live Google Doc format sync, and password-backed game history saving.
+<p align="center">
+  <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-@KVNAUST-red?style=flat-square&logo=youtube" alt="YouTube"></a>
+  <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="X"></a>
+  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-View_All_Formats-2ecc71?style=flat-square" alt="Format Map"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
+</p>
 
-YouTube hosts over 20 billion videos. 93% have under 1,000 views. 30% have under 100. This tool helps explore that vast, forgotten graveyard of content by generating random search strings based on default device filenames (IMG 3201, DSCF0042, MOV 0001, etc.) that surface zero-view uploads.
+---
+
+YouTube hosts over **20 billion videos**. **93%** have under 1,000 views. **30%** have under 100. This tool helps explore that vast, forgotten graveyard of content by generating random search strings based on default device filenames that surface zero-view uploads.
+
+> **[The Complete Format Map](FORMAT-MAP.md)** - All filename patterns, sources, ranges, and community credits in one place.
+
+---
 
 ## What It Does
 
-1. **Slide-Puzzle Bingo Card** - Generates a randomized bingo card with video categories, revealed as a mosaic slide puzzle that solves itself. 50 unique SVG daub stamps per game. Exportable as SVG.
-2. **Format Spinner** - 3D-textured spinning wheel of filename formats pulled from KVN AUST's [Recycle Bin Map](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) (loaded live when hosted, cached locally). No-repeat by default - won't land on the same format twice. Red dots mark used formats.
-3. **Rainbow Number Generator** - Randomly generates the variable portion with a character-by-character rainbow shuffle animation.
-4. **Search String** - Produces the final YouTube search query. Copy to clipboard, open directly in YouTube, or re-randomize with a flashy animation. Save & re-randomize to keep rolling without losing progress.
-5. **Multi-Metric Video Tracking** - Rate videos on Entertainment, Weirdness, Gem Factor, and "I Just Liked It". Track across rounds with persistent history.
-6. **Game Summary** - End-of-session recap with YouTube thumbnails, titles, per-metric breakdowns, and averages. Exportable as text.
+| Step | Feature | Description |
+|:----:|:--------|:------------|
+| 1 | **Slide-Puzzle Bingo** | Randomized bingo card with 101 video categories. Revealed as a mosaic slide puzzle. 50 unique SVG daub stamps per game. |
+| 2 | **Format Spinner** | 3D-textured wheel with filename formats from the [Recycle Bin Map](FORMAT-MAP.md). No-repeat by default. Red dots mark used formats. |
+| 3 | **Rainbow Number Gen** | Character-by-character rainbow shuffle animation generates the search variable. |
+| 4 | **Search & Rate** | Copy, open in YouTube, or re-randomize. Rate videos on 4 metrics. Save & re-roll without leaving the screen. |
+| 5 | **Game Summary** | End-of-session recap with thumbnails, per-metric breakdowns, averages. Export as SVG. |
+
+---
 
 ## Features
 
-- **Live Google Doc sync** - When hosted, auto-fetches KVN AUST's [Recycle Bin Map Google Doc](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) to pull the latest filename formats discovered by the community. Cached locally and refreshes every 30 minutes. When running offline, a small set of core formats are available as fallback.
-- **Password-backed game history** - On the hosted version at [falcontechnix.com](https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html), returning users can save and load their game history, bingo state, and settings with a simple password. Access your data from any device.
-- **No-repeat spinner** - By default, the spinner won't land on a format already used this game. Red dots mark used formats on the wheel. Configurable in Settings.
-- **Exports** - Bingo card as SVG (with KVN AUST social links), game summary as text file
-- Bingo categories editable, exportable/importable as JSON, cached in localStorage
-- 101 bingo categories compiled from KVN AUST's originals and community fan variants, randomly pooled each game
-- Game > Round history persisted with multi-metric scoring
-- Mosaic of KVN AUST's profile image visible through bingo cells
-- 50 unique SVG daub stamp designs (no repeats per game)
-- 3D-textured spinning wheel with embedded audio (tick/retro/casino presets)
-- BINGO detection with confetti, screen shake, and random easter egg messages
-- Customizable daub colors, opacity, and image settings
-- Auto-update checking against this repo (works from file:// and https://)
-- Works offline from `file://` or live from any web server
-- Single monolithic HTML file - no build step, no dependencies, no server required
+<table>
+<tr><td>
+
+**Core**
+- Single monolithic HTML file
+- Works offline from `file://` or any web server
+- No build step, no dependencies, no server required
+- Auto-update checking against this repo
+- Embedded Web Audio (tick/retro/casino presets)
+
+</td><td>
+
+**Online (Hosted)**
+- Live [Google Doc](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) format sync (every 30 min)
+- GitHub [Format Map](FORMAT-MAP.md) as secondary source
+- Password-backed game history saving
+- Always up to date
+
+</td></tr>
+<tr><td>
+
+**Bingo**
+- 101 categories (KVN originals + community)
+- Mosaic of KVN AUST's face through cells
+- Slide-puzzle reveal animation
+- BINGO detection with confetti & screen shake
+- Customizable daub colors & 50 unique SVG stamps
+- Export as SVG with social links
+
+</td><td>
+
+**Tracking & Scoring**
+- 4 rating metrics: Entertainment, Weirdness, Gem Factor, "I Just Liked It"
+- Game > Round history in localStorage
+- Browsed/clicked/rated video tracking
+- Per-game and all-time averages
+- Export game summary as SVG
+
+</td></tr>
+</table>
+
+---
 
 ## Usage
 
-### Online (recommended)
-Visit [falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html) - always up to date, live Google Doc format sync enabled, and password-backed game history saving.
+### Online (Recommended)
+
+> **[Play at falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html)** - always up to date, live Google Doc format sync, password-backed game history.
 
 ### Offline
-Download `kvnaust-recyclebin.html` and `bingo-categories.json`, place them in the same folder, and open the HTML in any browser. Works on Windows, Mac, and Linux. All core features work offline. The app shows a version badge in the footer and checks for updates when online.
 
-## Live Google Doc Sync
+Download `kvnaust-recyclebin.html` and `bingo-categories.json`, place in the same folder, open in any browser. Works on **Windows**, **Mac**, and **Linux**.
 
-KVN AUST maintains a [Google Doc](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) (the "Recycle Bin Map") listing all known default filename formats that surface zero-view YouTube uploads. The community continuously adds new formats to this doc.
+---
 
-When the app is hosted on a web server, it automatically fetches the latest formats from this Google Doc every 30 minutes and caches them locally. New formats appear on the spinner without any code changes. When running offline from a file, the app uses a small set of core formats as fallback.
+## The Format Map
+
+> **[VIEW THE COMPLETE FORMAT MAP](FORMAT-MAP.md)**
+
+The community-maintained list of every known default filename keyphrase that accesses YouTube's video graveyard. All 3 maps, all ranges, all sources, all contributor credits with YouTube links.
+
+---
 
 ## Bingo Categories
 
-`bingo-categories.json` is a simple, human-readable JSON file containing 101 bingo square categories as a flat list. Compiled from KVN AUST's original bingo cards and community fan variants (BingoBaker, GitHub contributions).
+`bingo-categories.json` contains 101 categories as a flat list. Compiled from KVN AUST's original bingo cards and community fan variants.
 
-KVN or contributors can edit this file directly - add, remove, or reorder categories. **This file is required** - the HTML contains a fallback copy embedded at the bottom, but the external JSON is the source of truth.
+- **Hosted**: app fetches the JSON at load time
+- **Offline**: place the JSON next to the HTML (embedded fallback if missing)
+- **Editable**: via Setup Bingo panel or directly in the JSON file
 
-- **When hosted**: the app fetches `bingo-categories.json` at load time
-- **When hosted on falcontechnix.com**: the server can override with user-saved categories from the database
-- **When running offline (file://)**: place `bingo-categories.json` in the same folder as the HTML
-- **User edits via Setup Bingo panel**: saved to localStorage and take priority
-
-All categories are shuffled randomly across the 24 squares each game. Edit the list via the Setup Bingo panel or directly in the JSON file.
+---
 
 ## Contributing
 
-When submitting changes to `kvnaust-recyclebin.html`, bump the version in the embedded JSON block at the very bottom of the file:
+1. **New formats**: Add to [FORMAT-MAP.md](FORMAT-MAP.md) via PR
+2. **New bingo categories**: Add to `bingo-categories.json` via PR
+3. **Code changes**: Edit `kvnaust-recyclebin.html` and bump the version:
 
 ```html
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.4.5",    <-- bump this
-  "build": "2026-03-28",  <-- update to today's date/time
+  "version": "1.6.1",    <-- bump this
+  "build": "2026-03-28",  <-- update date
   ...
 }
 </script>
 ```
 
-This is how the app detects updates. If you don't bump it, users won't know a new version is available.
+---
 
 ## Credits
 
-- **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)) - Creator of YouTube's Recycle Bin concept and the Maps
-- **Justin / [BASH & BRASS](https://www.youtube.com/@BASHnBRASS) / [FalconTechnix](https://www.falcontechnix.com)** - Tool development
-- All contributors listed in the [Google Doc](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) who helped discover filename formats
+- **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)) - Creator of YouTube's Recycle Bin & the Maps
+- **Justin / [BASH & BRASS](https://www.youtube.com/@BASHnBRASS) / [FalconTechnix](https://www.falcontechnix.com)** - Tool Development
+- **[70+ community contributors](FORMAT-MAP.md#contributors)** - Format discovery
 
-## License
+---
 
-GPL-3.0. See [LICENSE](LICENSE).
+<p align="center">
+  <sub>GPL-3.0 | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Live App</a></sub>
+</p>
