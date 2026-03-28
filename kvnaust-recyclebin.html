@@ -292,6 +292,33 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 .err-panel .err-line.warn{color:#f39c12}.err-panel .err-line.error{color:#e74c3c}
 .err-clear{background:var(--card2);border:1px solid #3a3a55;color:#ccc;padding:3px 10px;border-radius:4px;font-size:.65rem;cursor:pointer;margin-top:6px}
 
+/* ── SEARCH RESULTS PANEL ── */
+.search-results{position:fixed;top:220px;left:0;right:0;bottom:0;z-index:450;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);
+  display:none;flex-direction:column;align-items:center;overflow-y:auto;padding:16px 10px 80px}
+.search-results.open{display:flex}
+.sr-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;width:100%;max-width:700px}
+.sr-header h3{font-size:.95rem;flex:1;color:#ccc}
+.sr-close{background:none;border:none;color:#888;font-size:1.3rem;cursor:pointer}.sr-close:hover{color:#fff}
+.sr-list{width:100%;max-width:700px;display:flex;flex-direction:column;gap:8px}
+.sr-card{background:var(--card);border:1px solid #2a2a40;border-radius:10px;padding:10px;display:flex;gap:10px;cursor:pointer;transition:all .2s;position:relative}
+.sr-card:hover{border-color:#3a3a55;background:#1e1e35}
+.sr-card.clicked{border-left:3px solid var(--accent)}
+.sr-card.rated{border-left:3px solid #4caf50}
+.sr-thumb{width:168px;height:94px;border-radius:6px;object-fit:cover;background:#111;flex-shrink:0}
+.sr-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.sr-title{font-size:.8rem;font-weight:700;color:#eee;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sr-channel{font-size:.65rem;color:var(--muted)}
+.sr-views{font-size:.6rem;color:#555}
+.sr-actions{display:flex;gap:6px;align-items:center;margin-top:auto;flex-wrap:wrap}
+.sr-actions .vt-btn{font-size:.6rem;padding:3px 8px}
+.sr-rate{display:flex;gap:2px}
+.sr-rate .vt-star{font-size:1rem}
+.sr-badge{position:absolute;top:6px;right:8px;font-size:.55rem;padding:1px 6px;border-radius:4px;font-weight:700}
+.sr-badge.viewed{background:rgba(231,76,60,.2);color:#e74c3c}
+.sr-badge.saved{background:rgba(76,175,80,.2);color:#4caf50}
+.sr-loading{color:var(--muted);font-size:.85rem;padding:30px;text-align:center}
+.sr-empty{color:#555;font-size:.8rem;padding:30px;text-align:center}
+
 /* ── BINGO SETUP PANEL ── */
 .bingo-setup{position:fixed;top:220px;right:0;bottom:0;width:340px;background:var(--card);border-left:1px solid #2a2a40;z-index:460;
   transform:translateX(100%);transition:transform .35s ease;box-shadow:-4px 0 30px rgba(0,0,0,.5);overflow-y:auto;padding:14px}
@@ -435,7 +462,8 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     <div class="result-pill" id="resultPill" onclick="copyResult()"></div>
     <div class="result-sub" style="display:flex;gap:8px;align-items:center;margin-top:10px">
       <button class="vt-btn" style="background:linear-gradient(135deg,#333,#555);font-size:.7rem;padding:6px 14px" onclick="copyResult()">Copy</button>
-      <button class="vt-btn" style="background:linear-gradient(135deg,#c62828,#e74c3c);font-size:.7rem;padding:6px 14px" onclick="searchYouTube()">Search YouTube</button>
+      <button class="vt-btn" style="background:linear-gradient(135deg,#c62828,#e74c3c);font-size:.7rem;padding:6px 14px" onclick="browseResults()">Browse Results</button>
+      <button class="vt-btn" style="background:linear-gradient(135deg,#333,#555);font-size:.65rem;padding:5px 10px" onclick="searchYouTube()">Open in YouTube</button>
     </div>
     <div class="video-tracker">
       <!-- Re-spin / re-randomize same format -->
@@ -476,6 +504,15 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     <div class="summary-wrap"><div class="summary-title">Game Summary</div><div id="summaryList"></div><div class="summary-avg" id="summaryAvg"></div>
       <div class="summary-actions"><button class="nav-btn" onclick="exportBingoSVG()">Export Bingo Card (SVG)</button><button class="nav-btn primary" onclick="newSession()">New Game</button></div></div>
   </div>
+</div>
+
+<!-- SEARCH RESULTS PANEL -->
+<div class="search-results" id="searchResults">
+  <div class="sr-header">
+    <h3 id="srTitle">Results</h3>
+    <button class="sr-close" onclick="closeSearchResults()">&times;</button>
+  </div>
+  <div class="sr-list" id="srList"></div>
 </div>
 
 <!-- BINGO OVERLAY -->
@@ -989,7 +1026,7 @@ function saveGameToHistory(){
   if(games.length>50)games.length=50;saveAllGames(games);
 }
 
-function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;showScreen('wheel-screen');pickWheelFormats();drawWheel()}
+function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel()}
 function newSession(){sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showScreen('start-screen')}
 
 // ═══════════════════════════════════
@@ -1359,6 +1396,113 @@ function copyResult(){navigator.clipboard.writeText(finalString).then(()=>showTo
 function searchYouTube(){window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(finalString)+'&sp=CAI%253D','_blank')}
 
 // ═══════════════════════════════════
+//  IN-APP SEARCH RESULTS
+// ═══════════════════════════════════
+const INVIDIOUS_INSTANCES=['https://vid.puffyan.us','https://invidious.snopyta.org','https://yewtu.be','https://inv.nadeko.net'];
+let currentSearchVideos=[]; // {videoId,title,author,viewCount,thumbnail,clicked,rating:{}}
+let searchResultsOpen=false;
+
+async function browseResults(){
+  const panel=document.getElementById('searchResults');
+  const list=document.getElementById('srList');
+  document.getElementById('srTitle').textContent=`Results for: ${finalString}`;
+  list.innerHTML='<div class="sr-loading">Searching YouTube...</div>';
+  panel.classList.add('open');searchResultsOpen=true;
+
+  const results=await searchInvidious(finalString);
+  if(!results||!results.length){
+    list.innerHTML='<div class="sr-empty">No results found. <button class="vt-btn" style="background:var(--accent);font-size:.7rem;margin-left:8px" onclick="searchYouTube()">Try YouTube directly</button></div>';
+    return;
+  }
+
+  currentSearchVideos=results.map(v=>({
+    videoId:v.videoId,title:v.title,author:v.author||v.authorId||'Unknown',
+    viewCount:v.viewCount||0,lengthSeconds:v.lengthSeconds||0,
+    thumbnail:v.videoThumbnails?v.videoThumbnails.find(t=>t.quality==='medium')?.url||v.videoThumbnails[0]?.url:'',
+    clicked:false,rating:{entertainment:0,weirdness:0,gem:0,liked:0}
+  }));
+
+  renderSearchResults();
+}
+
+async function searchInvidious(query){
+  for(const instance of INVIDIOUS_INSTANCES){
+    try{
+      const url=`${instance}/api/v1/search?q=${encodeURIComponent(query)}&sort_by=upload_date&type=video`;
+      const r=await fetch(url);
+      if(!r.ok)continue;
+      const data=await r.json();
+      if(Array.isArray(data)&&data.length)return data.slice(0,20);
+    }catch{}
+  }
+  // Fallback: try YouTube oEmbed for just the search (won't return results, but we tried)
+  return null;
+}
+
+function renderSearchResults(){
+  const list=document.getElementById('srList');
+  list.innerHTML=currentSearchVideos.map((v,i)=>{
+    const views=v.viewCount<1000?v.viewCount:(v.viewCount/1000).toFixed(1)+'K';
+    const dur=v.lengthSeconds?`${Math.floor(v.lengthSeconds/60)}:${String(v.lengthSeconds%60).padStart(2,'0')}`:'';
+    const badge=v.rating&&avgMetric(v.rating)>0?'<span class="sr-badge saved">rated</span>':v.clicked?'<span class="sr-badge viewed">viewed</span>':'';
+    return`<div class="sr-card${v.clicked?' clicked':''}${avgMetric(v.rating)>0?' rated':''}" id="sr-${i}">
+      ${badge}
+      <img class="sr-thumb" src="${v.thumbnail||''}" alt="" onerror="this.src='https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg'" loading="lazy">
+      <div class="sr-body">
+        <div class="sr-title">${esc(v.title)}</div>
+        <div class="sr-channel">${esc(v.author)}${dur?' &middot; '+dur:''}</div>
+        <div class="sr-views">${views} views</div>
+        <div class="sr-actions">
+          <button class="vt-btn" style="background:var(--accent)" onclick="watchVideo(${i})">Watch</button>
+          <button class="vt-btn" style="background:var(--card2)" onclick="saveVideoFromSearch(${i})">Save to Round</button>
+        </div>
+        <div class="sr-rate" data-idx="${i}">
+          ${['entertainment','weirdness','gem','liked'].map(m=>
+            `<span style="font-size:.55rem;color:${METRIC_COLORS[m]};margin-right:4px">${METRIC_LABELS[m]}:${[1,2,3,4,5].map(s=>
+              `<span class="vt-star${v.rating[m]>=s?' lit':''}" style="font-size:.8rem" onclick="rateSearchVideo(${i},'${m}',${s})">&#9733;</span>`
+            ).join('')}</span>`
+          ).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function watchVideo(idx){
+  const v=currentSearchVideos[idx];if(!v)return;
+  v.clicked=true;
+  window.open('https://www.youtube.com/watch?v='+v.videoId,'_blank');
+  renderSearchResults();
+}
+
+function rateSearchVideo(idx,metric,value){
+  const v=currentSearchVideos[idx];if(!v)return;
+  v.rating[metric]=value;
+  renderSearchResults();
+}
+
+function saveVideoFromSearch(idx){
+  const v=currentSearchVideos[idx];if(!v)return;
+  // Fill in the main tracker with this video's data
+  document.getElementById('vtLink').value='https://www.youtube.com/watch?v='+v.videoId;
+  // Copy ratings if set
+  if(avgMetric(v.rating)>0){
+    currentMetrics={...v.rating};
+    document.querySelectorAll('.vt-stars[data-metric]').forEach(el=>{
+      const m=el.dataset.metric;
+      el.querySelectorAll('.vt-star').forEach(s=>s.classList.toggle('lit',+s.dataset.v<=currentMetrics[m]));
+    });
+  }
+  closeSearchResults();
+  showToast('Video loaded: '+v.title.substring(0,40));
+}
+
+function closeSearchResults(){
+  document.getElementById('searchResults').classList.remove('open');
+  searchResultsOpen=false;
+}
+
+// ═══════════════════════════════════
 //  VIDEO TRACKING
 // ═══════════════════════════════════
 let currentMetrics={entertainment:0,weirdness:0,gem:0,liked:0};
@@ -1377,9 +1521,15 @@ function avgMetric(m){const vals=Object.values(m).filter(v=>v>0);return vals.len
 
 function makeRound(){
   const m={...currentMetrics};
+  // Include browsed videos data (clicked, rated, skipped)
+  const browsed=currentSearchVideos.filter(v=>v.clicked||avgMetric(v.rating)>0).map(v=>({
+    videoId:v.videoId,title:v.title,author:v.author,views:v.viewCount,
+    clicked:v.clicked,rating:v.rating
+  }));
   return{search:finalString,format:chosenFormat?chosenFormat.label:'',number:chosenNumber||'',
     link:document.getElementById('vtLink').value.trim(),
     metrics:m,rating:Math.round(avgMetric(m)*10)/10,
+    browsed:browsed.length?browsed:undefined,
     date:new Date().toISOString()};
 }
 
@@ -1960,6 +2110,7 @@ document.addEventListener('keydown',e=>{
     if(document.getElementById('bingoFlash').classList.contains('show')&&document.getElementById('bfContinue').classList.contains('show'))closeBingoFlash();
     if(document.getElementById('bingoSetup').classList.contains('open'))toggleBingoSetup();
     if(document.getElementById('errPanel').classList.contains('open'))toggleErrPanel();
+    if(searchResultsOpen)closeSearchResults();
     if(document.getElementById('settingsOverlay').classList.contains('open'))toggleSettings();
   }
 });
