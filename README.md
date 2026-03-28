@@ -8,26 +8,29 @@ YouTube hosts over 20 billion videos. 93% have under 1,000 views. 30% have under
 
 ## What It Does
 
-1. **Slide-Puzzle Bingo Card** - Generates a randomized bingo card with video categories, revealed as a mosaic slide puzzle that solves itself. 50 unique SVG daub stamps per game.
-2. **Format Spinner** - 3D-textured spinning wheel of filename formats pulled from KVN AUST's [Recycle Bin Map](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) (loaded live when hosted, cached locally).
+1. **Slide-Puzzle Bingo Card** - Generates a randomized bingo card with video categories, revealed as a mosaic slide puzzle that solves itself. 50 unique SVG daub stamps per game. Exportable as SVG.
+2. **Format Spinner** - 3D-textured spinning wheel of filename formats pulled from KVN AUST's [Recycle Bin Map](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) (loaded live when hosted, cached locally). No-repeat by default - won't land on the same format twice. Red dots mark used formats.
 3. **Rainbow Number Generator** - Randomly generates the variable portion with a character-by-character rainbow shuffle animation.
-4. **Search String** - Produces the final YouTube search query. Click to copy. Re-randomize or save & re-roll without leaving the screen.
+4. **Search String** - Produces the final YouTube search query. Copy to clipboard, open directly in YouTube, or re-randomize with a flashy animation. Save & re-randomize to keep rolling without losing progress.
 5. **Multi-Metric Video Tracking** - Rate videos on Entertainment, Weirdness, Gem Factor, and "I Just Liked It". Track across rounds with persistent history.
-6. **Game Summary** - End-of-session recap with YouTube thumbnails, titles, per-metric breakdowns, and averages.
+6. **Game Summary** - End-of-session recap with YouTube thumbnails, titles, per-metric breakdowns, and averages. Exportable as text.
 
 ## Features
 
-- **Live Google Doc sync** - When hosted, auto-fetches KVN AUST's [Recycle Bin Map Google Doc](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) to pull the latest filename formats discovered by the community. Cached locally and refreshes every 30 minutes. When running offline from a file, 75+ formats are hardcoded in the app.
+- **Live Google Doc sync** - When hosted, auto-fetches KVN AUST's [Recycle Bin Map Google Doc](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) to pull the latest filename formats discovered by the community. Cached locally and refreshes every 30 minutes. When running offline, a small set of core formats are available as fallback.
 - **Password-backed game history** - On the hosted version at [falcontechnix.com](https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html), returning users can save and load their game history, bingo state, and settings with a simple password. Access your data from any device.
+- **No-repeat spinner** - By default, the spinner won't land on a format already used this game. Red dots mark used formats on the wheel. Configurable in Settings.
+- **Exports** - Bingo card as SVG (with KVN AUST social links), game summary as text file
 - Bingo categories editable, exportable/importable as JSON, cached in localStorage
+- Categories randomly pooled across all squares by default, or assignable per B-I-N-G-O column
+- 100 bingo categories compiled from KVN AUST's originals and community fan variants
 - Game > Round history persisted with multi-metric scoring
-- Bingo card exportable as SVG with KVN AUST social links
 - Mosaic of KVN AUST's profile image visible through bingo cells
 - 50 unique SVG daub stamp designs (no repeats per game)
 - 3D-textured spinning wheel with embedded audio (tick/retro/casino presets)
 - BINGO detection with confetti, screen shake, and random easter egg messages
 - Customizable daub colors, opacity, and image settings
-- Auto-update checking against this repo
+- Auto-update checking against this repo (works from file:// and https://)
 - Works offline from `file://` or live from any web server
 - Single monolithic HTML file - no build step, no dependencies, no server required
 
@@ -37,7 +40,7 @@ YouTube hosts over 20 billion videos. 93% have under 1,000 views. 30% have under
 Visit [falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html) - always up to date, live Google Doc format sync enabled, and password-backed game history saving.
 
 ### Offline
-Download `kvnaust-recyclebin.html` and open it in any browser. Works on Windows, Mac, and Linux. All core features work offline. The app shows a version badge in the footer and checks for updates when online.
+Download `kvnaust-recyclebin.html` and `bingo-categories.json`, place them in the same folder, and open the HTML in any browser. Works on Windows, Mac, and Linux. All core features work offline. The app shows a version badge in the footer and checks for updates when online.
 
 ## Live Google Doc Sync
 
@@ -47,13 +50,13 @@ When the app is hosted on a web server, it automatically fetches the latest form
 
 ## Bingo Categories
 
-`bingo-categories.json` is a simple, human-readable JSON file containing all bingo square categories organized by B-I-N-G-O column. Compiled from KVN AUST's original bingo cards and community fan variants.
+`bingo-categories.json` is a simple, human-readable JSON file containing 100 bingo square categories organized by B-I-N-G-O column. Compiled from KVN AUST's original bingo cards and community fan variants (BingoBaker, GitHub contributions).
 
-KVN or contributors can edit this file directly - add, remove, or reorder categories. **This file is required** - the HTML contains no hardcoded categories.
+KVN or contributors can edit this file directly - add, remove, or reorder categories. **This file is required** - the HTML contains a fallback copy embedded at the bottom, but the external JSON is the source of truth.
 
 - **When hosted**: the app fetches `bingo-categories.json` at load time
 - **When hosted on falcontechnix.com**: the server can override with user-saved categories from the database
-- **When running offline (file://)**: place `bingo-categories.json` in the same folder as the HTML. If missing, an amber warning banner appears with a link to download it
+- **When running offline (file://)**: place `bingo-categories.json` in the same folder as the HTML
 - **User edits via Setup Bingo panel**: saved to localStorage and take priority
 
 By default, categories are pooled randomly across all squares. Users can enable "per-letter mode" in Setup Bingo to assign categories to specific B-I-N-G-O columns.
@@ -65,8 +68,8 @@ When submitting changes to `kvnaust-recyclebin.html`, bump the version in the em
 ```html
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.0.1",   <-- bump this
-  "build": "2026-03-28", <-- update to today's date
+  "version": "1.4.5",    <-- bump this
+  "build": "2026-03-28",  <-- update to today's date/time
   ...
 }
 </script>
