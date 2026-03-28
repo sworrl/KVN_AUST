@@ -161,7 +161,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 .vt-row{display:flex;gap:6px;width:100%;align-items:center;flex-wrap:wrap;justify-content:center}
 .vt-input{flex:1;min-width:200px;background:var(--card2);border:1px solid #3a3a55;color:#fff;padding:9px 12px;border-radius:8px;font-size:.82rem;font-family:'Inter',sans-serif}
 .vt-input::placeholder{color:#444}
-.vt-btn{border:none;color:#fff;padding:9px 16px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.8rem;transition:all .15s;white-space:nowrap}
+.vt-btn{border:none;color:#fff;padding:9px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.78rem;transition:all .15s;white-space:nowrap;flex:1;min-width:0;text-align:center}
 .vt-btn.save{background:linear-gradient(135deg,#2ecc71,#27ae60)}.vt-btn.save:hover{box-shadow:0 3px 12px rgba(46,204,113,.3)}
 .vt-btn.skip{background:var(--card2);border:1px solid #3a3a55}.vt-btn.skip:hover{background:#2a2a45}
 .vt-btn.end{background:linear-gradient(135deg,var(--accent),var(--accent2))}.vt-btn.end:hover{box-shadow:0 3px 12px rgba(231,76,60,.3)}
@@ -463,19 +463,14 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
   <div id="result-screen" class="screen">
     <div class="result-sub">Search YouTube for:</div>
     <div class="result-pill" id="resultPill" onclick="copyResult()"></div>
-    <div class="result-sub" style="display:flex;gap:8px;align-items:center;margin-top:10px">
-      <button class="vt-btn" style="background:linear-gradient(135deg,#333,#555);font-size:.7rem;padding:6px 14px" onclick="copyResult()">Copy</button>
-      <button class="vt-btn" style="background:linear-gradient(135deg,#c62828,#e74c3c);font-size:.7rem;padding:6px 14px" onclick="browseResults()">Browse Results</button>
-      <button class="vt-btn" style="background:linear-gradient(135deg,#333,#555);font-size:.65rem;padding:5px 10px" onclick="searchYouTube()">Open in YouTube</button>
-    </div>
     <div class="video-tracker">
-      <!-- Re-spin / re-randomize same format -->
-      <div class="vt-row" style="margin-bottom:4px">
+      <div class="vt-row">
+        <button class="vt-btn" style="background:#444" onclick="copyResult()">Copy</button>
+        <button class="vt-btn" style="background:var(--accent)" onclick="searchYouTube()">Open in YouTube</button>
         <button class="vt-btn" style="background:linear-gradient(135deg,#7e57c2,#5e35b1)" onclick="reRandomize()">Re-Randomize</button>
       </div>
-      <div class="vt-label">Found a video? Paste the link &amp; rate it:</div>
+      <div class="vt-label" style="margin-top:6px">Found a video? Paste the link &amp; rate it:</div>
       <div class="vt-row"><input class="vt-input" id="vtLink" type="text" placeholder="https://youtube.com/watch?v=..."></div>
-      <!-- Multi-metric rating -->
       <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
         <div style="text-align:center"><div class="vt-label">Entertainment</div><div class="vt-stars" data-metric="entertainment">
           <span class="vt-star" data-v="1" onclick="setMetric('entertainment',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('entertainment',2)">&#9733;</span>
@@ -498,8 +493,15 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
           <span class="vt-star" data-v="5" onclick="setMetric('liked',5)">&#9733;</span>
         </div></div>
       </div>
-      <div class="vt-row"><button class="vt-btn save" onclick="saveVideo()">Save &amp; Next Round</button><button class="vt-btn" style="background:linear-gradient(135deg,#7e57c2,#5e35b1)" onclick="saveAndReRandomize()">Save &amp; Re-randomize</button><button class="vt-btn skip" onclick="skipVideo()">Skip</button></div>
-      <div class="vt-row"><button class="vt-btn endonly" onclick="saveAndEnd()">Save &amp; End Game</button><button class="vt-btn end" onclick="endSession()">End Game</button></div>
+      <div class="vt-row">
+        <button class="vt-btn save" onclick="saveVideo()">Save &amp; Next Round</button>
+        <button class="vt-btn" style="background:linear-gradient(135deg,#7e57c2,#5e35b1)" onclick="saveAndReRandomize()">Save &amp; Re-randomize</button>
+        <button class="vt-btn skip" onclick="skipVideo()">Skip</button>
+      </div>
+      <div class="vt-row">
+        <button class="vt-btn endonly" onclick="saveAndEnd()">Save &amp; End Game</button>
+        <button class="vt-btn end" onclick="endSession()">End Game</button>
+      </div>
     </div>
   </div>
 
@@ -1394,7 +1396,6 @@ function showResult(){
   finalString=chosenFormat.sp==='static'?chosenFormat.tpl:chosenFormat.tpl.replace('{V}',chosenNumber);
   document.getElementById('resultPill').textContent=finalString;
   resetTracker();
-  document.getElementById('vtLink').value=ytSearchUrl(finalString);
 }
 function copyResult(){navigator.clipboard.writeText(finalString).then(()=>showToast('Copied!')).catch(()=>{})}
 function searchYouTube(){window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(finalString)+'&sp=CAI%253D','_blank')}
@@ -1608,7 +1609,7 @@ function animatedReRandomize(callback){
   requestAnimationFrame(frame);
 }
 
-function reRandomize(){animatedReRandomize(()=>{document.getElementById('vtLink').value=ytSearchUrl(finalString);showToast('Re-randomized!')})}
+function reRandomize(){animatedReRandomize(()=>showToast('Re-randomized!'))}
 
 function reSpinSameFormat(){animatedReRandomize(()=>showToast('New search: '+finalString))}
 
@@ -1624,7 +1625,7 @@ function skipVideo(){sessionRounds.push({...makeRound(),link:'',rating:0,metrics
 function saveAndReRandomize(){
   sessionRounds.push(makeRound());
   resetTracker();
-  animatedReRandomize(()=>{document.getElementById('vtLink').value=ytSearchUrl(finalString);showToast('Saved! New number rolling...')});
+  animatedReRandomize(()=>showToast('Saved! New number rolling...'));
 }
 function saveAndEnd(){
   const round=makeRound();
