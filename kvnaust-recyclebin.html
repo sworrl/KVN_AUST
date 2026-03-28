@@ -893,6 +893,11 @@ function handleBingoBtn(){
   else{toggleBingoSetup()}
 }
 
+// Called directly after spin - bypasses nav guards
+function advanceFromWheel(){
+  showScreen('format-screen');showFormatReveal();
+}
+
 function goNext(){
   const idx=SCREENS.indexOf(currentScreen);if(idx<0)return;
   // Only allow forward from format-screen (2) or number-screen (3)
@@ -1223,7 +1228,7 @@ function spinWheel(){
     const curSeg=Math.floor(((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI)/arc)%n;
     if(curSeg!==lastTickSegment){lastTickSegment=curSeg;playTick(1-p)}
     if(p<1)requestAnimationFrame(anim);
-    else{spinning=false;btn.style.pointerEvents='';playWinSound();setTimeout(goNext,700)}
+    else{spinning=false;btn.style.pointerEvents='';playWinSound();setTimeout(advanceFromWheel,700)}
   })(performance.now());
 }
 
