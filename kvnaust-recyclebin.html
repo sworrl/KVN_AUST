@@ -508,9 +508,9 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
   <div id="summary-screen" class="screen">
     <div class="summary-wrap"><div class="summary-title">Game Summary</div><div id="summaryList"></div><div class="summary-avg" id="summaryAvg"></div>
       <div class="summary-actions" style="flex-wrap:wrap">
-        <button class="nav-btn" onclick="exportBingoSVG()">Export Bingo Card (SVG)</button>
-        <button class="nav-btn" onclick="exportSummaryText()">Export Game Summary (TXT)</button>
-        <button class="nav-btn primary" onclick="newSession()">New Game</button>
+        <button class="nav-btn" onclick="event.stopPropagation();exportBingoSVG()">Export Bingo Card (SVG)</button>
+        <button class="nav-btn" onclick="event.stopPropagation();exportSummaryText()">Export Game Summary (TXT)</button>
+        <button class="nav-btn primary" onclick="event.stopPropagation();newSession()">New Game</button>
       </div></div>
   </div>
 </div>
@@ -2124,8 +2124,7 @@ function exportBingoSVG(){
   // Subtle branding line
   svg+=`<text x="${w/2}" y="${fy+32}" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#555">YouTube&apos;s Recycle Bin &#183; youtu.be/@KVNAUST</text>`;
   svg+=`</svg>`;
-  const blob=new Blob([svg],{type:'image/svg+xml'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kvnaust-bingo-'+new Date().toISOString().slice(0,10)+'.svg';a.click();
+  downloadFile('kvnaust-bingo-'+new Date().toISOString().slice(0,10)+'.svg',svg,'image/svg+xml');
   showToast('Bingo card exported!');
 }
 
@@ -2144,15 +2143,22 @@ function exportSummaryText(){
     if(r.browsed&&r.browsed.length)txt+=`  Videos browsed: ${r.browsed.length}\n`;
     txt+='\n';
   });
-  // Averages
   const mTot={},mCnt={};
   sessionRounds.forEach(r=>{const m=r.metrics||{};for(const[k,v]of Object.entries(m))if(v>0){mTot[k]=(mTot[k]||0)+v;mCnt[k]=(mCnt[k]||0)+1}});
   txt+="Averages:\n";
   for(const k of Object.keys(mTot))txt+=`  ${k}: ${(mTot[k]/mCnt[k]).toFixed(1)}/5\n`;
   txt+="\n@KVNAUST | youtube.com/@KVNAUST | x.com/MingKasterMK\n";
-  const blob=new Blob([txt],{type:'text/plain'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kvnaust-summary-'+new Date().toISOString().slice(0,10)+'.txt';a.click();
+  downloadFile('kvnaust-summary-'+new Date().toISOString().slice(0,10)+'.txt',txt,'text/plain');
   showToast('Summary exported!');
+}
+
+function downloadFile(name,content,type){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=name;a.style.display='none';
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url)},100);
 }
 
 // ═══════════════════════════════════
