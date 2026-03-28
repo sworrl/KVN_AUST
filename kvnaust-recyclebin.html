@@ -754,14 +754,8 @@ const ALL_FORMATS=[
 {label:"Trim 4XXX",tpl:"Trim {V}",sp:"hex4"},
 ];
 
-// Minimal fallback - bingo-categories.json is the source of truth
-const BINGO={
-B:["Fever dream","Conspiracy theory","Future world leader","Possibly a crime","Unhinged rambler"],
-I:["Foreign language (to me)","Randomly nsfw","Potential serial killer","Wholesome content","Accidental upload"],
-N:["Actual talent","Rabbit-hole channel","Creepy","Karaoke session","Cat content"],
-G:["Good music","May be mentally unwell","Channel has 20,000+ uploads","Bass boosted / distorted audio","Dashcam clip"],
-O:["Old meme","Gives me Nostalgia","Jump scare","Vintage quality","Before 2010 energy"]
-};
+// Empty - bingo-categories.json is required
+const BINGO={B:[],I:[],N:[],G:[],O:[]};
 
 const FREE_SPACE_PHRASES=["Lemme Tag that Freespace","You Know I Had to Click It....","Free real estate, baby.","The one square you don't gotta earn.","Everybody gets one.","That's the gimme.","Center stage, no audition needed.","The participation trophy of bingo.","Click it or ticket.","This one's on the house.","Freebie secured.","The only guaranteed W."];
 
@@ -818,7 +812,7 @@ async function fetchBingoJSON(){
   }catch(e){
     console.log('bingo-categories.json:',e.message);
     // Show in-page warning if using minimal fallback
-    if(BINGO_LIVE.B.length<=5){
+    if(BINGO_LIVE.B.length<5){
       const warn=document.createElement('div');
       warn.style.cssText='position:fixed;top:224px;left:50%;transform:translateX(-50%);z-index:999;background:rgba(243,156,18,.9);color:#111;padding:8px 18px;border-radius:8px;font-size:.75rem;font-weight:700;text-align:center;max-width:90vw';
       warn.innerHTML='bingo-categories.json not found. Place it next to this HTML file for full categories. <a href="https://github.com/sworrl/KVN_AUST" target="_blank" style="color:#1565c0">Download from GitHub</a> <button onclick="this.parentElement.remove()" style="margin-left:8px;background:none;border:none;font-size:1rem;cursor:pointer">&times;</button>';
