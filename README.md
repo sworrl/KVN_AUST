@@ -45,6 +45,22 @@ KVN AUST maintains a [Google Doc](https://docs.google.com/document/d/1mV5PhumaIJ
 
 When the app is hosted on a web server, it automatically fetches the latest formats from this Google Doc every 30 minutes and caches them locally. New formats appear on the spinner without any code changes. When running offline from a file, the app uses 75+ formats hardcoded in the HTML.
 
+## Contributing
+
+When submitting changes to `kvnaust-recyclebin.html`, bump the version in the embedded JSON block at the very bottom of the file:
+
+```html
+<script type="application/json" id="app-version-data">
+{
+  "version": "1.0.1",   <-- bump this
+  "build": "2026-03-28", <-- update to today's date
+  ...
+}
+</script>
+```
+
+This is how the app detects updates. If you don't bump it, users won't know a new version is available.
+
 ## Credits
 
 - **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)) - Creator of YouTube's Recycle Bin concept and the Maps
