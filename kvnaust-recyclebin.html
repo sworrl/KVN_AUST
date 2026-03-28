@@ -743,56 +743,24 @@ function playWinSound(){
 // ═══════════════════════════════════
 //  FORMATS
 // ═══════════════════════════════════
+// Minimal fallback formats - full list fetched from Google Doc when hosted
 const ALL_FORMATS=[
 {label:"IMG XXXX",tpl:"IMG {V}",min:0,max:9999,pad:4},{label:"MVI XXXX",tpl:"MVI {V}",min:0,max:9999,pad:4},
-{label:"MOV XXXX",tpl:"MOV {V}",min:0,max:9999,pad:4},{label:"100 XXXX",tpl:"100 {V}",min:0,max:9999,pad:4},
-{label:"SAM XXXX",tpl:"SAM {V}",min:0,max:9999,pad:4},{label:"DSC XXXX",tpl:"DSC {V}",min:0,max:9999,pad:4},
-{label:"SDV XXXX",tpl:"SDV {V}",min:0,max:9999,pad:4},{label:"DSCFXXXX",tpl:"DSCF{V}",min:0,max:9999,pad:4},
-{label:"DSCNXXXX",tpl:"DSCN{V}",min:0,max:9999,pad:4},{label:"PICTXXXX",tpl:"PICT{V}",min:0,max:9999,pad:4},
-{label:"MAQ0XXXX",tpl:"MAQ0{V}",min:0,max:9999,pad:4},{label:"FILEXXXX",tpl:"FILE{V}",min:0,max:9999,pad:4},
-{label:"GOPRXXXX",tpl:"GOPR{V}",min:0,max:9999,pad:4},{label:"GP01XXXX",tpl:"GP01{V}",min:0,max:9999,pad:4},
-{label:"GX01XXXX",tpl:"GX01{V}",min:0,max:9999,pad:4},{label:"DJI XXXX",tpl:"DJI {V}",min:0,max:2000,pad:4},
-{label:"HNI 0XXX",tpl:"HNI 0{V}",min:0,max:100,pad:3},{label:"WA0XXX",tpl:"WA0{V}",min:0,max:999,pad:3},
-{label:"P100XXXX",tpl:"P100{V}",min:0,max:1999,pad:4},{label:"XXXX.MP4",tpl:"{V}.mp4",min:0,max:9999,pad:4},
-{label:"MAH0XXXX",tpl:"MAH0{V}",min:0,max:9999,pad:4},{label:"CIMGXXXX",tpl:"CIMG{V}",min:0,max:9999,pad:4},
-{label:"IMGPXXXX",tpl:"IMGP{V}",min:0,max:9999,pad:4},{label:"VideoXXXX",tpl:"Video{V}",min:0,max:9999,pad:4},
-{label:"MOV0XXXX",tpl:"MOV0{V}",min:0,max:9999,pad:4},{label:"M2U0XXXX",tpl:"M2U0{V}",min:0,max:9999,pad:4},
-{label:"GH01XXXX",tpl:"GH01{V}",min:0,max:9999,pad:4},{label:"M4H0XXXX",tpl:"M4H0{V}",min:0,max:9999,pad:4},
-{label:"SANYXXXX",tpl:"SANY{V}",min:0,max:9999,pad:4},{label:"HPIMXXXX",tpl:"HPIM{V}",min:0,max:9999,pad:4},
-{label:"GEDCXXXX",tpl:"GEDC{V}",min:0,max:9999,pad:4},{label:"VID0XXXX",tpl:"VID0{V}",min:0,max:5000,pad:4},
-{label:"CAM0XXXX",tpl:"CAM0{V}",min:0,max:5000,pad:4},{label:"AMBAXXXX",tpl:"AMBA{V}",min:1,max:5000,pad:4},
-{label:"HDV XXXX",tpl:"HDV {V}",min:1,max:5000,pad:4},{label:"DSCIXXXX",tpl:"DSCI{V}",min:1,max:4000,pad:4},
-{label:"ClipXXXX",tpl:"Clip{V}",min:0,max:2000,pad:4},{label:"YDXJXXXX",tpl:"YDXJ{V}",min:1,max:2000,pad:4},
-{label:"IMAGXXXX",tpl:"IMAG{V}",min:0,max:2000,pad:4},{label:"SUNPXXXX",tpl:"SUNP{V}",min:0,max:1500,pad:4},
-{label:"MOVIXXXX",tpl:"MOVI{V}",min:0,max:1050,pad:4},{label:"REC XXXX",tpl:"REC {V}",min:0,max:1000,pad:4},
-{label:"SDC1XXXX",tpl:"SDC1{V}",min:0,max:9999,pad:4},{label:"SNV3XXXX",tpl:"SNV3{V}",min:1,max:3000,pad:4},
-{label:"KVIDXXXX",tpl:"KVID{V}",min:0,max:1000,pad:4},{label:"Moto_0XXX",tpl:"Moto_0{V}",min:0,max:999,pad:3},
-{label:"ZOOM0XXX",tpl:"ZOOM0{V}",min:1,max:800,pad:3},{label:"Zi6 XXXX",tpl:"Zi6 {V}",min:1,max:2000,pad:4},
-{label:"PTDCXXXX",tpl:"PTDC{V}",min:0,max:1000,pad:4},{label:"VCLPXXXX",tpl:"VCLP{V}",min:1,max:1000,pad:4},
-{label:"FHDXXXX",tpl:"FHD{V}",min:1,max:1000,pad:4},{label:"Picture XXX",tpl:"Picture {V}",min:1,max:1220,pad:3},
-{label:"M4V0XXXX",tpl:"M4V0{V}",min:0,max:9999,pad:4},{label:"MOVXXXXA",tpl:"MOV{V}A",min:0,max:3000,pad:4},
-{label:"AVSEQXX",tpl:"AVSEQ{V}",min:0,max:99,pad:2},{label:"SVM AXXXX",tpl:"SVM A{V}",min:0,max:1000,pad:4},
-{label:"Video0XX",tpl:"Video0{V}",min:0,max:10,pad:2},{label:"MOV000XX",tpl:"MOV000{V}",min:0,max:10,pad:2},
-{label:"muuvee00XX",tpl:"muuvee00{V}",min:0,max:40,pad:2},
-{label:"Video YYYYMMDD",tpl:"Video {V}",sp:"date"},{label:"VID YYYYMMDD",tpl:"VID {V}",sp:"date"},
-{label:"WIN YYYYMMDD",tpl:"WIN {V}",sp:"date"},{label:"Capture YYYYMMDD",tpl:"Capture {V}",sp:"date"},
-{label:"InShot YYYYMMDD",tpl:"InShot {V}",sp:"date"},{label:"PXL YYYYMMDD",tpl:"PXL {V}",sp:"date"},
-{label:"YYYYMMDD",tpl:"{V}",sp:"date"},
+{label:"MOV XXXX",tpl:"MOV {V}",min:0,max:9999,pad:4},{label:"DSC XXXX",tpl:"DSC {V}",min:0,max:9999,pad:4},
+{label:"DSCFXXXX",tpl:"DSCF{V}",min:0,max:9999,pad:4},{label:"GOPRXXXX",tpl:"GOPR{V}",min:0,max:9999,pad:4},
+{label:"XXXX.MP4",tpl:"{V}.mp4",min:0,max:9999,pad:4},{label:"VideoXXXX",tpl:"Video{V}",min:0,max:9999,pad:4},
+{label:"YYYYMMDD",tpl:"{V}",sp:"date"},{label:"VID YYYYMMDD",tpl:"VID {V}",sp:"date"},
 {label:'".MP4"',tpl:'".MP4"',sp:"static"},{label:'".MOV"',tpl:'".MOV"',sp:"static"},
-{label:'".AVI"',tpl:'".AVI"',sp:"static"},{label:'".3gp"',tpl:'".3gp"',sp:"static"},{label:'".WMV"',tpl:'".WMV"',sp:"static"},
-{label:'"My Movie X"',tpl:'"My Movie {V}"',min:1,max:50,pad:0},
-{label:'"My Slideshow XX"',tpl:'"My Slideshow {V}"',min:0,max:99,pad:2},
-{label:'"Month DD, YYYY"',tpl:'"{V}"',sp:"monthdate"},{label:"Trim 4XXX",tpl:"Trim {V}",sp:"hex4"},
-{label:'"QuickCapture Video"',tpl:'"QuickCapture Video - {V}"',sp:"monthdate"},
+{label:"Trim 4XXX",tpl:"Trim {V}",sp:"hex4"},
 ];
 
-// Hardcoded defaults (used offline). When hosted, bingo-categories.json is fetched instead.
+// Minimal fallback - bingo-categories.json is the source of truth
 const BINGO={
-B:["Fever dream","Conspiracy theory","Future world leader","\"I've been to this place\"","Possibly a crime","Unhinged rambler","5 seconds of nothing","Intimate family moment","Test upload","Security cam footage","Zoom call","Pet video","Car ride","Baby's first steps","Drunk recording","Potential cult leader","Feels like a deep web video","Dial 911","Tweaker","Ancient artifact (2005-2006)"],
-I:["Foreign language (to me)","Randomly nsfw","Potential serial killer","Actual wisdom / insight","Wholesome content","Someone's backyard","Late night thoughts","Accidental upload","Mirror selfie video","Garage band","Phone left recording","Cooking attempt","Parking lot footage","Dark room vibes","Toddler with phone","I learned something new","Recurring character","AMV","Happy human","Sad human"],
-N:["Actual talent","Rabbit-hole channel","New sport unlocked","Creepy","Karaoke session","School presentation","Minecraft gameplay","Unboxing something weird","Dance practice","Cat content","Screen recording","Birthday party","Storm footage","Toy review","Tutorial attempt","Randomly creepy / unnerving","School project / presentation","Church / office production","Concert footage","Just plain weird / WTF"],
-G:["Good music","May be mentally unwell","Channel has 20,000+ uploads","School assignment / project","Bass boosted / distorted audio","Nature footage","Religious content","Stop motion","Someone's commute","Dashcam clip","Foreign news","Gaming rage","Exercise video","Magic trick","Time lapse","Channel has 5,000+ uploads","Gameplay of an obscure game","Innovative idea / technology","Same uploader in 2 searches","New lead discovery"],
-O:["Random food spotted","Old meme","Gives me Nostalgia","Life-hack","Jump scare","Vintage quality","Before 2010 energy","Someone singing","Hotel room tour","Construction site","Wedding footage","Elevator music","Walmart adventure","Drone footage","Soundcheck","Random animal spotted","Home video","Underrated creator","Liminality","No context but makes sense"]
+B:["Fever dream","Conspiracy theory","Future world leader","Possibly a crime","Unhinged rambler"],
+I:["Foreign language (to me)","Randomly nsfw","Potential serial killer","Wholesome content","Accidental upload"],
+N:["Actual talent","Rabbit-hole channel","Creepy","Karaoke session","Cat content"],
+G:["Good music","May be mentally unwell","Channel has 20,000+ uploads","Bass boosted / distorted audio","Dashcam clip"],
+O:["Old meme","Gives me Nostalgia","Jump scare","Vintage quality","Before 2010 energy"]
 };
 
 const FREE_SPACE_PHRASES=["Lemme Tag that Freespace","You Know I Had to Click It....","Free real estate, baby.","The one square you don't gotta earn.","Everybody gets one.","That's the gimme.","Center stage, no audition needed.","The participation trophy of bingo.","Click it or ticket.","This one's on the house.","Freebie secured.","The only guaranteed W."];
@@ -829,28 +797,34 @@ function loadBingoCategories(){
       let ok=true;
       for(const k of ['B','I','N','G','O']){if(!Array.isArray(cached[k])||cached[k].length<5){ok=false;break}}
       if(ok){BINGO_LIVE=cached;return}
-      else logError('warn','Cached bingo data malformed, using defaults');
     }
-  }catch(e){logError('error','Bingo cache parse error: '+e.message)}
-  // 2. If no local edits, try fetching bingo-categories.json (when hosted)
-  if(location.protocol!=='file:'){
-    fetchBingoJSON();
-  }
+  }catch{}
+  // 2. Try fetching bingo-categories.json from same directory (works from file:// AND https://)
+  fetchBingoJSON();
 }
 
 async function fetchBingoJSON(){
   try{
     const r=await fetch('bingo-categories.json?_='+Date.now());
-    if(!r.ok)return;
+    if(!r.ok)throw new Error('HTTP '+r.status);
     const data=await r.json();
     let ok=true;
     for(const k of ['B','I','N','G','O']){if(!Array.isArray(data[k])||data[k].length<5){ok=false;break}}
     if(ok){
       BINGO_LIVE=data;
-      buildBingo();// rebuild with new categories
-      console.log('Loaded bingo categories from JSON');
+      buildBingo();
+      console.log('Loaded bingo categories from JSON ('+Object.values(data).flat().length+' total)');
+    }else throw new Error('Malformed');
+  }catch(e){
+    console.log('bingo-categories.json:',e.message);
+    // Show in-page warning if using minimal fallback
+    if(BINGO_LIVE.B.length<=5){
+      const warn=document.createElement('div');
+      warn.style.cssText='position:fixed;top:224px;left:50%;transform:translateX(-50%);z-index:999;background:rgba(243,156,18,.9);color:#111;padding:8px 18px;border-radius:8px;font-size:.75rem;font-weight:700;text-align:center;max-width:90vw';
+      warn.innerHTML='bingo-categories.json not found. Place it next to this HTML file for full categories. <a href="https://github.com/sworrl/KVN_AUST" target="_blank" style="color:#1565c0">Download from GitHub</a> <button onclick="this.parentElement.remove()" style="margin-left:8px;background:none;border:none;font-size:1rem;cursor:pointer">&times;</button>';
+      document.body.appendChild(warn);
     }
-  }catch(e){console.log('bingo-categories.json not found, using hardcoded')}
+  }
 }
 
 function saveBingoCategories(){
