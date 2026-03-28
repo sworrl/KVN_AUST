@@ -718,7 +718,11 @@ async function checkForUpdates(){
     // Only read first 5KB to find the version JSON (don't download the whole file)
     const text=await r.text();
     // Match version specifically from the embedded app-version-data block
-    const m=text.match(/id="app-version-data"[\s\S]*?"version"\s*:\s*"(\d+\.\d+\.\d+)"/);
+    // Search from the END of the file (version block is at bottom)
+    const vBlock=text.lastIndexOf('app-version-data');
+    const tail=vBlock>0?text.substring(vBlock):'';
+    const m=tail.match(/"version"\s*:\s*"(\d+\.\d+\.\d+)"/);
+    console.log('Version check: local='+APP_VERSION+' github='+(m?m[1]:'?'));
     if(m&&m[1]&&m[1]!==APP_VERSION){
       // OUTDATED - bright red blinking
       badge.textContent=`UPDATE AVAILABLE: v${m[1]}`;
@@ -2407,8 +2411,8 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.7.1",
-  "build": "2026-03-28T11:30:00",
+  "version": "1.7.2",
+  "build": "2026-03-28T12:00:00",
   "changelog": "Flat category list, 101 categories, SVG fix, export improvements",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
