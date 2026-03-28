@@ -507,7 +507,11 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 
   <div id="summary-screen" class="screen">
     <div class="summary-wrap"><div class="summary-title">Game Summary</div><div id="summaryList"></div><div class="summary-avg" id="summaryAvg"></div>
-      <div class="summary-actions"><button class="nav-btn" onclick="exportBingoSVG()">Export Bingo Card (SVG)</button><button class="nav-btn primary" onclick="newSession()">New Game</button></div></div>
+      <div class="summary-actions" style="flex-wrap:wrap">
+        <button class="nav-btn" onclick="exportBingoSVG()">Bingo Card</button>
+        <button class="nav-btn" onclick="exportSummaryText()">Game Summary</button>
+        <button class="nav-btn primary" onclick="newSession()">New Game</button>
+      </div></div>
   </div>
 </div>
 
@@ -636,6 +640,17 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 
     <hr class="s-divider">
 
+    <div class="s-group">
+      <div class="s-label">Spinner</div>
+      <label style="font-size:.72rem;color:#ccc;cursor:pointer;display:flex;align-items:center;gap:6px">
+        <input type="checkbox" id="sAllowRepeats" style="accent-color:var(--accent)">
+        Allow repeat formats on the spinner
+      </label>
+      <div class="s-note">When off (default), the spinner avoids formats already used this game. Red dots mark used formats.</div>
+    </div>
+
+    <hr class="s-divider">
+
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="s-btn primary" onclick="applySettings()">Save &amp; Apply</button>
       <button class="s-btn" onclick="resetSettingsToDefault()">Reset to Defaults</button>
@@ -754,11 +769,18 @@ async function loadImages(){
 // ═══════════════════════════════════
 let audioCtx=null;
 let soundMode='tick';
-function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx}
+let audioUnlocked=false;
+function getAudioCtx(){
+  if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended')audioCtx.resume()}
+  return audioCtx;
+}
+// Only unlock audio on first user click (prevents browser audio indicator on load)
+document.addEventListener('click',function unlockAudio(){audioUnlocked=true;document.removeEventListener('click',unlockAudio)},{once:true});
 function setSound(v){soundMode=v}
 
 function playTick(pitch){
-  if(soundMode==='none')return;
+  if(soundMode==='none'||!audioUnlocked)return;
   try{
     const ctx=getAudioCtx();const t=ctx.currentTime;
     const osc=ctx.createOscillator();const gain=ctx.createGain();
@@ -770,7 +792,7 @@ function playTick(pitch){
 }
 
 function playWinSound(){
-  if(soundMode==='none')return;
+  if(soundMode==='none'||!audioUnlocked)return;
   try{
     const ctx=getAudioCtx();const t=ctx.currentTime;
     [523,659,784,1047].forEach((f,i)=>{
@@ -812,7 +834,9 @@ let bingoState=Array(25).fill(false),bingoWinShown=false,currentGameId=null,sess
 let lastTickSegment=-1;
 let bingoPicked=null;
 let gameActive=false;
-let bingoPerLetter=false; // false=fully random (default), true=categories assigned per B/I/N/G/O letter
+let bingoPerLetter=false;
+let usedFormats=new Set(); // labels of formats already spun this game
+let allowRepeatFormats=false; // user setting
 let maxReachedIdx=0; // farthest screen reached in current flow (can't skip ahead past this)
 let errorLog=[]; // {type:'warn'|'error', msg:string, ts:Date}
 
@@ -1017,7 +1041,7 @@ function startGame(){
   if(document.getElementById('bingoSetup').classList.contains('open'))toggleBingoSetup();
   currentGameId=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
   sessionRounds=[];bingoState=Array(25).fill(false);bingoWinShown=false;
-  gameActive=true;maxReachedIdx=1;
+  gameActive=true;maxReachedIdx=1;usedFormats=new Set();
   pickGameStamps(); // 25 unique SVG stamps for this game
   // Pick bingo data from BINGO_LIVE (which may have been edited)
   pickBingoCategories();
@@ -1284,7 +1308,10 @@ function drawWheel(){
     ctx.textAlign='right';ctx.fillStyle='#fff';
     const fs=Math.min(20,Math.max(11,500/n));
     ctx.font=`bold ${fs}px Inter`;ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=5;
-    ctx.fillText(wheelFormats[i].label,r-20,fs/3);ctx.shadowBlur=0;ctx.restore();
+    ctx.fillText(wheelFormats[i].label,r-20,fs/3);ctx.shadowBlur=0;
+    // Red dot for previously used formats
+    if(usedFormats.has(wheelFormats[i].label)){ctx.beginPath();ctx.arc(r-10,-fs/2-4,4,0,2*Math.PI);ctx.fillStyle='#ff1744';ctx.fill()}
+    ctx.restore();
   }
   ctx.restore();
   // Outer ring
@@ -1302,7 +1329,15 @@ function spinWheel(){
   if(!hasSpunOnce){hasSpunOnce=true;document.getElementById('wheelTop').style.display='none'}
   const btn=document.getElementById('spinBtn');btn.style.pointerEvents='none';btn.classList.add('spinning');
   setTimeout(()=>btn.classList.remove('spinning'),300);
-  const n=wheelFormats.length,ci=Math.floor(Math.random()*n);chosenFormat=wheelFormats[ci];
+  const n=wheelFormats.length;
+  // Pick a format, avoiding repeats unless allowed or all used
+  let ci;
+  if(!allowRepeatFormats){
+    const unused=[];for(let i=0;i<n;i++)if(!usedFormats.has(wheelFormats[i].label))unused.push(i);
+    ci=unused.length?unused[Math.floor(Math.random()*unused.length)]:Math.floor(Math.random()*n);
+  }else{ci=Math.floor(Math.random()*n)}
+  chosenFormat=wheelFormats[ci];
+  usedFormats.add(chosenFormat.label);
   const arc=2*Math.PI/n;
   const target=(5+Math.random()*4)*2*Math.PI+(2*Math.PI-ci*arc-arc/2)+Math.PI/2;
   const start=wheelAngle,dur=4200+Math.random()*1800,t0=performance.now();
@@ -1625,6 +1660,7 @@ function skipVideo(){sessionRounds.push({...makeRound(),link:'',rating:0,metrics
 function saveAndReRandomize(){
   sessionRounds.push(makeRound());
   resetTracker();
+  document.getElementById('vtLink').value='';
   animatedReRandomize(()=>showToast('Saved! New number rolling...'));
 }
 function saveAndEnd(){
@@ -1935,6 +1971,7 @@ function populateSettingsForm(){
   document.getElementById('sAvatarPreview').src=IMG_URLS.avatar||'';
   document.getElementById('sBannerPreview').src=IMG_URLS.banner||'';
   document.getElementById('sMosaicPreview').src=IMG_URLS.mosaic||IMG_URLS.avatar||'';
+  document.getElementById('sAllowRepeats').checked=allowRepeatFormats;
 }
 
 function handleFileSelect(type,input){
@@ -1969,6 +2006,9 @@ function applySettings(){
   if(bn&&bn!=='[local file]')IMG_URLS.banner=bn;
   if(mo&&mo!=='[local file]')IMG_URLS.mosaic=mo;
   IMG_URLS.footer=IMG_URLS.avatar; // footer avatar matches profile
+
+  allowRepeatFormats=document.getElementById('sAllowRepeats').checked;
+  localStorage.setItem('kvn_allow_repeats',allowRepeatFormats?'1':'0');
 
   saveSettings();
   applyImagesToDOM();
@@ -2039,6 +2079,7 @@ async function fetchChannelImages(){
 // ═══════════════════════════════════
 //  BINGO SVG EXPORT
 // ═══════════════════════════════════
+function escXml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;')}
 function exportBingoSVG(){
   if(!bingoPicked)return showToast('No bingo card to export','warn');
   const cols=['B','I','N','G','O'];const cw=100,ch=100,gap=4,pad=20;
@@ -2069,7 +2110,7 @@ function exportBingoSVG(){
       for(const wd of words){if((cur+' '+wd).length>12&&cur){lines.push(cur);cur=wd}else cur=cur?cur+' '+wd:wd}
       if(cur)lines.push(cur);
       const fs=isFree?11:9;const lh=fs+3;const startY=y+ch/2-(lines.length-1)*lh/2+fs/3;
-      lines.forEach((l,li)=>{svg+=`<text x="${x+cw/2}" y="${startY+li*lh}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="${isFree?'900':'600'}" font-size="${fs}" fill="${isFree?'#e74c3c':'#222'}">${esc(l)}</text>`});
+      lines.forEach((l,li)=>{svg+=`<text x="${x+cw/2}" y="${startY+li*lh}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="${isFree?'900':'600'}" font-size="${fs}" fill="${isFree?'#e74c3c':'#222'}">${escXml(l)}</text>`});
     }
   }
   // Footer with KVN AUST links
@@ -2094,6 +2135,32 @@ function exportBingoSVG(){
   const blob=new Blob([svg],{type:'image/svg+xml'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kvnaust-bingo-'+new Date().toISOString().slice(0,10)+'.svg';a.click();
   showToast('Bingo card exported!');
+}
+
+function exportSummaryText(){
+  if(!sessionRounds.length)return showToast('No rounds to export','warn');
+  let txt="YouTube's Recycle Bin - Game Summary\n";
+  txt+="Date: "+new Date().toLocaleString()+"\n";
+  txt+="Rounds: "+sessionRounds.length+"\n\n";
+  sessionRounds.forEach((r,i)=>{
+    txt+=`Round #${i+1}: ${r.search}\n`;
+    txt+=`  Format: ${r.format}\n`;
+    if(r.link)txt+=`  Video: ${r.link}\n`;
+    const m=r.metrics||{};
+    const rated=Object.entries(m).filter(([,v])=>v>0).map(([k,v])=>`${k}:${v}/5`).join(', ');
+    if(rated)txt+=`  Ratings: ${rated}\n`;
+    if(r.browsed&&r.browsed.length)txt+=`  Videos browsed: ${r.browsed.length}\n`;
+    txt+='\n';
+  });
+  // Averages
+  const mTot={},mCnt={};
+  sessionRounds.forEach(r=>{const m=r.metrics||{};for(const[k,v]of Object.entries(m))if(v>0){mTot[k]=(mTot[k]||0)+v;mCnt[k]=(mCnt[k]||0)+1}});
+  txt+="Averages:\n";
+  for(const k of Object.keys(mTot))txt+=`  ${k}: ${(mTot[k]/mCnt[k]).toFixed(1)}/5\n`;
+  txt+="\n@KVNAUST | youtube.com/@KVNAUST | x.com/MingKasterMK\n";
+  const blob=new Blob([txt],{type:'text/plain'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kvnaust-summary-'+new Date().toISOString().slice(0,10)+'.txt';a.click();
+  showToast('Summary exported!');
 }
 
 // ═══════════════════════════════════
@@ -2198,6 +2265,7 @@ function showToast(msg,type){
 //  INIT (must be after all declarations)
 // ═══════════════════════════════════
 pickGameStamps();
+allowRepeatFormats=localStorage.getItem('kvn_allow_repeats')==='1';
 loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
 checkForUpdates();
 </script>
@@ -2214,9 +2282,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.4.0",
-  "build": "2026-03-28T04:30:00",
-  "changelog": "In-app YouTube search browser, per-video ratings, click tracking",
+  "version": "1.4.4",
+  "build": "2026-03-28T06:00:00",
+  "changelog": "No-repeat spinner, red dots on used formats, export summary, SVG fix, audio fix",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
