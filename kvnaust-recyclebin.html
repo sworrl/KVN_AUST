@@ -985,9 +985,10 @@ function goNext(){
   // Only allow forward from format-screen (2) or number-screen (3)
   if(idx!==2&&idx!==3)return;
   let next=idx+1;
-  if(next===3&&chosenFormat&&chosenFormat.sp==='static'){chosenNumber='';next=4}
+  const isStatic=chosenFormat&&chosenFormat.sp==='static';
+  if(next===3&&isStatic){chosenNumber='';next=4}
   if(next>=SCREENS.length)return;
-  if(next>maxReachedIdx+1)return;
+  if(!isStatic&&next>maxReachedIdx+1)return; // static formats skip number screen, always allow
   showScreen(SCREENS[next]);
   if(SCREENS[next]==='format-screen')showFormatReveal();
   if(SCREENS[next]==='number-screen')setupNumberScreen();
