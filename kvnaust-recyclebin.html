@@ -28,6 +28,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 /* ── HEADER ── */
 .header{position:fixed;top:0;left:0;right:0;height:220px;z-index:500;display:flex;align-items:flex-end;padding:0 20px 14px;gap:14px;
   background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.75) 100%);backdrop-filter:blur(3px)}
+@media(max-width:600px){.header{height:120px;padding:0 10px 8px;gap:8px}
+  .header-banner img{object-position:center 40%}
+  .header-title{font-size:.9rem}.header-subtitle{font-size:.6rem}
+  .yt-avatar{width:32px;height:32px}
+  .header-right{gap:3px}.hdr-btn{font-size:.6rem;padding:3px 6px}
+  .main{top:120px}.bingo-overlay,.format-panel,.history-panel,.bingo-setup{top:120px}
+}
 .header-banner{position:absolute;inset:0;z-index:-1;overflow:hidden}
 .header-banner img{width:100%;height:100%;object-fit:cover;object-position:center 20%;opacity:.55;transition:opacity 1s}
 .yt-avatar{width:48px;height:48px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;flex-shrink:0;box-shadow:0 0 12px rgba(231,76,60,.3)}
@@ -341,6 +348,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 @keyframes cellReveal{0%{transform:scale(0) rotateY(90deg);opacity:0}60%{transform:scale(1.05) rotateY(-3deg)}100%{transform:scale(1) rotateY(0);opacity:1}}
 @keyframes screenShake{0%,100%{transform:translate(0)}10%{transform:translate(-6px,3px)}20%{transform:translate(5px,-5px)}30%{transform:translate(-3px,6px)}40%{transform:translate(6px,-2px)}50%{transform:translate(-5px,5px)}}
 @keyframes confettiFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@keyframes updateBlink{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes bingoWave{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes freeShimmer{
   0%{background:#fff9c4;color:#e74c3c;border-color:#f0c040}
@@ -425,7 +433,10 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
   <div id="result-screen" class="screen">
     <div class="result-sub">Search YouTube for:</div>
     <div class="result-pill" id="resultPill" onclick="copyResult()"></div>
-    <div class="result-sub">Click to copy</div>
+    <div class="result-sub" style="display:flex;gap:8px;align-items:center;margin-top:10px">
+      <button class="vt-btn" style="background:linear-gradient(135deg,#333,#555);font-size:.7rem;padding:6px 14px" onclick="copyResult()">Copy</button>
+      <button class="vt-btn" style="background:linear-gradient(135deg,#c62828,#e74c3c);font-size:.7rem;padding:6px 14px" onclick="searchYouTube()">Search YouTube</button>
+    </div>
     <div class="video-tracker">
       <!-- Re-spin / re-randomize same format -->
       <div class="vt-row" style="margin-bottom:4px">
@@ -618,40 +629,36 @@ const APP_BUILD=_v.build;
 
 async function checkForUpdates(){
   const badge=document.getElementById('versionBadge');
-  const isFile=location.protocol==='file:';
   const isLive=location.hostname.includes('falcontechnix.com');
 
   badge.textContent=`v${APP_VERSION}`;
   badge.title=`Build: ${APP_BUILD}`;
 
-  if(isFile){
-    badge.textContent=`v${APP_VERSION} (offline)`;
-    badge.title='Running locally. Visit falcontechnix.com/KVN_AUST for live version.';
-    badge.style.cursor='pointer';
-    badge.onclick=()=>showToast('Latest version at falcontechnix.com/KVN_AUST');
-    return;
-  }
-
-  // From https:// origin, check GitHub repo for latest embedded version in the HTML itself
+  // Check GitHub raw for latest version (works from ANY origin including file://)
   try{
     const r=await fetch(`${RAW_URL}/kvnaust-recyclebin.html?_=${Date.now()}`);
-    if(!r.ok)return;
-    const html=await r.text();
-    const m=html.match(/"version"\s*:\s*"([^"]+)"/);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    // Only read first 5KB to find the version JSON (don't download the whole file)
+    const text=await r.text();
+    const m=text.match(/"version"\s*:\s*"([^"]+)"/);
     if(m&&m[1]&&m[1]!==APP_VERSION){
-      badge.textContent=`v${APP_VERSION} → v${m[1]} available`;
-      badge.style.color='#f39c12';
-      badge.style.cursor='pointer';
-      badge.title='Update available! Click to update.';
-      badge.onclick=()=>{
-        if(isLive){showToast('Updating...');setTimeout(()=>location.reload(true),1000)}
-        else window.open(REPO_URL,'_blank');
-      };
+      // OUTDATED - bright red blinking
+      badge.textContent=`UPDATE AVAILABLE: v${m[1]}`;
+      badge.style.cssText='font-size:.6rem;color:#ff1744;cursor:pointer;padding:3px 8px;border-radius:4px;background:rgba(255,23,68,.1);border:1px solid #ff1744;animation:updateBlink 1s ease-in-out infinite';
+      badge.title=`Your version: v${APP_VERSION}. Latest: v${m[1]}. Click to get the update!`;
+      badge.onclick=()=>window.open(REPO_URL,'_blank');
     }else{
+      // Up to date - green
       badge.textContent=`v${APP_VERSION}`;
-      badge.style.color='#4caf50';
+      badge.style.cssText='font-size:.55rem;color:#4caf50;padding:2px 6px;border-radius:4px;background:rgba(76,175,80,.1)';
+      badge.title='Up to date!';
     }
-  }catch(e){console.log('Version check skipped:',e.message)}
+  }catch(e){
+    // Can't reach GitHub - just show version quietly
+    badge.textContent=`v${APP_VERSION}`;
+    badge.style.cssText='font-size:.55rem;color:#555;padding:2px 6px';
+    console.log('Version check:',e.message);
+  }
 }
 
 // ═══════════════════════════════════
@@ -1309,6 +1316,7 @@ function randHex(){let s='';for(let i=0;i<4;i++)s+='0123456789ABCDEF'[Math.floor
 
 function showResult(){finalString=chosenFormat.sp==='static'?chosenFormat.tpl:chosenFormat.tpl.replace('{V}',chosenNumber);document.getElementById('resultPill').textContent=finalString;resetTracker()}
 function copyResult(){navigator.clipboard.writeText(finalString).then(()=>showToast('Copied!')).catch(()=>{})}
+function searchYouTube(){window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(finalString)+'&sp=CAI%253D','_blank')}
 
 // ═══════════════════════════════════
 //  VIDEO TRACKING
@@ -1960,9 +1968,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.0.0",
+  "version": "1.2.0",
   "build": "2026-03-27",
-  "changelog": "Initial release",
+  "changelog": "Slide puzzle bingo, mosaic cards, multi-metric scoring, version checking",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
