@@ -41,19 +41,19 @@ Download `kvnaust-recyclebin.html` and open it in any browser. Works on Windows,
 ## File Structure
 
 ```
-kvnaust-recyclebin.html  - The entire app (single file)
-version.json             - Version info for update checking
-img/                     - Image assets (FT logos, favicon)
+kvnaust-recyclebin.html  - The entire app (single monolithic file)
 LICENSE                  - GPL-3.0
 README.md                - This file
 ```
 
+All images are either embedded as base64 or loaded from live URLs. No external files required.
+
 ## Version Checking
 
-The app embeds a version number. When hosted, it checks `version.json` in this repo:
-- **Live (falcontechnix.com)**: Auto-checks and can auto-reload when updates are available
+The app embeds its version as JSON at the bottom of the HTML. When hosted online, it checks this repo's HTML for a newer version:
+- **Live (falcontechnix.com)**: Auto-checks and reloads when updates are available
 - **Offline (file://)**: Shows current version with a note to check the live URL
-- **Bump version**: Update `APP_VERSION` in the HTML and `version` in `version.json`
+- **Bump version**: Update the embedded JSON block at the bottom of the HTML
 
 ## Credits
 

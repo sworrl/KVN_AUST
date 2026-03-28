@@ -483,7 +483,6 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     <button class="nav-btn" onclick="reshuffleBingoFlash()" style="font-size:.75rem">Shuffle Again</button>
     <button class="nav-btn primary" onclick="closeBingoFlash()">Let's Go!</button>
   </div>
-  <div style="margin-top:12px"><button class="nav-btn" id="bfSkip" onclick="skipBingoFlash()" style="font-size:.7rem;opacity:.5">No Bingo &mdash; Skip to Spinner</button></div>
 </div>
 
 <!-- PANELS -->
@@ -611,46 +610,37 @@ async function checkForUpdates(){
   const isFile=location.protocol==='file:';
   const isLive=location.hostname.includes('falcontechnix.com');
 
-  // Show current version
   badge.textContent=`v${APP_VERSION}`;
   badge.title=`Build: ${APP_BUILD}`;
 
   if(isFile){
-    // Can't fetch from file:// - show version + link
     badge.textContent=`v${APP_VERSION} (offline)`;
-    badge.title=`Running locally. Visit falcontechnix.com/KVN_AUST for live version.`;
+    badge.title='Running locally. Visit falcontechnix.com/KVN_AUST for live version.';
     badge.style.cursor='pointer';
     badge.onclick=()=>showToast('Latest version at falcontechnix.com/KVN_AUST');
-    // Try to check anyway (won't work but no harm)
     return;
   }
 
-  // From https:// origin, check GitHub for latest version
+  // From https:// origin, check GitHub repo for latest embedded version in the HTML itself
   try{
-    const r=await fetch(`${RAW_URL}/version.json?_=${Date.now()}`);
+    const r=await fetch(`${RAW_URL}/kvnaust-recyclebin.html?_=${Date.now()}`);
     if(!r.ok)return;
-    const data=await r.json();
-    if(data.version&&data.version!==APP_VERSION){
-      badge.textContent=`v${APP_VERSION} → v${data.version} available`;
+    const html=await r.text();
+    const m=html.match(/"version"\s*:\s*"([^"]+)"/);
+    if(m&&m[1]&&m[1]!==APP_VERSION){
+      badge.textContent=`v${APP_VERSION} → v${m[1]} available`;
       badge.style.color='#f39c12';
       badge.style.cursor='pointer';
-      badge.title=`Update available! Click to learn more.\n${data.changelog||''}`;
+      badge.title='Update available! Click to update.';
       badge.onclick=()=>{
-        if(isLive&&data.autoUpdate!==false){
-          showToast('Updating...');
-          setTimeout(()=>location.reload(true),1000);
-        }else{
-          window.open(REPO_URL+'/releases','_blank');
-        }
+        if(isLive){showToast('Updating...');setTimeout(()=>location.reload(true),1000)}
+        else window.open(REPO_URL,'_blank');
       };
     }else{
-      badge.textContent=`v${APP_VERSION} ✓`;
+      badge.textContent=`v${APP_VERSION}`;
       badge.style.color='#4caf50';
     }
-  }catch(e){
-    // Silent fail - version check is non-critical
-    console.log('Version check skipped:',e.message);
-  }
+  }catch(e){console.log('Version check skipped:',e.message)}
 }
 
 // ═══════════════════════════════════
@@ -1071,13 +1061,6 @@ function closeBingoFlash(){
   setTimeout(()=>{showScreen('wheel-screen');pickWheelFormats();drawWheel()},400);
 }
 
-function skipBingoFlash(){
-  // Skip bingo entirely - go straight to spinner without requiring free space click
-  bingoState[12]=true; // auto-daub free space
-  buildBingoFromPicked();
-  document.getElementById('bingoFlash').classList.remove('show');
-  setTimeout(()=>{showScreen('wheel-screen');pickWheelFormats();drawWheel()},400);
-}
 
 // ═══════════════════════════════════
 //  DOC FETCH
