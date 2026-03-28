@@ -529,7 +529,13 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 <div class="bingo-setup" id="bingoSetup">
   <button class="bs-close" onclick="toggleBingoSetup()">&times;</button>
   <h3>Bingo Categories</h3>
-  <div style="font-size:.65rem;color:var(--muted);margin-bottom:8px">Edit categories per column. Changes auto-save.</div>
+  <div style="margin-bottom:10px;display:flex;align-items:center;gap:8px;background:var(--card2);padding:8px 12px;border-radius:8px;border:1px solid #2a2a40">
+    <label style="font-size:.72rem;color:#ccc;cursor:pointer;display:flex;align-items:center;gap:6px">
+      <input type="checkbox" id="bingoPerLetterToggle" onchange="togglePerLetter(this.checked)" style="accent-color:var(--accent)">
+      Assign categories per B-I-N-G-O letter
+    </label>
+  </div>
+  <div style="font-size:.6rem;color:var(--muted);margin-bottom:8px" id="bingoModeDesc">Categories are shuffled randomly across all squares (default).</div>
   <div id="bingoSetupList"></div>
   <div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">
     <button class="nav-btn primary" style="font-size:.75rem;padding:6px 16px" onclick="toggleBingoSetup();showToast('Bingo categories saved!')">Done</button>
@@ -800,7 +806,8 @@ let currentScreen='start-screen',chosenFormat=null,chosenNumber=null,finalString
 let bingoState=Array(25).fill(false),bingoWinShown=false,currentGameId=null,sessionRounds=[];
 let lastTickSegment=-1;
 let bingoPicked=null;
-let gameActive=false; // true once NEW GAME is clicked, false on summary/start
+let gameActive=false;
+let bingoPerLetter=false; // false=fully random (default), true=categories assigned per B/I/N/G/O letter
 let maxReachedIdx=0; // farthest screen reached in current flow (can't skip ahead past this)
 let errorLog=[]; // {type:'warn'|'error', msg:string, ts:Date}
 
@@ -942,8 +949,7 @@ function startGame(){
   gameActive=true;maxReachedIdx=1;
   pickGameStamps(); // 25 unique SVG stamps for this game
   // Pick bingo data from BINGO_LIVE (which may have been edited)
-  const cols=['B','I','N','G','O'];bingoPicked={};
-  for(const c of cols){const p=[...BINGO_LIVE[c]];shuffle(p);bingoPicked[c]=p.slice(0,5)}
+  pickBingoCategories();
   buildBingoFromPicked();
   updateBingoBtn();
   showBingoFlash();
@@ -1421,11 +1427,9 @@ function reSpinSameFormat(){animatedReRandomize(()=>showToast('New search: '+fin
 
 // Reshuffle bingo during flash
 function reshuffleBingoFlash(){
-  const cols=['B','I','N','G','O'];bingoPicked={};
-  for(const c of cols){const p=[...BINGO_LIVE[c]];shuffle(p);bingoPicked[c]=p.slice(0,5)}
+  pickBingoCategories();
   bingoState=Array(25).fill(false);
   buildBingoFromPicked();
-  // Re-run the flash
   showBingoFlash();
 }
 function saveVideo(){sessionRounds.push(makeRound());showToast('Saved!');setTimeout(()=>{resetTracker();startNextRound()},600)}
@@ -1638,9 +1642,34 @@ function loadBingoState(){
   }catch{}
   return false;
 }
+function pickBingoCategories(){
+  const cols=['B','I','N','G','O'];
+  bingoPicked={};
+  if(bingoPerLetter){
+    // Per-letter mode: each column draws from its own pool
+    for(const c of cols){const p=[...BINGO_LIVE[c]];shuffle(p);bingoPicked[c]=p.slice(0,5)}
+  }else{
+    // Fully random: pool ALL categories from every letter, shuffle, deal 24
+    let allCats=[];
+    for(const c of cols)allCats.push(...BINGO_LIVE[c]);
+    // Deduplicate
+    allCats=[...new Set(allCats)];
+    shuffle(allCats);
+    const picked=allCats.slice(0,24);// 24 non-free cells
+    // Distribute into 5 columns of 5 (center is free)
+    let idx=0;
+    for(const c of cols)bingoPicked[c]=[];
+    for(let row=0;row<5;row++){
+      for(let ci=0;ci<5;ci++){
+        if(row===2&&ci===2)bingoPicked[cols[ci]].push('FREE SPACE');// placeholder, not used
+        else bingoPicked[cols[ci]].push(picked[idx++]);
+      }
+    }
+  }
+}
+
 function buildBingo(){
-  const cols=['B','I','N','G','O'];bingoPicked={};
-  for(const c of cols){const p=[...BINGO_LIVE[c]];shuffle(p);bingoPicked[c]=p.slice(0,5)}
+  pickBingoCategories();
   buildBingoFromPicked();
 }
 
@@ -1905,6 +1934,25 @@ document.addEventListener('keydown',e=>{
 // ═══════════════════════════════════
 //  BINGO SETUP PANEL
 // ═══════════════════════════════════
+function togglePerLetter(checked){
+  bingoPerLetter=checked;
+  localStorage.setItem('kvn_bingo_perLetter',checked?'1':'0');
+  document.getElementById('bingoModeDesc').textContent=checked
+    ?'Each B-I-N-G-O column draws from its own category pool.'
+    :'Categories are shuffled randomly across all squares (default).';
+}
+
+function loadPerLetterSetting(){
+  const v=localStorage.getItem('kvn_bingo_perLetter');
+  bingoPerLetter=v==='1';
+  const el=document.getElementById('bingoPerLetterToggle');
+  if(el)el.checked=bingoPerLetter;
+  const desc=document.getElementById('bingoModeDesc');
+  if(desc)desc.textContent=bingoPerLetter
+    ?'Each B-I-N-G-O column draws from its own category pool.'
+    :'Categories are shuffled randomly across all squares (default).';
+}
+
 function toggleBingoSetup(){
   const p=document.getElementById('bingoSetup');p.classList.toggle('open');
   document.getElementById('bingoToggle').classList.toggle('active',p.classList.contains('open'));
@@ -1961,16 +2009,16 @@ function showToast(msg,type){
 //  INIT (must be after all declarations)
 // ═══════════════════════════════════
 pickGameStamps();
-loadImages();loadBingoCategories();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
+loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
 checkForUpdates();
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.2.0",
-  "build": "2026-03-27",
-  "changelog": "Slide puzzle bingo, mosaic cards, multi-metric scoring, version checking",
+  "version": "1.3.0",
+  "build": "2026-03-28T02:15:00",
+  "changelog": "Random bingo mode, YouTube search button, version checking from file://",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
