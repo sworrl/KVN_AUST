@@ -1655,18 +1655,20 @@ function reshuffleBingoFlash(){
   buildBingoFromPicked();
   showBingoFlash();
 }
-function saveVideo(){sessionRounds.push(makeRound());showToast('Saved!');setTimeout(()=>{resetTracker();startNextRound()},600)}
-function skipVideo(){sessionRounds.push({...makeRound(),link:'',rating:0,metrics:{entertainment:0,weirdness:0,gem:0,liked:0}});resetTracker();startNextRound()}
+function clearVtLink(){document.getElementById('vtLink').value=''}
+function saveVideo(){sessionRounds.push(makeRound());clearVtLink();showToast('Saved!');setTimeout(()=>{resetTracker();startNextRound()},600)}
+function skipVideo(){sessionRounds.push({...makeRound(),link:'',rating:0,metrics:{entertainment:0,weirdness:0,gem:0,liked:0}});clearVtLink();resetTracker();startNextRound()}
 function saveAndReRandomize(){
   sessionRounds.push(makeRound());
-  resetTracker();
-  document.getElementById('vtLink').value='';
-  animatedReRandomize(()=>showToast('Saved! New number rolling...'));
+  clearVtLink();resetTracker();
+  // Stay on result screen - just re-roll the number
+  if(!chosenFormat){showToast('No format selected','warn');return}
+  animatedReRandomize(()=>showToast('Saved! Re-randomized'));
 }
 function saveAndEnd(){
   const round=makeRound();
   sessionRounds.push(round);
-  resetTracker();
+  clearVtLink();resetTracker();
   saveGameToHistory();
   showSummary();
 }
@@ -1676,7 +1678,7 @@ function endSession(){
     round.link='';round.rating=0;
     sessionRounds.push(round);
   }
-  resetTracker();
+  clearVtLink();resetTracker();
   saveGameToHistory();
   showSummary();
 }
@@ -2282,9 +2284,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.4.4",
-  "build": "2026-03-28T06:00:00",
-  "changelog": "No-repeat spinner, red dots on used formats, export summary, SVG fix, audio fix",
+  "version": "1.4.5",
+  "build": "2026-03-28T06:30:00",
+  "changelog": "Fix save & re-randomize, clear URL on all saves",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
