@@ -38,7 +38,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 .header-banner{position:absolute;inset:0;z-index:-1;overflow:hidden}
 .header-banner img{width:100%;height:100%;object-fit:cover;object-position:center 20%;opacity:.55;transition:opacity 1s}
 .yt-avatar{width:48px;height:48px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;flex-shrink:0;box-shadow:0 0 12px rgba(231,76,60,.3)}
-.header-title{font-weight:900;font-size:1.15rem;letter-spacing:1px;text-shadow:0 2px 10px #000}
+.header-title{font-weight:900;font-size:1.15rem;letter-spacing:1px;color:#fff;
+  text-shadow:0 0 10px rgba(231,76,60,.6),0 0 20px rgba(231,76,60,.3),0 2px 10px #000,0 0 40px rgba(231,76,60,.15)}
 .header-subtitle{font-size:.7rem;color:#aaa;text-shadow:0 1px 6px #000}
 .header-right{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .hdr-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;padding:5px 12px;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
@@ -75,7 +76,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 @keyframes avatarBreathe{0%,100%{transform:scale(1) translateY(0);box-shadow:0 0 30px rgba(231,76,60,.2)}
   30%{transform:scale(1.04) translateY(-3px);box-shadow:0 0 50px rgba(231,76,60,.35)}
   60%{transform:scale(1.01) translateY(1px);box-shadow:0 0 35px rgba(231,76,60,.25)}}
-#start-screen h1{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:900;text-align:center;background:linear-gradient(135deg,#fff,#ccc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#start-screen h1{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:900;text-align:center;color:#fff;letter-spacing:2px;
+  text-shadow:0 0 12px rgba(231,76,60,.7),0 0 25px rgba(231,76,60,.4),0 0 50px rgba(231,76,60,.2),0 2px 8px #000}
 #start-screen .tagline{color:var(--muted);font-size:.85rem;margin-bottom:20px;text-align:center}
 .start-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:16px 52px;font-size:1.1rem;font-weight:900;border-radius:12px;cursor:pointer;letter-spacing:2px;transition:transform .15s,box-shadow .3s;box-shadow:0 4px 25px rgba(231,76,60,.35)}
 .start-btn:hover{transform:scale(1.05);box-shadow:0 6px 35px rgba(231,76,60,.45)}
@@ -183,7 +185,8 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
   transform:scale(.85) translateY(30px);transition:transform .4s cubic-bezier(.4,0,.2,1);position:relative}
 .bingo-overlay.open .bingo-card{transform:scale(1) translateY(0)}
 .bingo-card-header{text-align:center;font-weight:900;font-size:1.05rem;margin-bottom:3px;
-  background:linear-gradient(135deg,var(--g1),var(--g2),var(--g3),var(--g4),var(--g5));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  background:linear-gradient(135deg,var(--g1),var(--g2),var(--g3),var(--g4),var(--g5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 6px rgba(231,76,60,.5)) drop-shadow(0 0 12px rgba(231,76,60,.25))}
 .bingo-card-sub{text-align:center;font-size:.68rem;color:var(--muted);margin-bottom:8px}
 .bingo-letters{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:3px}
 .bingo-letters span{text-align:center;font-size:1.7rem;font-weight:900}
