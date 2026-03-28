@@ -1985,18 +1985,19 @@ async function fetchCredits(){
     const r=await fetch(`${RAW_URL}/FORMAT-MAP.md?_=${Date.now()}`);
     if(!r.ok)throw new Error('HTTP '+r.status);
     const md=await r.text();
-    // Extract contributors section
-    const match=md.match(/## Contributors[\s\S]*?((?:@[\w._]+[\s,]*)+)/);
-    if(match){
-      const names=match[1].match(/@[\w._]+/g)||[];
-      const list=document.getElementById('creditsList');
+    // Grab everything after "## Contributors"
+    const section=md.split(/## Contributors/i)[1]||'';
+    // Find all @handles in that section
+    const names=[...new Set(section.match(/@[\w._]+/g)||[])];
+    const list=document.getElementById('creditsList');
+    if(names.length){
       list.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center">'+
-        names.map(n=>`<a href="https://www.youtube.com/${n}" target="_blank" style="background:var(--card2);padding:3px 8px;border-radius:4px;color:#7e9cd8;text-decoration:none;font-size:.7rem;border:1px solid #2a2a40;transition:background .15s" onmouseover="this.style.background='#2e2e48'" onmouseout="this.style.background='var(--card2)'">${n}</a>`).join('')+
-        '</div>';
+        names.map(n=>`<a href="https://www.youtube.com/${n}" target="_blank" style="background:var(--card2);padding:4px 10px;border-radius:6px;color:#7e9cd8;text-decoration:none;font-size:.72rem;border:1px solid #2a2a40;transition:background .15s" onmouseover="this.style.background='#2e2e48'" onmouseout="this.style.background=''">${n}</a>`).join('')+
+        '</div><div style="text-align:center;margin-top:8px;font-size:.6rem;color:#555">'+names.length+' contributors</div>';
       creditsLoaded=true;
-    }
+    }else throw new Error('No names found');
   }catch(e){
-    document.getElementById('creditsList').innerHTML='<div style="text-align:center;color:#555">Could not load contributors. <a href="'+REPO_URL+'/blob/main/FORMAT-MAP.md" target="_blank" style="color:#7e9cd8">View on GitHub</a></div>';
+    document.getElementById('creditsList').innerHTML='<div style="text-align:center;color:#555">Could not load contributors. <a href="'+REPO_URL+'/blob/main/FORMAT-MAP.md#contributors" target="_blank" style="color:#7e9cd8">View on GitHub</a></div>';
   }
 }
 
