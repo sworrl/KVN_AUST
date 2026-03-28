@@ -786,12 +786,13 @@ const ALL_FORMATS=[
 {label:'"QuickCapture Video"',tpl:'"QuickCapture Video - {V}"',sp:"monthdate"},
 ];
 
+// Hardcoded defaults (used offline). When hosted, bingo-categories.json is fetched instead.
 const BINGO={
-B:["Fever dream","Conspiracy theory","Future world leader","\"I've been to this place\"","Possibly a crime","Unhinged rambler","5 seconds of nothing","Intimate family moment","Test upload","Security cam footage","Zoom call","Pet video","Car ride","Baby's first steps","Drunk recording"],
-I:["Foreign language (to me)","Randomly nsfw","Potential serial killer","Actual wisdom / insight","Wholesome content","Someone's backyard","Late night thoughts","Accidental upload","Mirror selfie video","Garage band","Phone left recording","Cooking attempt","Parking lot footage","Dark room vibes","Toddler with phone"],
-N:["Actual talent","Rabbit-hole channel","New sport unlocked","Creepy","Karaoke session","School presentation","Minecraft gameplay","Unboxing something weird","Dance practice","Cat content","Screen recording","Birthday party","Storm footage","Toy review","Tutorial attempt"],
-G:["Good music","May be mentally unwell","Channel has 20,000+ uploads","School assignment / project","Bass boosted / distorted audio","Nature footage","Religious content","Stop motion","Someone's commute","Dashcam clip","Foreign news","Gaming rage","Exercise video","Magic trick","Time lapse"],
-O:["Random food spotted","Old meme","Gives me Nostalgia","Life-hack","Jump scare","Vintage quality","Before 2010 energy","Someone singing","Hotel room tour","Construction site","Wedding footage","Elevator music","Walmart adventure","Drone footage","Soundcheck"]
+B:["Fever dream","Conspiracy theory","Future world leader","\"I've been to this place\"","Possibly a crime","Unhinged rambler","5 seconds of nothing","Intimate family moment","Test upload","Security cam footage","Zoom call","Pet video","Car ride","Baby's first steps","Drunk recording","Potential cult leader","Feels like a deep web video","Dial 911","Tweaker","Ancient artifact (2005-2006)"],
+I:["Foreign language (to me)","Randomly nsfw","Potential serial killer","Actual wisdom / insight","Wholesome content","Someone's backyard","Late night thoughts","Accidental upload","Mirror selfie video","Garage band","Phone left recording","Cooking attempt","Parking lot footage","Dark room vibes","Toddler with phone","I learned something new","Recurring character","AMV","Happy human","Sad human"],
+N:["Actual talent","Rabbit-hole channel","New sport unlocked","Creepy","Karaoke session","School presentation","Minecraft gameplay","Unboxing something weird","Dance practice","Cat content","Screen recording","Birthday party","Storm footage","Toy review","Tutorial attempt","Randomly creepy / unnerving","School project / presentation","Church / office production","Concert footage","Just plain weird / WTF"],
+G:["Good music","May be mentally unwell","Channel has 20,000+ uploads","School assignment / project","Bass boosted / distorted audio","Nature footage","Religious content","Stop motion","Someone's commute","Dashcam clip","Foreign news","Gaming rage","Exercise video","Magic trick","Time lapse","Channel has 5,000+ uploads","Gameplay of an obscure game","Innovative idea / technology","Same uploader in 2 searches","New lead discovery"],
+O:["Random food spotted","Old meme","Gives me Nostalgia","Life-hack","Jump scare","Vintage quality","Before 2010 energy","Someone singing","Hotel room tour","Construction site","Wedding footage","Elevator music","Walmart adventure","Drone footage","Soundcheck","Random animal spotted","Home video","Underrated creator","Liminality","No context but makes sense"]
 };
 
 const FREE_SPACE_PHRASES=["Lemme Tag that Freespace","You Know I Had to Click It....","Free real estate, baby.","The one square you don't gotta earn.","Everybody gets one.","That's the gimme.","Center stage, no audition needed.","The participation trophy of bingo.","Click it or ticket.","This one's on the house.","Freebie secured.","The only guaranteed W."];
@@ -821,6 +822,7 @@ const BINGO_CACHE_KEY='kvn_bingo_cats';
 let BINGO_LIVE=JSON.parse(JSON.stringify(BINGO)); // mutable working copy
 
 function loadBingoCategories(){
+  // 1. Check localStorage first (user's custom edits take priority)
   try{
     const cached=JSON.parse(localStorage.getItem(BINGO_CACHE_KEY)||'null');
     if(cached&&typeof cached==='object'){
@@ -830,6 +832,25 @@ function loadBingoCategories(){
       else logError('warn','Cached bingo data malformed, using defaults');
     }
   }catch(e){logError('error','Bingo cache parse error: '+e.message)}
+  // 2. If no local edits, try fetching bingo-categories.json (when hosted)
+  if(location.protocol!=='file:'){
+    fetchBingoJSON();
+  }
+}
+
+async function fetchBingoJSON(){
+  try{
+    const r=await fetch('bingo-categories.json?_='+Date.now());
+    if(!r.ok)return;
+    const data=await r.json();
+    let ok=true;
+    for(const k of ['B','I','N','G','O']){if(!Array.isArray(data[k])||data[k].length<5){ok=false;break}}
+    if(ok){
+      BINGO_LIVE=data;
+      buildBingo();// rebuild with new categories
+      console.log('Loaded bingo categories from JSON');
+    }
+  }catch(e){console.log('bingo-categories.json not found, using hardcoded')}
 }
 
 function saveBingoCategories(){
