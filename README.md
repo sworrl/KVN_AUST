@@ -133,7 +133,7 @@ The community-maintained list of every known default filename keyphrase that acc
 ## Credits
 
 - **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)) - Creator of YouTube's Recycle Bin & the Maps
-- **Justin / [BASH & BRASS](https://www.youtube.com/@BASHnBRASS) / [FalconTechnix](https://www.falcontechnix.com)** - Tool Development
+- **Justin** ([@Chegnus](https://x.com/Chegnus)) / [BASH & BRASS](https://www.youtube.com/@BASHnBRASS) / [FalconTechnix](https://www.falcontechnix.com) - Tool Development
 - **[70+ community contributors](FORMAT-MAP.md#contributors)** - Format discovery
 
 ---

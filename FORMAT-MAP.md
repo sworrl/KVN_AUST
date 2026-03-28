@@ -241,5 +241,5 @@ The only way to access these videos is to search for the **keyphrase** associate
 ---
 
 <p align="center">
-  <sub>Maintained by <a href="https://youtube.com/@KVNAUST">KVN AUST</a> &amp; the community | <a href="https://github.com/sworrl/KVN_AUST">GitHub Repo</a> | <a href="https://falcontechnix.com/KVN_AUST/">Live Tool</a></sub>
+  <sub>Maintained by <a href="https://youtube.com/@KVNAUST">KVN AUST</a> &amp; the community | Tool by <a href="https://x.com/Chegnus">@Chegnus</a> / <a href="https://falcontechnix.com">FalconTechnix</a> | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Play</a></sub>
 </p>
