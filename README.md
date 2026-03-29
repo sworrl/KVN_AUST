@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  <a href="https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"><img src="https://img.shields.io/badge/PLAY_NOW-falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
+  <a href="https://falcontechnix.com/KVN_AUST"><img src="https://img.shields.io/badge/PLAY_NOW-falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
 </p>
 
 <p align="center">
