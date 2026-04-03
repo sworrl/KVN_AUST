@@ -40,6 +40,21 @@ YouTube hosts over **20 billion videos**. **93%** have under 1,000 views. **30%*
 ## Screenshots
 
 <p align="center">
+  <img src="screenshots/cloud-save.png" width="720" alt="Cloud Save">
+  <br><sub>Cloud Save — sync game data across devices</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/bingo-export.png" width="720" alt="Bingo Card Export">
+  <br><sub>Bingo Card Export Preview</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/bingo-card.png" width="720" alt="Bingo Card">
+  <br><sub>Bingo Card with Mosaic & Daub Stamps</sub>
+</p>
+
+<p align="center">
   <img src="screenshots/spinner.png" width="720" alt="3D Format Spinner">
   <br><sub>3D Format Spinner</sub>
 </p>
@@ -57,21 +72,6 @@ YouTube hosts over **20 billion videos**. **93%** have under 1,000 views. **30%*
 <p align="center">
   <img src="screenshots/result-screen.png" width="720" alt="Result Screen">
   <br><sub>Search, Rate & Save</sub>
-</p>
-
-<p align="center">
-  <img src="screenshots/bingo-card.png" width="720" alt="Bingo Card">
-  <br><sub>Bingo Card with Mosaic & Daub Stamps</sub>
-</p>
-
-<p align="center">
-  <img src="screenshots/bingo-export.png" width="720" alt="Bingo Card Export">
-  <br><sub>Bingo Card Export Preview</sub>
-</p>
-
-<p align="center">
-  <img src="screenshots/cloud-save.png" width="720" alt="Cloud Save">
-  <br><sub>Cloud Save — sync game data across devices</sub>
 </p>
 
 ---
