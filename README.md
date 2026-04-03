@@ -37,6 +37,45 @@ YouTube hosts over **20 billion videos**. **93%** have under 1,000 views. **30%*
 
 ---
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/spinner.png" width="720" alt="3D Format Spinner">
+  <br><sub>3D Format Spinner</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/format-selected.png" width="720" alt="Format Selected">
+  <br><sub>Format Selected — click anywhere to continue</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/number-gen.png" width="720" alt="Number Generator">
+  <br><sub>Rainbow Number Generator</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/result-screen.png" width="720" alt="Result Screen">
+  <br><sub>Search, Rate & Save</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/bingo-card.png" width="720" alt="Bingo Card">
+  <br><sub>Bingo Card with Mosaic & Daub Stamps</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/bingo-export.png" width="720" alt="Bingo Card Export">
+  <br><sub>Bingo Card Export Preview</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/cloud-save.png" width="720" alt="Cloud Save">
+  <br><sub>Cloud Save — sync game data across devices</sub>
+</p>
+
+---
+
 ## Features
 
 <table>
@@ -121,7 +160,7 @@ The community-maintained list of every known default filename keyphrase that acc
 ```html
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.7.1",    <-- bump this
+  "version": "1.7.2",    <-- bump this
   "build": "2026-03-28",  <-- update date
   ...
 }
