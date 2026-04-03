@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-@KVNAUST-red?style=for-the-badge&logo=youtube" alt="YouTube"></a>
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=for-the-badge&logo=x" alt="X/Twitter"></a>
-  <a href="https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/"><img src="https://img.shields.io/badge/Google_Doc-Original_Source-blue?style=for-the-badge&logo=googledocs" alt="Google Doc"></a>
+  <a href="https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"><img src="https://img.shields.io/badge/PLAY_NOW-falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
 </p>
 
 > **Note from KVN AUST:** WORKING ON A FIX FOR SORTING BY UPLOAD DATE
@@ -229,6 +229,24 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `"Dvgrab"` | Camera | [@BastienSante1902](https://youtube.com/@BastienSante1902) |
 | `"XiaoYing video"` | Misc | [@Hrotmaister](https://youtube.com/@Hrotmaister) |
 | `"Temp video for share"` | Drone | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) |
+
+---
+
+## Solved Mysteries
+
+### "Better Bandai" / Webdriver Torso-Style Channels
+
+You may encounter channels uploading hundreds or thousands of short videos consisting of **colored rectangles changing size and position** with **high-pitched beeping tones**. Examples include channels like "Better Bandai" and the infamous "Webdriver Torso."
+
+Despite their eerie, cryptic appearance, **these are not** C2 (Command & Control) communications, ARGs, or secret number stations.
+
+**What they actually are:** Automated test videos created by YouTube/Google to continuously monitor the platform's video uploading, encoding, and compression infrastructure.
+
+- **Why boxes and beeps?** Simple visual patterns (solid colored rectangles) and audio tones are specifically designed to be easy for software to analyze. YouTube's backend compares the uploaded output to the original source file to measure quality loss during compression and detect audio desync.
+- **The titles** (e.g. `gcs-pkg-20200105-032036-742513`) are automated system log IDs and timestamps. "GCS" stands for Google Cloud Storage, part of the infrastructure used to host and process these files.
+- **The volume** is intentional — YouTube uploads hundreds of thousands of these test videos across multiple bot channels to monitor performance at scale.
+
+> While the sheer volume and bizarre nature of these videos have sparked many conspiracy theories over the years, they are just behind-the-scenes engineering tools used to ensure the platform is functioning correctly.
 
 ---
 
