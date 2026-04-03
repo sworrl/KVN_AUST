@@ -91,8 +91,7 @@ YouTube hosts over **20 billion videos**. **93%** have under 1,000 views. **30%*
 </td><td>
 
 **Online (Hosted)**
-- Live [Google Doc](https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/) format sync (every 30 min)
-- GitHub [Format Map](FORMAT-MAP.md) as secondary source
+- Live [FORMAT-MAP.md](FORMAT-MAP.md) sync from GitHub (every 30 min)
 - Password-backed game history saving
 - Always up to date
 
@@ -125,7 +124,7 @@ YouTube hosts over **20 billion videos**. **93%** have under 1,000 views. **30%*
 
 ### Online (Recommended)
 
-> **[Play at falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html)** - always up to date, live Google Doc format sync, password-backed game history.
+> **[Play at falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html)** - always up to date, live format sync, password-backed game history.
 
 ### Offline
 
@@ -160,8 +159,8 @@ The community-maintained list of every known default filename keyphrase that acc
 ```html
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.7.2",    <-- bump this
-  "build": "2026-03-28",  <-- update date
+  "version": "1.8.0",    <-- bump this
+  "build": "2026-04-02",  <-- update date
   ...
 }
 </script>

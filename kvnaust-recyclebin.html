@@ -3,7 +3,7 @@
   https://github.com/sworrl/KVN_AUST
   https://falcontechnix.com/KVN_AUST/
 
-  FORMAT SYNC: When hosted, the app fetches KVN AUST's Google Doc live.
+  FORMAT SYNC: Formats fetched from GitHub FORMAT-MAP.md (works from file:// and hosted).
   For offline/file:// usage, formats are hardcoded below. To update them,
   run the companion script: update-formats.sh (see repo root).
   Or set up a cron job on your server:
@@ -430,7 +430,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       <h1>YouTube's Recycle Bin</h1>
       <div class="tagline">The internet's largest video graveyard</div>
       <button class="start-btn" onclick="startGame()">NEW GAME</button>
-      <div style="margin-top:10px;font-size:.68rem;color:#333">Formats pulled live from the Google Doc every 30 minutes</div>
+      <div style="margin-top:10px;font-size:.68rem;color:#333">Formats synced from <a href="https://github.com/sworrl/KVN_AUST/blob/main/FORMAT-MAP.md" target="_blank" style="color:#2ecc71">FORMAT-MAP.md</a> on GitHub</div>
     </div>
   </div>
 
@@ -826,7 +826,7 @@ function playWinSound(){
 // ═══════════════════════════════════
 //  FORMATS
 // ═══════════════════════════════════
-// Minimal fallback formats - full list fetched from Google Doc when hosted
+// Minimal fallback formats - full list fetched from GitHub FORMAT-MAP.md
 const ALL_FORMATS=[
 {label:"IMG XXXX",tpl:"IMG {V}",min:0,max:9999,pad:4},{label:"MVI XXXX",tpl:"MVI {V}",min:0,max:9999,pad:4},
 {label:"MOV XXXX",tpl:"MOV {V}",min:0,max:9999,pad:4},{label:"DSC XXXX",tpl:"DSC {V}",min:0,max:9999,pad:4},
@@ -1241,84 +1241,36 @@ async function fetchDocFormats(){
   loadCachedFormats();
 
   // If cache is fresh, skip network fetch
-  if(!isCacheStale()){console.log('Doc cache is fresh, skipping fetch');return}
+  if(!isCacheStale()){console.log('Format cache is fresh, skipping fetch');return}
 
-  // file:// origin can't fetch cross-origin at all - use cached/hardcoded formats only
-  if(location.protocol==='file:'){
-    console.log('Running from file:// - using hardcoded + cached formats only. For live doc sync, run from localhost.');
-    return;
-  }
-
-  // Fetch live from Google Doc
-  let errors=[];
+  // file:// can still fetch from GitHub (CORS allows *)
   try{
-    const docUrl='https://docs.google.com/document/d/1mV5PhumaIJ8mtH8XmohqXkk5fjK_HlqcineMccPQm5A/export?format=txt';
-    const proxies=[
-      docUrl,
-      'https://api.allorigins.win/raw?url='+encodeURIComponent(docUrl)
-    ];
-    let r=null;
-    for(const url of proxies){
-      try{r=await fetch(url);if(r&&r.ok)break;r=null}catch{r=null}
-    }
-    if(!r){showToast('Doc fetch failed - using cached formats','warn');return}
-    const txt=await r.text();
-    if(!txt||txt.length<100){showToast('Doc fetch returned empty content','warn');return}
-
-    const existing=new Set(ALL_FORMATS.map(f=>f.label));
-    const docFormats=[]; // all parsed from doc (for cache)
-    let newCount=0,lineNum=0;
-
-    for(const line of txt.split('\n')){
-      lineNum++;
-      const m=line.match(/^[-\s]*([A-Z][A-Za-z0-9_ ]*?)(X{2,4})\s+\((\d+)-(\d+)\)/);
-      if(m){
-        const lbl=m[1].trim()+m[2];
-        const lo=parseInt(m[3]),hi=parseInt(m[4]);
-        if(isNaN(lo)||isNaN(hi)){errors.push(`Line ${lineNum}: bad range "${m[3]}-${m[4]}" for ${lbl}`);continue}
-        if(lo>hi){errors.push(`Line ${lineNum}: min>max (${lo}>${hi}) for ${lbl}`);continue}
-        const fmt={label:lbl,tpl:m[1].trim()+'{V}',min:lo,max:hi,pad:m[2].length};
-        docFormats.push(fmt);
-        if(!existing.has(lbl)){ALL_FORMATS.push(fmt);existing.add(lbl);newCount++}
-      }
-    }
-
-    // Save to cache
-    saveCachedFormats(docFormats);
-    formats=[...ALL_FORMATS];selectedFormats=new Set(formats.map((_,i)=>i));buildFormatPanel();
-    console.log(`Doc: parsed ${docFormats.length} formats, ${newCount} new. ${errors.length} errors.`);
-
-    if(errors.length){
-      showToast(`Doc parse: ${errors.length} warning(s)`,'warn');
-      errors.forEach(e=>logError('warn',e));
-    }
-  }catch(e){
-    console.log('Google Doc fetch:',e.message);
-  }
-
-  // Also fetch from GitHub MD (recycle-bin-map) as secondary source
-  try{
-    const r2=await fetch(`${RAW_URL}/FORMAT-MAP.md?_=${Date.now()}`);
-    if(r2&&r2.ok){
-      const md=await r2.text();
+    const r=await fetch(`${RAW_URL}/FORMAT-MAP.md?_=${Date.now()}`);
+    if(r&&r.ok){
+      const md=await r.text();
       const existing=new Set(ALL_FORMATS.map(f=>f.label));
-      let mdCount=0;
+      const fetched=[];
+      let newCount=0;
       // Parse markdown table rows: | KEYPHRASE | RANGE | ...
       for(const line of md.split('\n')){
         const m=line.match(/\|\s*([A-Z][A-Za-z0-9_ ]*?)(X{2,4})\s*\|\s*(\d+)-(\d+)/);
         if(m){
           const lbl=m[1].trim()+m[2];
           const lo=parseInt(m[3]),hi=parseInt(m[4]);
-          if(!existing.has(lbl)&&lo<=hi){
-            ALL_FORMATS.push({label:lbl,tpl:m[1].trim()+'{V}',min:lo,max:hi,pad:m[2].length});
-            existing.add(lbl);mdCount++;
+          if(lo<=hi){
+            const fmt={label:lbl,tpl:m[1].trim()+'{V}',min:lo,max:hi,pad:m[2].length};
+            fetched.push(fmt);
+            if(!existing.has(lbl)){ALL_FORMATS.push(fmt);existing.add(lbl);newCount++}
           }
         }
       }
-      if(mdCount){formats=[...ALL_FORMATS];selectedFormats=new Set(formats.map((_,i)=>i));buildFormatPanel()}
-      console.log(`GitHub MD: ${mdCount} new formats`);
+      saveCachedFormats(fetched);
+      formats=[...ALL_FORMATS];selectedFormats=new Set(formats.map((_,i)=>i));buildFormatPanel();
+      console.log(`GitHub FORMAT-MAP: parsed ${fetched.length} formats, ${newCount} new`);
+    }else{
+      showToast('Format fetch failed - using cached formats','warn');
     }
-  }catch(e){console.log('GitHub MD fetch:',e.message)}
+  }catch(e){console.log('Format fetch:',e.message)}
 }
 
 // ═══════════════════════════════════
@@ -2411,9 +2363,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.7.2",
-  "build": "2026-03-28T12:00:00",
-  "changelog": "Flat category list, 101 categories, SVG fix, export improvements",
+  "version": "1.8.0",
+  "build": "2026-04-02T12:00:00",
+  "changelog": "Replace Google Doc with GitHub FORMAT-MAP.md as sole format source",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
