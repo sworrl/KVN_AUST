@@ -348,6 +348,34 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 .cf-close{background:none;border:none;color:#444;font-size:.9rem;cursor:pointer;padding:2px 6px;margin-left:4px}.cf-close:hover{color:#aaa}
 .cf-sep{color:#333;font-size:.7rem}
 
+/* ── RECORDS TIMELINE MODAL ── */
+.records-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.records-overlay.open{opacity:1;pointer-events:auto}
+.records-modal{background:#000;border:1px solid #333;border-radius:16px;padding:24px 20px 18px;max-width:720px;width:95vw;max-height:85vh;overflow-y:auto;transform:scale(.9);transition:transform .3s}
+.records-overlay.open .records-modal{transform:scale(1)}
+.records-modal h3{text-align:center;color:#fff;font-size:1.1rem;margin:0 0 4px;font-weight:900;letter-spacing:.5px}
+.records-modal .rec-sub{text-align:center;font-size:.65rem;color:#888;margin-bottom:14px}
+.rec-timeline{position:relative;width:100%;height:320px;background:#000;border:1px solid #333;border-radius:8px;overflow:hidden;margin-bottom:14px}
+.rec-timeline canvas{width:100%;height:100%}
+.rec-form{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:10px}
+.rec-form input{background:#111;border:1px solid #333;color:#fff;padding:6px 10px;border-radius:6px;font-size:.75rem;font-family:'Inter',sans-serif}
+.rec-form input::placeholder{color:#444}
+.rec-form button{background:#e74c3c;border:none;color:#fff;padding:6px 14px;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer}
+.rec-form button:hover{background:#c0392b}
+.rec-list{max-height:150px;overflow-y:auto;margin-bottom:10px}
+.rec-entry{display:flex;gap:8px;align-items:center;padding:5px 8px;border-radius:6px;font-size:.72rem;color:#ccc;background:#0a0a0a;margin-bottom:3px;border:1px solid #1a1a1a}
+.rec-entry .rec-date{color:#e74c3c;font-weight:700;min-width:95px}
+.rec-entry .rec-views{color:#2ecc71;font-weight:700;min-width:48px}
+.rec-entry .rec-link{color:#5b7fc7;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none}
+.rec-entry .rec-link:hover{text-decoration:underline}
+.rec-entry .rec-del{background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:0 4px}.rec-entry .rec-del:hover{color:#e74c3c}
+.rec-rarity-legend{display:flex;gap:12px;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
+.rec-rarity-legend span{font-size:.65rem;font-weight:700;display:flex;align-items:center;gap:4px}
+.rec-rarity-legend span::before{content:'';width:10px;height:10px;border-radius:50%;display:inline-block}
+.rec-rarity-legend .r-gold::before{background:#ffd700}.rec-rarity-legend .r-red::before{background:#e74c3c}
+.rec-rarity-legend .r-orange::before{background:#e67e22}.rec-rarity-legend .r-green::before{background:#2ecc71}
+.rec-rarity-legend .r-blue::before{background:#3498db}
+
 /* ── SETTINGS MODAL ── */
 .settings-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 .settings-overlay.open{opacity:1;pointer-events:auto}
@@ -412,6 +440,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     </div>
     <button class="hdr-btn" id="historyBtn" onclick="toggleHistory()">History</button>
     <button class="hdr-btn" id="bingoToggle" onclick="handleBingoBtn()">Setup Bingo</button>
+    <button class="hdr-btn" onclick="showRecords()" style="color:#e74c3c">Records</button>
     <button class="hdr-btn" id="formatsBtn" onclick="toggleFormatPanel()">Formats</button>
     <button class="hdr-btn" onclick="toggleSettings()" title="Settings" style="padding:5px 8px">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -436,7 +465,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 
   <div id="wheel-screen" class="screen">
     <div class="wheel-top" id="wheelTop">
-      <div class="wheel-count-wrap"><label>Slots:</label><input type="number" id="wheelCount" value="20" min="4" max="60"><button onclick="rebuildWheel()">Set</button></div>
+      <div class="wheel-count-wrap"><label>Slots:</label><input type="number" id="wheelCount" value="20" min="4" max="60" onchange="rebuildWheel()" onkeydown="if(event.key==='Enter'){event.preventDefault();rebuildWheel()}"><button onclick="rebuildWheel()">Set</button></div>
       <div class="wheel-mode-btns"><button class="active" id="modeRandom" onclick="setWheelMode('random')">Random</button><button id="modeSelected" onclick="setWheelMode('selected')">Selected</button></div>
     </div>
     <div class="wheel-container">
@@ -602,6 +631,32 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       <div><a href="https://www.youtube.com/@BASHnBRASS" target="_blank" style="color:#7e9cd8">BASH &amp; BRASS</a> &middot; <a href="https://www.falcontechnix.com" target="_blank" style="color:#4fc3f7">FalconTechnix</a></div>
     </div>
     <div style="text-align:center;margin-top:12px"><button class="s-btn" onclick="closeCredits()">Close</button></div>
+  </div>
+</div>
+
+<!-- RECORDS TIMELINE MODAL -->
+<div class="records-overlay" id="recordsOverlay" onclick="if(event.target===this)closeRecords()">
+  <div class="records-modal">
+    <h3>Oldest Zero-View Record</h3>
+    <div class="rec-sub">Track the oldest zero-view videos you discover in the Recycle Bin</div>
+    <div class="rec-rarity-legend">
+      <span class="r-gold">YouTube Launch (2005)</span>
+      <span class="r-red">SUPER RARE (2006)</span>
+      <span class="r-orange">VERY RARE (2007-2008)</span>
+      <span class="r-green">RARE (2009-2012)</span>
+      <span class="r-blue">COMMON (2013+)</span>
+    </div>
+    <div class="rec-timeline"><canvas id="recordsCanvas"></canvas></div>
+    <div class="rec-form">
+      <input type="date" id="recDate" style="width:140px">
+      <input type="number" id="recViews" placeholder="Views" min="0" value="0" style="width:70px">
+      <input type="url" id="recUrl" placeholder="YouTube link (optional)" style="flex:1;min-width:160px">
+      <button onclick="addRecord()">Add Find</button>
+    </div>
+    <div class="rec-list" id="recordsList"></div>
+    <div style="text-align:center;margin-top:6px">
+      <button class="s-btn" onclick="closeRecords()">Close</button>
+    </div>
   </div>
 </div>
 
@@ -1078,7 +1133,7 @@ function saveGameToHistory(){
   if(games.length>50)games.length=50;saveAllGames(games);
 }
 
-function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel()}
+function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];hasSpunOnce=false;document.getElementById('wheelTop').style.display='';showScreen('wheel-screen');pickWheelFormats();drawWheel()}
 function newSession(){sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showScreen('start-screen')}
 
 // ═══════════════════════════════════
@@ -1349,7 +1404,7 @@ function spinWheel(){
   })(performance.now());
 }
 
-function rebuildWheel(){if(currentScreen==='wheel-screen'){pickWheelFormats();wheelAngle=0;drawWheel()}}
+function rebuildWheel(){pickWheelFormats();wheelAngle=0;drawWheel()}
 function setWheelMode(m){wheelMode=m;document.getElementById('modeRandom').classList.toggle('active',m==='random');document.getElementById('modeSelected').classList.toggle('active',m==='selected');if(currentScreen==='wheel-screen')rebuildWheel()}
 
 // ═══════════════════════════════════
@@ -1969,6 +2024,181 @@ async function fetchCredits(){
 }
 
 // ═══════════════════════════════════
+//  RECORDS TIMELINE
+// ═══════════════════════════════════
+const RECORDS_KEY='kvn_records';
+function getRecords(){try{return JSON.parse(localStorage.getItem(RECORDS_KEY)||'[]')}catch{return[]}}
+function saveRecords(r){localStorage.setItem(RECORDS_KEY,JSON.stringify(r))}
+
+function showRecords(){
+  document.getElementById('recordsOverlay').classList.add('open');
+  renderRecords();
+  drawRecordsTimeline();
+}
+function closeRecords(){document.getElementById('recordsOverlay').classList.remove('open')}
+
+function addRecord(){
+  const dateVal=document.getElementById('recDate').value;
+  const views=parseInt(document.getElementById('recViews').value)||0;
+  const url=document.getElementById('recUrl').value.trim();
+  if(!dateVal){showToast('Enter the video upload date','warn');return}
+  const recs=getRecords();
+  recs.push({date:dateVal,views:views,url:url,added:new Date().toISOString()});
+  recs.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  saveRecords(recs);
+  document.getElementById('recDate').value='';
+  document.getElementById('recViews').value='0';
+  document.getElementById('recUrl').value='';
+  renderRecords();
+  drawRecordsTimeline();
+  showToast('Record added!');
+}
+
+function deleteRecord(i){
+  const recs=getRecords();recs.splice(i,1);saveRecords(recs);renderRecords();drawRecordsTimeline();
+}
+
+function renderRecords(){
+  const recs=getRecords(),list=document.getElementById('recordsList');
+  if(!recs.length){list.innerHTML='<div style="text-align:center;color:#555;font-size:.7rem;padding:8px">No finds yet. Discover the oldest zero-view video you can!</div>';return}
+  list.innerHTML=recs.map((r,i)=>{
+    const d=new Date(r.date);
+    const dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const color=getRecordColor(d);
+    return`<div class="rec-entry"><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views">${r.views} views</span>${r.url?`<a class="rec-link" href="${esc(r.url)}" target="_blank">${esc(r.url).substring(0,50)}</a>`:'<span style="color:#333;flex:1">no link</span>'}<button class="rec-del" onclick="deleteRecord(${i})" title="Remove">&times;</button></div>`;
+  }).join('');
+}
+
+function getRecordColor(d){
+  const y=d.getFullYear();
+  if(y<=2005)return'#ffd700';
+  if(y<=2006)return'#e74c3c';
+  if(y<=2008)return'#e67e22';
+  if(y<=2012)return'#2ecc71';
+  return'#3498db';
+}
+
+function getRarityLabel(y){
+  if(y<=2005)return'LEGENDARY';
+  if(y<=2006)return'SUPER RARE';
+  if(y<=2008)return'VERY RARE';
+  if(y<=2012)return'RARE';
+  return'COMMON';
+}
+
+function drawRecordsTimeline(){
+  const canvas=document.getElementById('recordsCanvas');
+  const dpr=window.devicePixelRatio||1;
+  const rect=canvas.parentElement.getBoundingClientRect();
+  canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;
+  canvas.style.width=rect.width+'px';canvas.style.height=rect.height+'px';
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  const W=rect.width,H=rect.height;
+  ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+
+  // Timeline config
+  const startYear=2005,endYear=new Date().getFullYear()+1;
+  const totalYears=endYear-startYear;
+  const padL=50,padR=20,padT=30,padB=40;
+  const chartW=W-padL-padR,chartH=H-padT-padB;
+
+  // Rarity zone backgrounds
+  const zones=[
+    {y1:2005,y2:2006,color:'rgba(255,215,0,.06)',label:''},
+    {y1:2006,y2:2007,color:'rgba(231,76,60,.08)',label:'SUPER RARE'},
+    {y1:2007,y2:2009,color:'rgba(230,126,34,.06)',label:'VERY RARE'},
+    {y1:2009,y2:2013,color:'rgba(46,204,113,.04)',label:'RARE'},
+    {y1:2013,y2:endYear,color:'rgba(52,152,219,.03)',label:'COMMON'}
+  ];
+  zones.forEach(z=>{
+    const x1=padL+((z.y1-startYear)/totalYears)*chartW;
+    const x2=padL+((z.y2-startYear)/totalYears)*chartW;
+    ctx.fillStyle=z.color;
+    ctx.fillRect(x1,padT,x2-x1,chartH);
+    // Zone divider
+    ctx.strokeStyle='#333';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x2,padT);ctx.lineTo(x2,padT+chartH);ctx.stroke();
+    // Zone label
+    if(z.label){
+      ctx.fillStyle='#444';ctx.font='bold 11px Inter,sans-serif';ctx.textAlign='center';
+      ctx.fillText(z.label,(x1+x2)/2,padT+16);
+    }
+  });
+
+  // YouTube launch marker
+  const ytX=padL+((2005.1-startYear)/totalYears)*chartW;
+  ctx.fillStyle='#ffd700';ctx.fillRect(ytX-3,padT,6,chartH);
+  ctx.fillStyle='#ffd700';ctx.font='bold 9px Inter,sans-serif';ctx.textAlign='center';
+  ctx.fillText('YT LAUNCH',ytX,padT-6);
+
+  // Y-axis (log scale: 0, 10, 50, 100, 500, 1k, 5k+)
+  const yTicks=[0,10,50,100,500,1000,5000];
+  const yLabels=['0','10','50','100','500','1k','5k+'];
+  ctx.fillStyle='#666';ctx.font='10px Inter,sans-serif';ctx.textAlign='right';
+  yTicks.forEach((v,i)=>{
+    const y=padT+chartH-(i/(yTicks.length-1))*chartH;
+    ctx.fillText(yLabels[i],padL-8,y+3);
+    ctx.strokeStyle='#1a1a1a';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+chartW,y);ctx.stroke();
+  });
+
+  // X-axis year labels
+  ctx.fillStyle='#888';ctx.font='10px Inter,sans-serif';ctx.textAlign='center';
+  // Timeline base line
+  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(padL,padT+chartH);ctx.lineTo(padL+chartW,padT+chartH);ctx.stroke();
+  for(let y=startYear;y<endYear;y++){
+    const x=padL+((y-startYear)/totalYears)*chartW;
+    ctx.fillStyle='#888';
+    ctx.fillText("'"+String(y).slice(2),x,padT+chartH+16);
+    // Small tick mark
+    ctx.strokeStyle='#555';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,padT+chartH+4);ctx.stroke();
+  }
+
+  // Plot user records
+  const recs=getRecords();
+  function viewsToY(v){
+    if(v<=0)return padT+chartH;
+    const logMax=Math.log10(5000),logV=Math.log10(Math.min(v,5000));
+    return padT+chartH-(logV/logMax)*chartH;
+  }
+
+  recs.forEach(r=>{
+    const d=new Date(r.date);
+    const yearFrac=d.getFullYear()+(d.getMonth()/12)+(d.getDate()/365);
+    const x=padL+((yearFrac-startYear)/totalYears)*chartW;
+    const y=viewsToY(r.views);
+    const color=getRecordColor(d);
+
+    // Vertical line from bottom to dot
+    ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,y);ctx.stroke();
+
+    // Dot
+    ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#000';ctx.lineWidth=1.5;ctx.stroke();
+
+    // Glow
+    ctx.shadowColor=color;ctx.shadowBlur=10;ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
+
+    // Date label
+    const dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    ctx.fillStyle=color;ctx.font='bold 9px Inter,sans-serif';ctx.textAlign='center';
+    ctx.fillText(dateStr,x,y-12);
+    // Rarity tag
+    const rarity=getRarityLabel(d.getFullYear());
+    ctx.fillStyle='rgba(255,255,255,.4)';ctx.font='7px Inter,sans-serif';
+    ctx.fillText(rarity,x,y-3);
+  });
+
+  // Empty state message
+  if(!recs.length){
+    ctx.fillStyle='#333';ctx.font='14px Inter,sans-serif';ctx.textAlign='center';
+    ctx.fillText('Add your oldest zero-view finds to see them on the timeline',W/2,H/2);
+    ctx.fillStyle='#222';ctx.font='11px Inter,sans-serif';
+    ctx.fillText('The older the video, the rarer the find',W/2,H/2+20);
+  }
+}
+
+// ═══════════════════════════════════
 //  SETTINGS (image customization)
 // ═══════════════════════════════════
 const SETTINGS_KEY='kvn_settings';
@@ -2363,9 +2593,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.8.0",
-  "build": "2026-04-02T12:00:00",
-  "changelog": "Replace Google Doc with GitHub FORMAT-MAP.md as sole format source",
+  "version": "1.9.0",
+  "build": "2026-04-16T12:00:00",
+  "changelog": "Fix spinner slot count bug, add Oldest Zero-View Record timeline modal",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
