@@ -46,6 +46,42 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `"Made with One True Media"` | Ancient YT | Online video creator (2005-2014) |
 | `"Jing"` | Ancient YT | TechSmith Jing (2007-2013) |
 
+### Format Details
+
+**`Snapchat-`** — When you save a Snapchat memory to your camera roll, the file is named `Snapchat-XXXXXXXXXX.mp4` with a long numeric ID. People upload these directly to YouTube without renaming. Snapchat has 800M+ monthly users, so there's a massive pool of accidental uploads with this prefix.
+
+**`"Screencast from"`** — The default filename from GNOME's built-in screen recorder (used on Fedora, Ubuntu, and other Linux desktops) and ChromeOS. With Chromebooks flooding into schools worldwide, this surfaces a huge number of student screen recordings uploaded with the default title.
+
+**`"zoom_0"`** — When you record a Zoom meeting locally (not to cloud), the video file is saved as `zoom_0.mp4` inside a date-stamped folder. People upload these directly. Given Zoom's explosion during 2020+, this surfaces tons of accidental meeting uploads.
+
+**`"Replay"`** — Games like Fortnite, Rocket League, and others have built-in replay systems that export clips with "Replay" in the filename. Players upload these without renaming. Sort by upload date for a constant stream of new gaming clips.
+
+**`".MKV"`** — The Matroska container format. OBS Studio (the most popular streaming/recording software) defaults to `.mkv` output. Also produced by MKVToolNix, HandBrake rips, and media converters. Missing from the original map despite being one of the most common recording formats.
+
+**`".WEBM"`** — Google's open web video format. Used by browser-based screen recorders, Discord video downloads, and various web tools. Chrome's built-in media recorder outputs `.webm` by default.
+
+**`".MTS"`** — The AVCHD format used by Sony, Panasonic, and Canon camcorders from roughly 2006-2015. Files are named `00001.MTS`, `00002.MTS`, etc. The numbered pattern `0XXXX.MTS` was already on the map, but searching the bare extension `".MTS"` casts a wider net.
+
+**`".TS"`** — Transport Stream format. Used by DVRs, IPTV set-top boxes, and TV capture cards. When people record live TV or rip DVR content, the raw files are `.ts`. These surface a lot of accidental TV recordings uploaded to YouTube.
+
+**`R001XXXX`** (0001-9999) — Ricoh cameras (GR series, GR III, etc.) and the Ricoh Theta 360 cameras all save video as `R0010001.MP4`, `R0010002.MP4`, etc. The `R001` prefix followed by a 4-digit number. Ricoh GR is popular with street photographers who also shoot video; Theta 360 videos are frequently uploaded to YouTube.
+
+**`VIRB0XXX`** (001-999) — Garmin VIRB action cameras (VIRB X, VIRB XE, VIRB Ultra 30, VIRB 360). Popular with cyclists, hikers, and outdoor athletes. Files are saved as `VIRB0001.MP4`, `VIRB0002.MP4`, etc. Niche but produces genuinely forgotten footage.
+
+**`STE_XXXX`** (0001-9999) — Samsung cameras' stereo video mode. When recording in 3D/stereo mode on certain Samsung cameras and phones, the output file is prefixed `STE_` followed by a 4-digit number. Less common than standard Samsung video, making these finds more interesting.
+
+**`Screencast YYYY-MM-DD`** — ChromeOS and GNOME save screen recordings with the exact pattern `Screencast YYYY-MM-DD HH.MM.SS`. The date-based version of `"Screencast from"` — use this with `Before:` filters to find older recordings.
+
+**`PANO_YYYYMMDD`** — Android phones save panoramic videos with the prefix `PANO_` followed by the date. People occasionally upload panoramic videos to YouTube with the default filename intact.
+
+**`vlc-record-YYYY-MM-DD`** — VLC media player's built-in recording function saves files as `vlc-record-YYYY-MM-DD-HHhMMmSSs-[source].mp4`. More specific than the existing `VLC Record` keyphrase and better for date-filtered searches.
+
+**`"Qik"`** — Qik was one of the first mobile live-streaming apps, launching in 2008. It had a direct "upload to YouTube" button that auto-titled videos with "Qik" in the name. Skype acquired it in 2011 and shut it down. Search with `Before:2012` to find ancient zero-view uploads from the early mobile video era.
+
+**`"Made with One True Media"`** — One True Media was an online video editor popular from 2005-2014 (acquired by Verizon, then shut down). It let people make slideshows and montages and upload directly to YouTube. The default title included "Made with One True Media." Search with `Before:2015` for deep graveyard content.
+
+**`"Jing"`** — TechSmith Jing was a free screen capture tool (2007-2013) that could record short screencasts and share them. It had YouTube upload integration. The default upload title included "Jing." Search with `Before:2014` for old tutorial attempts and desktop recordings from the early screen-sharing era.
+
 ---
 
 ## Search Keyphrases
