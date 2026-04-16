@@ -76,6 +76,14 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `"Untitled Design"` | Video Editor | | [@BladeOscReal](https://youtube.com/@BladeOscReal) |
 | `"Javaw"` | Game Capture | Minecraft | |
 | `"Injected"` | 360 Video | Filter: 360 Video | [@PnfrmEnm](https://youtube.com/@PnfrmEnm) |
+| `Snapchat-` | App | Saved memories to camera roll | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `".MKV"` | Format | OBS, MKVToolNix, media rips | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `".WEBM"` | Format | Web video, screen recorders | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `".MTS"` | Format | AVCHD camcorders | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `".TS"` | Format | DVR / IPTV recordings | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"Screencast from"` | Screen Recorder | GNOME / ChromeOS default | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"zoom_0"` | App | Zoom local recording default | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"Replay"` | Game Capture | Fortnite / game replay exports | [@Chegnus](https://youtube.com/@BASHnBRASS) |
 
 ---
 
@@ -161,6 +169,9 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `"Month DD, YYYY"` | - | Phone | |
 | `AVSEQXX` | 00-99 | Misc | [@Set_Your_Handle10](https://youtube.com/@Set_Your_Handle10) |
 | `"My Videolicious Video"` | - | Video Editor | [@slurrygeyser8133](https://youtube.com/@slurrygeyser8133) |
+| `R001XXXX` | 0001-9999 | Camera | Ricoh / Theta 360. [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `VIRB0XXX` | 001-999 | Action Cam | Garmin VIRB. [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `STE_XXXX` | 0001-9999 | Camera | Samsung stereo video. [@Chegnus](https://youtube.com/@BASHnBRASS) |
 
 ### Map 2: Date-Based Formats
 
@@ -184,6 +195,9 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `Grand Theft Auto 5 YYYY MM DD` | >2008 | Game Capture (GTA V) | [@Laxesthecorgi9824](https://youtube.com/@Laxesthecorgi9824) |
 | `YouCut YYYYMMDD` | >May 2018 | Video Editor | |
 | `XRecorder YYYYMMDD` | >2024 | Screen Recorder | [@Dayve8977](https://youtube.com/@Dayve8977) |
+| `Screencast YYYY-MM-DD` | >2020 | Screen Recorder | ChromeOS / GNOME. [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `PANO_YYYYMMDD` | >2015 | Smartphone | Android panoramic video. [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `vlc-record-YYYY-MM-DD` | >2008 | Misc | VLC media player. [@Chegnus](https://youtube.com/@BASHnBRASS) |
 
 ---
 
@@ -229,6 +243,9 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `"Dvgrab"` | Camera | [@BastienSante1902](https://youtube.com/@BastienSante1902) |
 | `"XiaoYing video"` | Misc | [@Hrotmaister](https://youtube.com/@Hrotmaister) |
 | `"Temp video for share"` | Drone | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) |
+| `"Qik"` | App | Qik mobile video (2008-2011). [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"Made with One True Media"` | Video Editor | Online creator (2005-2014). [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"Jing"` | Screen Recorder | TechSmith Jing (2007-2013). [@Chegnus](https://youtube.com/@BASHnBRASS) |
 
 ---
 
