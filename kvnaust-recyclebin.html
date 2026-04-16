@@ -1269,7 +1269,7 @@ function closeBingoFlash(){
 // ═══════════════════════════════════
 //  DOC FETCH
 // ═══════════════════════════════════
-const DOC_CACHE_KEY='kvn_doc_formats';
+const DOC_CACHE_KEY='kvn_doc_formats_v2'; // v2: bust old cache from broken regex
 const DOC_CACHE_TS_KEY='kvn_doc_ts';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
@@ -1298,8 +1298,9 @@ async function fetchDocFormats(){
   // Load from cache immediately
   loadCachedFormats();
 
-  // If cache is fresh, skip network fetch
-  if(!isCacheStale()){console.log('Format cache is fresh, skipping fetch');return}
+  // If cache is fresh AND has enough formats, skip network fetch
+  const cacheSize=ALL_FORMATS.length;
+  if(!isCacheStale()&&cacheSize>=20){console.log(`Format cache is fresh (${cacheSize} formats), skipping fetch`);return}
 
   // file:// can still fetch from GitHub (CORS allows *)
   try{
@@ -1313,10 +1314,13 @@ async function fetchDocFormats(){
       for(const line of md.split('\n')){
         const m=line.match(/\|\s*`?([A-Z][A-Za-z0-9_ ]*?)(X{2,4})`?\s*\|\s*(\d+)-(\d+)/);
         if(m){
-          const lbl=m[1].trim()+m[2];
+          // Preserve spacing: "IMG " + "XXXX" = "IMG XXXX", "DSCF" + "XXXX" = "DSCFXXXX"
+          const lbl=m[1]+m[2];
+          const hasSpace=m[1].endsWith(' ');
+          const tpl=hasSpace?m[1].trimEnd()+' {V}':m[1]+'{V}';
           const lo=parseInt(m[3]),hi=parseInt(m[4]);
           if(lo<=hi){
-            const fmt={label:lbl,tpl:m[1].trim()+'{V}',min:lo,max:hi,pad:m[2].length};
+            const fmt={label:lbl,tpl:tpl,min:lo,max:hi,pad:m[2].length};
             fetched.push(fmt);
             if(!existing.has(lbl)){ALL_FORMATS.push(fmt);existing.add(lbl);newCount++}
           }
@@ -2601,7 +2605,7 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.9.9b",
+  "version": "1.9.9c",
   "build": "2026-04-16T12:00:00",
   "changelog": "Records timeline, spinner fix, 17 new format leads, FORMAT-MAP restructure",
   "repo": "https://github.com/sworrl/KVN_AUST",

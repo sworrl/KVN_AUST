@@ -23,7 +23,7 @@ The only way to access these videos is to search for the **keyphrase** associate
 > **For contributors:** The [Recycle Bin tool](https://falcontechnix.com/KVN_AUST/) parses this file to populate its format spinner. To ensure new numbered formats are picked up, they **must** follow this exact table format:
 >
 > ```
-> | `KEYPHRASEXXXX` | 0000-9999 | Source | Credit |
+> | `formatXXXX` | 0000-9999 | Source | Credit |
 > ```
 >
 > - Keyphrase wrapped in backticks (`` ` ``)
