@@ -20,6 +20,17 @@ YouTube currently hosts over **20 billion videos**. **93%** have under 1,000 vie
 
 The only way to access these videos is to search for the **keyphrase** associated with the device or application used to record them. These are usually the default filenames given to recorded or downloaded videos.
 
+> **For contributors:** The [Recycle Bin tool](https://falcontechnix.com/KVN_AUST/) parses this file to populate its format spinner. To ensure new numbered formats are picked up, they **must** follow this exact table format:
+>
+> ```
+> | `KEYPHRASEXXXX` | 0000-9999 | Source | Credit |
+> ```
+>
+> - Keyphrase wrapped in backticks (`` ` ``)
+> - Must end with 2-4 `X` characters representing the variable portion
+> - Range column must be `MIN-MAX` (digits only, separated by hyphen)
+> - Entries without `X` patterns or ranges (search keyphrases, file extensions, etc.) are not parsed for the spinner — those are loaded from the hardcoded list in the HTML
+
 ---
 
 ## Recently Added (April 2026)

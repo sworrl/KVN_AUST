@@ -152,7 +152,11 @@ The community-maintained list of every known default filename keyphrase that acc
 
 ## Contributing
 
-1. **New formats**: Add to [FORMAT-MAP.md](FORMAT-MAP.md) via PR
+1. **New formats**: Add to [FORMAT-MAP.md](FORMAT-MAP.md) via PR. Numbered formats must follow this table format for the spinner parser:
+   ```
+   | `KEYPHRASEXXXX` | 0000-9999 | Source | Credit |
+   ```
+   Keyphrase in backticks, ending with 2-4 `X` characters, range as `MIN-MAX` digits.
 2. **New bingo categories**: Add to `bingo-categories.json` via PR
 3. **Code changes**: Edit `kvnaust-recyclebin.html` and bump the version:
 
