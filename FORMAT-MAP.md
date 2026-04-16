@@ -22,13 +22,45 @@ The only way to access these videos is to search for the **keyphrase** associate
 
 ---
 
-## Map 1: Brand New Videos (~0 Views)
+## Recently Added (April 2026)
+
+> New format leads discovered by [@Chegnus](https://youtube.com/@BASHnBRASS)
+
+| Keyphrase | Type | Source |
+|:----------|:-----|:-------|
+| `Snapchat-` | Search | Snapchat camera roll saves |
+| `"Screencast from"` | Search | GNOME / ChromeOS screen recorder |
+| `"zoom_0"` | Search | Zoom local recording default |
+| `"Replay"` | Search | Fortnite / game replay exports |
+| `".MKV"` | Extension | OBS, MKVToolNix, media rips |
+| `".WEBM"` | Extension | Web video, screen recorders |
+| `".MTS"` | Extension | AVCHD camcorders |
+| `".TS"` | Extension | DVR / IPTV recordings |
+| `R001XXXX` (0001-9999) | Numbered | Ricoh cameras / Theta 360 |
+| `VIRB0XXX` (001-999) | Numbered | Garmin VIRB action cameras |
+| `STE_XXXX` (0001-9999) | Numbered | Samsung stereo video mode |
+| `Screencast YYYY-MM-DD` | Date-Based | ChromeOS / GNOME |
+| `PANO_YYYYMMDD` | Date-Based | Android panoramic video |
+| `vlc-record-YYYY-MM-DD` | Date-Based | VLC media player recording |
+| `"Qik"` | Ancient YT | Qik mobile video (2008-2011) |
+| `"Made with One True Media"` | Ancient YT | Online video creator (2005-2014) |
+| `"Jing"` | Ancient YT | TechSmith Jing (2007-2013) |
+
+---
+
+## Search Keyphrases
 
 > **Sort by:** Upload Date **(MANDATORY)**
 > **Search Tools:** Quotations `" "` (e.g. `".MP4"`)
 
+Generic keyphrases that surface brand new zero-view uploads when sorted by upload date.
+
 | Keyphrase | Source | Info | Credit |
 |:----------|:-------|:-----|:-------|
+| `Snapchat-` | App | Saved memories to camera roll | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"Screencast from"` | Screen Recorder | GNOME / ChromeOS default | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"zoom_0"` | App | Zoom local recording default | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"Replay"` | Game Capture | Fortnite / game replay exports | [@Chegnus](https://youtube.com/@BASHnBRASS) |
 | `IMG` | Smartphone | | |
 | `MVI` | Camera | | |
 | `YYYYMMDD` | Misc | YMD = YearMonthDay | |
@@ -47,14 +79,6 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `DVR` | Game Capture | | |
 | `VLC Record` | Game Capture / Misc | | |
 | `Robloxapp` | Game Capture | Roblox | [@T1MAGEDDON](https://youtube.com/@T1MAGEDDON) |
-| `".MP4"` | Format | | |
-| `".3gp"` | Format | | |
-| `".MOV"` | Format | | |
-| `".AVI"` | Format | | |
-| `".WMV"` | Format | | |
-| `".FLAC"` | Format | Copyright music | |
-| `".WAV"` | Format | User-created music | |
-| `".3g2"` | Format | | [@Pagenonfound](https://youtube.com/@Pagenonfound) |
 | `Recording gvo` | Zoom | | [@zxz41_Kristian](https://youtube.com/@zxz41_Kristian) |
 | `Lv 0` | Misc | | [@Oopse47](https://youtube.com/@Oopse47) |
 | `bmdjAAAF` | Misc | | |
@@ -76,24 +100,43 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `"Untitled Design"` | Video Editor | | [@BladeOscReal](https://youtube.com/@BladeOscReal) |
 | `"Javaw"` | Game Capture | Minecraft | |
 | `"Injected"` | 360 Video | Filter: 360 Video | [@PnfrmEnm](https://youtube.com/@PnfrmEnm) |
-| `Snapchat-` | App | Saved memories to camera roll | [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `".MKV"` | Format | OBS, MKVToolNix, media rips | [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `".WEBM"` | Format | Web video, screen recorders | [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `".MTS"` | Format | AVCHD camcorders | [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `".TS"` | Format | DVR / IPTV recordings | [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `"Screencast from"` | Screen Recorder | GNOME / ChromeOS default | [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `"zoom_0"` | App | Zoom local recording default | [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `"Replay"` | Game Capture | Fortnite / game replay exports | [@Chegnus](https://youtube.com/@BASHnBRASS) |
 
 ---
 
-## Map 2: Old & Forgotten Videos (~0 Views)
+## File Extensions
+
+> Search with quotations: `".MP4"`, `".MKV"`, etc.
+
+| Extension | Source | Credit |
+|:----------|:-------|:-------|
+| `".MKV"` | OBS, MKVToolNix, media rips | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `".WEBM"` | Web video, screen recorders | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `".MTS"` | AVCHD camcorders | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `".TS"` | DVR / IPTV recordings | [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `".MP4"` | Universal | |
+| `".3gp"` | Early phones | |
+| `".MOV"` | Apple / Camera | |
+| `".AVI"` | Legacy | |
+| `".WMV"` | Windows | |
+| `".FLAC"` | Copyright music | |
+| `".WAV"` | User-created music | |
+| `".3g2"` | Early phones | [@Pagenonfound](https://youtube.com/@Pagenonfound) |
+| `".VOB"` | DVD | [@Chernyat5048](https://youtube.com/@Chernyat5048) |
+
+---
+
+## Numbered Formats
 
 > **Sort by:** View Count (Optional)
 > **Search Tools:** `Before:(Year)` e.g. `Before:2015`, Quotations `" "`
 
+Device-specific filename patterns with numeric ranges. Best for finding old, forgotten videos.
+
 | Keyphrase | Range | Source | Credit |
 |:----------|:------|:-------|:-------|
+| `R001XXXX` | 0001-9999 | Camera | Ricoh / Theta 360. [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `VIRB0XXX` | 001-999 | Action Cam | Garmin VIRB. [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `STE_XXXX` | 0001-9999 | Camera | Samsung stereo video. [@Chegnus](https://youtube.com/@BASHnBRASS) |
 | `IMG XXXX` | 0000-9999 | Smartphone | |
 | `MVI XXXX` | 0000-9999 | Camera | |
 | `MOV XXXX` | 0000-9999 | Camera | |
@@ -169,14 +212,18 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `"Month DD, YYYY"` | - | Phone | |
 | `AVSEQXX` | 00-99 | Misc | [@Set_Your_Handle10](https://youtube.com/@Set_Your_Handle10) |
 | `"My Videolicious Video"` | - | Video Editor | [@slurrygeyser8133](https://youtube.com/@slurrygeyser8133) |
-| `R001XXXX` | 0001-9999 | Camera | Ricoh / Theta 360. [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `VIRB0XXX` | 001-999 | Action Cam | Garmin VIRB. [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `STE_XXXX` | 0001-9999 | Camera | Samsung stereo video. [@Chegnus](https://youtube.com/@BASHnBRASS) |
 
-### Map 2: Date-Based Formats
+---
+
+## Date-Based Formats
+
+> Formats that include a date in the filename. Use `Before:(Year)` to narrow results.
 
 | Keyphrase | Years Active | Source | Credit |
 |:----------|:-------------|:-------|:-------|
+| `Screencast YYYY-MM-DD` | >2020 | Screen Recorder | ChromeOS / GNOME. [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `PANO_YYYYMMDD` | >2015 | Smartphone | Android panoramic video. [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `vlc-record-YYYY-MM-DD` | >2008 | Misc | VLC media player. [@Chegnus](https://youtube.com/@BASHnBRASS) |
 | `Video YYYYMMDD` | >2012 | Misc | |
 | `VID YYYYMMDD` | >2008 | Misc | |
 | `WIN YYYYMMDD` | >2013 | Webcam | |
@@ -195,19 +242,21 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `Grand Theft Auto 5 YYYY MM DD` | >2008 | Game Capture (GTA V) | [@Laxesthecorgi9824](https://youtube.com/@Laxesthecorgi9824) |
 | `YouCut YYYYMMDD` | >May 2018 | Video Editor | |
 | `XRecorder YYYYMMDD` | >2024 | Screen Recorder | [@Dayve8977](https://youtube.com/@Dayve8977) |
-| `Screencast YYYY-MM-DD` | >2020 | Screen Recorder | ChromeOS / GNOME. [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `PANO_YYYYMMDD` | >2015 | Smartphone | Android panoramic video. [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `vlc-record-YYYY-MM-DD` | >2008 | Misc | VLC media player. [@Chegnus](https://youtube.com/@BASHnBRASS) |
 
 ---
 
-## Map 3: Low-View Videos from 2006-2008
+## Ancient YouTube (2006-2008)
 
 > **Sort by:** View Count (Optional)
 > **Search Tools:** `Before:(Year)` e.g. `Before:2008`, Quotations `" "`
 
+The deepest layer of the Recycle Bin. These keyphrases surface videos from the first years of YouTube — many with zero views since upload. Finding anything here from 2005-2006 is **SUPER RARE**.
+
 | Keyphrase | Source | Credit |
 |:----------|:-------|:-------|
+| `"Qik"` | App | Qik mobile video (2008-2011). [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"Made with One True Media"` | Video Editor | Online creator (2005-2014). [@Chegnus](https://youtube.com/@BASHnBRASS) |
+| `"Jing"` | Screen Recorder | TechSmith Jing (2007-2013). [@Chegnus](https://youtube.com/@BASHnBRASS) |
 | `"You have new picture mail! (video)"` | Phone | |
 | `"Media1.3gp"` | Phone | |
 | `"Media1.3g2"` | Phone | |
@@ -236,16 +285,12 @@ The only way to access these videos is to search for the **keyphrase** associate
 | `"Video from Tweetcaster"` | App | [@UsuallyLime](https://youtube.com/@UsuallyLime) |
 | `"My Ezvid Video"` | Screen Recorder | [@UsuallyLime](https://youtube.com/@UsuallyLime) |
 | `"This video was uploaded from an Android phone"` | Phone | [@UsuallyLime](https://youtube.com/@UsuallyLime) |
-| `".VOB"` | DVD | [@Chernyat5048](https://youtube.com/@Chernyat5048) |
 | `"Sprint PictureMail"` | Phone | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
 | `"My stop motion movie"` | Video Editor | [@Huebirdfan2.0](https://youtube.com/@Huebirdfan2.0) |
 | `"Stop motion.avi"` | Stop Motion | [@Evanlee1](https://youtube.com/@Evanlee1) |
 | `"Dvgrab"` | Camera | [@BastienSante1902](https://youtube.com/@BastienSante1902) |
 | `"XiaoYing video"` | Misc | [@Hrotmaister](https://youtube.com/@Hrotmaister) |
 | `"Temp video for share"` | Drone | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) |
-| `"Qik"` | App | Qik mobile video (2008-2011). [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `"Made with One True Media"` | Video Editor | Online creator (2005-2014). [@Chegnus](https://youtube.com/@BASHnBRASS) |
-| `"Jing"` | Screen Recorder | TechSmith Jing (2007-2013). [@Chegnus](https://youtube.com/@BASHnBRASS) |
 
 ---
 
@@ -271,7 +316,7 @@ Despite their eerie, cryptic appearance, **these are not** C2 (Command & Control
 
 > Thank you to everyone who helped discover new format leads. This list grows because of you.
 
-[@Junoeclipse7715](https://youtube.com/@Junoeclipse7715) | [@ZuperDarkk](https://youtube.com/@ZuperDarkk) | [@zxz41_Kristian](https://youtube.com/@zxz41_Kristian) | [@TheLimeyDragon](https://youtube.com/@TheLimeyDragon) | [@nellip.683](https://youtube.com/@nellip.683) | [@Hassan-zw9tb](https://youtube.com/@Hassan-zw9tb) | [@Oopse47](https://youtube.com/@Oopse47) | [@slurrygeyser8133](https://youtube.com/@slurrygeyser8133) | [@denzelkrocker1673](https://youtube.com/@denzelkrocker1673) | [@Set_Your_Handle10](https://youtube.com/@Set_Your_Handle10) | [@StormSplurge](https://youtube.com/@StormSplurge) | [@CharlesMontgomeryBurns.](https://youtube.com/@CharlesMontgomeryBurns.) | [@kyle6266](https://youtube.com/@kyle6266) | [@czechgop7631](https://youtube.com/@czechgop7631) | [@KILOPOWER](https://youtube.com/@KILOPOWER) | [@T1MAGEDDON](https://youtube.com/@T1MAGEDDON) | [@stickmandaninacan](https://youtube.com/@stickmandaninacan) | [@blissom](https://youtube.com/@blissom) | [@thevoid6756](https://youtube.com/@thevoid6756) | [@Jannik323](https://youtube.com/@Jannik323) | [@Coletale](https://youtube.com/@Coletale) | [@Laxesthecorgi9824](https://youtube.com/@Laxesthecorgi9824) | [@Infinitysnapz](https://youtube.com/@Infinitysnapz) | [@AymonAdren](https://youtube.com/@AymonAdren) | [@misterherman](https://youtube.com/@misterherman) | [@Fraigo](https://youtube.com/@Fraigo) | [@UsuallyLime](https://youtube.com/@UsuallyLime) | [@Thatoneguy59-x9l](https://youtube.com/@Thatoneguy59-x9l) | [@Chernyat5048](https://youtube.com/@Chernyat5048) | [@BladeOscReal](https://youtube.com/@BladeOscReal) | [@sScorpioNn1](https://youtube.com/@sScorpioNn1) | [@H2knad](https://youtube.com/@H2knad) | [@Lorenzorentniop717](https://youtube.com/@Lorenzorentniop717) | [@Mort3534](https://youtube.com/@Mort3534) | [@_Mag10_](https://youtube.com/@_Mag10_) | [@EvilyArised](https://youtube.com/@EvilyArised) | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) | [@i664k](https://youtube.com/@i664k) | [@Piggypiggyyoinkyoink](https://youtube.com/@Piggypiggyyoinkyoink) | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) | [@Pagenonfound](https://youtube.com/@Pagenonfound) | [@flizzycat](https://youtube.com/@flizzycat) | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) | [@Ron2600_](https://youtube.com/@Ron2600_) | [@Huebirdfan2.0](https://youtube.com/@Huebirdfan2.0) | [@Hrotmaister](https://youtube.com/@Hrotmaister) | [@Harrisonmoss1310](https://youtube.com/@Harrisonmoss1310) | [@Dayve8977](https://youtube.com/@Dayve8977) | [@Zeebdy](https://youtube.com/@Zeebdy) | [@Lemonposting](https://youtube.com/@Lemonposting) | [@Dontzky](https://youtube.com/@Dontzky) | [@Alexanderhunt9263](https://youtube.com/@Alexanderhunt9263) | [@Techyarchivuma](https://youtube.com/@Techyarchivuma) | [@Mackhill8851](https://youtube.com/@Mackhill8851) | [@A0V1](https://youtube.com/@A0V1) | [@PrimeroAtreides](https://youtube.com/@PrimeroAtreides) | [@YeoungBraxx](https://youtube.com/@YeoungBraxx) | [@BastienSante1902](https://youtube.com/@BastienSante1902) | [@RadieForge](https://youtube.com/@RadieForge) | [@GaspacoZanis](https://youtube.com/@GaspacoZanis) | [@Qrde](https://youtube.com/@Qrde) | [@saso1901](https://youtube.com/@saso1901) | [@__atob__](https://youtube.com/@__atob__) | [@Whenwhowhathow](https://youtube.com/@Whenwhowhathow) | [@Machine___angel](https://youtube.com/@Machine___angel) | [@KappenKonundrum](https://youtube.com/@KappenKonundrum) | [@Chloe.in.mae](https://youtube.com/@Chloe.in.mae) | [@Evanlee1](https://youtube.com/@Evanlee1) | [@Daldosbm](https://youtube.com/@Daldosbm) | [@PnfrmEnm](https://youtube.com/@PnfrmEnm)
+[@Junoeclipse7715](https://youtube.com/@Junoeclipse7715) | [@ZuperDarkk](https://youtube.com/@ZuperDarkk) | [@zxz41_Kristian](https://youtube.com/@zxz41_Kristian) | [@TheLimeyDragon](https://youtube.com/@TheLimeyDragon) | [@nellip.683](https://youtube.com/@nellip.683) | [@Hassan-zw9tb](https://youtube.com/@Hassan-zw9tb) | [@Oopse47](https://youtube.com/@Oopse47) | [@slurrygeyser8133](https://youtube.com/@slurrygeyser8133) | [@denzelkrocker1673](https://youtube.com/@denzelkrocker1673) | [@Set_Your_Handle10](https://youtube.com/@Set_Your_Handle10) | [@StormSplurge](https://youtube.com/@StormSplurge) | [@CharlesMontgomeryBurns.](https://youtube.com/@CharlesMontgomeryBurns.) | [@kyle6266](https://youtube.com/@kyle6266) | [@czechgop7631](https://youtube.com/@czechgop7631) | [@KILOPOWER](https://youtube.com/@KILOPOWER) | [@T1MAGEDDON](https://youtube.com/@T1MAGEDDON) | [@stickmandaninacan](https://youtube.com/@stickmandaninacan) | [@blissom](https://youtube.com/@blissom) | [@thevoid6756](https://youtube.com/@thevoid6756) | [@Jannik323](https://youtube.com/@Jannik323) | [@Coletale](https://youtube.com/@Coletale) | [@Laxesthecorgi9824](https://youtube.com/@Laxesthecorgi9824) | [@Infinitysnapz](https://youtube.com/@Infinitysnapz) | [@AymonAdren](https://youtube.com/@AymonAdren) | [@misterherman](https://youtube.com/@misterherman) | [@Fraigo](https://youtube.com/@Fraigo) | [@UsuallyLime](https://youtube.com/@UsuallyLime) | [@Thatoneguy59-x9l](https://youtube.com/@Thatoneguy59-x9l) | [@Chernyat5048](https://youtube.com/@Chernyat5048) | [@BladeOscReal](https://youtube.com/@BladeOscReal) | [@sScorpioNn1](https://youtube.com/@sScorpioNn1) | [@H2knad](https://youtube.com/@H2knad) | [@Lorenzorentniop717](https://youtube.com/@Lorenzorentniop717) | [@Mort3534](https://youtube.com/@Mort3534) | [@_Mag10_](https://youtube.com/@_Mag10_) | [@EvilyArised](https://youtube.com/@EvilyArised) | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) | [@i664k](https://youtube.com/@i664k) | [@Piggypiggyyoinkyoink](https://youtube.com/@Piggypiggyyoinkyoink) | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) | [@Pagenonfound](https://youtube.com/@Pagenonfound) | [@flizzycat](https://youtube.com/@flizzycat) | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) | [@Ron2600_](https://youtube.com/@Ron2600_) | [@Huebirdfan2.0](https://youtube.com/@Huebirdfan2.0) | [@Hrotmaister](https://youtube.com/@Hrotmaister) | [@Harrisonmoss1310](https://youtube.com/@Harrisonmoss1310) | [@Dayve8977](https://youtube.com/@Dayve8977) | [@Zeebdy](https://youtube.com/@Zeebdy) | [@Lemonposting](https://youtube.com/@Lemonposting) | [@Dontzky](https://youtube.com/@Dontzky) | [@Alexanderhunt9263](https://youtube.com/@Alexanderhunt9263) | [@Techyarchivuma](https://youtube.com/@Techyarchivuma) | [@Mackhill8851](https://youtube.com/@Mackhill8851) | [@A0V1](https://youtube.com/@A0V1) | [@PrimeroAtreides](https://youtube.com/@PrimeroAtreides) | [@YeoungBraxx](https://youtube.com/@YeoungBraxx) | [@BastienSante1902](https://youtube.com/@BastienSante1902) | [@RadieForge](https://youtube.com/@RadieForge) | [@GaspacoZanis](https://youtube.com/@GaspacoZanis) | [@Qrde](https://youtube.com/@Qrde) | [@saso1901](https://youtube.com/@saso1901) | [@__atob__](https://youtube.com/@__atob__) | [@Whenwhowhathow](https://youtube.com/@Whenwhowhathow) | [@Machine___angel](https://youtube.com/@Machine___angel) | [@KappenKonundrum](https://youtube.com/@KappenKonundrum) | [@Chloe.in.mae](https://youtube.com/@Chloe.in.mae) | [@Evanlee1](https://youtube.com/@Evanlee1) | [@Daldosbm](https://youtube.com/@Daldosbm) | [@PnfrmEnm](https://youtube.com/@PnfrmEnm) | [@Chegnus](https://youtube.com/@BASHnBRASS)
 
 ---
 
