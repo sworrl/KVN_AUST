@@ -465,8 +465,9 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 
   <div id="wheel-screen" class="screen">
     <div class="wheel-top" id="wheelTop">
-      <div class="wheel-count-wrap"><label>Slots:</label><input type="number" id="wheelCount" value="20" min="4" max="60" onchange="rebuildWheel()" onkeydown="if(event.key==='Enter'){event.preventDefault();rebuildWheel()}"><button onclick="rebuildWheel()">Set</button></div>
+      <div class="wheel-count-wrap"><label>Slots:</label><input type="number" id="wheelCount" value="20" min="4" max="60" oninput="rebuildWheel()" onkeydown="if(event.key==='Enter'){event.preventDefault();rebuildWheel()}"><button onclick="rebuildWheel()">Set</button></div>
       <div class="wheel-mode-btns"><button class="active" id="modeRandom" onclick="setWheelMode('random')">Random</button><button id="modeSelected" onclick="setWheelMode('selected')">Selected</button></div>
+      <span id="wheelSlotCount" style="font-size:.65rem;color:var(--muted)"></span>
     </div>
     <div class="wheel-container">
       <div class="wheel-pointer"><svg width="36" height="40" viewBox="0 0 36 40"><polygon points="18,40 0,0 36,0" fill="var(--bg)" stroke="#555" stroke-width="2"/></svg></div>
@@ -1323,6 +1324,7 @@ async function fetchDocFormats(){
       }
       saveCachedFormats(fetched);
       formats=[...ALL_FORMATS];selectedFormats=new Set(formats.map((_,i)=>i));buildFormatPanel();
+      if(currentScreen==='wheel-screen'){pickWheelFormats();drawWheel()}
       console.log(`GitHub FORMAT-MAP: parsed ${fetched.length} formats, ${newCount} new`);
     }else{
       showToast('Format fetch failed - using cached formats','warn');
@@ -1334,9 +1336,15 @@ async function fetchDocFormats(){
 //  WHEEL (3D textured slices)
 // ═══════════════════════════════════
 function pickWheelFormats(){
-  const count=Math.max(4,Math.min(60,+document.getElementById('wheelCount').value||20));
+  const raw=document.getElementById('wheelCount').value;
+  const count=Math.max(4,Math.min(60,parseInt(raw,10)||20));
   let pool=wheelMode==='selected'?[...selectedFormats].map(i=>formats[i]).filter(Boolean):[...formats];
   shuffle(pool);wheelFormats=pool.slice(0,count);if(wheelFormats.length<2)wheelFormats=formats.slice(0,count);
+  console.log(`Wheel: input="${raw}" count=${count} mode=${wheelMode} pool=${pool.length} showing=${wheelFormats.length}`);
+  // Sync input & counter to reflect actual count
+  document.getElementById('wheelCount').value=wheelFormats.length;
+  const sc=document.getElementById('wheelSlotCount');
+  if(sc)sc.textContent=`Showing ${wheelFormats.length} of ${pool.length} formats`;
 }
 
 function drawWheel(){
