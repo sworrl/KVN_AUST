@@ -1311,7 +1311,7 @@ async function fetchDocFormats(){
       let newCount=0;
       // Parse markdown table rows: | KEYPHRASE | RANGE | ...
       for(const line of md.split('\n')){
-        const m=line.match(/\|\s*([A-Z][A-Za-z0-9_ ]*?)(X{2,4})\s*\|\s*(\d+)-(\d+)/);
+        const m=line.match(/\|\s*`?([A-Z][A-Za-z0-9_ ]*?)(X{2,4})`?\s*\|\s*(\d+)-(\d+)/);
         if(m){
           const lbl=m[1].trim()+m[2];
           const lo=parseInt(m[3]),hi=parseInt(m[4]);
@@ -2601,7 +2601,7 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.9.9a",
+  "version": "1.9.9b",
   "build": "2026-04-16T12:00:00",
   "changelog": "Records timeline, spinner fix, 17 new format leads, FORMAT-MAP restructure",
   "repo": "https://github.com/sworrl/KVN_AUST",
