@@ -1341,8 +1341,6 @@ function pickWheelFormats(){
   let pool=wheelMode==='selected'?[...selectedFormats].map(i=>formats[i]).filter(Boolean):[...formats];
   shuffle(pool);wheelFormats=pool.slice(0,count);if(wheelFormats.length<2)wheelFormats=formats.slice(0,count);
   console.log(`Wheel: input="${raw}" count=${count} mode=${wheelMode} pool=${pool.length} showing=${wheelFormats.length}`);
-  // Sync input & counter to reflect actual count
-  document.getElementById('wheelCount').value=wheelFormats.length;
   const sc=document.getElementById('wheelSlotCount');
   if(sc)sc.textContent=`Showing ${wheelFormats.length} of ${pool.length} formats`;
 }
@@ -2603,7 +2601,7 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "1.9.9",
+  "version": "1.9.9a",
   "build": "2026-04-16T12:00:00",
   "changelog": "Records timeline, spinner fix, 17 new format leads, FORMAT-MAP restructure",
   "repo": "https://github.com/sworrl/KVN_AUST",
