@@ -34,10 +34,16 @@ YouTube hosts over **20 billion videos**. **93%** have under 1,000 views. **30%*
 | 3 | **Rainbow Number Gen** | Character-by-character rainbow shuffle animation generates the search variable. |
 | 4 | **Search & Rate** | Copy, open in YouTube, or re-randomize. Rate videos on 4 metrics. Save & re-roll without leaving the screen. |
 | 5 | **Game Summary** | End-of-session recap with thumbnails, per-metric breakdowns, averages. Export as SVG. |
+| 6 | **Oldest Zero-View Record** | Track the oldest zero-view videos you discover. Canvas timeline with rarity zones from YouTube's launch (2005) to present. |
 
 ---
 
 ## Screenshots
+
+<p align="center">
+  <img src="screenshots/records-timeline.png" width="720" alt="Oldest Zero-View Record">
+  <br><sub>Oldest Zero-View Record — track your rarest finds on a timeline</sub>
+</p>
 
 <p align="center">
   <img src="screenshots/cloud-save.png" width="720" alt="Cloud Save">
