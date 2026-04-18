@@ -17,6 +17,15 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
 </p>
 
+<p align="center">
+  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-192-e74c3c?style=flat-square&labelColor=1a1a2e" alt="192 Total Formats"></a>
+  <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-43-3498db?style=flat-square&labelColor=1a1a2e" alt="43 Search Keyphrases"></a>
+  <a href="FORMAT-MAP.md#file-extensions"><img src="https://img.shields.io/badge/Extensions-13-9b59b6?style=flat-square&labelColor=1a1a2e" alt="13 File Extensions"></a>
+  <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-78-2ecc71?style=flat-square&labelColor=1a1a2e" alt="78 Numbered Formats"></a>
+  <a href="FORMAT-MAP.md#date-based-formats"><img src="https://img.shields.io/badge/Date--Based-21-e67e22?style=flat-square&labelColor=1a1a2e" alt="21 Date-Based Formats"></a>
+  <a href="FORMAT-MAP.md#ancient-youtube-2006-2008"><img src="https://img.shields.io/badge/Ancient_YT-37-f39c12?style=flat-square&labelColor=1a1a2e" alt="37 Ancient YouTube Formats"></a>
+</p>
+
 ---
 
 YouTube hosts over **20 billion videos**. **93%** have under 1,000 views. **30%** have under 100. Millions of these are zero-view uploads that no human has ever watched — uploaded with default device filenames like `IMG 0001`, `DSCF0042`, or `MOV 0037` and immediately forgotten.
