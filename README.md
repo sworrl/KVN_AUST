@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  <a href="https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"><img src="https://img.shields.io/badge/%F0%9F%8E%AE_PLAY_NOW-falcontechnix.com%2FKVN__AUST-e74c3c?style=for-the-badge&labelColor=1a1a2e" alt="Play YouTube's Recycle Bin Game Tool"></a>
+  <a href="https://falcontechnix.com/KVN_AUST/"><img src="https://img.shields.io/badge/%F0%9F%8E%AE_PLAY_NOW-falcontechnix.com%2FKVN__AUST-e74c3c?style=for-the-badge&labelColor=1a1a2e" alt="Play YouTube's Recycle Bin Game Tool"></a>
 </p>
 
 <p align="center">
@@ -141,7 +141,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 ### Online (Recommended)
 
-> **[Play YouTube's Recycle Bin at falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html)** — always up to date, live format sync, cloud save for game history across devices.
+> **[Play YouTube's Recycle Bin at falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/)** — always up to date, live format sync, cloud save for game history across devices.
 
 ### Offline / Standalone
 
