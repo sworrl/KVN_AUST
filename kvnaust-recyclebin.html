@@ -100,7 +100,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 
 /* ── SCREENS ── */
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  opacity:0;pointer-events:none;transform:scale(.95) translateY(20px);transition:opacity var(--trans),transform var(--trans) cubic-bezier(.4,0,.2,1)}
+  opacity:0;pointer-events:none;transform:scale(.95) translateY(20px);transition:opacity var(--trans),transform var(--trans) cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
 .screen.active{opacity:1;pointer-events:auto;transform:scale(1) translateY(0)}
 .screen.exit-left{opacity:0;transform:scale(.92) translateX(-60px)}
 
@@ -139,7 +139,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 @keyframes titleShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .bf-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:480px;width:85vw;position:relative}
 .bf-cell{color:#fff;border:2px solid rgba(120,120,120,.5);border-radius:4px;position:relative;z-index:1;background:rgba(30,28,40,.55);
-  font-weight:800;text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.7),0 0 2px rgba(0,0,0,1);display:flex;align-items:center;justify-content:center;text-align:center;
+  text-shadow:0 1px 4px rgba(0,0,0,.9),0 0 12px rgba(0,0,0,.7),0 0 2px rgba(0,0,0,1);display:flex;align-items:center;justify-content:center;text-align:center;
   font-size:clamp(.5rem,1.2vw,.7rem);font-weight:600;padding:6px 3px;aspect-ratio:1;opacity:0;transform:scale(0) rotateY(90deg);transition:none}
 .bf-cell.revealed{opacity:1;transform:scale(1) rotateY(0);transition:opacity .3s,transform .3s cubic-bezier(.17,.67,.35,1.2)}
 .bf-cell.free{background:#fff9c4;color:var(--accent);font-weight:900;cursor:pointer;border-color:#f0c040;font-size:clamp(.6rem,1.5vw,.85rem)}
@@ -148,7 +148,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 /* slide-puzzle transition for bingo flash cells */
 .bf-grid{position:relative}
 .bf-grid.puzzle-mode{display:block !important}
-.bf-grid.puzzle-mode .bf-cell{position:absolute;transition:left .5s cubic-bezier(.4,0,.2,1),top .5s cubic-bezier(.4,0,.2,1)}
+.bf-grid.puzzle-mode .bf-cell{position:absolute;transition:left .5s cubic-bezier(.4,0,.2,1),top .5s cubic-bezier(.4,0,.2,1);will-change:left,top}
 .bf-free-msg{margin-top:12px;font-size:.85rem;color:#4caf50;opacity:0;transition:opacity .5s;font-style:italic}
 .bf-free-msg.show{opacity:1}
 .bf-continue{margin-top:16px;opacity:0;pointer-events:none;transition:opacity .4s}
@@ -1262,7 +1262,7 @@ function showBingoFlash(){
     const MOVE_DUR=Math.min(75,Math.floor(3000/scrambleMoves.length));
 
     setTimeout(()=>{
-      cellEls.forEach(c=>{c.style.transition=`left ${MOVE_DUR}ms linear, top ${MOVE_DUR}ms linear`});
+      cellEls.forEach(c=>{c.style.transition=`left ${MOVE_DUR}ms ease, top ${MOVE_DUR}ms ease`});
 
       // Solve = scramble reversed. Each reversed move: hole goes from move.to back to move.from
       const solveMoves=[...scrambleMoves].reverse();
@@ -1417,6 +1417,9 @@ function pickWheelFormats(){
 
 function drawWheel(){
   const c=document.getElementById('wheelCanvas'),ctx=c.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  if(c.width!==800*dpr){c.width=800*dpr;c.height=800*dpr}
+  ctx.setTransform(dpr,0,0,dpr,0,0);
   const sz=800,cx=400,cy=400,r=390;
   const n=wheelFormats.length;if(!n)return;const arc=2*Math.PI/n;
   ctx.clearRect(0,0,sz,sz);ctx.save();ctx.translate(cx,cy);ctx.rotate(wheelAngle);ctx.translate(-cx,-cy);
@@ -1476,7 +1479,7 @@ function spinWheel(){
   const target=fullSpins+((desiredAngle-wheelAngle)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
   const start=wheelAngle,dur=4200+Math.random()*1800,t0=performance.now();
   (function anim(now){
-    const p=Math.min((now-t0)/dur,1);wheelAngle=start+target*(1-Math.pow(1-p,3));drawWheel();
+    const p=Math.min((now-t0)/dur,1);wheelAngle=start+target*(1-Math.pow(1-p,4));drawWheel();
     // Tick sound on segment change
     const curSeg=Math.floor(((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI)/arc)%n;
     if(curSeg!==lastTickSegment){lastTickSegment=curSeg;playTick(1-p)}
@@ -2031,7 +2034,7 @@ function setDaubColor(c){const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slic
 function setDaubOpacity(v){const c=document.getElementById('daubColor').value;const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];document.documentElement.style.setProperty('--daub',`rgba(${r},${g},${b},${v/100})`)}
 function resetBingoCard(){bingoState=Array(25).fill(false);bingoState[12]=true;bingoWinShown=false;buildBingoFromPicked();saveBingoState()}
 function checkBingo(){if(bingoWinShown)return;const s=bingoState;for(let r=0;r<5;r++)if(s[r*5]&&s[r*5+1]&&s[r*5+2]&&s[r*5+3]&&s[r*5+4]){triggerBingo();return}for(let c=0;c<5;c++)if(s[c]&&s[5+c]&&s[10+c]&&s[15+c]&&s[20+c]){triggerBingo();return}if(s[0]&&s[6]&&s[12]&&s[18]&&s[24]){triggerBingo();return}if(s[4]&&s[8]&&s[12]&&s[16]&&s[20])triggerBingo()}
-function triggerBingo(){bingoWinShown=true;document.getElementById('easterMsg').textContent=EASTER_EGGS[Math.floor(Math.random()*EASTER_EGGS.length)];document.getElementById('bingoWin').classList.add('show');document.body.style.animation='screenShake .6s';setTimeout(()=>document.body.style.animation='',700);spawnConfetti();playWinSound()}
+function triggerBingo(){bingoWinShown=true;document.getElementById('easterMsg').textContent=EASTER_EGGS[Math.floor(Math.random()*EASTER_EGGS.length)];document.getElementById('bingoWin').classList.add('show');const mainEl=document.querySelector('.main');mainEl.style.animation='screenShake .6s';setTimeout(()=>mainEl.style.animation='',700);spawnConfetti();playWinSound()}
 function dismissBingoWin(){document.getElementById('bingoWin').classList.remove('show');document.getElementById('confettiBox').innerHTML=''}
 function spawnConfetti(){const box=document.getElementById('confettiBox');box.innerHTML='';const colors=['#e74c3c','#f39c12','#2ecc71','#3498db','#9b59b6','#e91e63','#00bcd4','#ff5722','#ffeb3b','#8bc34a'];for(let i=0;i<140;i++){const c=document.createElement('div');c.className='confetti';const sz=6+Math.random()*10;c.style.cssText=`width:${sz}px;height:${sz}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;top:-20px;border-radius:${Math.random()>.5?'50%':'2px'};animation:confettiFall ${2+Math.random()*3}s ${Math.random()*1.5}s linear forwards`;box.appendChild(c)}}
 
@@ -2625,7 +2628,7 @@ function renderBingoSetup(){
 function updateBingoCat(idx,val){BINGO_LIVE[idx]=val;saveBingoCategories()}
 function removeBingoCat(idx){if(BINGO_LIVE.length<=24){showToast('Need at least 24 categories','warn');return}BINGO_LIVE.splice(idx,1);saveBingoCategories();renderBingoSetup()}
 function addBingoCat(){BINGO_LIVE.push('New category');saveBingoCategories();renderBingoSetup()}
-function resetBingoToDefaults(){BINGO_LIVE=[...BINGO_CATS];saveBingoCategories();renderBingoSetup();showToast('Reset to defaults')}
+function resetBingoToDefaults(){try{const e=JSON.parse(document.getElementById('embedded-bingo-cats').textContent);BINGO_LIVE=e.categories||[...BINGO_CATS]}catch{BINGO_LIVE=[...BINGO_CATS]}saveBingoCategories();renderBingoSetup();showToast('Reset to defaults ('+BINGO_LIVE.length+' categories)')}
 function exportBingoJSON(){
   const out={categories:BINGO_LIVE};
   const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
@@ -2677,9 +2680,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "build": "2026-04-19T12:00:00",
-  "changelog": "Fix spinner landing mismatch, date year limits per format, KVN Bingo Picks preset",
+  "changelog": "HiDPI canvas, snappier spinner physics, puzzle easing, bingo reset fix, performance",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
