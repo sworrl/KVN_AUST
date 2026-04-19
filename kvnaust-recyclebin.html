@@ -913,7 +913,7 @@ function getAudioCtx(){
 }
 // Only unlock audio on first user click (prevents browser audio indicator on load)
 document.addEventListener('click',function unlockAudio(){audioUnlocked=true;document.removeEventListener('click',unlockAudio)},{once:true});
-function setSound(v){soundMode=v}
+function setSound(v){soundMode=v;localStorage.setItem('kvn_sound',v)}
 
 function playTick(pitch){
   if(soundMode==='none'||!audioUnlocked)return;
@@ -1221,7 +1221,7 @@ function showBingoFlash(){
     cell.className='bf-cell'+(isFree?' free':'');
     if(isFree){
       cell.innerHTML=`<span style="position:relative;z-index:1">${esc(txt)}</span>`;
-      cell.style.opacity='0';
+      cell.style.opacity='0';cell.style.pointerEvents='none';
       cell.onclick=function(){
         if(this.classList.contains('clicked'))return;
         this.classList.add('clicked');bingoState[12]=true;buildBingoFromPicked();
@@ -1306,7 +1306,7 @@ function showBingoFlash(){
         cellEls[12].style.left=(2*cW)+'px';cellEls[12].style.top=(2*cH)+'px';
         cellEls[12].offsetHeight;
         cellEls[12].style.transition='opacity 1s ease';
-        cellEls[12].style.opacity='1';cellEls[12].classList.add('revealed','free-shimmer');
+        cellEls[12].style.opacity='1';cellEls[12].style.pointerEvents='';cellEls[12].classList.add('revealed','free-shimmer');
         setTimeout(()=>{
           grid.classList.remove('puzzle-mode');grid.style.width='';grid.style.height='';
           cellEls.forEach((c,i)=>{
@@ -1590,7 +1590,9 @@ function setupNumberScreen(){
   else{const p=f.pad||4;mn.textContent=String(f.min).padStart(p,'0');mx.textContent=String(f.max).padStart(p,'0');nm.textContent='0'.repeat(p)}
 }
 
+let numberGenerating=false;
 function generateNumber(){
+  if(numberGenerating)return;numberGenerating=true;
   const f=chosenFormat,nm=document.getElementById('rollingNumber'),btn=document.getElementById('genBtn');
   btn.style.pointerEvents='none';
   const final=generateFinalNumber();
@@ -1616,7 +1618,7 @@ function generateNumber(){
     nm.innerHTML=html;
     if(Math.random()<(1-progress)*0.4)playTick(progress);
     if(progress<1){requestAnimationFrame(frame)}
-    else{nm.textContent=final;btn.style.pointerEvents='';playWinSound();setTimeout(goNext,900)}
+    else{nm.textContent=final;btn.style.pointerEvents='';numberGenerating=false;playWinSound();setTimeout(goNext,900)}
   })(performance.now());
 }
 
@@ -2125,8 +2127,8 @@ function updateAllProximity(){
     else if(p>=2)cell.classList.add('prox-2');
   });
 }
-function setDaubColor(c){const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];document.documentElement.style.setProperty('--daub',`rgba(${r},${g},${b},${document.getElementById('daubOpacity').value/100})`)}
-function setDaubOpacity(v){const c=document.getElementById('daubColor').value;const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];document.documentElement.style.setProperty('--daub',`rgba(${r},${g},${b},${v/100})`)}
+function setDaubColor(c){const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];const o=document.getElementById('daubOpacity').value;document.documentElement.style.setProperty('--daub',`rgba(${r},${g},${b},${o/100})`);localStorage.setItem('kvn_daub',JSON.stringify({color:c,opacity:+o}))}
+function setDaubOpacity(v){const c=document.getElementById('daubColor').value;const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];document.documentElement.style.setProperty('--daub',`rgba(${r},${g},${b},${v/100})`);localStorage.setItem('kvn_daub',JSON.stringify({color:c,opacity:+v}))}
 function resetBingoCard(){bingoState=Array(25).fill(false);bingoState[12]=true;bingoWinShown=false;buildBingoFromPicked();saveBingoState()}
 function checkBingo(){if(bingoWinShown)return;const s=bingoState;for(let r=0;r<5;r++)if(s[r*5]&&s[r*5+1]&&s[r*5+2]&&s[r*5+3]&&s[r*5+4]){triggerBingo();return}for(let c=0;c<5;c++)if(s[c]&&s[5+c]&&s[10+c]&&s[15+c]&&s[20+c]){triggerBingo();return}if(s[0]&&s[6]&&s[12]&&s[18]&&s[24]){triggerBingo();return}if(s[4]&&s[8]&&s[12]&&s[16]&&s[20])triggerBingo()}
 function triggerBingo(){bingoWinShown=true;document.getElementById('easterMsg').textContent=EASTER_EGGS[Math.floor(Math.random()*EASTER_EGGS.length)];document.getElementById('bingoWin').classList.add('show');const mainEl=document.querySelector('.main');mainEl.style.animation='screenShake .6s';setTimeout(()=>mainEl.style.animation='',700);spawnConfetti();playWinSound()}
@@ -2713,7 +2715,7 @@ function downloadFile(name,content,type){
 // ═══════════════════════════════════
 document.addEventListener('keydown',e=>{
   const inInput=document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='SELECT';
-  if((e.key==='r'||e.key==='R')&&!inInput&&(currentScreen==='result-screen'||currentScreen==='summary-screen')&&!e.ctrlKey)newSession();
+  if((e.key==='r'||e.key==='R')&&!inInput&&currentScreen==='summary-screen'&&!e.ctrlKey)newSession();
   if(e.ctrlKey&&e.key==='Enter'&&currentScreen==='wheel-screen'&&!spinning)spinWheel();
   if((e.key===' '||e.key==='Enter')&&currentScreen==='number-screen'&&!inInput){e.preventDefault();generateNumber()}
   if((e.key==='b'||e.key==='B')&&!inInput)toggleBingo();
@@ -2798,7 +2800,7 @@ function importBingoJSON(input){
 //  UTIL
 // ═══════════════════════════════════
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function showToast(msg,type){
   const t=document.getElementById('toast');t.textContent=msg;
   t.className='toast '+(type||'ok');
@@ -2812,6 +2814,10 @@ function showToast(msg,type){
 // ═══════════════════════════════════
 pickGameStamps();
 allowRepeatFormats=localStorage.getItem('kvn_allow_repeats')==='1';
+// Restore saved daub color/opacity
+try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){document.getElementById('daubColor').value=daubSaved.color;document.getElementById('daubOpacity').value=daubSaved.opacity;setDaubColor(daubSaved.color)}}catch{}
+// Restore saved sound preference
+try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}}catch{}
 loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
 checkForUpdates();
 </script>
