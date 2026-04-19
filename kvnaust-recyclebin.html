@@ -61,6 +61,7 @@
 }
 </script>
 <link rel="icon" type="image/png" id="favicon">
+<link rel="manifest" href="manifest.json">
 <title>YouTube's Recycle Bin - KVN AUST | Interactive Game Tool</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@700&display=swap');
@@ -276,7 +277,19 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 .color-tool input[type=range]{width:70px;accent-color:var(--accent)}
 
 /* ── PANELS ── */
-.format-panel{position:fixed;top:220px;right:0;bottom:0;width:310px;background:var(--card);border-left:1px solid #2a2a40;z-index:450;
+.fp-search{width:100%;background:var(--card2);border:1px solid #3a3a55;color:#fff;padding:7px 10px;border-radius:6px;font-size:.78rem;font-family:'Inter',sans-serif;margin-bottom:8px}
+.fp-search::placeholder{color:#444}
+.fp-search:focus{border-color:var(--accent)}
+.fp-count{font-size:.6rem;color:var(--muted);margin-bottom:6px}
+.fp-section{font-size:.62rem;color:var(--accent);font-weight:700;margin:8px 0 4px;text-transform:uppercase;letter-spacing:.5px}
+.fp-item.hidden{display:none}
+.fp-item .fp-range{font-size:.58rem;color:#555;margin-left:auto;white-space:nowrap}
+.fp-item .fp-type{font-size:.55rem;padding:1px 5px;border-radius:3px;margin-left:4px;font-weight:600}
+.fp-item .fp-type.numbered{background:rgba(46,204,113,.15);color:#2ecc71}
+.fp-item .fp-type.date{background:rgba(243,156,18,.15);color:#f39c12}
+.fp-item .fp-type.static{background:rgba(155,89,182,.15);color:#9b59b6}
+.fp-item .fp-type.special{background:rgba(52,152,219,.15);color:#3498db}
+.format-panel{position:fixed;top:220px;right:0;bottom:0;width:340px;background:var(--card);border-left:1px solid #2a2a40;z-index:450;
   transform:translateX(100%);transition:transform .35s ease;box-shadow:-4px 0 30px rgba(0,0,0,.5);overflow-y:auto;padding:14px}
 .format-panel.open{transform:translateX(0)}
 .format-panel h3{font-size:.9rem;margin-bottom:8px;color:#aaa}
@@ -645,7 +658,9 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 </div>
 
 <!-- PANELS -->
-<div class="format-panel" id="formatPanel"><button class="fp-close" onclick="toggleFormatPanel()">&times;</button><h3>Format Selector</h3>
+<div class="format-panel" id="formatPanel"><button class="fp-close" onclick="toggleFormatPanel()">&times;</button><h3>Format Browser</h3>
+  <input class="fp-search" id="fpSearch" type="text" placeholder="Search formats..." oninput="filterFormats(this.value)">
+  <div class="fp-count" id="fpCount"></div>
   <div class="fp-actions"><button onclick="fpSelectAll()">All</button><button onclick="fpSelectNone()">None</button><button onclick="fpSelectRandom()">Random 20</button><button onclick="fpBingoPicks()" style="background:#e74c3c;color:#fff">KVN Picks</button></div><div id="formatList"></div></div>
 <div class="history-panel" id="historyPanel"><button class="hp-close" onclick="toggleHistory()">&times;</button><h3>Game History</h3><div id="historyList"></div></div>
 
@@ -715,7 +730,12 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       <input type="url" id="recUrl" placeholder="YouTube link (optional)" style="flex:1;min-width:160px">
       <button onclick="addRecord()">Add Find</button>
     </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">
+      <button class="s-btn" style="font-size:.7rem;padding:4px 12px" onclick="showRecordTab('mine')" id="recTabMine">My Finds</button>
+      <button class="s-btn" style="font-size:.7rem;padding:4px 12px" onclick="showRecordTab('community')" id="recTabComm">Community</button>
+    </div>
     <div class="rec-list" id="recordsList"></div>
+    <div class="rec-list" id="communityRecordsList" style="display:none"></div>
     <div style="text-align:center;margin-top:6px">
       <button class="s-btn" onclick="closeRecords()">Close</button>
     </div>
@@ -2141,7 +2161,34 @@ function spawnConfetti(){const box=document.getElementById('confettiBox');box.in
 function toggleBingo(){const o=document.getElementById('bingoOverlay');o.classList.toggle('open');document.getElementById('bingoToggle').classList.toggle('active',o.classList.contains('open'))}
 function toggleFormatPanel(){const p=document.getElementById('formatPanel');p.classList.toggle('open');document.getElementById('formatsBtn').classList.toggle('active',p.classList.contains('open'))}
 function toggleHistory(){const p=document.getElementById('historyPanel');p.classList.toggle('open');document.getElementById('historyBtn').classList.toggle('active',p.classList.contains('open'));if(p.classList.contains('open'))renderHistory()}
-function buildFormatPanel(){const list=document.getElementById('formatList');list.innerHTML='';formats.forEach((f,i)=>{const d=document.createElement('div');d.className='fp-item';d.innerHTML=`<input type="checkbox" ${selectedFormats.has(i)?'checked':''} onchange="toggleFormat(${i},this.checked)"><span>${esc(f.label)}</span>`;list.appendChild(d)})}
+function buildFormatPanel(){
+  const list=document.getElementById('formatList');list.innerHTML='';
+  formats.forEach((f,i)=>{
+    const d=document.createElement('div');d.className='fp-item';d.dataset.label=f.label.toLowerCase();
+    let type='numbered',typeLabel='';
+    if(f.sp==='static'){type='static';typeLabel='static'}
+    else if(f.sp==='date'){type='date';typeLabel='date'}
+    else if(f.sp==='hex4'||f.sp==='monthdate'){type='special';typeLabel=f.sp}
+    else{typeLabel=`${String(f.min||0).padStart(f.pad||4,'0')}-${String(f.max||9999).padStart(f.pad||4,'0')}`}
+    const rangeHtml=type==='numbered'?`<span class="fp-range">${typeLabel}</span>`:`<span class="fp-type ${type}">${typeLabel}</span>`;
+    d.innerHTML=`<input type="checkbox" ${selectedFormats.has(i)?'checked':''} onchange="toggleFormat(${i},this.checked)"><span>${esc(f.label)}</span>${rangeHtml}`;
+    list.appendChild(d);
+  });
+  updateFpCount();
+}
+function filterFormats(q){
+  const lq=q.toLowerCase();
+  document.querySelectorAll('#formatList .fp-item').forEach(d=>{
+    d.classList.toggle('hidden',lq&&!d.dataset.label.includes(lq));
+  });
+  updateFpCount();
+}
+function updateFpCount(){
+  const total=formats.length,selected=selectedFormats.size;
+  const visible=document.querySelectorAll('#formatList .fp-item:not(.hidden)').length;
+  const el=document.getElementById('fpCount');
+  if(el)el.textContent=`${selected} selected of ${total} formats`+(visible<total?` (${visible} shown)`:'');
+}
 function toggleFormat(i,ch){if(ch)selectedFormats.add(i);else selectedFormats.delete(i)}
 function fpSelectAll(){selectedFormats=new Set(formats.map((_,i)=>i));buildFormatPanel()}
 function fpSelectNone(){selectedFormats.clear();buildFormatPanel()}
@@ -2220,6 +2267,37 @@ function showRecords(){
   drawRecordsTimeline();
 }
 function closeRecords(){document.getElementById('recordsOverlay').classList.remove('open')}
+
+function showRecordTab(tab){
+  const mine=document.getElementById('recordsList'),comm=document.getElementById('communityRecordsList');
+  const btnMine=document.getElementById('recTabMine'),btnComm=document.getElementById('recTabComm');
+  if(tab==='mine'){mine.style.display='';comm.style.display='none';btnMine.style.background='var(--accent)';btnMine.style.borderColor='var(--accent)';btnComm.style.background='';btnComm.style.borderColor=''}
+  else{mine.style.display='none';comm.style.display='';btnComm.style.background='var(--accent)';btnComm.style.borderColor='var(--accent)';btnMine.style.background='';btnMine.style.borderColor='';fetchCommunityRecords()}
+}
+
+let communityRecordsLoaded=false;
+async function fetchCommunityRecords(){
+  const list=document.getElementById('communityRecordsList');
+  if(communityRecordsLoaded){return}
+  list.innerHTML='<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Loading community records...</div>';
+  try{
+    const r=await fetch('/KVN_AUST/api/records');
+    if(!r.ok)throw new Error('not hosted');
+    const data=await r.json();
+    if(data.records&&data.records.length){
+      communityRecordsLoaded=true;
+      list.innerHTML=data.records.map((r,i)=>{
+        const d=new Date(r.date);
+        const dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+        const color=getRecordColor(d);
+        const medal=i===0?'&#x1F947; ':i===1?'&#x1F948; ':i===2?'&#x1F949; ':'';
+        return`<div class="rec-entry"><span style="min-width:20px;font-size:.8rem">${medal}</span><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views">${r.views} views</span><span style="color:#666;font-size:.65rem;flex:1">${esc(r.user||'anonymous')}</span></div>`;
+      }).join('')+'<div style="text-align:center;font-size:.6rem;color:#333;margin-top:6px">'+data.records.length+' community finds</div>';
+    }else throw new Error('empty');
+  }catch{
+    list.innerHTML='<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Community leaderboard available on <a href="https://falcontechnix.com/KVN_AUST/" style="color:#5b7fc7">falcontechnix.com</a></div>';
+  }
+}
 
 function addRecord(){
   const dateVal=document.getElementById('recDate').value;
@@ -2830,9 +2908,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "2.6.0",
+  "version": "3.0.0",
   "build": "2026-04-19T12:00:00",
-  "changelog": "Spinner accuracy fix, 6 bug fixes, settings persistence, premium Records timeline",
+  "changelog": "Searchable format browser, community leaderboard, PWA manifest, GitHub Actions CI",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }

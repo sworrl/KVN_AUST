@@ -4,6 +4,16 @@ All notable changes to YouTube's Recycle Bin — KVN AUST Game Tool.
 
 ---
 
+## [3.0.0] - 2026-04-19
+
+### Added
+- **Searchable format browser**: search bar in the format panel filters formats in real-time, shows type badges (numbered/date/static/special) and ranges per format, displays count of selected/total/visible
+- **Community leaderboard**: Records timeline has My Finds / Community tabs. Community tab fetches shared records from falcontechnix.com with medal rankings. Falls back gracefully when offline or on file://
+- **PWA manifest**: `manifest.json` allows installing the app as a standalone app on phones and desktops with KVN AUST's avatar as the icon
+- **GitHub Actions CI**: auto-counts formats in FORMAT-MAP.md on every push and updates badge numbers in both README and FORMAT-MAP
+
+---
+
 ## [2.6.0] - 2026-04-19
 
 ### Fixed

@@ -1,0 +1,68 @@
+name: Update Format Counts
+
+on:
+  push:
+    paths:
+      - 'FORMAT-MAP.md'
+
+jobs:
+  update-counts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Count formats
+        id: count
+        run: |
+          search=$(grep -c '^| `' FORMAT-MAP.md | head -1 || echo 0)
+          # Count per section
+          python3 -c "
+          import re
+          with open('FORMAT-MAP.md') as f:
+              md = f.read()
+          sections = {'search':0,'ext':0,'numbered':0,'date':0,'ancient':0}
+          sec = ''
+          for line in md.split('\n'):
+              if line.startswith('## Search Keyphrases'): sec='search'
+              elif line.startswith('## File Extensions'): sec='ext'
+              elif line.startswith('## Numbered Formats'): sec='numbered'
+              elif line.startswith('## Date-Based Formats'): sec='date'
+              elif line.startswith('## Ancient YouTube'): sec='ancient'
+              elif line.startswith('## Solved') or line.startswith('## Contributors') or line.startswith('## Recently'): sec=''
+              if sec and line.startswith('| \`'):
+                  sections[sec] += 1
+          total = sum(sections.values())
+          print(f'total={total}')
+          print(f'search={sections[\"search\"]}')
+          print(f'ext={sections[\"ext\"]}')
+          print(f'numbered={sections[\"numbered\"]}')
+          print(f'date={sections[\"date\"]}')
+          print(f'ancient={sections[\"ancient\"]}')
+          " >> $GITHUB_OUTPUT
+
+      - name: Update badge counts in FORMAT-MAP.md
+        run: |
+          sed -i "s/TOTAL_FORMATS-[0-9]*/TOTAL_FORMATS-${{ steps.count.outputs.total }}/" FORMAT-MAP.md
+          sed -i "s/Search_Keyphrases-[0-9]*/Search_Keyphrases-${{ steps.count.outputs.search }}/" FORMAT-MAP.md
+          sed -i "s/File_Extensions-[0-9]*/File_Extensions-${{ steps.count.outputs.ext }}/" FORMAT-MAP.md
+          sed -i "s/Numbered_Formats-[0-9]*/Numbered_Formats-${{ steps.count.outputs.numbered }}/" FORMAT-MAP.md
+          sed -i "s/Date--Based-[0-9]*/Date--Based-${{ steps.count.outputs.date }}/" FORMAT-MAP.md
+          sed -i "s/Ancient_YouTube-[0-9]*/Ancient_YouTube-${{ steps.count.outputs.ancient }}/" FORMAT-MAP.md
+          sed -i "s/Ancient_YT-[0-9]*/Ancient_YT-${{ steps.count.outputs.ancient }}/" FORMAT-MAP.md
+
+      - name: Update badge counts in README.md
+        run: |
+          sed -i "s/TOTAL_FORMATS-[0-9]*/TOTAL_FORMATS-${{ steps.count.outputs.total }}/" README.md
+          sed -i "s/Keyphrases-[0-9]*/Keyphrases-${{ steps.count.outputs.search }}/" README.md
+          sed -i "s/Extensions-[0-9]*/Extensions-${{ steps.count.outputs.ext }}/" README.md
+          sed -i "s/Numbered-[0-9]*/Numbered-${{ steps.count.outputs.numbered }}/" README.md
+          sed -i "s/Date--Based-[0-9]*/Date--Based-${{ steps.count.outputs.date }}/" README.md
+          sed -i "s/Ancient_YT-[0-9]*/Ancient_YT-${{ steps.count.outputs.ancient }}/" README.md
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet || (git add FORMAT-MAP.md README.md && git commit -m "Auto-update format counts" && git push)
