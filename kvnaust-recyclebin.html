@@ -1409,7 +1409,7 @@ async function fetchDocFormats(){
       }
       saveCachedFormats(fetched);
       formats=[...ALL_FORMATS];selectedFormats=new Set(formats.map((_,i)=>i));buildFormatPanel();
-      if(currentScreen==='wheel-screen'){pickWheelFormats();drawWheel()}
+      if(currentScreen==='wheel-screen'&&!spinning){pickWheelFormats();drawWheel()}
       console.log(`GitHub FORMAT-MAP: parsed ${fetched.length} formats, ${newCount} new`);
     }else{
       showToast('Format fetch failed - using cached formats','warn');
@@ -1494,25 +1494,43 @@ function drawWheel(){
 }
 
 let hasSpunOnce=false;
+
+// Determine which segment index is under the pointer (top = 3*PI/2 in screen space)
+function getSegmentAtPointer(){
+  const n=wheelFormats.length;if(!n)return 0;
+  const arc=2*Math.PI/n;
+  // Normalize wheelAngle to [0, 2*PI)
+  const a=((wheelAngle%((2*Math.PI)))+2*Math.PI)%(2*Math.PI);
+  // The pointer is at screen angle 3*PI/2 (top). A segment drawn at angle i*arc
+  // appears at screen angle i*arc + wheelAngle. So the unrotated angle at the pointer is:
+  const pointerAngle=((3*Math.PI/2-a)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  return Math.floor(pointerAngle/arc)%n;
+}
+
 function spinWheel(){
   if(spinning)return;spinning=true;lastTickSegment=-1;
   if(!hasSpunOnce){hasSpunOnce=true;document.getElementById('wheelTop').style.display='none'}
   const btn=document.getElementById('spinBtn');btn.style.pointerEvents='none';btn.classList.add('spinning');
   setTimeout(()=>btn.classList.remove('spinning'),300);
   const n=wheelFormats.length;
-  // Pick a format, avoiding repeats unless allowed or all used
+  const arc=2*Math.PI/n;
+
+  // Pick a target segment, avoiding repeats unless allowed
   let ci;
   if(!allowRepeatFormats){
     const unused=[];for(let i=0;i<n;i++)if(!usedFormats.has(wheelFormats[i].label))unused.push(i);
     ci=unused.length?unused[Math.floor(Math.random()*unused.length)]:Math.floor(Math.random()*n);
   }else{ci=Math.floor(Math.random()*n)}
-  chosenFormat=wheelFormats[ci];
-  usedFormats.add(chosenFormat.label);
-  const arc=2*Math.PI/n;
-  // Calculate target so segment ci lands under the pointer (top = -PI/2)
-  const desiredAngle=(-ci*arc-arc/2-Math.PI/2)%(2*Math.PI);
+
+  // Calculate the final angle where segment ci's center is at 3*PI/2 (pointer)
+  // Screen position of segment ci center = ci*arc + arc/2 + wheelAngle
+  // We need: ci*arc + arc/2 + finalAngle ≡ 3*PI/2 (mod 2*PI)
+  // So: finalAngle ≡ 3*PI/2 - ci*arc - arc/2 (mod 2*PI)
+  const targetRest=((3*Math.PI/2-ci*arc-arc/2)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  // How far to spin from current angle to reach targetRest, plus full rotations
+  const distToTarget=((targetRest-wheelAngle)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
   const fullSpins=(5+Math.random()*4)*2*Math.PI;
-  const target=fullSpins+((desiredAngle-wheelAngle)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  const target=fullSpins+distToTarget;
   const start=wheelAngle,dur=4200+Math.random()*1800,t0=performance.now();
   (function anim(now){
     const p=Math.min((now-t0)/dur,1);wheelAngle=start+target*(1-Math.pow(1-p,5));drawWheel();
@@ -1520,7 +1538,14 @@ function spinWheel(){
     const curSeg=Math.floor(((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI)/arc)%n;
     if(curSeg!==lastTickSegment){lastTickSegment=curSeg;playTick(1-p)}
     if(p<1)requestAnimationFrame(anim);
-    else{spinning=false;btn.style.pointerEvents='';playWinSound();setTimeout(advanceFromWheel,700)}
+    else{
+      spinning=false;btn.style.pointerEvents='';
+      // Read the ACTUAL segment under the pointer — what you see is what you get
+      const landed=getSegmentAtPointer();
+      chosenFormat=wheelFormats[landed];
+      usedFormats.add(chosenFormat.label);
+      playWinSound();setTimeout(advanceFromWheel,700);
+    }
   })(performance.now());
 }
 
