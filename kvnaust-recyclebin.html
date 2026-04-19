@@ -631,7 +631,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 
 <!-- PANELS -->
 <div class="format-panel" id="formatPanel"><button class="fp-close" onclick="toggleFormatPanel()">&times;</button><h3>Format Selector</h3>
-  <div class="fp-actions"><button onclick="fpSelectAll()">All</button><button onclick="fpSelectNone()">None</button><button onclick="fpSelectRandom()">Random 20</button></div><div id="formatList"></div></div>
+  <div class="fp-actions"><button onclick="fpSelectAll()">All</button><button onclick="fpSelectNone()">None</button><button onclick="fpSelectRandom()">Random 20</button><button onclick="fpBingoPicks()" style="background:#e74c3c;color:#fff">KVN Picks</button></div><div id="formatList"></div></div>
 <div class="history-panel" id="historyPanel"><button class="hp-close" onclick="toggleHistory()">&times;</button><h3>Game History</h3><div id="historyList"></div></div>
 
 <!-- BINGO WIN / CONFETTI / TOAST -->
@@ -934,7 +934,8 @@ const ALL_FORMATS=[
 {label:"MOV XXXX",tpl:"MOV {V}",min:0,max:9999,pad:4},{label:"DSC XXXX",tpl:"DSC {V}",min:0,max:9999,pad:4},
 {label:"DSCFXXXX",tpl:"DSCF{V}",min:0,max:9999,pad:4},{label:"GOPRXXXX",tpl:"GOPR{V}",min:0,max:9999,pad:4},
 {label:"XXXX.MP4",tpl:"{V}.mp4",min:0,max:9999,pad:4},{label:"VideoXXXX",tpl:"Video{V}",min:0,max:9999,pad:4},
-{label:"YYYYMMDD",tpl:"{V}",sp:"date"},{label:"VID YYYYMMDD",tpl:"VID {V}",sp:"date"},
+{label:"YYYYMMDD",tpl:"{V}",sp:"date",minY:2006,maxY:2026},
+{label:"VID YYYYMMDD",tpl:"VID {V}",sp:"date",minY:2008,maxY:2026},
 {label:'".MP4"',tpl:'".MP4"',sp:"static"},{label:'".MOV"',tpl:'".MOV"',sp:"static"},
 {label:"Trim 4XXX",tpl:"Trim {V}",sp:"hex4"},
 {label:"R001XXXX",tpl:"R001{V}",min:1,max:9999,pad:4},{label:"VIRB0XXX",tpl:"VIRB0{V}",min:1,max:999,pad:3},
@@ -1356,11 +1357,11 @@ async function fetchDocFormats(){
       const existing=new Set(ALL_FORMATS.map(f=>f.label));
       const fetched=[];
       let newCount=0;
-      // Parse markdown table rows: | KEYPHRASE | RANGE | ...
+      // Parse markdown table rows
       for(const line of md.split('\n')){
+        // Numbered formats: | `KEYPHRASEXXXX` | 0000-9999 | ...
         const m=line.match(/\|\s*`?([A-Z][A-Za-z0-9_ ]*?)(X{2,4})`?\s*\|\s*(\d+)-(\d+)/);
         if(m){
-          // Preserve spacing: "IMG " + "XXXX" = "IMG XXXX", "DSCF" + "XXXX" = "DSCFXXXX"
           const lbl=m[1]+m[2];
           const hasSpace=m[1].endsWith(' ');
           const tpl=hasSpace?m[1].trimEnd()+' {V}':m[1]+'{V}';
@@ -1369,6 +1370,25 @@ async function fetchDocFormats(){
             const fmt={label:lbl,tpl:tpl,min:lo,max:hi,pad:m[2].length};
             fetched.push(fmt);
             if(!existing.has(lbl)){ALL_FORMATS.push(fmt);existing.add(lbl);newCount++}
+          }
+          continue;
+        }
+        // Date-based formats: | `PREFIX YYYYMMDD` | >YYYY | ...
+        const dm=line.match(/\|\s*`([^`]*YYYY[^`]*)`\s*\|\s*>?\s*(\d{4})/);
+        if(dm){
+          const lbl=dm[1];
+          const minY=parseInt(dm[2]);
+          // Check for max year: (<YYYY) pattern
+          const maxM=line.match(/<\s*(\d{4})/);
+          const maxY=maxM?parseInt(maxM[1]):new Date().getFullYear();
+          if(!existing.has(lbl)){
+            const tpl=lbl.replace('YYYYMMDD','{V}').replace('YYYY MM DD','{V}').replace('YYYY MM','{V}').replace('YYYY-MM-DD','{V}');
+            ALL_FORMATS.push({label:lbl,tpl:tpl,sp:'date',minY:minY,maxY:maxY});
+            existing.add(lbl);newCount++;
+          }else{
+            // Update year limits on existing format
+            const ex=ALL_FORMATS.find(f=>f.label===lbl);
+            if(ex&&ex.sp==='date'){ex.minY=minY;ex.maxY=maxY}
           }
         }
       }
@@ -1450,7 +1470,10 @@ function spinWheel(){
   chosenFormat=wheelFormats[ci];
   usedFormats.add(chosenFormat.label);
   const arc=2*Math.PI/n;
-  const target=(5+Math.random()*4)*2*Math.PI+(2*Math.PI-ci*arc-arc/2)+Math.PI/2;
+  // Calculate target so segment ci lands under the pointer (top = -PI/2)
+  const desiredAngle=(-ci*arc-arc/2-Math.PI/2)%(2*Math.PI);
+  const fullSpins=(5+Math.random()*4)*2*Math.PI;
+  const target=fullSpins+((desiredAngle-wheelAngle)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
   const start=wheelAngle,dur=4200+Math.random()*1800,t0=performance.now();
   (function anim(now){
     const p=Math.min((now-t0)/dur,1);wheelAngle=start+target*(1-Math.pow(1-p,3));drawWheel();
@@ -1497,7 +1520,7 @@ function showFormatReveal(){
 function setupNumberScreen(){
   const f=chosenFormat;if(!f)return;
   const mn=document.getElementById('rangeMin'),mx=document.getElementById('rangeMax'),nm=document.getElementById('rollingNumber');
-  if(f.sp==='date'){mn.textContent='2006';mx.textContent='2026';nm.textContent='--------'}
+  if(f.sp==='date'){mn.textContent=f.minY||'2006';mx.textContent=f.maxY||'2026';nm.textContent='--------'}
   else if(f.sp==='monthdate'){mn.textContent='2007';mx.textContent='2013';nm.textContent='--- --, ----'}
   else if(f.sp==='hex4'){mn.textContent='0000';mx.textContent='FFFF';nm.textContent='----'}
   else{const p=f.pad||4;mn.textContent=String(f.min).padStart(p,'0');mx.textContent=String(f.max).padStart(p,'0');nm.textContent='0'.repeat(p)}
@@ -1533,7 +1556,7 @@ function generateNumber(){
   })(performance.now());
 }
 
-function randDate(){const y=2006+Math.floor(Math.random()*21),m=1+Math.floor(Math.random()*12),d=1+Math.floor(Math.random()*28);return`${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}`}
+function randDate(minY,maxY){const lo=minY||2006,hi=maxY||2026;const y=lo+Math.floor(Math.random()*(hi-lo+1)),m=1+Math.floor(Math.random()*12),d=1+Math.floor(Math.random()*28);return`${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}`}
 function randMonthDate(){const ms=['January','February','March','April','May','June','July','August','September','October','November','December'];return`${ms[Math.floor(Math.random()*12)]} ${String(1+Math.floor(Math.random()*28)).padStart(2,'0')}, ${2007+Math.floor(Math.random()*7)}`}
 function randHex(){let s='';for(let i=0;i<4;i++)s+='0123456789ABCDEF'[Math.floor(Math.random()*16)];return s}
 
@@ -1691,7 +1714,7 @@ const SHUFFLE_COLORS=['#e74c3c','#f39c12','#2ecc71','#3498db','#9b59b6','#e91e63
 
 function generateFinalNumber(){
   const f=chosenFormat;
-  if(f.sp==='date')return randDate();
+  if(f.sp==='date')return randDate(f.minY,f.maxY);
   if(f.sp==='monthdate')return randMonthDate();
   if(f.sp==='hex4')return randHex();
   if(f.sp!=='static'){const p=f.pad||4;return String(Math.floor(Math.random()*(f.max-f.min+1))+f.min).padStart(p,'0')}
@@ -2023,6 +2046,9 @@ function toggleFormat(i,ch){if(ch)selectedFormats.add(i);else selectedFormats.de
 function fpSelectAll(){selectedFormats=new Set(formats.map((_,i)=>i));buildFormatPanel()}
 function fpSelectNone(){selectedFormats.clear();buildFormatPanel()}
 function fpSelectRandom(){selectedFormats.clear();const p=[...formats.keys()];shuffle(p);p.slice(0,20).forEach(i=>selectedFormats.add(i));buildFormatPanel()}
+// KVN AUST's curated "Bingo Picks" - formats that consistently produce good results
+const KVN_BINGO_PICKS=['IMG XXXX','CIMGXXXX','IMGPXXXX','MVI XXXX','DSC XXXX','DSCFXXXX','VideoXXXX','MAQ0XXXX','100 XXXX','M2U0XXXX','XXXX.MP4','VID0XXXX','P100XXXX','Trim 4XXX','"HHMMSS"','VID YYYYMMDD','Capture YYYYMMDD','WIN YYYYMMDD','WP YYYYMMDD'];
+function fpBingoPicks(){selectedFormats.clear();formats.forEach((f,i)=>{if(KVN_BINGO_PICKS.includes(f.label))selectedFormats.add(i)});buildFormatPanel();showToast(`KVN's Bingo Picks: ${selectedFormats.size} formats selected`)}
 
 function renderHistory(){
   const list=document.getElementById('historyList'),games=getAllGames();
@@ -2651,9 +2677,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "2.0.0",
-  "build": "2026-04-17T12:00:00",
-  "changelog": "SEO meta tags, Records timeline, 63 format spinner, FORMAT-MAP restructure",
+  "version": "2.1.0",
+  "build": "2026-04-19T12:00:00",
+  "changelog": "Fix spinner landing mismatch, date year limits per format, KVN Bingo Picks preset",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }

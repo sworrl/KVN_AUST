@@ -283,12 +283,12 @@ Device-specific filename patterns with numeric ranges. Best for finding old, for
 | `Video YYYYMMDD` | >2012 | Misc | |
 | `VID YYYYMMDD` | >2008 | Misc | |
 | `WIN YYYYMMDD` | >2013 | Webcam | |
-| `Capture YYYYMMDD` | >2008 | Webcam | [@thevoid6756](https://youtube.com/@thevoid6756) |
+| `Capture YYYYMMDD` | >2008 (<2018) | Webcam | [@thevoid6756](https://youtube.com/@thevoid6756) |
 | `InShot YYYYMMDD` | >2016 | App | |
 | `PXL YYYYMMDD` | >2020 | Smartphone | |
 | `WhatsApp Video YYYY MM DD` | >2015 | App | |
 | `Desktop YYYY MM DD` | - | Game Capture | |
-| `WP YYYYMMDD` | >2011 | Misc | |
+| `WP YYYYMMDD` | >2011 (<2018) | Misc | |
 | `KakaoTalk Video YYYY MM` | >2012 | Misc | |
 | `"QuickCapture Video - Month D, YYYY"` | 2007-2013 | Webcam | [@Pagenonfound](https://youtube.com/@Pagenonfound) |
 | `Webcam YYYYMMDD` | 2007-2010 | Webcam | [@GaspacoZanis](https://youtube.com/@GaspacoZanis) |
