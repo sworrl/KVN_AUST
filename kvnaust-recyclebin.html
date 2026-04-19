@@ -407,30 +407,35 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 /* ── RECORDS TIMELINE MODAL ── */
 .records-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 .records-overlay.open{opacity:1;pointer-events:auto}
-.records-modal{background:#000;border:1px solid #333;border-radius:16px;padding:24px 20px 18px;max-width:720px;width:95vw;max-height:85vh;overflow-y:auto;transform:scale(.9);transition:transform .3s}
+.records-modal{background:#050508;border:1px solid #222;border-radius:16px;padding:28px 24px 20px;max-width:960px;width:96vw;max-height:92vh;overflow-y:auto;transform:scale(.9);transition:transform .3s;box-shadow:0 20px 80px rgba(0,0,0,.8),0 0 60px rgba(231,76,60,.06)}
 .records-overlay.open .records-modal{transform:scale(1)}
-.records-modal h3{text-align:center;color:#fff;font-size:1.1rem;margin:0 0 4px;font-weight:900;letter-spacing:.5px}
-.records-modal .rec-sub{text-align:center;font-size:.65rem;color:#888;margin-bottom:14px}
-.rec-timeline{position:relative;width:100%;height:320px;background:#000;border:1px solid #333;border-radius:8px;overflow:hidden;margin-bottom:14px}
+.records-modal h3{text-align:center;color:#fff;font-size:1.3rem;margin:0 0 4px;font-weight:900;letter-spacing:1px;text-shadow:0 0 20px rgba(231,76,60,.3)}
+.records-modal .rec-sub{text-align:center;font-size:.72rem;color:#666;margin-bottom:16px}
+.rec-timeline{position:relative;width:100%;height:min(55vh,480px);background:#030306;border:1px solid #1a1a2a;border-radius:10px;overflow:hidden;margin-bottom:16px;box-shadow:inset 0 0 40px rgba(0,0,0,.5)}
 .rec-timeline canvas{width:100%;height:100%}
-.rec-form{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:10px}
-.rec-form input{background:#111;border:1px solid #333;color:#fff;padding:6px 10px;border-radius:6px;font-size:.75rem;font-family:'Inter',sans-serif}
-.rec-form input::placeholder{color:#444}
-.rec-form button{background:#e74c3c;border:none;color:#fff;padding:6px 14px;border-radius:6px;font-size:.75rem;font-weight:700;cursor:pointer}
-.rec-form button:hover{background:#c0392b}
-.rec-list{max-height:150px;overflow-y:auto;margin-bottom:10px}
-.rec-entry{display:flex;gap:8px;align-items:center;padding:5px 8px;border-radius:6px;font-size:.72rem;color:#ccc;background:#0a0a0a;margin-bottom:3px;border:1px solid #1a1a1a}
-.rec-entry .rec-date{color:#e74c3c;font-weight:700;min-width:95px}
-.rec-entry .rec-views{color:#2ecc71;font-weight:700;min-width:48px}
+.rec-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;margin-bottom:12px}
+.rec-form input{background:#0a0a14;border:1px solid #2a2a40;color:#fff;padding:8px 12px;border-radius:8px;font-size:.78rem;font-family:'Inter',sans-serif;transition:border-color .2s}
+.rec-form input:focus{border-color:var(--accent)}
+.rec-form input::placeholder{color:#333}
+.rec-form button{background:linear-gradient(135deg,#e74c3c,#c0392b);border:none;color:#fff;padding:8px 18px;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:0 2px 12px rgba(231,76,60,.25)}
+.rec-form button:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(231,76,60,.4)}
+.rec-form button:active{transform:scale(.96)}
+.rec-list{max-height:180px;overflow-y:auto;margin-bottom:12px}
+.rec-entry{display:flex;gap:10px;align-items:center;padding:7px 10px;border-radius:8px;font-size:.75rem;color:#ccc;background:#080810;margin-bottom:4px;border:1px solid #161625;transition:border-color .2s}
+.rec-entry:hover{border-color:#2a2a45}
+.rec-entry .rec-date{color:#e74c3c;font-weight:700;min-width:100px;text-shadow:0 0 8px rgba(231,76,60,.2)}
+.rec-entry .rec-views{color:#2ecc71;font-weight:700;min-width:52px}
 .rec-entry .rec-link{color:#5b7fc7;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-decoration:none}
-.rec-entry .rec-link:hover{text-decoration:underline}
-.rec-entry .rec-del{background:none;border:none;color:#555;cursor:pointer;font-size:.85rem;padding:0 4px}.rec-entry .rec-del:hover{color:#e74c3c}
-.rec-rarity-legend{display:flex;gap:12px;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
-.rec-rarity-legend span{font-size:.65rem;font-weight:700;display:flex;align-items:center;gap:4px}
-.rec-rarity-legend span::before{content:'';width:10px;height:10px;border-radius:50%;display:inline-block}
-.rec-rarity-legend .r-gold::before{background:#ffd700}.rec-rarity-legend .r-red::before{background:#e74c3c}
-.rec-rarity-legend .r-orange::before{background:#e67e22}.rec-rarity-legend .r-green::before{background:#2ecc71}
-.rec-rarity-legend .r-blue::before{background:#3498db}
+.rec-entry .rec-link:hover{text-decoration:underline;color:#7e9cd8}
+.rec-entry .rec-del{background:none;border:none;color:#333;cursor:pointer;font-size:.9rem;padding:0 4px;transition:color .15s}.rec-entry .rec-del:hover{color:#e74c3c}
+.rec-rarity-legend{display:flex;gap:14px;justify-content:center;margin-bottom:12px;flex-wrap:wrap}
+.rec-rarity-legend span{font-size:.7rem;font-weight:700;display:flex;align-items:center;gap:5px;text-shadow:0 0 6px rgba(255,255,255,.05)}
+.rec-rarity-legend span::before{content:'';width:10px;height:10px;border-radius:50%;display:inline-block;box-shadow:0 0 6px currentColor}
+.rec-rarity-legend .r-gold{color:#ffd700}.rec-rarity-legend .r-gold::before{background:#ffd700;box-shadow:0 0 8px #ffd700}
+.rec-rarity-legend .r-red{color:#e74c3c}.rec-rarity-legend .r-red::before{background:#e74c3c;box-shadow:0 0 8px #e74c3c}
+.rec-rarity-legend .r-orange{color:#e67e22}.rec-rarity-legend .r-orange::before{background:#e67e22;box-shadow:0 0 8px #e67e22}
+.rec-rarity-legend .r-green{color:#2ecc71}.rec-rarity-legend .r-green::before{background:#2ecc71;box-shadow:0 0 8px #2ecc71}
+.rec-rarity-legend .r-blue{color:#3498db}.rec-rarity-legend .r-blue::before{background:#3498db;box-shadow:0 0 8px #3498db}
 
 /* ── SETTINGS MODAL ── */
 .settings-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -2239,62 +2244,82 @@ function drawRecordsTimeline(){
   const ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
   const W=rect.width,H=rect.height;
-  ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);
+
+  // Background gradient
+  const bgGrad=ctx.createLinearGradient(0,0,0,H);
+  bgGrad.addColorStop(0,'#050510');bgGrad.addColorStop(.5,'#030308');bgGrad.addColorStop(1,'#080812');
+  ctx.fillStyle=bgGrad;ctx.fillRect(0,0,W,H);
 
   // Timeline config
   const startYear=2005,endYear=new Date().getFullYear()+1;
   const totalYears=endYear-startYear;
-  const padL=50,padR=20,padT=30,padB=40;
+  const padL=52,padR=24,padT=36,padB=44;
   const chartW=W-padL-padR,chartH=H-padT-padB;
 
-  // Rarity zone backgrounds
+  // Rarity zone backgrounds with gradients
   const zones=[
-    {y1:2005,y2:2006,color:'rgba(255,215,0,.06)',label:''},
-    {y1:2006,y2:2007,color:'rgba(231,76,60,.08)',label:'SUPER RARE'},
-    {y1:2007,y2:2009,color:'rgba(230,126,34,.06)',label:'VERY RARE'},
-    {y1:2009,y2:2013,color:'rgba(46,204,113,.04)',label:'RARE'},
-    {y1:2013,y2:endYear,color:'rgba(52,152,219,.03)',label:'COMMON'}
+    {y1:2005,y2:2006,c1:'rgba(255,215,0,.12)',c2:'rgba(255,215,0,.03)',label:''},
+    {y1:2006,y2:2007,c1:'rgba(231,76,60,.14)',c2:'rgba(231,76,60,.04)',label:'SUPER RARE'},
+    {y1:2007,y2:2009,c1:'rgba(230,126,34,.10)',c2:'rgba(230,126,34,.03)',label:'VERY RARE'},
+    {y1:2009,y2:2013,c1:'rgba(46,204,113,.08)',c2:'rgba(46,204,113,.02)',label:'RARE'},
+    {y1:2013,y2:endYear,c1:'rgba(52,152,219,.06)',c2:'rgba(52,152,219,.015)',label:'COMMON'}
   ];
   zones.forEach(z=>{
     const x1=padL+((z.y1-startYear)/totalYears)*chartW;
     const x2=padL+((z.y2-startYear)/totalYears)*chartW;
-    ctx.fillStyle=z.color;
-    ctx.fillRect(x1,padT,x2-x1,chartH);
-    // Zone divider
-    ctx.strokeStyle='#333';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x2,padT);ctx.lineTo(x2,padT+chartH);ctx.stroke();
+    // Vertical gradient per zone: brighter at bottom, fading up
+    const zGrad=ctx.createLinearGradient(0,padT,0,padT+chartH);
+    zGrad.addColorStop(0,z.c2);zGrad.addColorStop(1,z.c1);
+    ctx.fillStyle=zGrad;ctx.fillRect(x1,padT,x2-x1,chartH);
+    // Zone divider with gradient fade
+    const dGrad=ctx.createLinearGradient(0,padT,0,padT+chartH);
+    dGrad.addColorStop(0,'rgba(255,255,255,.02)');dGrad.addColorStop(.5,'rgba(255,255,255,.08)');dGrad.addColorStop(1,'rgba(255,255,255,.03)');
+    ctx.strokeStyle=dGrad;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x2,padT);ctx.lineTo(x2,padT+chartH);ctx.stroke();
     // Zone label
     if(z.label){
-      ctx.fillStyle='#444';ctx.font='bold 11px Inter,sans-serif';ctx.textAlign='center';
-      ctx.fillText(z.label,(x1+x2)/2,padT+16);
+      ctx.fillStyle='rgba(255,255,255,.12)';ctx.font='bold 12px Inter,sans-serif';ctx.textAlign='center';
+      ctx.fillText(z.label,(x1+x2)/2,padT+20);
     }
   });
 
-  // YouTube launch marker
+  // YouTube launch marker — glowing bar
   const ytX=padL+((2005.1-startYear)/totalYears)*chartW;
+  ctx.shadowColor='#ffd700';ctx.shadowBlur=20;
   ctx.fillStyle='#ffd700';ctx.fillRect(ytX-3,padT,6,chartH);
-  ctx.fillStyle='#ffd700';ctx.font='bold 9px Inter,sans-serif';ctx.textAlign='center';
-  ctx.fillText('YT LAUNCH',ytX,padT-6);
+  ctx.shadowBlur=0;
+  // YT launch label with background pill
+  ctx.font='bold 10px Inter,sans-serif';ctx.textAlign='center';
+  const ytLabel='YT LAUNCH';const ytLW=ctx.measureText(ytLabel).width;
+  ctx.fillStyle='rgba(255,215,0,.15)';
+  ctx.beginPath();ctx.roundRect(ytX-ytLW/2-6,padT-20,ytLW+12,16,4);ctx.fill();
+  ctx.fillStyle='#ffd700';ctx.fillText(ytLabel,ytX,padT-9);
 
-  // Y-axis (log scale: 0, 10, 50, 100, 500, 1k, 5k+)
+  // Y-axis
   const yTicks=[0,10,50,100,500,1000,5000];
   const yLabels=['0','10','50','100','500','1k','5k+'];
-  ctx.fillStyle='#666';ctx.font='10px Inter,sans-serif';ctx.textAlign='right';
+  ctx.textAlign='right';
   yTicks.forEach((v,i)=>{
     const y=padT+chartH-(i/(yTicks.length-1))*chartH;
-    ctx.fillText(yLabels[i],padL-8,y+3);
-    ctx.strokeStyle='#1a1a1a';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+chartW,y);ctx.stroke();
+    ctx.fillStyle='#555';ctx.font='bold 10px Inter,sans-serif';
+    ctx.fillText(yLabels[i],padL-10,y+4);
+    // Grid lines
+    ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;
+    ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+chartW,y);ctx.stroke();
+    ctx.setLineDash([]);
   });
 
-  // X-axis year labels
-  ctx.fillStyle='#888';ctx.font='10px Inter,sans-serif';ctx.textAlign='center';
-  // Timeline base line
-  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(padL,padT+chartH);ctx.lineTo(padL+chartW,padT+chartH);ctx.stroke();
+  // X-axis
+  // Timeline base line with gradient
+  const blGrad=ctx.createLinearGradient(padL,0,padL+chartW,0);
+  blGrad.addColorStop(0,'rgba(255,255,255,.3)');blGrad.addColorStop(.5,'#fff');blGrad.addColorStop(1,'rgba(255,255,255,.3)');
+  ctx.strokeStyle=blGrad;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(padL,padT+chartH);ctx.lineTo(padL+chartW,padT+chartH);ctx.stroke();
+  // Year labels
+  ctx.font='bold 11px Inter,sans-serif';ctx.textAlign='center';
   for(let y=startYear;y<endYear;y++){
     const x=padL+((y-startYear)/totalYears)*chartW;
-    ctx.fillStyle='#888';
-    ctx.fillText("'"+String(y).slice(2),x,padT+chartH+16);
-    // Small tick mark
-    ctx.strokeStyle='#555';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,padT+chartH+4);ctx.stroke();
+    ctx.fillStyle='#666';
+    ctx.fillText("'"+String(y).slice(2),x,padT+chartH+18);
+    ctx.strokeStyle='#444';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,padT+chartH+5);ctx.stroke();
   }
 
   // Plot user records
@@ -2305,40 +2330,69 @@ function drawRecordsTimeline(){
     return padT+chartH-(logV/logMax)*chartH;
   }
 
-  recs.forEach(r=>{
+  recs.forEach((r,ri)=>{
     const d=new Date(r.date);
     const yearFrac=d.getFullYear()+(d.getMonth()/12)+(d.getDate()/365);
     const x=padL+((yearFrac-startYear)/totalYears)*chartW;
     const y=viewsToY(r.views);
     const color=getRecordColor(d);
-
-    // Vertical line from bottom to dot
-    ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,y);ctx.stroke();
-
-    // Dot
-    ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='#000';ctx.lineWidth=1.5;ctx.stroke();
-
-    // Glow
-    ctx.shadowColor=color;ctx.shadowBlur=10;ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();
-    ctx.shadowBlur=0;
-
-    // Date label
-    const dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-    ctx.fillStyle=color;ctx.font='bold 9px Inter,sans-serif';ctx.textAlign='center';
-    ctx.fillText(dateStr,x,y-12);
-    // Rarity tag
     const rarity=getRarityLabel(d.getFullYear());
-    ctx.fillStyle='rgba(255,255,255,.4)';ctx.font='7px Inter,sans-serif';
-    ctx.fillText(rarity,x,y-3);
+    const isRare=d.getFullYear()<=2008;
+
+    // Vertical beam from bottom to dot
+    const beamGrad=ctx.createLinearGradient(0,padT+chartH,0,y);
+    beamGrad.addColorStop(0,color);beamGrad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.strokeStyle=beamGrad;ctx.lineWidth=isRare?3:2;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,y);ctx.stroke();
+
+    // Ambient glow under dot
+    const glowR=isRare?30:18;
+    const ambGrad=ctx.createRadialGradient(x,y,0,x,y,glowR);
+    ambGrad.addColorStop(0,color.replace(')',',0.35)').replace('rgb','rgba'));
+    ambGrad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=ambGrad;ctx.beginPath();ctx.arc(x,y,glowR,0,Math.PI*2);ctx.fill();
+
+    // Dot with metallic ring
+    const dotR=isRare?8:6;
+    ctx.beginPath();ctx.arc(x,y,dotR,0,Math.PI*2);
+    ctx.fillStyle=color;ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,.3)';ctx.lineWidth=1.5;ctx.stroke();
+    // Inner highlight
+    ctx.beginPath();ctx.arc(x-2,y-2,dotR*.4,0,Math.PI*2);
+    const hlGrad=ctx.createRadialGradient(x-2,y-2,0,x-2,y-2,dotR*.4);
+    hlGrad.addColorStop(0,'rgba(255,255,255,.4)');hlGrad.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=hlGrad;ctx.fill();
+
+    // Date label with background
+    const dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    ctx.font=`bold ${isRare?11:10}px Inter,sans-serif`;ctx.textAlign='center';
+    const lblW=ctx.measureText(dateStr).width;
+    ctx.fillStyle='rgba(0,0,0,.6)';
+    ctx.beginPath();ctx.roundRect(x-lblW/2-5,y-26,lblW+10,15,3);ctx.fill();
+    ctx.fillStyle=color;
+    ctx.fillText(dateStr,x,y-15);
+    // Rarity tag
+    if(isRare){
+      ctx.font='bold 8px Inter,sans-serif';
+      const rW=ctx.measureText(rarity).width;
+      ctx.fillStyle='rgba(0,0,0,.5)';
+      ctx.beginPath();ctx.roundRect(x-rW/2-4,y+dotR+3,rW+8,12,3);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.6)';
+      ctx.fillText(rarity,x,y+dotR+12);
+    }
   });
 
-  // Empty state message
+  // Empty state
   if(!recs.length){
-    ctx.fillStyle='#333';ctx.font='14px Inter,sans-serif';ctx.textAlign='center';
-    ctx.fillText('Add your oldest zero-view finds to see them on the timeline',W/2,H/2);
-    ctx.fillStyle='#222';ctx.font='11px Inter,sans-serif';
-    ctx.fillText('The older the video, the rarer the find',W/2,H/2+20);
+    // Centered text with subtle glow
+    ctx.shadowColor='rgba(231,76,60,.2)';ctx.shadowBlur=20;
+    ctx.fillStyle='#444';ctx.font='bold 16px Inter,sans-serif';ctx.textAlign='center';
+    ctx.fillText('Add your oldest zero-view finds to see them here',W/2,H/2-8);
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#2a2a2a';ctx.font='12px Inter,sans-serif';
+    ctx.fillText('The older the video, the rarer the find',W/2,H/2+14);
+    // Decorative crosshair at center
+    ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(W/2-30,H/2+30);ctx.lineTo(W/2+30,H/2+30);ctx.stroke();
   }
 }
 
