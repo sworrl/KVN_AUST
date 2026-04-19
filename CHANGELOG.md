@@ -4,6 +4,19 @@ All notable changes to YouTube's Recycle Bin — KVN AUST Game Tool.
 
 ---
 
+## [3.1.0] - 2026-04-19
+
+### Added
+- **Share Card**: SVG export button on result screen generates a branded card with search string, format, star ratings, YouTube link, and @KVNAUST/@MingKasterMK social links
+- **Stats Dashboard**: header button opens a modal with total games/rounds, per-metric averages, most-used format, unique format count, and best-rated video from all game history
+- **Keyboard Shortcuts Help**: `?` button in header opens a modal listing all shortcuts (Ctrl+Enter, Space, R, B, arrows, Escape)
+- **Dramatic BINGO fanfare**: 7-note ascending C major scale (C5→C7) with crescendo, separate from the standard 4-note win sound
+
+### Changed
+- Win sound upgraded from basic sine wave to triumphant triangle-wave fanfare (C5-E5-G5-C6)
+
+---
+
 ## [3.0.0] - 2026-04-19
 
 ### Added
