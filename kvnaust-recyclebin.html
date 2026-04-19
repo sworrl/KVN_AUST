@@ -166,7 +166,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 .wheel-mode-btns button{background:var(--card);border:1px solid #3a3a55;color:#aaa;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:.72rem;font-weight:600;transition:all .15s}
 .wheel-mode-btns button.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .wheel-container{position:relative;width:min(68vh,68vw,520px);height:min(68vh,68vw,520px)}
-canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 0 30px rgba(0,0,0,.6)) drop-shadow(0 0 60px rgba(231,76,60,.08))}
+canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 0 20px rgba(0,0,0,.5))}
 .wheel-pointer{position:absolute;top:-14px;left:50%;transform:translateX(-50%);z-index:10}
 .wheel-pointer svg{filter:drop-shadow(0 3px 6px rgba(0,0,0,.6))}
 /* Big spin button with avatar */
@@ -1198,7 +1198,7 @@ function saveGameToHistory(){
   if(games.length>50)games.length=50;saveAllGames(games);
 }
 
-function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];hasSpunOnce=false;document.getElementById('wheelTop').style.display='';showScreen('wheel-screen');pickWheelFormats();drawWheel()}
+function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel()}
 function newSession(){sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showScreen('start-screen')}
 
 // ═══════════════════════════════════
@@ -1438,50 +1438,58 @@ function drawWheel(){
   const sz=800,cx=400,cy=400,r=390;
   const n=wheelFormats.length;if(!n)return;const arc=2*Math.PI/n;
   ctx.clearRect(0,0,sz,sz);ctx.save();ctx.translate(cx,cy);ctx.rotate(wheelAngle);ctx.translate(-cx,-cy);
+  // Pass 1: fill all segments (no strokes yet — prevents bleed-through)
   for(let i=0;i<n;i++){
     const a=i*arc;
-    // Base color
     ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+arc);ctx.closePath();
     ctx.fillStyle=WHEEL_COLORS[i%WHEEL_COLORS.length];ctx.fill();
-    // 3D bevel: radial shine + edge darkening
-    const grad=ctx.createRadialGradient(cx,cy,r*.15,cx,cy,r);
-    grad.addColorStop(0,'rgba(255,255,255,.18)');grad.addColorStop(.35,'rgba(255,255,255,.08)');grad.addColorStop(.7,'rgba(0,0,0,.05)');grad.addColorStop(1,'rgba(0,0,0,.3)');
-    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+arc);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
-    // Specular highlight arc near outer edge
-    ctx.beginPath();ctx.arc(cx,cy,r*.85,a+arc*.15,a+arc*.5);ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=2;ctx.stroke();
-    // Segment edge lines
+  }
+  // Pass 2: depth overlay on all segments
+  const grad=ctx.createRadialGradient(cx,cy,r*.1,cx,cy,r);
+  grad.addColorStop(0,'rgba(255,255,255,.14)');grad.addColorStop(.4,'rgba(255,255,255,.04)');grad.addColorStop(.75,'rgba(0,0,0,.08)');grad.addColorStop(1,'rgba(0,0,0,.25)');
+  ctx.beginPath();ctx.arc(cx,cy,r,0,2*Math.PI);ctx.fillStyle=grad;ctx.fill();
+  // Pass 3: segment divider lines (clean, on top of fills)
+  for(let i=0;i<n;i++){
+    const a=i*arc;
     ctx.beginPath();ctx.moveTo(cx,cy);
-    ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);ctx.strokeStyle='rgba(0,0,0,.3)';ctx.lineWidth=2;ctx.stroke();
-    // Outer rim half-highlight
-    ctx.beginPath();ctx.arc(cx,cy,r-6,a+arc*.08,a+arc*.45);ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=2;ctx.stroke();
-    // Text
+    ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);
+    ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=1.5;ctx.stroke();
+  }
+  // Pass 4: text (last, on top of everything)
+  for(let i=0;i<n;i++){
+    const a=i*arc;
     ctx.save();ctx.translate(cx,cy);ctx.rotate(a+arc/2);
     ctx.textAlign='right';ctx.fillStyle='#fff';
     const fs=Math.min(20,Math.max(11,500/n));
-    ctx.font=`bold ${fs}px Inter`;ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=6;ctx.shadowOffsetX=1;ctx.shadowOffsetY=2;
-    ctx.fillText(wheelFormats[i].label,r-20,fs/3);ctx.shadowBlur=0;ctx.shadowOffsetX=0;ctx.shadowOffsetY=0;
+    ctx.font=`bold ${fs}px Inter`;ctx.shadowColor='rgba(0,0,0,.95)';ctx.shadowBlur=4;ctx.shadowOffsetX=1;ctx.shadowOffsetY=1;
+    ctx.fillText(wheelFormats[i].label,r-18,fs/3);ctx.shadowBlur=0;ctx.shadowOffsetX=0;ctx.shadowOffsetY=0;
     // Red dot for previously used formats
-    if(usedFormats.has(wheelFormats[i].label)){ctx.beginPath();ctx.arc(r-10,-fs/2-4,4,0,2*Math.PI);ctx.fillStyle='#ff1744';ctx.fill()}
+    if(usedFormats.has(wheelFormats[i].label)){
+      ctx.beginPath();ctx.arc(r-10,-fs/2-4,4,0,2*Math.PI);ctx.fillStyle='#ff1744';ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,.5)';ctx.lineWidth=1;ctx.stroke();
+    }
     ctx.restore();
   }
   ctx.restore();
   // Metallic outer bezel
   const bezel=ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
-  bezel.addColorStop(0,'#888');bezel.addColorStop(.3,'#ccc');bezel.addColorStop(.5,'#fff');bezel.addColorStop(.7,'#ccc');bezel.addColorStop(1,'#666');
-  ctx.beginPath();ctx.arc(cx,cy,r+2,0,2*Math.PI);ctx.strokeStyle=bezel;ctx.lineWidth=8;ctx.stroke();
-  ctx.beginPath();ctx.arc(cx,cy,r-4,0,2*Math.PI);ctx.strokeStyle='rgba(0,0,0,.35)';ctx.lineWidth=2;ctx.stroke();
-  // Center: metallic orb with highlight
-  ctx.beginPath();ctx.arc(cx,cy,72,0,2*Math.PI);
-  const co=ctx.createRadialGradient(cx-12,cy-12,5,cx,cy,72);
-  co.addColorStop(0,'#444');co.addColorStop(.3,'#222');co.addColorStop(.7,'#111');co.addColorStop(1,'#0a0a12');
+  bezel.addColorStop(0,'#666');bezel.addColorStop(.25,'#aaa');bezel.addColorStop(.45,'#ddd');bezel.addColorStop(.55,'#ddd');bezel.addColorStop(.75,'#aaa');bezel.addColorStop(1,'#666');
+  ctx.beginPath();ctx.arc(cx,cy,r+3,0,2*Math.PI);ctx.strokeStyle=bezel;ctx.lineWidth=7;ctx.stroke();
+  // Inner shadow ring
+  ctx.beginPath();ctx.arc(cx,cy,r-1,0,2*Math.PI);ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=2;ctx.stroke();
+  // Center hub
+  ctx.beginPath();ctx.arc(cx,cy,74,0,2*Math.PI);
+  const co=ctx.createRadialGradient(cx-10,cy-10,8,cx,cy,74);
+  co.addColorStop(0,'#3a3a48');co.addColorStop(.25,'#252530');co.addColorStop(.6,'#161620');co.addColorStop(1,'#0a0a12');
   ctx.fillStyle=co;ctx.fill();
-  const cr=ctx.createLinearGradient(cx-72,cy,cx+72,cy);
-  cr.addColorStop(0,'#555');cr.addColorStop(.4,'#999');cr.addColorStop(.5,'#bbb');cr.addColorStop(.6,'#999');cr.addColorStop(1,'#555');
-  ctx.strokeStyle=cr;ctx.lineWidth=4;ctx.stroke();
-  // Specular highlight on center orb
-  ctx.beginPath();ctx.arc(cx-15,cy-18,18,0,2*Math.PI);
-  const ch=ctx.createRadialGradient(cx-15,cy-18,2,cx-15,cy-18,18);
-  ch.addColorStop(0,'rgba(255,255,255,.2)');ch.addColorStop(1,'rgba(255,255,255,0)');
+  // Metallic hub ring
+  const cr=ctx.createLinearGradient(cx-74,cy,cx+74,cy);
+  cr.addColorStop(0,'#444');cr.addColorStop(.35,'#888');cr.addColorStop(.5,'#aaa');cr.addColorStop(.65,'#888');cr.addColorStop(1,'#444');
+  ctx.strokeStyle=cr;ctx.lineWidth=3;ctx.stroke();
+  // Hub specular
+  ctx.beginPath();ctx.arc(cx-14,cy-16,16,0,2*Math.PI);
+  const ch=ctx.createRadialGradient(cx-14,cy-16,1,cx-14,cy-16,16);
+  ch.addColorStop(0,'rgba(255,255,255,.18)');ch.addColorStop(1,'rgba(255,255,255,0)');
   ctx.fillStyle=ch;ctx.fill();
 }
 
@@ -2791,9 +2799,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "2.4.0",
+  "version": "2.5.0",
   "build": "2026-04-19T12:00:00",
-  "changelog": "Progressive daub intensity: stamps glow brighter and pulse as you approach BINGO",
+  "changelog": "Clean wheel rendering (no artifacting), lock slot count during game, progressive daubs",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
