@@ -15,7 +15,7 @@
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-2ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v3.1.0-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v3.3.0-1a1a2e?style=flat-square" alt="Changelog"></a>
 </p>
 
 <p align="center">
@@ -44,7 +44,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 | 1 | **Recycle Bin Bingo** | Randomized 5x5 bingo card with 101 video categories from KVN AUST's series. Slide-puzzle reveal animation. 50 unique SVG daub stamps per game. |
 | 2 | **Format Spinner** | 3D-textured wheel loaded with 60+ filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md). No-repeat spins with red dots marking used formats. |
 | 3 | **Rainbow Number Generator** | Character-by-character rainbow shuffle animation generates the random search number for your format. |
-| 4 | **Search YouTube & Rate** | Copy the search string, open directly in YouTube, or re-randomize. Rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." |
+| 4 | **Search YouTube & Rate** | Copy the search string, open directly in YouTube, or re-randomize. Rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." Log date posted, views, and channel size. Share via SVG card or copy for Discord. |
 | 5 | **Game Summary & Export** | End-of-session recap with video thumbnails, per-metric breakdowns, and averages. Export bingo cards and summaries as SVG. |
 | 6 | **Oldest Zero-View Record** | Track the oldest zero-view videos you discover on a canvas timeline with rarity zones — from YouTube's launch in 2005 to present day. |
 

@@ -4,6 +4,24 @@ All notable changes to YouTube's Recycle Bin — KVN AUST Game Tool.
 
 ---
 
+## [3.3.0] - 2026-04-20
+
+### Added
+- **Video metadata fields**: date posted, views when found, channel video count — captured on the result screen, saved to history, included in SVG share cards and Discord copy
+- **Copy for Discord**: purple button generates a formatted markdown message with ✮ metadata, star ratings, and @KVNAUST branding — ready to paste in any Discord channel
+- **177 format parser**: static keyphrases, file extensions, and Ancient YouTube entries now load from FORMAT-MAP.md as playable spinner formats (was 62, now 177)
+
+### Changed
+- Share card SVG dynamically resizes to fit metadata fields
+- Game history shows date posted, views, and channel video count per round
+
+### Fixed
+- Heading hierarchy: single `<h1>`, BINGO demoted to `<h2>`
+- Lighthouse accessibility: alt attrs, aria-labels, font preconnect, image dimensions
+- GitHub Action: fixed detached HEAD checkout
+
+---
+
 ## [3.1.0] - 2026-04-19
 
 ### Added
