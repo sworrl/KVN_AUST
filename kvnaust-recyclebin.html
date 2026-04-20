@@ -1485,7 +1485,7 @@ function closeBingoFlash(){
 // ═══════════════════════════════════
 //  DOC FETCH
 // ═══════════════════════════════════
-const DOC_CACHE_KEY='kvn_doc_formats_v3'; // v3: now parses static keyphrases + extensions
+const DOC_CACHE_KEY='kvn_doc_formats_v4'; // v4: all 177 formats cached (date+static were missing)
 const DOC_CACHE_TS_KEY='kvn_doc_ts';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
@@ -1551,7 +1551,8 @@ async function fetchDocFormats(){
           const maxY=maxM?parseInt(maxM[1]):new Date().getFullYear();
           if(!existing.has(lbl)){
             const tpl=lbl.replace('YYYYMMDD','{V}').replace('YYYY MM DD','{V}').replace('YYYY MM','{V}').replace('YYYY-MM-DD','{V}');
-            ALL_FORMATS.push({label:lbl,tpl:tpl,sp:'date',minY:minY,maxY:maxY});
+            const fmt={label:lbl,tpl:tpl,sp:'date',minY:minY,maxY:maxY};
+            ALL_FORMATS.push(fmt);fetched.push(fmt);
             existing.add(lbl);newCount++;
           }else{
             const ex=ALL_FORMATS.find(f=>f.label===lbl);
@@ -1564,7 +1565,8 @@ async function fetchDocFormats(){
         if(sm&&!sm[1].match(/XXXX|YYYY|format/i)){
           const lbl=sm[1];
           if(!existing.has(lbl)){
-            ALL_FORMATS.push({label:lbl,tpl:lbl,sp:'static'});
+            const fmt={label:lbl,tpl:lbl,sp:'static'};
+            ALL_FORMATS.push(fmt);fetched.push(fmt);
             existing.add(lbl);newCount++;
           }
         }
@@ -3357,9 +3359,9 @@ setInterval(fetchCommunityRecords,60000);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "3.7.0",
+  "version": "4.0.0",
   "build": "2026-04-20T12:00:00",
-  "changelog": "Live community finds API, clickable find details, timeline integration",
+  "changelog": "Fix format cache: all 177 formats now persist offline. Community finds API, Deep Dive mode.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }

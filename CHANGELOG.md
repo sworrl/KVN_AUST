@@ -4,6 +4,21 @@ All notable changes to YouTube's Recycle Bin — KVN AUST Game Tool.
 
 ---
 
+## [4.0.0] - 2026-04-20
+
+### Fixed
+- **Format cache bug**: date-based and static formats were added to `ALL_FORMATS` in memory but never pushed to the `fetched[]` array that gets saved to localStorage. On reload without network, only 62-78 numbered formats survived. Now all 177 formats are cached and available offline.
+- Cache key bumped to v4 to invalidate stale caches
+
+### Added
+- **Community Finds API**: live leaderboard from `finds.php` with 14+ seeded discoveries. Clickable detail overlays with thumbnails, rarity badges, channel info, and attribution. Plotted on the Records timeline as community dots.
+- **Deep Dive mode**: underwater bubble physics, nautical sonar sounds, whale-call win fanfare, ocean teal theme with 30+ CSS overrides, `Before:2010` search filter for targeting VERY RARE and older videos
+- **Video metadata fields**: date posted, views when found, channel video count — saved to history, SVG cards, and Discord copy
+- **Copy for Discord**: formatted markdown message with ✮ metadata, star ratings, and @KVNAUST branding
+- **Hosted vs Standalone comparison table** and Finds API documentation in README
+
+---
+
 ## [3.4.0] - 2026-04-20
 
 ### Added
