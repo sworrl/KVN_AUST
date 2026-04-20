@@ -107,6 +107,20 @@ body.deep-dive .screen-nav:hover{border-color:rgba(0,188,212,.3);color:#4dd0e1}
 body.deep-dive .wheel-count-wrap{border-color:#0a2a3a}
 body.deep-dive .wheel-mode-btns button.active{background:#00838f;border-color:#00838f}
 body.deep-dive .credit-footer{background:linear-gradient(0deg,rgba(2,6,8,.95) 0%,rgba(2,6,8,.6) 60%,transparent)}
+/* Anchor drop wipe */
+.anchor-wipe{position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.anchor-wipe .anchor-bg{position:absolute;inset:0;background:linear-gradient(180deg,#020810,#041420,#061828);transform:translateY(-100%);animation:anchorBgDrop 1.2s cubic-bezier(.4,0,.2,1) forwards}
+.anchor-wipe .anchor-icon{position:relative;z-index:1;font-size:4rem;animation:anchorFall 1.2s cubic-bezier(.4,0,.2,1) forwards;opacity:0}
+.anchor-wipe .anchor-text{position:relative;z-index:1;color:#4dd0e1;font-weight:900;font-size:1.2rem;letter-spacing:3px;opacity:0;animation:anchorTextFade .5s .8s ease forwards}
+.anchor-wipe.rising .anchor-bg{animation:anchorBgRise 1s cubic-bezier(.4,0,.2,1) forwards}
+.anchor-wipe.rising .anchor-icon{animation:anchorRise 1s cubic-bezier(.4,0,.2,1) forwards}
+.anchor-wipe.rising .anchor-text{animation:anchorTextOut .3s ease forwards}
+@keyframes anchorBgDrop{0%{transform:translateY(-100%)}100%{transform:translateY(0)}}
+@keyframes anchorFall{0%{transform:translateY(-120vh);opacity:0}20%{opacity:1}100%{transform:translateY(0);opacity:1}}
+@keyframes anchorTextFade{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes anchorBgRise{0%{transform:translateY(0)}100%{transform:translateY(100%)}}
+@keyframes anchorRise{0%{transform:translateY(0);opacity:1}80%{opacity:1}100%{transform:translateY(120vh);opacity:0}}
+@keyframes anchorTextOut{0%{opacity:1}100%{opacity:0}}
 #bubbleCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;display:none}
 body.deep-dive #bubbleCanvas{display:block}
 body.deep-dive .deep-dive-badge{display:inline-block}
@@ -1059,6 +1073,32 @@ function playNauticalWin(){
   }catch{}
 }
 
+function playAnchorDrop(){
+  if(!audioUnlocked)return;
+  try{
+    const ctx=getAudioCtx();const t=ctx.currentTime;
+    // Chain rattle: burst of filtered noise
+    const buf=ctx.createBuffer(1,ctx.sampleRate*.6,ctx.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*.15));
+    const noise=ctx.createBufferSource();noise.buffer=buf;
+    const bp=ctx.createBiquadFilter();bp.type='bandpass';bp.frequency.value=2000;bp.Q.value=3;
+    const ng=ctx.createGain();ng.gain.setValueAtTime(.08,t);ng.gain.exponentialRampToValueAtTime(.001,t+.6);
+    noise.connect(bp);bp.connect(ng);ng.connect(ctx.destination);noise.start(t);
+    // Descending tone (anchor falling)
+    const o=ctx.createOscillator();const g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);o.type='sine';
+    o.frequency.setValueAtTime(400,t);o.frequency.exponentialRampToValueAtTime(80,t+.8);
+    g.gain.setValueAtTime(.06,t+.1);g.gain.exponentialRampToValueAtTime(.001,t+.9);
+    o.start(t+.1);o.stop(t+.9);
+    // Splash: low thud
+    const s=ctx.createOscillator();const sg=ctx.createGain();
+    s.connect(sg);sg.connect(ctx.destination);s.type='sine';s.frequency.value=60;
+    sg.gain.setValueAtTime(.1,t+.7);sg.gain.exponentialRampToValueAtTime(.001,t+1.1);
+    s.start(t+.7);s.stop(t+1.1);
+  }catch{}
+}
+
 function playWinSound(){
   if(soundMode==='none'||!audioUnlocked)return;
   if(soundMode==='nautical'){playNauticalWin();return}
@@ -1726,33 +1766,53 @@ const DEEP_DIVE_LABELS=new Set(['IMG XXXX','MVI XXXX','MOV XXXX','DSC XXXX','DSC
 
 function toggleDeepDive(){
   deepDiveActive=!deepDiveActive;
-  document.body.classList.toggle('deep-dive',deepDiveActive);
   document.getElementById('modeDeepDive').classList.toggle('active',deepDiveActive);
+
   if(deepDiveActive){
-    // Switch to nautical sounds
-    prevSoundMode=soundMode;
-    setSound('nautical');document.getElementById('soundPick').value='nautical';
-    // Auto-select deep dive formats
-    selectedFormats.clear();
-    formats.forEach((f,i)=>{
-      if(DEEP_DIVE_LABELS.has(f.label))selectedFormats.add(i);
-      if(f.sp==='date'&&(f.minY||2006)<2013)selectedFormats.add(i);
-      if(f.sp==='static'&&DEEP_DIVE_LABELS.has(f.label))selectedFormats.add(i);
-    });
-    wheelMode='selected';
-    document.getElementById('modeSelected').classList.add('active');
-    document.getElementById('modeRandom').classList.remove('active');
-    buildFormatPanel();rebuildWheel();startBubbles();
-    showToast(`Deep Dive: ${selectedFormats.size} old-video formats, Before:${DEEP_DIVE_YEAR}`);
+    // Anchor drop wipe IN
+    const wipe=document.createElement('div');wipe.className='anchor-wipe';
+    wipe.innerHTML='<div class="anchor-bg"></div><div class="anchor-icon">&#9875;</div><div class="anchor-text">DEEP DIVE</div>';
+    document.body.appendChild(wipe);
+    playAnchorDrop();
+
+    // Apply theme at the midpoint of the wipe (when screen is covered)
+    setTimeout(()=>{
+      document.body.classList.add('deep-dive');
+      prevSoundMode=soundMode;
+      soundMode='nautical';document.getElementById('soundPick').value='nautical';
+      selectedFormats.clear();
+      formats.forEach((f,i)=>{
+        if(DEEP_DIVE_LABELS.has(f.label))selectedFormats.add(i);
+        if(f.sp==='date'&&(f.minY||2006)<2013)selectedFormats.add(i);
+        if(f.sp==='static'&&DEEP_DIVE_LABELS.has(f.label))selectedFormats.add(i);
+      });
+      wheelMode='selected';
+      document.getElementById('modeSelected').classList.add('active');
+      document.getElementById('modeRandom').classList.remove('active');
+      buildFormatPanel();rebuildWheel();startBubbles();
+    },600);
+
+    // Remove wipe overlay after animation completes
+    setTimeout(()=>{wipe.remove();showToast(`Deep Dive: ${selectedFormats.size} formats, Before:${DEEP_DIVE_YEAR}`)},1800);
+
   }else{
-    // Restore previous sound
-    if(prevSoundMode){setSound(prevSoundMode);document.getElementById('soundPick').value=prevSoundMode}
-    wheelMode='random';
-    document.getElementById('modeRandom').classList.add('active');
-    document.getElementById('modeSelected').classList.remove('active');
-    selectedFormats=new Set(formats.map((_,i)=>i));
-    buildFormatPanel();rebuildWheel();stopBubbles();
-    showToast('Normal mode');
+    // Anchor rising wipe OUT
+    const wipe=document.createElement('div');wipe.className='anchor-wipe rising';
+    wipe.innerHTML='<div class="anchor-bg"></div><div class="anchor-icon">&#9875;</div><div class="anchor-text"></div>';
+    document.body.appendChild(wipe);
+
+    setTimeout(()=>{
+      document.body.classList.remove('deep-dive');
+      const restore=prevSoundMode||localStorage.getItem('kvn_sound')||'tick';
+      setSound(restore);document.getElementById('soundPick').value=restore;
+      wheelMode='random';
+      document.getElementById('modeRandom').classList.add('active');
+      document.getElementById('modeSelected').classList.remove('active');
+      selectedFormats=new Set(formats.map((_,i)=>i));
+      buildFormatPanel();rebuildWheel();stopBubbles();
+    },500);
+
+    setTimeout(()=>{wipe.remove();showToast('Normal mode')},1200);
   }
 }
 let prevSoundMode=null;
