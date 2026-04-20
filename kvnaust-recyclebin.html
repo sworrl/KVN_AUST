@@ -833,7 +833,8 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       <span class="r-green">RARE (2009-2012)</span>
       <span class="r-blue">COMMON (2013+)</span>
     </div>
-    <div class="rec-timeline"><canvas id="recordsCanvas" onclick="handleTimelineClick(event)" style="cursor:pointer"></canvas><div id="timelineTooltip" style="display:none;position:absolute;background:#111;border:1px solid #333;border-radius:8px;padding:10px;font-size:.7rem;color:#ccc;pointer-events:none;z-index:10;max-width:260px;box-shadow:0 4px 20px rgba(0,0,0,.6)"></div></div>
+    <div id="recordHolder" style="text-align:center;font-size:.72rem;color:#888;margin-bottom:8px"></div>
+    <div class="rec-timeline"><canvas id="recordsCanvas" onclick="handleTimelineClick(event)" onmousemove="handleTimelineHover(event)" onmouseleave="document.getElementById('timelineTooltip').style.display='none'" style="cursor:pointer"></canvas><div id="timelineTooltip" style="display:none;position:absolute;background:#111;border:1px solid #333;border-radius:8px;padding:8px 10px;font-size:.65rem;color:#ccc;pointer-events:none;z-index:10;max-width:220px;box-shadow:0 4px 16px rgba(0,0,0,.6)"></div></div>
     <div class="rec-form">
       <input type="date" id="recDate" style="width:140px">
       <input type="number" id="recViews" placeholder="Views" min="0" value="0" style="width:70px">
@@ -2752,7 +2753,7 @@ function showRecords(){
   document.getElementById('recordsOverlay').classList.add('open');
   renderRecords();
   drawRecordsTimeline();
-  // Fetch community finds on first open, then poll
+  updateRecordHolder();
   if(!communityFetchedOnce)fetchCommunityRecords();
 }
 function closeRecords(){document.getElementById('recordsOverlay').classList.remove('open')}
@@ -2785,7 +2786,7 @@ async function fetchCommunityRecords(){
       return`<div class="rec-entry" style="cursor:pointer" onclick="showFindDetail(${i})"><span style="min-width:20px;font-size:.8rem">${medal}</span><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views" title="Views when found">${f.views_when_found??'?'} views</span><span style="color:${color};font-size:.6rem;font-weight:700;min-width:65px">${esc(f.rarity||'')}</span><span style="color:#666;font-size:.62rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(f.lead)}">${esc(f.lead)}</span><span style="color:#444;font-size:.58rem">${esc(f.found_by||'')}</span></div>`;
     }).join('')+`<div style="text-align:center;font-size:.6rem;color:#333;margin-top:6px">${data.total} finds &#183; oldest: ${data.oldest_post_date} &#183; newest: ${data.newest_post_date}</div>`;
     // Redraw timeline with community data
-    drawRecordsTimeline();
+    drawRecordsTimeline();updateRecordHolder();
   }catch(e){
     if(!communityFetchedOnce)list.innerHTML=`<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Could not load community finds.<br><a href="https://falcontechnix.com/KVN_AUST/" style="color:#5b7fc7">Play on falcontechnix.com</a> for the full leaderboard.</div>`;
   }
@@ -2795,24 +2796,28 @@ function showFindDetail(idx){
   const f=communityFinds[idx];if(!f)return;
   const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
   const color=rc[f.rarity]||'#888';
-  const html=`<div style="text-align:center;padding:12px">
-    <a href="${esc(f.video_url)}" target="_blank" rel="noopener"><img src="${esc(f.thumbnail_url)}" style="width:240px;border-radius:8px;border:2px solid ${color};margin-bottom:8px" alt="${esc(f.video_title)}"></a>
-    <div style="font-weight:900;font-size:1rem;color:#fff;margin-bottom:4px">${esc(f.video_title||'Untitled')}</div>
-    <div style="font-size:.75rem;color:${color};font-weight:700;margin-bottom:8px">${esc(f.rarity)}</div>
-    <div style="font-size:.72rem;color:#aaa;line-height:1.6">
+  const src=f.source||'';const srcSym=SOURCE_SYMBOLS[src.toLowerCase()]||'?';
+  const d=document.createElement('div');d.className='rec-find-detail';
+  d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)';
+  d.onclick=e=>{if(e.target===d)d.remove()};
+  d.innerHTML=`<div style="text-align:center;padding:20px;background:#111;border:1px solid #2a2a40;border-radius:14px;max-width:380px;width:90vw">
+    <img src="${esc(f.thumbnail_url)}" style="width:280px;max-width:100%;border-radius:8px;border:2px solid ${color};margin-bottom:10px;cursor:pointer" alt="${esc(f.video_title)}" onclick="window.open('${esc(f.video_url)}','_blank','noopener')">
+    <div style="font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:4px">${esc(f.video_title||'Untitled')}</div>
+    <div style="font-size:.8rem;color:${color};font-weight:700;margin-bottom:10px">${esc(f.rarity)}</div>
+    <div style="font-size:.75rem;color:#aaa;line-height:1.8;text-align:left;padding:0 12px">
       <div>&#10038; <strong>Date posted:</strong> ${esc(f.date_posted)}</div>
       <div>&#10038; <strong>Views when found:</strong> ${f.views_when_found??'unknown'}</div>
       <div>&#10038; <strong>Lead:</strong> ${esc(f.lead)}</div>
       ${f.channel_name?`<div>&#10038; <strong>Channel:</strong> ${esc(f.channel_name)}${f.channel_videos?' ('+f.channel_videos+' videos)':''}${f.channel_subs?' &#183; '+f.channel_subs+' subs':''}</div>`:''}
-      <div style="margin-top:6px;color:#666">Found by <strong style="color:#aaa">${esc(f.found_by||'anonymous')}</strong> in ${esc(f.server||'unknown')}</div>
+      <div style="margin-top:6px;color:#666">Found by <strong style="color:#aaa">${esc(f.found_by||'anonymous')}</strong></div>
+      <div style="color:#555">[${srcSym}] ${esc(f.server||src)}</div>
     </div>
-    <div style="margin-top:10px"><a href="${esc(f.video_url)}" target="_blank" rel="noopener" style="color:#5b7fc7;font-size:.75rem">Watch on YouTube</a></div>
-    <button class="s-btn" style="margin-top:8px" onclick="this.closest('.rec-find-detail').remove()">Back</button>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
+      <button class="nav-btn primary" style="font-size:.75rem;padding:6px 18px" onclick="window.open('${esc(f.video_url)}','_blank','noopener')">Watch on YouTube</button>
+      <button class="nav-btn" style="font-size:.75rem;padding:6px 14px" onclick="this.closest('.rec-find-detail').remove()">Close</button>
+    </div>
   </div>`;
-  const d=document.createElement('div');d.className='rec-find-detail';d.style.cssText='position:absolute;inset:0;background:rgba(0,0,0,.9);z-index:10;border-radius:10px;overflow-y:auto';
-  d.innerHTML=html;
-  document.getElementById('communityRecordsList').style.position='relative';
-  document.getElementById('communityRecordsList').appendChild(d);
+  document.body.appendChild(d);
 }
 
 function addRecord(){
@@ -2867,39 +2872,73 @@ function getRarityLabel(y){
 let timelineDotPositions=[]; // {x,y,type:'local'|'community',idx,data}
 const SOURCE_SYMBOLS={discord:'D',github:'G','google doc':'GD',manual:'M',kvn:'K'};
 
-function handleTimelineClick(e){
+function findNearestDot(e){
   const canvas=document.getElementById('recordsCanvas');
   const rect=canvas.getBoundingClientRect();
   const mx=e.clientX-rect.left,my=e.clientY-rect.top;
-  // Find nearest dot within 15px
-  let best=null,bestDist=15;
+  let best=null,bestDist=18;
   for(const dot of timelineDotPositions){
     const dx=dot.x-mx,dy=dot.y-my,dist=Math.sqrt(dx*dx+dy*dy);
     if(dist<bestDist){bestDist=dist;best=dot}
   }
+  return{best,mx,my};
+}
+
+// Hover: basic info tooltip
+function handleTimelineHover(e){
+  const{best,mx,my}=findNearestDot(e);
   const tip=document.getElementById('timelineTooltip');
-  if(!best){tip.style.display='none';return}
-  const d=best.data;
+  const canvas=document.getElementById('recordsCanvas');
+  if(!best){tip.style.display='none';canvas.style.cursor='default';return}
+  canvas.style.cursor='pointer';
+  const d=best.data;const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
   if(best.type==='community'){
-    const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
-    const color=rc[d.rarity]||'#888';
-    const src=d.source||'unknown';const srcSym=SOURCE_SYMBOLS[src.toLowerCase()]||src[0].toUpperCase();
-    tip.innerHTML=`<div style="font-weight:700;color:${color};margin-bottom:4px">${esc(d.rarity)} ${d.video_title?'— '+esc(d.video_title):''}</div>
-      <div>Date: ${esc(d.date_posted)}</div>
-      <div>Views: ${d.views_when_found??'?'}</div>
-      <div>Lead: ${esc(d.lead||'')}</div>
-      ${d.channel_name?`<div>Channel: ${esc(d.channel_name)}</div>`:''}
-      <div style="margin-top:4px;color:#666">Found by <strong style="color:#aaa">${esc(d.found_by||'?')}</strong></div>
-      <div style="color:#555">[${srcSym}] ${esc(d.server||src)}</div>
-      ${d.video_url?`<div style="margin-top:4px"><a href="${esc(d.video_url)}" target="_blank" style="color:#5b7fc7;font-size:.65rem">Watch on YouTube</a></div>`:''}`;
+    const color=rc[d.rarity]||'#888';const src=d.source||'';const srcSym=SOURCE_SYMBOLS[src.toLowerCase()]||'?';
+    tip.innerHTML=`<span style="color:${color};font-weight:700">${esc(d.rarity)}</span> <span style="color:#aaa">${esc(d.date_posted)}</span><br>${esc(d.video_title||d.lead||'')}<br><span style="color:#666">${d.views_when_found??'?'} views &#183; [${srcSym}] ${esc(d.found_by||'?')}</span>`;
   }else{
-    tip.innerHTML=`<div style="font-weight:700;color:#e74c3c;margin-bottom:4px">Your Find</div>
-      <div>Date: ${esc(d.date)}</div><div>Views: ${esc(d.views+'')}</div>
-      ${d.url?`<div><a href="${esc(d.url)}" target="_blank" style="color:#5b7fc7;font-size:.65rem">Watch</a></div>`:''}`;
+    tip.innerHTML=`<span style="color:#e74c3c;font-weight:700">Your Find</span> <span style="color:#aaa">${esc(d.date||'')}</span><br>${d.views||0} views`;
   }
-  // Position tooltip near click
-  const tx=Math.min(mx+12,rect.width-270),ty=Math.max(my-60,4);
+  const rect=document.querySelector('.rec-timeline').getBoundingClientRect();
+  const tx=Math.min(mx+14,rect.width-230),ty=Math.max(my-50,4);
   tip.style.left=tx+'px';tip.style.top=ty+'px';tip.style.display='block';
+}
+
+// Click: full detail modal
+function handleTimelineClick(e){
+  const{best}=findNearestDot(e);
+  document.getElementById('timelineTooltip').style.display='none';
+  if(!best)return;
+  const d=best.data;const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
+  if(best.type==='community'){
+    showFindDetail(best.idx);
+  }else{
+    // Local find — open URL if available
+    if(d.url)window.open(d.url,'_blank','noopener');
+  }
+}
+
+function updateRecordHolder(){
+  const el=document.getElementById('recordHolder');if(!el)return;
+  // Score: oldest date (heaviest) + lowest views + lowest channel videos
+  function scoreFind(f){
+    const d=new Date(f.date_posted||f.date);
+    const age=(2026-d.getFullYear())*365; // older = higher score
+    const views=-(f.views_when_found??f.views??9999); // fewer views = higher score (negative so lower is better)
+    const chVids=-(f.channel_videos||9999); // fewer channel vids = higher
+    return age*1000+views*10+chVids; // age weighted heaviest
+  }
+  let best=null,bestScore=-Infinity;
+  // Check community finds
+  communityFinds.forEach(f=>{const s=scoreFind(f);if(s>bestScore){bestScore=s;best={date_posted:f.date_posted,found_by:f.found_by,rarity:f.rarity,views_when_found:f.views_when_found,channel_videos:f.channel_videos}}});
+  // Check local records
+  getRecords().forEach(r=>{const s=scoreFind(r);if(s>bestScore){bestScore=s;best={date_posted:r.date,found_by:'You',rarity:getRarityLabel(new Date(r.date).getFullYear()),views_when_found:r.views}}});
+  if(!best){el.innerHTML='';return}
+  const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
+  const color=rc[best.rarity]||'#888';
+  const dateStr=new Date(best.date_posted).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const viewsTxt=best.views_when_found!==undefined?best.views_when_found+' views':'? views';
+  const chTxt=best.channel_videos?best.channel_videos+' ch vids':'';
+  el.innerHTML=`&#x1F3C6; <strong style="color:${color}">Record Holder:</strong> <span style="color:#fff">${dateStr}</span> <span style="color:${color}">(${best.rarity})</span> &#183; ${viewsTxt}${chTxt?' &#183; '+chTxt:''} &#183; <strong style="color:#aaa">${esc(best.found_by||'?')}</strong>`;
 }
 
 function drawRecordsTimeline(){
@@ -3571,9 +3610,9 @@ setInterval(fetchCommunityRecords,60000);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "4.2.0",
+  "version": "4.3.0",
   "build": "2026-04-20T12:00:00",
-  "changelog": "Clickable timeline dots with tooltips, source symbols, responsive zone labels",
+  "changelog": "Hover tooltips, click detail modals, record holder banner, responsive zone labels",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
