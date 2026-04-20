@@ -142,11 +142,40 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 ### Online (Recommended)
 
-> **[Play YouTube's Recycle Bin at falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/)** — always up to date, live format sync, cloud save for game history across devices.
+> **[Play YouTube's Recycle Bin at falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/)** — always up to date, cloud save, community leaderboard, and more.
+
+The hosted version wraps the same HTML file from this repo with additional features:
+
+| Feature | Hosted | Standalone |
+|:--------|:------:|:----------:|
+| Full game (spinner, bingo, rating, export) | Yes | Yes |
+| Format sync from FORMAT-MAP.md | Yes | Yes |
+| Deep Dive mode | Yes | Yes |
+| Share Card / Discord copy | Yes | Yes |
+| **Cloud Save** — game history, bingo state, settings synced across devices | Yes | No |
+| **Welcome Back** — resume in-progress games, see your stats on return | Yes | No |
+| **Community Finds** — live leaderboard of oldest zero-view discoveries from the community | Yes | Fetch only |
+| **Auto-updates** — new versions deploy within 5 minutes of a push to this repo | Yes | Manual download |
+| **Version badge** — shows current version, sync status, countdown to next check | Yes | Basic |
+| **Bingo capture** — completed bingo cards saved and synced automatically | Yes | Local only |
+| **PWA install** — add to home screen as a standalone app | Yes | No |
 
 ### Offline / Standalone
 
-Download [`kvnaust-recyclebin.html`](kvnaust-recyclebin.html) and [`bingo-categories.json`](bingo-categories.json), place them in the same folder, and open in any browser. Everything runs locally — no internet required after download.
+Download [`kvnaust-recyclebin.html`](kvnaust-recyclebin.html) and [`bingo-categories.json`](bingo-categories.json), place them in the same folder, and open in any browser. Everything runs locally — no internet required after download. Formats still sync from GitHub on first load if online.
+
+---
+
+## Community Finds API
+
+The hosted version serves a public API of community-discovered zero-view YouTube videos at [`/KVN_AUST/finds.php`](https://falcontechnix.com/KVN_AUST/finds.php). The standalone HTML polls this automatically.
+
+- **Rate limit**: 3 requests per 60 seconds per IP (conditional GET with ETag doesn't count)
+- **14+ seeded finds** spanning 2005 to 2025, sourced from the KVN AUST Discord
+- **Rarity tiers**: LEGENDARY (2005), SUPER RARE (2006), VERY RARE (2007-2008), RARE (2009-2012), COMMON (2013+)
+- Each find includes: video URL, title, channel, date posted, views when found, lead used, who found it, and which server
+
+Query with `?category=camera-img`, `?source=discord`, `?since=2026-01-01T00:00:00`, `?order=desc`, `?limit=100`.
 
 ---
 
