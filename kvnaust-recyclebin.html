@@ -73,6 +73,18 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 :root{--accent:#e74c3c;--accent2:#ff6b4a;--bg:#0d0d14;--card:#161625;--card2:#1e1e32;--text:#eee;--muted:#777;
   --daub:rgba(76,175,80,.65);--trans:.45s;
   --g1:#e74c3c;--g2:#f39c12;--g3:#2ecc71;--g4:#3498db;--g5:#9b59b6}
+/* Deep Dive theme overrides */
+body.deep-dive{--accent:#00bcd4;--accent2:#26c6da;--bg:#040810;--card:#0a1520;--card2:#0e1a28;
+  --g1:#00bcd4;--g2:#0097a7;--g3:#00838f;--g4:#006064;--g5:#004d40}
+body.deep-dive .header{background:linear-gradient(180deg,rgba(0,20,40,.98),rgba(4,8,16,.95))}
+body.deep-dive .header-title{background:linear-gradient(135deg,#00bcd4,#0097a7,#26c6da);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+body.deep-dive .start-btn{background:linear-gradient(135deg,#00838f,#006064)}
+body.deep-dive .start-btn:hover{box-shadow:0 6px 35px rgba(0,188,212,.45)}
+body.deep-dive .header-banner img{filter:hue-rotate(160deg) saturate(.7) brightness(.8)}
+body.deep-dive .main{background:radial-gradient(ellipse at 50% 100%,rgba(0,40,60,.15),transparent 70%)}
+body.deep-dive .spin-btn{box-shadow:0 6px 30px rgba(0,0,0,.7),0 0 20px rgba(0,188,212,.2)}
+body.deep-dive .deep-dive-badge{display:inline-block}
+.deep-dive-badge{display:none;font-size:.55rem;padding:2px 8px;border-radius:4px;background:rgba(0,188,212,.15);color:#00bcd4;font-weight:700;letter-spacing:1px;margin-left:6px;vertical-align:middle;animation:daubPulse 3s ease-in-out infinite}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 
@@ -505,7 +517,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 <div class="header">
   <div class="header-banner"><img id="bannerImg" alt="banner"></div>
   <img class="yt-avatar" id="avatarImg" alt="KVN AUST">
-  <div><div class="header-title">YouTube's Recycle Bin</div><div class="header-subtitle">KVN AUST</div></div>
+  <div><div class="header-title">YouTube's Recycle Bin</div><div class="header-subtitle">KVN AUST<span class="deep-dive-badge">DEEP DIVE</span></div></div>
   <div class="header-right">
     <div class="sound-pick">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
@@ -546,7 +558,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
   <div id="wheel-screen" class="screen">
     <div class="wheel-top" id="wheelTop">
       <div class="wheel-count-wrap"><label>Slots:</label><input type="number" id="wheelCount" value="20" min="4" max="60" oninput="rebuildWheel()" onkeydown="if(event.key==='Enter'){event.preventDefault();rebuildWheel()}" aria-label="Number of wheel slots"><button onclick="rebuildWheel()">Set</button></div>
-      <div class="wheel-mode-btns"><button class="active" id="modeRandom" onclick="setWheelMode('random')">Random</button><button id="modeSelected" onclick="setWheelMode('selected')">Selected</button></div>
+      <div class="wheel-mode-btns"><button class="active" id="modeRandom" onclick="setWheelMode('random')">Random</button><button id="modeSelected" onclick="setWheelMode('selected')">Selected</button><button id="modeDeepDive" onclick="toggleDeepDive()" style="background:linear-gradient(135deg,#006064,#00838f);color:#b2ebf2">Deep Dive</button></div>
       <span id="wheelSlotCount" style="font-size:.65rem;color:var(--muted)"></span>
     </div>
     <div class="wheel-container">
@@ -636,13 +648,13 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 </div>
 
 <!-- SEARCH RESULTS PANEL -->
-<div class="search-results" id="searchResults">
+<section class="search-results" id="searchResults" aria-labelledby="srTitle">
   <div class="sr-header">
-    <h3 id="srTitle">Results</h3>
+    <h2 id="srTitle" style="font-size:inherit;font-weight:inherit;margin:0">Results</h2>
     <button class="sr-close" onclick="closeSearchResults()">&times;</button>
   </div>
   <div class="sr-list" id="srList"></div>
-</div>
+</section>
 
 <!-- BINGO OVERLAY -->
 <div class="bingo-overlay" id="bingoOverlay" onclick="if(event.target===this)toggleBingo()">
@@ -673,11 +685,11 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 </div>
 
 <!-- PANELS -->
-<div class="format-panel" id="formatPanel"><button class="fp-close" onclick="toggleFormatPanel()">&times;</button><h3>Format Browser</h3>
+<section class="format-panel" id="formatPanel" aria-label="Format Browser"><button class="fp-close" onclick="toggleFormatPanel()">&times;</button><h2 style="font-size:.9rem;margin-bottom:8px;color:#aaa">Format Browser</h2>
   <input class="fp-search" id="fpSearch" type="text" placeholder="Search formats..." oninput="filterFormats(this.value)">
   <div class="fp-count" id="fpCount"></div>
-  <div class="fp-actions"><button onclick="fpSelectAll()">All</button><button onclick="fpSelectNone()">None</button><button onclick="fpSelectRandom()">Random 20</button><button onclick="fpBingoPicks()" style="background:#e74c3c;color:#fff">KVN Picks</button></div><div id="formatList"></div></div>
-<div class="history-panel" id="historyPanel"><button class="hp-close" onclick="toggleHistory()">&times;</button><h3>Game History</h3><div id="historyList"></div></div>
+  <div class="fp-actions"><button onclick="fpSelectAll()">All</button><button onclick="fpSelectNone()">None</button><button onclick="fpSelectRandom()">Random 20</button><button onclick="fpBingoPicks()" style="background:#e74c3c;color:#fff">KVN Picks</button></div><div id="formatList"></div></section>
+<section class="history-panel" id="historyPanel" aria-label="Game History"><button class="hp-close" onclick="toggleHistory()">&times;</button><h2 style="font-size:.9rem;margin-bottom:8px;color:#aaa">Game History</h2><div id="historyList"></div></section>
 
 <!-- BINGO WIN / CONFETTI / TOAST -->
 <div class="bingo-win" id="bingoWin"><h2 style="font-size:inherit">BINGO!</h2><div class="easter-msg" id="easterMsg"></div><button class="dismiss" onclick="dismissBingoWin()">Nice!</button></div>
@@ -687,7 +699,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 <!-- ERROR LOG -->
 <div class="err-badge" id="errBadge" onclick="toggleErrPanel()">0</div>
 <div class="err-panel" id="errPanel">
-  <h4>Log</h4>
+  <h3 style="font-size:inherit">Log</h3>
   <div id="errList"></div>
   <button class="err-clear" onclick="clearErrors()">Clear</button>
 </div>
@@ -1528,11 +1540,13 @@ function drawWheel(){
   const sz=800,cx=400,cy=400,r=390;
   const n=wheelFormats.length;if(!n)return;const arc=2*Math.PI/n;
   ctx.clearRect(0,0,sz,sz);ctx.save();ctx.translate(cx,cy);ctx.rotate(wheelAngle);ctx.translate(-cx,-cy);
+  const DEEP_COLORS=['#004d40','#006064','#01579b','#0d47a1','#1a237e','#004d40','#00695c','#00838f','#0097a7','#00796b','#00897b','#1565c0','#283593','#003d5b','#005f73','#0a3d62','#1b4332','#2d6a4f','#0b525b','#3a506b','#1c3144','#0f4c5c','#274c77','#044a6e','#03312e','#023047','#1a535c','#184e77','#1b263b','#0d3b66','#14213d','#002855'];
+  const colors=deepDiveActive?DEEP_COLORS:WHEEL_COLORS;
   // Pass 1: fill all segments (no strokes yet — prevents bleed-through)
   for(let i=0;i<n;i++){
     const a=i*arc;
     ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+arc);ctx.closePath();
-    ctx.fillStyle=WHEEL_COLORS[i%WHEEL_COLORS.length];ctx.fill();
+    ctx.fillStyle=colors[i%colors.length];ctx.fill();
   }
   // Pass 2: depth overlay on all segments
   const grad=ctx.createRadialGradient(cx,cy,r*.1,cx,cy,r);
@@ -1642,6 +1656,41 @@ function spinWheel(){
 function rebuildWheel(){pickWheelFormats();wheelAngle=0;drawWheel()}
 function setWheelMode(m){wheelMode=m;document.getElementById('modeRandom').classList.toggle('active',m==='random');document.getElementById('modeSelected').classList.toggle('active',m==='selected');if(currentScreen==='wheel-screen')rebuildWheel()}
 
+// Deep Dive mode: filters for old-video formats + appends Before: to searches
+let deepDiveActive=false;
+const DEEP_DIVE_YEAR=2012;
+// Formats known to surface old/ancient videos
+const DEEP_DIVE_LABELS=new Set(['IMG XXXX','MVI XXXX','MOV XXXX','DSC XXXX','DSCFXXXX','DSCNXXXX','100 XXXX','SAM XXXX','GOPRXXXX','VideoXXXX','MAQ0XXXX','PICTXXXX','XXXX.MP4','M2U0XXXX','MAH0XXXX','HPIMXXXX','GEDCXXXX','SANYXXXX','VID0XXXX','MOV0XXXX','IMGPXXXX','CIMGXXXX','P100XXXX','PC10XXXX','AVSEQXX','Trim 4XXX','"HHMMSS"','VID YYYYMMDD','Capture YYYYMMDD','WIN YYYYMMDD','WP YYYYMMDD','Webcam YYYYMMDD','"You have new picture mail! (video)"','"Media1.3gp"','"Media1.3g2"','"Video.3g2"','"New Multimedia Message"','"Multimedia Message"','"Video from my phone"','"Video uploaded from my mobile phone"','"Sent from my blackberry smartphone"','"My Ezvid Video"','"This video was uploaded from an Android phone"','"Sprint PictureMail"','"My stop motion movie"','"My Great Movie"','"My First Project"','"Qik"','"Made with One True Media"','"Jing"','"My Slideshow Video"','"My Stupeflix Video"','"My Videolicious Video"','".VOB"','".AVI"','".WMV"','".3gp"','".3g2"']);
+
+function toggleDeepDive(){
+  deepDiveActive=!deepDiveActive;
+  document.body.classList.toggle('deep-dive',deepDiveActive);
+  document.getElementById('modeDeepDive').classList.toggle('active',deepDiveActive);
+  if(deepDiveActive){
+    // Auto-select deep dive formats
+    selectedFormats.clear();
+    formats.forEach((f,i)=>{
+      if(DEEP_DIVE_LABELS.has(f.label))selectedFormats.add(i);
+      // Also include any format with date sp and minY < 2013
+      if(f.sp==='date'&&(f.minY||2006)<2013)selectedFormats.add(i);
+      // Include any ancient-era static keyphrases
+      if(f.sp==='static'&&DEEP_DIVE_LABELS.has(f.label))selectedFormats.add(i);
+    });
+    wheelMode='selected';
+    document.getElementById('modeSelected').classList.add('active');
+    document.getElementById('modeRandom').classList.remove('active');
+    buildFormatPanel();rebuildWheel();
+    showToast(`Deep Dive: ${selectedFormats.size} old-video formats, Before:${DEEP_DIVE_YEAR}`);
+  }else{
+    wheelMode='random';
+    document.getElementById('modeRandom').classList.add('active');
+    document.getElementById('modeSelected').classList.remove('active');
+    selectedFormats=new Set(formats.map((_,i)=>i));
+    buildFormatPanel();rebuildWheel();
+    showToast('Normal mode');
+  }
+}
+
 // ═══════════════════════════════════
 //  FORMAT / NUMBER / RESULT
 // ═══════════════════════════════════
@@ -1722,8 +1771,8 @@ function showResult(){
   document.getElementById('resultPill').textContent=finalString;
   resetTracker();
 }
-function copyResult(){navigator.clipboard.writeText(finalString).then(()=>showToast('Copied!')).catch(()=>{})}
-function searchYouTube(){window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(finalString)+'&sp=CAI%253D','_blank')}
+function copyResult(){const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:finalString;navigator.clipboard.writeText(q).then(()=>showToast('Copied!')).catch(()=>{})}
+function searchYouTube(){const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:finalString;window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'&sp=CAI%253D','_blank')}
 
 // ═══════════════════════════════════
 //  IN-APP SEARCH RESULTS
@@ -3099,9 +3148,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "3.3.0",
+  "version": "3.4.0",
   "build": "2026-04-20T12:00:00",
-  "changelog": "177 formats, video metadata, Discord share, Lighthouse fixes",
+  "changelog": "Deep Dive mode, semantic heading hierarchy, ocean wheel theme",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }

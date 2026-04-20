@@ -4,6 +4,19 @@ All notable changes to YouTube's Recycle Bin — KVN AUST Game Tool.
 
 ---
 
+## [3.4.0] - 2026-04-20
+
+### Added
+- **Deep Dive mode**: toggle on the wheel screen activates a teal/ocean color theme, auto-selects old-video formats (Ancient YouTube, early date formats, classic numbered formats), and appends `Before:2012` to all YouTube searches and copies. Deep ocean wheel colors, pulsing "DEEP DIVE" badge in header.
+- Semantic `<section aria-labelledby>` wrappers on Results, Format Browser, and Game History panels for proper heading hierarchy restart
+
+### Changed
+- Panels promoted from `<div>` to `<section>` with `aria-label`/`aria-labelledby`
+- Panel headings promoted to `<h2>` (were `<h3>` skipping from `<h1>`)
+- Log heading promoted to `<h3>` (was `<h4>` skipping from `<h2>`)
+
+---
+
 ## [3.3.0] - 2026-04-20
 
 ### Added
