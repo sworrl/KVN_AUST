@@ -2280,7 +2280,18 @@ async function fetchVideoMeta(vid){
   // Try 1: Hosted proxy (fastest, no CORS issues when on falcontechnix.com)
   try{
     const r=await tryFetch(`/KVN_AUST/videometa.php?v=${vid}`,5000);
-    if(r&&r.ok){const d=await r.json();if(d.ok){applyData(d);if(status)status.textContent='auto-filled';setTimeout(()=>{if(status)status.textContent=''},3000);return}}
+    if(r&&r.ok){const d=await r.json();if(d.ok){
+      applyData(d);
+      // If no channelVideos, try fetching channel stats from proxy
+      if(!d.channelVideos&&d.authorId){
+        try{const cr=await tryFetch(`/KVN_AUST/videometa.php?channel=${d.authorId}`,4000);if(cr&&cr.ok){const cd=await cr.json();if(cd.videoCount)document.getElementById('vtChannelVids').value=cd.videoCount}}catch{}
+      }
+      // Fallback: if author name but no channel vids, try YouTube page scrape for count
+      if(!document.getElementById('vtChannelVids').value&&d.author){
+        if(status)status.textContent='auto-filled (no ch. count)';
+      }else{if(status)status.textContent='auto-filled'}
+      setTimeout(()=>{if(status)status.textContent=''},3000);return;
+    }}
   }catch{}
 
   // Try 2: Invidious via CORS proxy (works from file:// and any origin)
