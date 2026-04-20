@@ -582,6 +582,11 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       </div>
       <div class="vt-label" style="margin-top:6px">Found a video? Paste the link &amp; rate it:</div>
       <div class="vt-row"><input class="vt-input" id="vtLink" type="text" placeholder="https://youtube.com/watch?v=..."></div>
+      <div class="vt-row" style="gap:4px">
+        <input class="vt-input" id="vtDatePosted" type="text" placeholder="Date posted (e.g. 30/10/2006)" style="flex:1">
+        <input class="vt-input" id="vtViews" type="text" placeholder="Views (e.g. 0)" style="width:70px">
+        <input class="vt-input" id="vtChannelVids" type="text" placeholder="Ch. videos (e.g. 1)" style="width:90px">
+      </div>
       <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
         <div style="text-align:center"><div class="vt-label">Entertainment</div><div class="vt-stars" data-metric="entertainment">
           <span class="vt-star" data-v="1" onclick="setMetric('entertainment',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('entertainment',2)">&#9733;</span>
@@ -1853,6 +1858,9 @@ function makeRound(){
   }));
   return{search:finalString,format:chosenFormat?chosenFormat.label:'',number:chosenNumber||'',
     link:document.getElementById('vtLink').value.trim(),
+    datePosted:document.getElementById('vtDatePosted').value.trim(),
+    viewsWhenFound:document.getElementById('vtViews').value.trim(),
+    channelVids:document.getElementById('vtChannelVids').value.trim(),
     metrics:m,rating:Math.round(avgMetric(m)*10)/10,
     browsed:browsed.length?browsed:undefined,
     date:new Date().toISOString()};
@@ -1940,7 +1948,7 @@ function reshuffleBingoFlash(){
   buildBingoFromPicked();
   showBingoFlash();
 }
-function clearVtLink(){document.getElementById('vtLink').value=''}
+function clearVtLink(){document.getElementById('vtLink').value='';document.getElementById('vtDatePosted').value='';document.getElementById('vtViews').value='';document.getElementById('vtChannelVids').value=''}
 function saveVideo(){sessionRounds.push(makeRound());clearVtLink();showToast('Saved!');setTimeout(()=>{resetTracker();startNextRound()},600)}
 function skipVideo(){sessionRounds.push({...makeRound(),link:'',rating:0,metrics:{entertainment:0,weirdness:0,gem:0,liked:0}});clearVtLink();resetTracker();startNextRound()}
 function saveAndReRandomize(){
@@ -2273,7 +2281,7 @@ function renderHistory(){
       const a=mCnt[k]>0?(mTot[k]/mCnt[k]).toFixed(1):'--';
       return`<span style="color:${METRIC_COLORS[k]};font-size:.6rem">${METRIC_LABELS[k]}:${a}</span>`;
     }).join(' ');
-    return`<div class="game-block"><div class="game-header"><span>Game ${games.length-gi} &middot; ${new Date(g.date).toLocaleDateString()} &middot; ${g.rounds.length}r</span><span class="gh-avg">${avgLine}</span></div>${g.rounds.map(r=>`<div class="hist-item" onclick="copyText('${esc(r.search).replace(/'/g,"\\'")}')"><div class="hi-search">${esc(r.search)}</div><div class="hi-format">${esc(r.format)} ${metricBars(r.metrics)}</div>${r.link?`<div class="hi-date"><a href="${esc(r.link)}" target="_blank" style="color:#5b7fc7;text-decoration:none" onclick="event.stopPropagation()">${esc(r.link).substring(0,45)}</a></div>`:''}<div class="hi-date">${new Date(r.date).toLocaleString()}</div></div>`).join('')}</div>`}).join('')}
+    return`<div class="game-block"><div class="game-header"><span>Game ${games.length-gi} &middot; ${new Date(g.date).toLocaleDateString()} &middot; ${g.rounds.length}r</span><span class="gh-avg">${avgLine}</span></div>${g.rounds.map(r=>`<div class="hist-item" onclick="copyText('${esc(r.search).replace(/'/g,"\\'")}')"><div class="hi-search">${esc(r.search)}</div><div class="hi-format">${esc(r.format)} ${metricBars(r.metrics)}</div>${r.link?`<div class="hi-date"><a href="${esc(r.link)}" target="_blank" style="color:#5b7fc7;text-decoration:none" onclick="event.stopPropagation()">${esc(r.link).substring(0,45)}</a></div>`:''}${r.datePosted?`<div class="hi-date" style="color:#e74c3c">Posted: ${esc(r.datePosted)}${r.viewsWhenFound?' · '+esc(r.viewsWhenFound)+' views':''}${r.channelVids?' · '+esc(r.channelVids)+' ch vids':''}</div>`:''}<div class="hi-date">${new Date(r.date).toLocaleString()}</div></div>`).join('')}</div>`}).join('')}
 function copyText(t){navigator.clipboard.writeText(t).then(()=>showToast('Copied: '+t)).catch(()=>{})}
 
 function hideFooter(){document.getElementById('creditFooter').classList.add('hidden')}
@@ -2888,7 +2896,11 @@ function exportSummaryText(){
 
 function exportShareCard(){
   if(!finalString)return showToast('No search string yet','warn');
-  const w=480,h=340,pad=24;
+  const datePosted=document.getElementById('vtDatePosted').value.trim();
+  const views=document.getElementById('vtViews').value.trim();
+  const chVids=document.getElementById('vtChannelVids').value.trim();
+  const extraLines=[datePosted,views,chVids].filter(Boolean).length;
+  const w=480,h=340+extraLines*20,pad=24;
   const mc=METRIC_COLORS,ml={entertainment:'Entertainment',weirdness:'Weirdness',gem:'Gem Factor',liked:'I Just Liked It'};
   const link=document.getElementById('vtLink').value.trim();
   const m=currentMetrics;
@@ -2900,8 +2912,13 @@ function exportShareCard(){
   // Format name
   const fmtLabel=chosenFormat?chosenFormat.label:'';
   svg+=`<text x="${w/2}" y="${pad+54}" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#777">${escXml(fmtLabel)}</text>`;
+  // Video metadata
+  let infoY=pad+72;
+  if(datePosted){svg+=`<text x="${pad+8}" y="${infoY}" font-family="Inter,sans-serif" font-size="10" fill="#e74c3c">&#10038; Date posted: ${escXml(datePosted)}</text>`;infoY+=18}
+  if(views){svg+=`<text x="${pad+8}" y="${infoY}" font-family="Inter,sans-serif" font-size="10" fill="#2ecc71">&#10038; Views when found: ${escXml(views)}</text>`;infoY+=18}
+  if(chVids){svg+=`<text x="${pad+8}" y="${infoY}" font-family="Inter,sans-serif" font-size="10" fill="#3498db">&#10038; Channel: ${escXml(chVids)} video${chVids==='1'?'':'s'}</text>`;infoY+=18}
   // Metric star ratings
-  let my=pad+80;
+  let my=infoY+8;
   for(const k of ['entertainment','weirdness','gem','liked']){
     const v=m[k]||0;
     svg+=`<text x="${pad+8}" y="${my}" font-family="Inter,sans-serif" font-weight="600" font-size="11" fill="${mc[k]}">${escXml(ml[k])}</text>`;
@@ -2926,18 +2943,25 @@ function exportShareCard(){
 function shareToDiscord(){
   if(!finalString)return showToast('No search string yet','warn');
   const link=document.getElementById('vtLink').value.trim();
+  const datePosted=document.getElementById('vtDatePosted').value.trim();
+  const views=document.getElementById('vtViews').value.trim();
+  const chVids=document.getElementById('vtChannelVids').value.trim();
   const m=currentMetrics;
   const stars=n=>n>0?'⭐'.repeat(n):'—';
   const lines=[
     `## 🗑️ YouTube's Recycle Bin Find`,
     `\`\`\`${finalString}\`\`\``,
-    `**Format:** ${chosenFormat?chosenFormat.label:'unknown'}`,
-    '',
+  ];
+  if(datePosted)lines.push(`✮ **Date posted:** ${datePosted}`);
+  if(views)lines.push(`✮ **Views when found:** ${views}`);
+  lines.push(`✮ **Lead:** ${chosenFormat?chosenFormat.label:'unknown'}`);
+  if(chVids)lines.push(`✮ **Channel:** ${chVids} video${chVids==='1'?'':'s'}`);
+  lines.push('',
     `🎭 Entertainment: ${stars(m.entertainment)}`,
     `👽 Weirdness: ${stars(m.weirdness)}`,
     `💎 Gem Factor: ${stars(m.gem)}`,
     `❤️ I Just Liked It: ${stars(m.liked)}`,
-  ];
+  );
   if(link)lines.push('',`🔗 ${link}`);
   lines.push('',`*Found with [YouTube's Recycle Bin](<https://falcontechnix.com/KVN_AUST/>) — @KVNAUST*`);
   const text=lines.join('\n');
