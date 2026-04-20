@@ -841,10 +841,13 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     </div>
     <div class="rec-timeline"><canvas id="recordsCanvas" onclick="handleTimelineClick(event)" onmousemove="handleTimelineHover(event)" onmouseleave="document.getElementById('timelineTooltip').style.display='none'" style="cursor:pointer"></canvas><div id="timelineTooltip" style="display:none;position:absolute;background:#111;border:1px solid #333;border-radius:8px;padding:8px 10px;font-size:.65rem;color:#ccc;pointer-events:none;z-index:10;max-width:220px;box-shadow:0 4px 16px rgba(0,0,0,.6)"></div></div>
     <div class="rec-form">
-      <input type="date" id="recDate" style="width:140px">
-      <input type="number" id="recViews" placeholder="Views" min="0" value="0" style="width:70px">
-      <input type="url" id="recUrl" placeholder="YouTube link (optional)" style="flex:1;min-width:160px">
-      <button onclick="addRecord()">Add Find</button>
+      <input type="url" id="recUrl" placeholder="Paste YouTube link..." style="flex:1;min-width:200px" oninput="onRecordLinkChange(this.value)">
+      <span id="recFetchStatus" style="font-size:.55rem;color:var(--muted)"></span>
+    </div>
+    <div class="rec-form">
+      <input type="date" id="recDate" style="width:140px" disabled>
+      <input type="number" id="recViews" placeholder="Views" min="0" value="" style="width:70px" disabled>
+      <button onclick="addRecord()" id="recAddBtn" disabled style="opacity:.5">Add Find</button>
     </div>
     <div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">
       <button class="s-btn" style="font-size:.7rem;padding:4px 12px" onclick="showRecordTab('mine')" id="recTabMine">My Finds</button>
@@ -2827,20 +2830,83 @@ function showFindDetail(idx){
   document.body.appendChild(d);
 }
 
+let recFetchTimer=null;
+function onRecordLinkChange(val){
+  clearTimeout(recFetchTimer);
+  const vid=getVideoId(val.trim());
+  const status=document.getElementById('recFetchStatus');
+  const btn=document.getElementById('recAddBtn');
+  const dateEl=document.getElementById('recDate');
+  const viewsEl=document.getElementById('recViews');
+  if(!vid){btn.disabled=true;btn.style.opacity='.5';dateEl.disabled=true;viewsEl.disabled=true;if(status)status.textContent='';return}
+  if(status)status.textContent='fetching...';
+  recFetchTimer=setTimeout(()=>fetchRecordMeta(vid),500);
+}
+
+async function fetchRecordMeta(vid){
+  const status=document.getElementById('recFetchStatus');
+  const dateEl=document.getElementById('recDate');
+  const viewsEl=document.getElementById('recViews');
+  const btn=document.getElementById('recAddBtn');
+
+  // Same fetch chain as the result screen
+  function applyMeta(d){
+    if(d.published){
+      const dt=typeof d.published==='number'?new Date(d.published*1000):new Date(d.published);
+      const iso=dt.toISOString().slice(0,10);
+      dateEl.value=iso;
+    }
+    if(d.viewCount!==undefined)viewsEl.value=d.viewCount;
+    else if(d.views!==undefined)viewsEl.value=d.views;
+    dateEl.disabled=false;viewsEl.disabled=false;
+    btn.disabled=false;btn.style.opacity='1';
+    if(status)status.textContent='auto-filled — verify & add';
+    setTimeout(()=>{if(status&&status.textContent.includes('verify'))status.textContent=''},5000);
+  }
+
+  async function tryFetchR(url,timeout){
+    const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),timeout||6000);
+    try{const r=await fetch(url,{signal:ctrl.signal});clearTimeout(t);return r}catch{clearTimeout(t);return null}
+  }
+
+  // Try hosted proxy
+  try{
+    const r=await tryFetchR(`/KVN_AUST/videometa.php?v=${vid}`,5000);
+    if(r&&r.ok){const d=await r.json();if(d.ok){applyMeta(d);return}}
+  }catch{}
+  // Try Invidious via CORS proxy
+  for(const instance of INVIDIOUS_INSTANCES){
+    const apiUrl=`${instance}/api/v1/videos/${vid}?fields=title,viewCount,published`;
+    let r=await tryFetchR(apiUrl,5000);
+    if(!r||!r.ok){for(const proxy of CORS_PROXIES){r=await tryFetchR(proxy+encodeURIComponent(apiUrl),6000);if(r&&r.ok)break}}
+    if(r&&r.ok){try{const d=await r.json();applyMeta(d);return}catch{}}
+  }
+  // Fallback: enable manual entry
+  dateEl.disabled=false;viewsEl.disabled=false;
+  btn.disabled=false;btn.style.opacity='1';
+  if(status)status.textContent='could not auto-fetch — enter manually';
+  setTimeout(()=>{if(status)status.textContent=''},5000);
+}
+
 function addRecord(){
-  const dateVal=document.getElementById('recDate').value;
-  const views=parseInt(document.getElementById('recViews').value)||0;
   const url=document.getElementById('recUrl').value.trim();
-  if(!dateVal){showToast('Enter the video upload date','warn');return}
+  const vid=getVideoId(url);
+  if(!vid){showToast('Paste a valid YouTube link','warn');return}
+  const dateVal=document.getElementById('recDate').value;
+  if(!dateVal){showToast('Date is required','warn');return}
+  const views=parseInt(document.getElementById('recViews').value)||0;
   const recs=getRecords();
+  // Prevent duplicate video IDs
+  if(recs.some(r=>r.url&&getVideoId(r.url)===vid)){showToast('This video is already in your records','warn');return}
   recs.push({date:dateVal,views:views,url:url,added:new Date().toISOString()});
   recs.sort((a,b)=>new Date(a.date)-new Date(b.date));
   saveRecords(recs);
-  document.getElementById('recDate').value='';
-  document.getElementById('recViews').value='0';
+  document.getElementById('recDate').value='';document.getElementById('recDate').disabled=true;
+  document.getElementById('recViews').value='';document.getElementById('recViews').disabled=true;
   document.getElementById('recUrl').value='';
-  renderRecords();
-  drawRecordsTimeline();
+  document.getElementById('recAddBtn').disabled=true;document.getElementById('recAddBtn').style.opacity='.5';
+  document.getElementById('recFetchStatus').textContent='';
+  renderRecords();drawRecordsTimeline();updateRecordHolder();
   showToast('Record added!');
 }
 
