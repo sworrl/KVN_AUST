@@ -15,7 +15,7 @@
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-43ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v4.1.0-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v4.3.0-1a1a2e?style=flat-square" alt="Changelog"></a>
 </p>
 
 <p align="center">
@@ -176,6 +176,21 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 - Each find includes: video URL, title, channel, date posted, views when found, lead used, who found it, and which server
 
 Query with `?category=camera-img`, `?source=discord`, `?since=2026-01-01T00:00:00`, `?order=desc`, `?limit=100`.
+
+### Direct Links
+
+| Link | Opens |
+|:-----|:------|
+| [falcontechnix.com/KVN_AUST/#records](https://falcontechnix.com/KVN_AUST/#records) | Records Timeline & Community Leaderboard |
+| [falcontechnix.com/KVN_AUST/#stats](https://falcontechnix.com/KVN_AUST/#stats) | Stats Dashboard |
+| [falcontechnix.com/KVN_AUST/#credits](https://falcontechnix.com/KVN_AUST/#credits) | Credits & Contributors |
+| [falcontechnix.com/KVN_AUST/#shortcuts](https://falcontechnix.com/KVN_AUST/#shortcuts) | Keyboard Shortcuts |
+
+### Community Leaderboard
+
+<!-- LEADERBOARD-START -->
+*Leaderboard auto-updates via GitHub Actions — see the live version at [falcontechnix.com/KVN_AUST/#records](https://falcontechnix.com/KVN_AUST/#records)*
+<!-- LEADERBOARD-END -->
 
 ---
 

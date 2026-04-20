@@ -4,6 +4,23 @@ All notable changes to YouTube's Recycle Bin — KVN AUST Game Tool.
 
 ---
 
+## [4.3.0] - 2026-04-20
+
+### Added
+- **Hover tooltips on timeline dots**: mouseover shows rarity, date, views, source, finder
+- **Click detail modal**: full-screen overlay with thumbnail, all metadata, "Watch on YouTube" button (window.open, works correctly)
+- **Record Holder banner**: trophy banner at top of Records modal showing the winning find. Scoring: oldest date (heaviest weight) + lowest view count + lowest channel videos
+- **Hash routing**: `#records`, `#stats`, `#shortcuts`, `#credits` open modals directly from URL
+- **GitHub README leaderboard**: auto-updated every 6 hours via GitHub Action fetching from `finds.php` API
+- **Direct links table** in README for all hash routes
+
+### Fixed
+- Zone labels no longer overlap — font scales with zone width, hides when too narrow
+- Detail modal now uses `window.open()` for YouTube links instead of `<a>` inside pointer-events:none container
+- Source attribution symbols (D/G/GD/M/K) rendered inside community dots
+
+---
+
 ## [4.1.0] - 2026-04-20
 
 ### Fixed
