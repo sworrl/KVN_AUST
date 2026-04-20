@@ -227,9 +227,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 .wheel-mode-btns button.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .wheel-container{position:relative;width:min(68vh,68vw,520px);height:min(68vh,68vw,520px)}
 canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 0 20px rgba(0,0,0,.5))}
-.wheel-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);z-index:10;animation:pointerIdle 2s ease-in-out infinite}
+.wheel-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);z-index:10;animation:pointerIdle 2s ease-in-out infinite;transition:top .3s cubic-bezier(.4,0,.2,1)}
 .wheel-pointer svg{filter:drop-shadow(0 4px 8px rgba(0,0,0,.7)) drop-shadow(0 0 6px var(--pointer-glow,transparent));transition:filter .15s}
+.wheel-pointer.locked{top:-6px;animation:pointerBite .25s cubic-bezier(.4,0,.2,1) forwards}
 @keyframes pointerIdle{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(3px)}}
+@keyframes pointerBite{0%{transform:translateX(-50%) translateY(-4px) scale(1)}40%{transform:translateX(-50%) translateY(8px) scale(1.1)}70%{transform:translateX(-50%) translateY(2px) scale(1.05)}100%{transform:translateX(-50%) translateY(4px) scale(1.02)}}
 /* Big spin button with avatar */
 .spin-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:130px;height:130px;border-radius:50%;
   background:var(--bg);cursor:pointer;z-index:11;border:4px solid #555;
@@ -610,9 +612,13 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     </div>
     <div class="wheel-container">
       <div class="wheel-pointer" id="wheelPointer"><svg width="40" height="44" viewBox="0 0 40 44">
-  <defs><linearGradient id="ptrGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#666"/><stop offset="40%" stop-color="#333"/><stop offset="100%" stop-color="#111"/></linearGradient></defs>
+  <defs>
+    <linearGradient id="ptrGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#666"/><stop offset="40%" stop-color="#333"/><stop offset="100%" stop-color="#111"/></linearGradient>
+    <linearGradient id="ptrInner" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--pointer-inner,#444)" stop-opacity=".5"/><stop offset="100%" stop-color="var(--pointer-inner,#222)" stop-opacity=".2"/></linearGradient>
+  </defs>
   <polygon points="20,44 1,0 39,0" fill="url(#ptrGrad)" stroke="#888" stroke-width="2" id="ptrFill"/>
-  <polygon points="20,38 6,4 20,0" fill="rgba(255,255,255,.08)"/>
+  <polygon points="20,40 5,3 35,3" fill="url(#ptrInner)" id="ptrInnerFill"/>
+  <polygon points="20,36 8,5 20,1" fill="rgba(255,255,255,.1)"/>
 </svg></div>
       <canvas id="wheelCanvas" width="800" height="800"></canvas>
       <button class="spin-btn" id="spinBtn" onclick="spinWheel()"><img id="spinAvatar" alt="SPIN"></button>
@@ -1401,7 +1407,8 @@ function saveGameToHistory(){
   if(games.length>50)games.length=50;saveAllGames(games);
 }
 
-function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel();const ptr=document.getElementById('wheelPointer');if(ptr){ptr.style.animation='';ptr.style.setProperty('--pointer-glow','transparent')}const pf=document.getElementById('ptrFill');if(pf)pf.setAttribute('stroke','#888')}
+function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel();resetPointer()}
+function resetPointer(){const ptr=document.getElementById('wheelPointer');if(ptr){ptr.classList.remove('locked');ptr.style.animation='';ptr.style.top='';ptr.style.setProperty('--pointer-glow','transparent');ptr.style.setProperty('--pointer-inner','#444');void ptr.offsetHeight;ptr.style.animation='pointerIdle 2s ease-in-out infinite'}const pf=document.getElementById('ptrFill');if(pf)pf.setAttribute('stroke','#888')}
 function newSession(){sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showScreen('start-screen')}
 
 // ═══════════════════════════════════
@@ -1758,7 +1765,7 @@ function spinWheel(){
       // Pulse pointer with segment color
       const segColor=activeWheelColors[curSeg%activeWheelColors.length];
       const ptr=document.getElementById('wheelPointer');
-      if(ptr)ptr.style.setProperty('--pointer-glow',segColor);
+      if(ptr){ptr.style.setProperty('--pointer-glow',segColor);ptr.style.setProperty('--pointer-inner',segColor)}
       const ptrFill=document.getElementById('ptrFill');
       if(ptrFill)ptrFill.setAttribute('stroke',segColor);
     }
@@ -1769,10 +1776,12 @@ function spinWheel(){
       const landed=getSegmentAtPointer();
       chosenFormat=wheelFormats[landed];
       usedFormats.add(chosenFormat.label);
-      // Lock pointer to landed segment color
+      // Lock pointer — bite down into segment
       const landedColor=activeWheelColors[landed%activeWheelColors.length];
       const ptr=document.getElementById('wheelPointer');
-      if(ptr){ptr.style.setProperty('--pointer-glow',landedColor);ptr.style.animation='none'}
+      if(ptr){ptr.style.setProperty('--pointer-glow',landedColor);ptr.style.setProperty('--pointer-inner',landedColor);ptr.classList.add('locked')}
+      const pf=document.getElementById('ptrFill');
+      if(pf)pf.setAttribute('stroke',landedColor);
       playWinSound();setTimeout(advanceFromWheel,700);
     }
   })(performance.now());
