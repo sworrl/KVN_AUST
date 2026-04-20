@@ -1994,7 +1994,7 @@ function searchYouTube(){const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE
 // ═══════════════════════════════════
 //  IN-APP SEARCH RESULTS
 // ═══════════════════════════════════
-const INVIDIOUS_INSTANCES=['https://vid.puffyan.us','https://invidious.snopyta.org','https://yewtu.be','https://inv.nadeko.net'];
+const INVIDIOUS_INSTANCES=['https://iv.melmac.space'];
 let currentSearchVideos=[]; // {videoId,title,author,viewCount,thumbnail,clicked,rating:{}}
 let searchResultsOpen=false;
 
@@ -2228,36 +2228,52 @@ function onVideoLinkChange(val){
 
 async function fetchVideoMeta(vid){
   const status=document.getElementById('vtFetchStatus');
+  const now=new Date();
+  const today=now.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  let filled=false;
+
+  // Try 1: Invidious (full data: views, date, channel)
   for(const instance of INVIDIOUS_INSTANCES){
     try{
-      const r=await fetch(`${instance}/api/v1/videos/${vid}?fields=title,viewCount,published,author,authorId,subCountText`,{signal:AbortSignal.timeout(5000)});
+      const r=await fetch(`${instance}/api/v1/videos/${vid}?fields=title,viewCount,published,author,authorId,subCountText`,{signal:AbortSignal.timeout(6000)});
       if(!r.ok)continue;
       const d=await r.json();
-      // Date posted
-      if(d.published){
-        const dt=new Date(d.published*1000);
-        document.getElementById('vtDatePosted').value=dt.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
-      }
-      // Views when found + today's date
-      if(d.viewCount!==undefined){
-        const now=new Date();
-        const today=now.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
-        const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-        document.getElementById('vtViews').value=`${d.viewCount} (found ${today} ${time})`;
-      }
-      // Channel videos — fetch channel
-      if(d.authorId){
-        try{
-          const cr=await fetch(`${instance}/api/v1/channels/${d.authorId}?fields=videoCount,subCount`,{signal:AbortSignal.timeout(5000)});
-          if(cr.ok){const cd=await cr.json();if(cd.videoCount!==undefined)document.getElementById('vtChannelVids').value=cd.videoCount}
-        }catch{}
-      }
-      if(status)status.textContent='auto-filled';
-      setTimeout(()=>{if(status)status.textContent=''},3000);
-      return;
+      if(d.published){document.getElementById('vtDatePosted').value=new Date(d.published*1000).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'})}
+      if(d.viewCount!==undefined)document.getElementById('vtViews').value=`${d.viewCount} (found ${today} ${time})`;
+      if(d.authorId){try{
+        const cr=await fetch(`${instance}/api/v1/channels/${d.authorId}?fields=videoCount`,{signal:AbortSignal.timeout(5000)});
+        if(cr.ok){const cd=await cr.json();if(cd.videoCount!==undefined)document.getElementById('vtChannelVids').value=cd.videoCount}
+      }catch{}}
+      filled=true;break;
     }catch{}
   }
-  if(status)status.textContent='could not fetch';
+
+  // Try 2: Hosted proxy (if on falcontechnix.com)
+  if(!filled){
+    try{
+      const r=await fetch(`/KVN_AUST/videometa.php?v=${vid}`,{signal:AbortSignal.timeout(5000)});
+      if(r.ok){const d=await r.json();if(d.ok){
+        if(d.published)document.getElementById('vtDatePosted').value=d.published;
+        if(d.views!==undefined)document.getElementById('vtViews').value=`${d.views} (found ${today} ${time})`;
+        if(d.channelVideos)document.getElementById('vtChannelVids').value=d.channelVideos;
+        filled=true;
+      }}
+    }catch{}
+  }
+
+  // Try 3: YouTube oEmbed (title + author only, no views/date, but always works)
+  if(!filled){
+    try{
+      const r=await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${vid}&format=json`,{signal:AbortSignal.timeout(5000)});
+      if(r.ok){const d=await r.json();
+        // Can't get views/date from oEmbed, but at least confirm the video exists
+        if(d.title){if(status)status.textContent='partial (no view data)';setTimeout(()=>{if(status)status.textContent=''},4000);return}
+      }
+    }catch{}
+  }
+
+  if(status)status.textContent=filled?'auto-filled':'could not fetch';
   setTimeout(()=>{if(status)status.textContent=''},3000);
 }
 function saveVideo(){sessionRounds.push(makeRound());clearVtLink();showToast('Saved!');setTimeout(()=>{resetTracker();startNextRound()},600)}
