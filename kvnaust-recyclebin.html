@@ -2584,6 +2584,8 @@ function showRecords(){
   document.getElementById('recordsOverlay').classList.add('open');
   renderRecords();
   drawRecordsTimeline();
+  // Fetch community finds on first open, then poll
+  if(!communityFetchedOnce)fetchCommunityRecords();
 }
 function closeRecords(){document.getElementById('recordsOverlay').classList.remove('open')}
 
@@ -2594,28 +2596,55 @@ function showRecordTab(tab){
   else{mine.style.display='none';comm.style.display='';btnComm.style.background='var(--accent)';btnComm.style.borderColor='var(--accent)';btnMine.style.background='';btnMine.style.borderColor='';fetchCommunityRecords()}
 }
 
-let communityRecordsLoaded=false;
+let communityFinds=[];let communityFetchedOnce=false;
+const FINDS_API='https://www.falcontechnix.com/KVN_AUST/finds.php';
+
 async function fetchCommunityRecords(){
   const list=document.getElementById('communityRecordsList');
-  if(communityRecordsLoaded){return}
-  list.innerHTML='<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Loading community records...</div>';
+  if(!communityFetchedOnce)list.innerHTML='<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Loading community finds...</div>';
   try{
-    const r=await fetch('/KVN_AUST/api/records');
-    if(!r.ok)throw new Error('not hosted');
+    const r=await fetch(FINDS_API+'?limit=500&order=asc');
+    if(!r.ok)throw new Error('HTTP '+r.status);
     const data=await r.json();
-    if(data.records&&data.records.length){
-      communityRecordsLoaded=true;
-      list.innerHTML=data.records.map((r,i)=>{
-        const d=new Date(r.date);
-        const dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-        const color=getRecordColor(d);
-        const medal=i===0?'&#x1F947; ':i===1?'&#x1F948; ':i===2?'&#x1F949; ':'';
-        return`<div class="rec-entry"><span style="min-width:20px;font-size:.8rem">${medal}</span><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views">${r.views} views</span><span style="color:#666;font-size:.65rem;flex:1">${esc(r.user||'anonymous')}</span></div>`;
-      }).join('')+'<div style="text-align:center;font-size:.6rem;color:#333;margin-top:6px">'+data.records.length+' community finds</div>';
-    }else throw new Error('empty');
-  }catch{
-    list.innerHTML='<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Community leaderboard available on <a href="https://falcontechnix.com/KVN_AUST/" style="color:#5b7fc7">falcontechnix.com</a></div>';
+    if(!data.ok||!data.finds)throw new Error('bad response');
+    communityFinds=data.finds;
+    communityFetchedOnce=true;
+    const rc=data.rarity_colors||{};
+    list.innerHTML=data.finds.map((f,i)=>{
+      const color=rc[f.rarity]||getRecordColor(new Date(f.date_posted));
+      const medal=i===0?'&#x1F947; ':i===1?'&#x1F948; ':i===2?'&#x1F949; ':'';
+      const dateStr=new Date(f.date_posted).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      return`<div class="rec-entry" style="cursor:pointer" onclick="showFindDetail(${i})"><span style="min-width:20px;font-size:.8rem">${medal}</span><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views" title="Views when found">${f.views_when_found??'?'} views</span><span style="color:${color};font-size:.6rem;font-weight:700;min-width:65px">${esc(f.rarity||'')}</span><span style="color:#666;font-size:.62rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(f.lead)}">${esc(f.lead)}</span><span style="color:#444;font-size:.58rem">${esc(f.found_by||'')}</span></div>`;
+    }).join('')+`<div style="text-align:center;font-size:.6rem;color:#333;margin-top:6px">${data.total} finds &#183; oldest: ${data.oldest_post_date} &#183; newest: ${data.newest_post_date}</div>`;
+    // Redraw timeline with community data
+    drawRecordsTimeline();
+  }catch(e){
+    if(!communityFetchedOnce)list.innerHTML=`<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Could not load community finds.<br><a href="https://falcontechnix.com/KVN_AUST/" style="color:#5b7fc7">Play on falcontechnix.com</a> for the full leaderboard.</div>`;
   }
+}
+
+function showFindDetail(idx){
+  const f=communityFinds[idx];if(!f)return;
+  const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
+  const color=rc[f.rarity]||'#888';
+  const html=`<div style="text-align:center;padding:12px">
+    <a href="${esc(f.video_url)}" target="_blank" rel="noopener"><img src="${esc(f.thumbnail_url)}" style="width:240px;border-radius:8px;border:2px solid ${color};margin-bottom:8px" alt="${esc(f.video_title)}"></a>
+    <div style="font-weight:900;font-size:1rem;color:#fff;margin-bottom:4px">${esc(f.video_title||'Untitled')}</div>
+    <div style="font-size:.75rem;color:${color};font-weight:700;margin-bottom:8px">${esc(f.rarity)}</div>
+    <div style="font-size:.72rem;color:#aaa;line-height:1.6">
+      <div>&#10038; <strong>Date posted:</strong> ${esc(f.date_posted)}</div>
+      <div>&#10038; <strong>Views when found:</strong> ${f.views_when_found??'unknown'}</div>
+      <div>&#10038; <strong>Lead:</strong> ${esc(f.lead)}</div>
+      ${f.channel_name?`<div>&#10038; <strong>Channel:</strong> ${esc(f.channel_name)}${f.channel_videos?' ('+f.channel_videos+' videos)':''}${f.channel_subs?' &#183; '+f.channel_subs+' subs':''}</div>`:''}
+      <div style="margin-top:6px;color:#666">Found by <strong style="color:#aaa">${esc(f.found_by||'anonymous')}</strong> in ${esc(f.server||'unknown')}</div>
+    </div>
+    <div style="margin-top:10px"><a href="${esc(f.video_url)}" target="_blank" rel="noopener" style="color:#5b7fc7;font-size:.75rem">Watch on YouTube</a></div>
+    <button class="s-btn" style="margin-top:8px" onclick="this.closest('.rec-find-detail').remove()">Back</button>
+  </div>`;
+  const d=document.createElement('div');d.className='rec-find-detail';d.style.cssText='position:absolute;inset:0;background:rgba(0,0,0,.9);z-index:10;border-radius:10px;overflow-y:auto';
+  d.innerHTML=html;
+  document.getElementById('communityRecordsList').style.position='relative';
+  document.getElementById('communityRecordsList').appendChild(d);
 }
 
 function addRecord(){
@@ -2813,8 +2842,30 @@ function drawRecordsTimeline(){
     }
   });
 
+  // Community finds (smaller, dimmer, behind personal records)
+  const rarityColors={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
+  if(communityFinds.length){
+    communityFinds.forEach(f=>{
+      const d=new Date(f.date_posted);
+      const yearFrac=d.getFullYear()+(d.getMonth()/12)+(d.getDate()/365);
+      const x=padL+((yearFrac-startYear)/totalYears)*chartW;
+      const y=viewsToY(f.views_when_found||0);
+      const color=rarityColors[f.rarity]||'#555';
+      // Small dim dot
+      ctx.globalAlpha=0.4;
+      ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=1;ctx.stroke();
+      // Thin beam
+      ctx.strokeStyle=color;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,y);ctx.stroke();
+      ctx.globalAlpha=1;
+    });
+    // Label
+    ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='9px Inter,sans-serif';ctx.textAlign='right';
+    ctx.fillText('Community finds shown as small dots',padL+chartW,padT+chartH-6);
+  }
+
   // Empty state
-  if(!recs.length){
+  if(!recs.length&&!communityFinds.length){
     // Centered text with subtle glow
     ctx.shadowColor='rgba(231,76,60,.2)';ctx.shadowBlur=20;
     ctx.fillStyle='#444';ctx.font='bold 16px Inter,sans-serif';ctx.textAlign='center';
@@ -3293,6 +3344,9 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}}catch{}
 loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
 checkForUpdates();
+// Fetch community finds in background, poll every 60s
+setTimeout(fetchCommunityRecords,2000);
+setInterval(fetchCommunityRecords,60000);
 </script>
 
 <!-- ═══ EMBEDDED BINGO CATEGORIES (fallback when JSON can't be loaded) ═══ -->
@@ -3303,9 +3357,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "3.6.0",
+  "version": "3.7.0",
   "build": "2026-04-20T12:00:00",
-  "changelog": "Full Deep Dive overhaul: 30+ CSS overrides, brighter bubbles, Before:2010",
+  "changelog": "Live community finds API, clickable find details, timeline integration",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
