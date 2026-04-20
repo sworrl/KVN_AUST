@@ -53,43 +53,58 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/records-timeline.png" width="720" alt="KVN AUST Recycle Bin - Oldest Zero-View Record Timeline">
-  <br><sub>Oldest Zero-View Record — track your rarest finds on a timeline</sub>
+  <img src="screenshots/01-landing.png" width="720" alt="KVN AUST Recycle Bin - Start Screen">
+  <br><sub>Start Screen — YouTube's Recycle Bin</sub>
 </p>
 
 <p align="center">
-  <img src="screenshots/cloud-save.png" width="720" alt="KVN AUST Recycle Bin - Cloud Save">
-  <br><sub>Cloud Save — sync game data across devices</sub>
+  <img src="screenshots/02-bingo-setup.png" width="720" alt="KVN AUST Recycle Bin - Bingo Category Setup">
+  <br><sub>Bingo Setup — 101 customizable categories</sub>
 </p>
 
 <p align="center">
-  <img src="screenshots/bingo-export.png" width="720" alt="KVN AUST Recycle Bin Bingo Card Export">
-  <br><sub>Bingo Card Export Preview</sub>
+  <img src="screenshots/03-settings.png" width="720" alt="KVN AUST Recycle Bin - Settings">
+  <br><sub>Settings — channel images, spinner options, daub colors</sub>
 </p>
 
 <p align="center">
-  <img src="screenshots/bingo-card.png" width="720" alt="KVN AUST Recycle Bin Bingo Card with Mosaic">
-  <br><sub>Bingo Card with Mosaic & Daub Stamps</sub>
+  <img src="screenshots/04-bingo-reveal.png" width="720" alt="KVN AUST Recycle Bin - Bingo Card Reveal">
+  <br><sub>Bingo Card Reveal — slide puzzle with mosaic</sub>
 </p>
 
 <p align="center">
-  <img src="screenshots/spinner.png" width="720" alt="KVN AUST Recycle Bin Format Spinner Wheel">
-  <br><sub>3D Format Spinner — 60+ default filename formats</sub>
+  <img src="screenshots/05-spinner.png" width="720" alt="KVN AUST Recycle Bin - Format Spinner Wheel">
+  <br><sub>3D Format Spinner — 170+ formats from the community map</sub>
 </p>
 
 <p align="center">
-  <img src="screenshots/format-selected.png" width="720" alt="KVN AUST Recycle Bin Format Selected">
-  <br><sub>Format Selected — click anywhere to continue</sub>
+  <img src="screenshots/06-deep-dive.png" width="720" alt="KVN AUST Recycle Bin - Deep Dive Mode">
+  <br><sub>Deep Dive Mode — underwater theme, Before:2010 filter, nautical sounds</sub>
 </p>
 
 <p align="center">
-  <img src="screenshots/number-gen.png" width="720" alt="KVN AUST Recycle Bin Number Generator">
-  <br><sub>Rainbow Number Generator</sub>
+  <img src="screenshots/07-format-selected.png" width="720" alt="KVN AUST Recycle Bin - Format Selected">
+  <br><sub>Format Selected — rainbow reveal animation</sub>
 </p>
 
 <p align="center">
-  <img src="screenshots/result-screen.png" width="720" alt="KVN AUST Recycle Bin Search and Rate">
-  <br><sub>Search YouTube, Rate & Save</sub>
+  <img src="screenshots/08-result-screen.png" width="720" alt="KVN AUST Recycle Bin - Search Rate Save">
+  <br><sub>Search, Rate & Save — auto-fetch video stats, share to Discord</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/09-bingo-live.png" width="720" alt="KVN AUST Recycle Bin - Live Bingo Card with Daubs">
+  <br><sub>Live Bingo Card — progressive daub stamps that glow near BINGO</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/10-records-timeline.png" width="720" alt="KVN AUST Recycle Bin - Records Timeline">
+  <br><sub>Oldest Zero-View Records — community leaderboard with rarity tiers</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/11-find-detail.png" width="720" alt="KVN AUST Recycle Bin - Find Detail Modal">
+  <br><sub>Find Detail — click any dot for video info, channel stats, attribution</sub>
 </p>
 
 ---
