@@ -3448,7 +3448,7 @@ allowRepeatFormats=localStorage.getItem('kvn_allow_repeats')==='1';
 // Restore saved daub color/opacity
 try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){document.getElementById('daubColor').value=daubSaved.color;document.getElementById('daubOpacity').value=daubSaved.opacity;setDaubColor(daubSaved.color)}}catch{}
 // Restore saved sound preference
-try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}}catch{}
+try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
 checkForUpdates();
 // Fetch community finds in background, poll every 60s
