@@ -3600,6 +3600,16 @@ checkForUpdates();
 // Fetch community finds in background, poll every 60s
 setTimeout(fetchCommunityRecords,2000);
 setInterval(fetchCommunityRecords,60000);
+// Hash routing: #records, #stats, #shortcuts, #credits
+function handleHash(){
+  const h=location.hash.toLowerCase().replace('#','');
+  if(h==='records')setTimeout(showRecords,300);
+  else if(h==='stats')setTimeout(showStats,300);
+  else if(h==='shortcuts')setTimeout(showShortcuts,300);
+  else if(h==='credits')setTimeout(showCredits,300);
+}
+handleHash();
+window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED BINGO CATEGORIES (fallback when JSON can't be loaded) ═══ -->
