@@ -14,6 +14,27 @@
 
 ---
 
+## [4.4.0] - 2026-04-20
+
+### Added
+- **Zero-view emphasis on timeline**: zero-view finds render large/bright/glowing, non-zero fade and shrink proportionally
+- **Filter toggle**: "All Finds" / "Zero Views Only" buttons above the timeline
+- **Discord Integration Guide**: [DISCORD_INTEGRATION.md](DISCORD_INTEGRATION.md) with Node.js, Python, and bash bot code
+- **Solved Mysteries**: moved to own file [SOLVED_MYSTERIES.md](SOLVED_MYSTERIES.md)
+- **11 new screenshots** in user flow order (landing through find detail)
+- **README leaderboard**: auto-updates every 3 hours via GitHub Actions with top 10 finds
+- **Hash routing**: `#records`, `#stats`, `#shortcuts`, `#credits` open modals from URL
+- **Record Holder banner**: scored by oldest date + lowest views + lowest channel videos
+- **Back to Home / New Game** split buttons on game summary screen
+
+### Changed
+- End game sets `gameActive=false` and returns to landing after summary
+- Standard centered headers on all markdown files (CHANGELOG, DISCORD_INTEGRATION, SOLVED_MYSTERIES)
+- Removed "Note from KVN AUST: WORKING ON A FIX" from FORMAT-MAP
+- Leaderboard submission note: submit via hosted tool or Records timeline, no full game required
+
+---
+
 ## [4.3.0] - 2026-04-20
 
 ### Added
