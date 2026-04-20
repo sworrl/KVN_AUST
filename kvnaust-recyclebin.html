@@ -74,18 +74,41 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
   --daub:rgba(76,175,80,.65);--trans:.45s;
   --g1:#e74c3c;--g2:#f39c12;--g3:#2ecc71;--g4:#3498db;--g5:#9b59b6}
 /* Deep Dive theme overrides */
-body.deep-dive{--accent:#00bcd4;--accent2:#26c6da;--bg:#040810;--card:#0a1520;--card2:#0e1a28;
-  --g1:#00bcd4;--g2:#0097a7;--g3:#00838f;--g4:#006064;--g5:#004d40}
-body.deep-dive .header{background:linear-gradient(180deg,rgba(0,20,40,.98),rgba(4,8,16,.95))}
-body.deep-dive .header-title{background:linear-gradient(135deg,#00bcd4,#0097a7,#26c6da);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-body.deep-dive .start-btn{background:linear-gradient(135deg,#00838f,#006064)}
-body.deep-dive .start-btn:hover{box-shadow:0 6px 35px rgba(0,188,212,.45)}
-body.deep-dive .header-banner img{filter:hue-rotate(160deg) saturate(.7) brightness(.8)}
-body.deep-dive .main{background:radial-gradient(ellipse at 50% 100%,rgba(0,40,60,.15),transparent 70%)}
-#bubbleCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;display:none}
+body.deep-dive{--accent:#00bcd4;--accent2:#26c6da;--bg:#020608;--card:#081218;--card2:#0c1a24;
+  --g1:#00bcd4;--g2:#0097a7;--g3:#00838f;--g4:#006064;--g5:#004d40;--daub:rgba(0,188,212,.55)}
+body.deep-dive .header{background:linear-gradient(180deg,rgba(0,15,30,.98),rgba(2,6,8,.96));border-bottom:1px solid rgba(0,188,212,.15)}
+body.deep-dive .header-title{background:linear-gradient(135deg,#4dd0e1,#00bcd4,#0097a7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none}
+body.deep-dive .header-subtitle{color:#0097a7}
+body.deep-dive .start-btn{background:linear-gradient(135deg,#00838f,#006064);box-shadow:0 4px 20px rgba(0,188,212,.3)}
+body.deep-dive .start-btn:hover{box-shadow:0 6px 35px rgba(0,188,212,.5)}
+body.deep-dive .header-banner img{filter:hue-rotate(160deg) saturate(.6) brightness(.6)}
+body.deep-dive .main{background:linear-gradient(180deg,rgba(0,10,20,.3) 0%,rgba(0,30,50,.1) 50%,rgba(0,60,80,.08) 100%)}
+body.deep-dive .spin-btn{box-shadow:0 6px 30px rgba(0,0,0,.7),0 0 25px rgba(0,188,212,.3);border-color:#0097a7}
+body.deep-dive .spin-label{color:#00bcd4}
+body.deep-dive .wheel-pointer svg polygon{fill:var(--bg);stroke:#0097a7}
+body.deep-dive .number-box{border-color:#0a2a3a;box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 30px rgba(0,188,212,.08)}
+body.deep-dive .rolling-number{color:#4dd0e1}
+body.deep-dive .result-pill{border-color:#0a2a3a;color:#4dd0e1}
+body.deep-dive .result-pill:hover{border-color:#00bcd4;box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 15px rgba(0,188,212,.2)}
+body.deep-dive .gen-btn{background:linear-gradient(135deg,#00838f,#006064)}
+body.deep-dive .vt-btn.save{background:linear-gradient(135deg,#00838f,#006064)}
+body.deep-dive .nav-btn.primary{background:#00838f;border-color:#00838f}
+body.deep-dive .hdr-btn.active{background:#00838f;border-color:#00838f}
+body.deep-dive .tagline{color:#0097a7}
+body.deep-dive .bingo-card{border-color:#0a2a3a;background:linear-gradient(145deg,#081218,#040a0f)}
+body.deep-dive .bingo-card-header{background:linear-gradient(135deg,#00bcd4,#0097a7,#00838f,#006064,#004d40);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+body.deep-dive .result-sub{color:#0097a7}
+body.deep-dive .click-hint{color:#006064}
+body.deep-dive .format-banner{color:#4dd0e1}
+body.deep-dive .toast.ok{background:linear-gradient(135deg,#00838f,#006064)}
+body.deep-dive canvas#wheelCanvas{filter:drop-shadow(0 0 20px rgba(0,0,0,.5)) drop-shadow(0 0 40px rgba(0,188,212,.1))}
+body.deep-dive .screen-nav{border-color:rgba(0,188,212,.15)}
+body.deep-dive .screen-nav:hover{border-color:rgba(0,188,212,.3);color:#4dd0e1}
+body.deep-dive .wheel-count-wrap{border-color:#0a2a3a}
+body.deep-dive .wheel-mode-btns button.active{background:#00838f;border-color:#00838f}
+body.deep-dive .credit-footer{background:linear-gradient(0deg,rgba(2,6,8,.95) 0%,rgba(2,6,8,.6) 60%,transparent)}
+#bubbleCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;display:none}
 body.deep-dive #bubbleCanvas{display:block}
-body.deep-dive .screen{z-index:2}
-body.deep-dive .spin-btn{box-shadow:0 6px 30px rgba(0,0,0,.7),0 0 20px rgba(0,188,212,.2)}
 body.deep-dive .deep-dive-badge{display:inline-block}
 .deep-dive-badge{display:none;font-size:.55rem;padding:2px 8px;border-radius:4px;background:rgba(0,188,212,.15);color:#00bcd4;font-weight:700;letter-spacing:1px;margin-left:6px;vertical-align:middle;animation:daubPulse 3s ease-in-out infinite}
 html,body{height:100%;overflow:hidden}
@@ -548,8 +571,8 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 <button class="screen-nav" id="navBack" onclick="goPrev()">&#9664;</button>
 <button class="screen-nav" id="navFwd" onclick="goNext()">&#9654;</button>
 
+<canvas id="bubbleCanvas"></canvas>
 <div class="main">
-  <canvas id="bubbleCanvas"></canvas>
   <div id="start-screen" class="screen active">
     <div class="logo-area">
       <img class="big-avatar" id="bigAvatarImg" alt="KVN AUST">
@@ -1695,7 +1718,7 @@ function setWheelMode(m){wheelMode=m;document.getElementById('modeRandom').class
 
 // Deep Dive mode: filters for old-video formats + appends Before: to searches
 let deepDiveActive=false;
-const DEEP_DIVE_YEAR=2012;
+const DEEP_DIVE_YEAR=2010;
 // Formats known to surface old/ancient videos
 const DEEP_DIVE_LABELS=new Set(['IMG XXXX','MVI XXXX','MOV XXXX','DSC XXXX','DSCFXXXX','DSCNXXXX','100 XXXX','SAM XXXX','GOPRXXXX','VideoXXXX','MAQ0XXXX','PICTXXXX','XXXX.MP4','M2U0XXXX','MAH0XXXX','HPIMXXXX','GEDCXXXX','SANYXXXX','VID0XXXX','MOV0XXXX','IMGPXXXX','CIMGXXXX','P100XXXX','PC10XXXX','AVSEQXX','Trim 4XXX','"HHMMSS"','VID YYYYMMDD','Capture YYYYMMDD','WIN YYYYMMDD','WP YYYYMMDD','Webcam YYYYMMDD','"You have new picture mail! (video)"','"Media1.3gp"','"Media1.3g2"','"Video.3g2"','"New Multimedia Message"','"Multimedia Message"','"Video from my phone"','"Video uploaded from my mobile phone"','"Sent from my blackberry smartphone"','"My Ezvid Video"','"This video was uploaded from an Android phone"','"Sprint PictureMail"','"My stop motion movie"','"My Great Movie"','"My First Project"','"Qik"','"Made with One True Media"','"Jing"','"My Slideshow Video"','"My Stupeflix Video"','"My Videolicious Video"','".VOB"','".AVI"','".WMV"','".3gp"','".3g2"']);
 
@@ -1736,19 +1759,19 @@ let prevSoundMode=null;
 //  BUBBLE PHYSICS (Deep Dive mode)
 // ═══════════════════════════════════
 let bubbles=[];let bubbleAnim=null;
-const MAX_BUBBLES=40;
+const MAX_BUBBLES=60;
 
 function spawnBubble(W,H){
   return{
     x:Math.random()*W,
     y:H+Math.random()*50,
-    r:3+Math.random()*12,
-    vx:(Math.random()-.5)*.3,
-    vy:-(0.4+Math.random()*0.8),
-    wobbleAmp:0.3+Math.random()*0.6,
-    wobbleFreq:0.01+Math.random()*0.015,
+    r:2+Math.random()*16,
+    vx:(Math.random()-.5)*.4,
+    vy:-(0.3+Math.random()*1.0),
+    wobbleAmp:0.4+Math.random()*0.8,
+    wobbleFreq:0.008+Math.random()*0.02,
     wobblePhase:Math.random()*Math.PI*2,
-    opacity:0.15+Math.random()*0.25,
+    opacity:0.12+Math.random()*0.3,
     age:0
   };
 }
@@ -1775,7 +1798,7 @@ function startBubbles(){
     ctx.clearRect(0,0,W,H);
 
     // Spawn new bubbles from bottom
-    if(bubbles.length<MAX_BUBBLES&&Math.random()<.08)bubbles.push(spawnBubble(W,H));
+    if(bubbles.length<MAX_BUBBLES&&Math.random()<.15)bubbles.push(spawnBubble(W,H));
 
     for(let i=bubbles.length-1;i>=0;i--){
       const b=bubbles[i];
@@ -1796,16 +1819,20 @@ function startBubbles(){
 
       // Draw bubble
       ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-      ctx.strokeStyle=`rgba(100,210,230,${alpha})`;ctx.lineWidth=1;ctx.stroke();
+      ctx.strokeStyle=`rgba(100,220,240,${alpha*1.2})`;ctx.lineWidth=b.r>8?1.5:1;ctx.stroke();
       // Inner gradient for glass effect
-      const g=ctx.createRadialGradient(b.x-b.r*.3,b.y-b.r*.3,b.r*.1,b.x,b.y,b.r);
-      g.addColorStop(0,`rgba(180,240,255,${alpha*.5})`);
-      g.addColorStop(.5,`rgba(80,200,220,${alpha*.15})`);
-      g.addColorStop(1,`rgba(40,160,180,${alpha*.05})`);
+      const g=ctx.createRadialGradient(b.x-b.r*.3,b.y-b.r*.3,b.r*.05,b.x,b.y,b.r);
+      g.addColorStop(0,`rgba(200,250,255,${alpha*.6})`);
+      g.addColorStop(.3,`rgba(100,220,240,${alpha*.2})`);
+      g.addColorStop(.7,`rgba(50,180,200,${alpha*.08})`);
+      g.addColorStop(1,`rgba(30,140,160,${alpha*.03})`);
       ctx.fillStyle=g;ctx.fill();
       // Specular highlight
-      ctx.beginPath();ctx.arc(b.x-b.r*.25,b.y-b.r*.3,b.r*.25,0,Math.PI*2);
-      ctx.fillStyle=`rgba(255,255,255,${alpha*.4})`;ctx.fill();
+      ctx.beginPath();ctx.arc(b.x-b.r*.25,b.y-b.r*.3,b.r*.3,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${alpha*.5})`;ctx.fill();
+      // Secondary small highlight
+      if(b.r>6){ctx.beginPath();ctx.arc(b.x+b.r*.15,b.y+b.r*.2,b.r*.12,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,240,255,${alpha*.2})`;ctx.fill()}
     }
     bubbleAnim=requestAnimationFrame(frame);
   }
@@ -3276,9 +3303,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "3.5.0",
+  "version": "3.6.0",
   "build": "2026-04-20T12:00:00",
-  "changelog": "Deep Dive bubbles, nautical sonar sounds, whale call win fanfare",
+  "changelog": "Full Deep Dive overhaul: 30+ CSS overrides, brighter bubbles, Before:2010",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
