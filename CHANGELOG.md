@@ -4,6 +4,19 @@ All notable changes to YouTube's Recycle Bin — KVN AUST Game Tool.
 
 ---
 
+## [4.0.3] - 2026-04-20
+
+### Fixed
+- **Format cache nuclear bust (v5)**: renamed both cache key (`kvn_fmt_v5`) and timestamp key (`kvn_fmt_ts_v5`) so no stale data from v2/v3/v4 can prevent the full 177-format fetch. Threshold raised to 100 (was 20) to force re-fetch until all formats are cached.
+- **Nautical sound persistence**: `'nautical'` can no longer persist to localStorage. On load, stale `'nautical'` values are detected and removed. Deep Dive sets sound in-memory only.
+- **Invidious instances**: replaced 4 dead instances with `iv.melmac.space` (confirmed working). YouTube oEmbed added as fallback for video existence check.
+
+### Added
+- **Auto-fetch video metadata**: pasting a YouTube URL auto-fills date posted, views when found (with today's date+time), and channel video count via Invidious API
+- **Anchor drop screen wipe**: toggling Deep Dive plays a full-screen transition — anchor icon falls from top, ocean background slides down, theme switches at midpoint. Includes chain rattle + descending tone + splash sound. Reverse wipe on toggle off.
+
+---
+
 ## [4.0.0] - 2026-04-20
 
 ### Fixed
