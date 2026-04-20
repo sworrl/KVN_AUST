@@ -621,7 +621,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
         <button class="vt-btn" style="background:linear-gradient(135deg,#7e57c2,#5e35b1)" onclick="reRandomize()">Re-Randomize</button>
       </div>
       <div class="vt-label" style="margin-top:6px">Found a video? Paste the link &amp; rate it:</div>
-      <div class="vt-row"><input class="vt-input" id="vtLink" type="text" placeholder="https://youtube.com/watch?v=..."></div>
+      <div class="vt-row"><input class="vt-input" id="vtLink" type="text" placeholder="https://youtube.com/watch?v=..." oninput="onVideoLinkChange(this.value)"><span id="vtFetchStatus" style="font-size:.55rem;color:var(--muted);margin-left:4px"></span></div>
       <div class="vt-row" style="gap:4px">
         <input class="vt-input" id="vtDatePosted" type="text" placeholder="Date posted (e.g. 30/10/2006)" style="flex:1">
         <input class="vt-input" id="vtViews" type="text" placeholder="Views (e.g. 0)" style="width:70px">
@@ -2154,7 +2154,52 @@ function reshuffleBingoFlash(){
   buildBingoFromPicked();
   showBingoFlash();
 }
-function clearVtLink(){document.getElementById('vtLink').value='';document.getElementById('vtDatePosted').value='';document.getElementById('vtViews').value='';document.getElementById('vtChannelVids').value=''}
+function clearVtLink(){document.getElementById('vtLink').value='';document.getElementById('vtDatePosted').value='';document.getElementById('vtViews').value='';document.getElementById('vtChannelVids').value='';const s=document.getElementById('vtFetchStatus');if(s)s.textContent=''}
+
+let vtFetchTimer=null;
+function onVideoLinkChange(val){
+  clearTimeout(vtFetchTimer);
+  const vid=getVideoId(val.trim());
+  if(!vid)return;
+  const status=document.getElementById('vtFetchStatus');
+  if(status)status.textContent='fetching...';
+  vtFetchTimer=setTimeout(()=>fetchVideoMeta(vid),500);
+}
+
+async function fetchVideoMeta(vid){
+  const status=document.getElementById('vtFetchStatus');
+  for(const instance of INVIDIOUS_INSTANCES){
+    try{
+      const r=await fetch(`${instance}/api/v1/videos/${vid}?fields=title,viewCount,published,author,authorId,subCountText`,{signal:AbortSignal.timeout(5000)});
+      if(!r.ok)continue;
+      const d=await r.json();
+      // Date posted
+      if(d.published){
+        const dt=new Date(d.published*1000);
+        document.getElementById('vtDatePosted').value=dt.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
+      }
+      // Views when found + today's date
+      if(d.viewCount!==undefined){
+        const now=new Date();
+        const today=now.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
+        const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+        document.getElementById('vtViews').value=`${d.viewCount} (found ${today} ${time})`;
+      }
+      // Channel videos — fetch channel
+      if(d.authorId){
+        try{
+          const cr=await fetch(`${instance}/api/v1/channels/${d.authorId}?fields=videoCount,subCount`,{signal:AbortSignal.timeout(5000)});
+          if(cr.ok){const cd=await cr.json();if(cd.videoCount!==undefined)document.getElementById('vtChannelVids').value=cd.videoCount}
+        }catch{}
+      }
+      if(status)status.textContent='auto-filled';
+      setTimeout(()=>{if(status)status.textContent=''},3000);
+      return;
+    }catch{}
+  }
+  if(status)status.textContent='could not fetch';
+  setTimeout(()=>{if(status)status.textContent=''},3000);
+}
 function saveVideo(){sessionRounds.push(makeRound());clearVtLink();showToast('Saved!');setTimeout(()=>{resetTracker();startNextRound()},600)}
 function skipVideo(){sessionRounds.push({...makeRound(),link:'',rating:0,metrics:{entertainment:0,weirdness:0,gem:0,liked:0}});clearVtLink();resetTracker();startNextRound()}
 function saveAndReRandomize(){
