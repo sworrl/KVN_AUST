@@ -1525,8 +1525,8 @@ function closeBingoFlash(){
 // ═══════════════════════════════════
 //  DOC FETCH
 // ═══════════════════════════════════
-const DOC_CACHE_KEY='kvn_doc_formats_v4'; // v4: all 177 formats cached (date+static were missing)
-const DOC_CACHE_TS_KEY='kvn_doc_ts';
+const DOC_CACHE_KEY='kvn_fmt_v5'; // v5: nuclear cache bust — all 177 formats
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v5';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -1556,7 +1556,7 @@ async function fetchDocFormats(){
 
   // If cache is fresh AND has enough formats, skip network fetch
   const cacheSize=ALL_FORMATS.length;
-  if(!isCacheStale()&&cacheSize>=20){console.log(`Format cache is fresh (${cacheSize} formats), skipping fetch`);return}
+  if(!isCacheStale()&&cacheSize>=100){console.log(`Format cache is fresh (${cacheSize} formats), skipping fetch`);return}
 
   // file:// can still fetch from GitHub (CORS allows *)
   try{
