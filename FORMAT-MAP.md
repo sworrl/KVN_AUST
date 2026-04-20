@@ -21,8 +21,6 @@
   <img src="https://img.shields.io/badge/Ancient_YouTube-37-f39c12?style=flat-square&labelColor=1a1a2e" alt="37 Ancient YouTube Formats">
 </p>
 
-> **Note from KVN AUST:** WORKING ON A FIX FOR SORTING BY UPLOAD DATE
-
 ---
 
 YouTube currently hosts over **20 billion videos**. **93%** have under 1,000 views. **30%** have under 100. This map helps you access the billions of forgotten, zero-view uploads by searching for **default device filenames** that the algorithm never learned to recommend.
@@ -350,21 +348,7 @@ The deepest layer of the Recycle Bin. These keyphrases surface videos from the f
 
 ---
 
-## Solved Mysteries
-
-### "Better Bandai" / Webdriver Torso-Style Channels
-
-You may encounter channels uploading hundreds or thousands of short videos consisting of **colored rectangles changing size and position** with **high-pitched beeping tones**. Examples include channels like "Better Bandai" and the infamous "Webdriver Torso."
-
-Despite their eerie, cryptic appearance, **these are not** C2 (Command & Control) communications, ARGs, or secret number stations.
-
-**What they actually are:** Automated test videos created by YouTube/Google to continuously monitor the platform's video uploading, encoding, and compression infrastructure.
-
-- **Why boxes and beeps?** Simple visual patterns (solid colored rectangles) and audio tones are specifically designed to be easy for software to analyze. YouTube's backend compares the uploaded output to the original source file to measure quality loss during compression and detect audio desync.
-- **The titles** (e.g. `gcs-pkg-20200105-032036-742513`) are automated system log IDs and timestamps. "GCS" stands for Google Cloud Storage, part of the infrastructure used to host and process these files.
-- **The volume** is intentional — YouTube uploads hundreds of thousands of these test videos across multiple bot channels to monitor performance at scale.
-
-> While the sheer volume and bizarre nature of these videos have sparked many conspiracy theories over the years, they are just behind-the-scenes engineering tools used to ensure the platform is functioning correctly.
+> See also: **[Solved Mysteries](SOLVED_MYSTERIES.md)** — explained encounters like Webdriver Torso, Better Bandai, and other cryptic channels
 
 ---
 

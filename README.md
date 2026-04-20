@@ -267,5 +267,5 @@ The community-maintained database of every known default filename keyphrase that
 ---
 
 <p align="center">
-  <sub>GPL-3.0 | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Play Now</a> | <a href="FORMAT-MAP.md">Format Map</a> | <a href="CHANGELOG.md">Changelog</a></sub>
+  <sub>GPL-3.0 | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Play Now</a> | <a href="FORMAT-MAP.md">Format Map</a> | <a href="SOLVED_MYSTERIES.md">Solved Mysteries</a> | <a href="DISCORD_INTEGRATION.md">Discord</a> | <a href="CHANGELOG.md">Changelog</a></sub>
 </p>
