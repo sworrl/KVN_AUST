@@ -60,11 +60,14 @@
   }
 }
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@700&display=swap">
 <link rel="icon" type="image/png" id="favicon">
 <link rel="manifest" href="manifest.json">
 <title>YouTube's Recycle Bin - KVN AUST | Interactive Game Tool</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@700&display=swap');
+/* Fonts loaded via <link> in <head> for performance */
 *{margin:0;padding:0;box-sizing:border-box}
 input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 :root{--accent:#e74c3c;--accent2:#ff6b4a;--bg:#0d0d14;--card:#161625;--card2:#1e1e32;--text:#eee;--muted:#777;
@@ -497,6 +500,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 </head>
 <body>
 
+<h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">YouTube's Recycle Bin - KVN AUST</h1>
 <!-- HEADER -->
 <div class="header">
   <div class="header-banner"><img id="bannerImg" alt="banner"></div>
@@ -505,7 +509,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
   <div class="header-right">
     <div class="sound-pick">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
-      <select id="soundPick" onchange="setSound(this.value)">
+      <select id="soundPick" onchange="setSound(this.value)" aria-label="Sound effect preset">
         <option value="tick">Tick</option>
         <option value="retro">Retro</option>
         <option value="casino">Casino</option>
@@ -541,7 +545,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 
   <div id="wheel-screen" class="screen">
     <div class="wheel-top" id="wheelTop">
-      <div class="wheel-count-wrap"><label>Slots:</label><input type="number" id="wheelCount" value="20" min="4" max="60" oninput="rebuildWheel()" onkeydown="if(event.key==='Enter'){event.preventDefault();rebuildWheel()}"><button onclick="rebuildWheel()">Set</button></div>
+      <div class="wheel-count-wrap"><label>Slots:</label><input type="number" id="wheelCount" value="20" min="4" max="60" oninput="rebuildWheel()" onkeydown="if(event.key==='Enter'){event.preventDefault();rebuildWheel()}" aria-label="Number of wheel slots"><button onclick="rebuildWheel()">Set</button></div>
       <div class="wheel-mode-btns"><button class="active" id="modeRandom" onclick="setWheelMode('random')">Random</button><button id="modeSelected" onclick="setWheelMode('selected')">Selected</button></div>
       <span id="wheelSlotCount" style="font-size:.65rem;color:var(--muted)"></span>
     </div>
@@ -792,7 +796,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     <div class="s-group">
       <div class="s-label">Profile Image (avatar, spinner, favicon, mosaic)</div>
       <div class="s-row">
-        <img class="s-preview round" id="sAvatarPreview">
+        <img class="s-preview round" id="sAvatarPreview" alt="Avatar preview">
         <input class="s-input" id="sAvatarUrl" placeholder="Image URL or select file...">
         <button class="s-btn" onclick="document.getElementById('sAvatarFile').click()">File</button>
         <input type="file" class="s-file" id="sAvatarFile" accept="image/*" onchange="handleFileSelect('avatar',this)">
@@ -802,7 +806,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     <div class="s-group">
       <div class="s-label">Banner Image (header background)</div>
       <div class="s-row">
-        <img class="s-preview" id="sBannerPreview" style="width:96px;height:48px;border-radius:6px">
+        <img class="s-preview" id="sBannerPreview" style="width:96px;height:48px;border-radius:6px" alt="Banner preview">
         <input class="s-input" id="sBannerUrl" placeholder="Image URL or select file...">
         <button class="s-btn" onclick="document.getElementById('sBannerFile').click()">File</button>
         <input type="file" class="s-file" id="sBannerFile" accept="image/*" onchange="handleFileSelect('banner',this)">
@@ -812,7 +816,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     <div class="s-group">
       <div class="s-label">Mosaic Image (bingo card underlay)</div>
       <div class="s-row">
-        <img class="s-preview round" id="sMosaicPreview">
+        <img class="s-preview round" id="sMosaicPreview" alt="Mosaic preview">
         <input class="s-input" id="sMosaicUrl" placeholder="Same as avatar by default">
         <button class="s-btn" onclick="document.getElementById('sMosaicFile').click()">File</button>
         <input type="file" class="s-file" id="sMosaicFile" accept="image/*" onchange="handleFileSelect('mosaic',this)">
@@ -850,8 +854,8 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
   </div>
   <span class="cf-sep">&middot;</span>
   <div class="cf-group">
-    <img class="ft-img" src="/img/favicon-512.png" onerror="this.src='https://falcontechnix.com/img/favicon-512.png';this.onerror=null" alt="FT">
-    <a href="https://www.falcontechnix.com" target="_blank" style="color:#4fc3f7"><img src="/img/site_logo2.webp" onerror="this.src='https://falcontechnix.com/img/site_logo2.webp';this.onerror=null" alt="FalconTechnix" class="ft-wordmark"></a>
+    <img class="ft-img" src="/img/favicon-512.png" onerror="this.src='https://falcontechnix.com/img/favicon-512.png';this.onerror=null" alt="FT" width="30" height="30">
+    <a href="https://www.falcontechnix.com" target="_blank" style="color:#4fc3f7"><img src="/img/site_logo2.webp" onerror="this.src='https://falcontechnix.com/img/site_logo2.webp';this.onerror=null" alt="FalconTechnix" class="ft-wordmark" width="120" height="22"></a>
   </div>
   <button class="hdr-btn" style="font-size:.55rem;padding:2px 8px" onclick="showCredits()">Credits</button>
   <span id="versionBadge" style="font-size:.55rem;color:#555;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.05);cursor:default"></span>
@@ -3041,9 +3045,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "3.1.0",
+  "version": "3.2.0",
   "build": "2026-04-19T12:00:00",
-  "changelog": "Share card SVG export, stats dashboard, keyboard shortcuts help, triumphant win sounds",
+  "changelog": "Lighthouse fixes: accessibility, performance, SEO improvements",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
