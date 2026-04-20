@@ -15,7 +15,7 @@
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-43ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v4.0.3-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v4.1.0-1a1a2e?style=flat-square" alt="Changelog"></a>
 </p>
 
 <p align="center">
@@ -29,7 +29,7 @@
 
 ---
 
-YouTube hosts over **20 billion videos**. **93%** have under 1,000 views. **30%** have under 100. Millions of these are zero-view uploads that no human has ever watched — uploaded with default device filenames like `IMG 0001`, `DSCF0042`, or `MOV 0037` and immediately forgotten.
+YouTube hosts over **20 billion videos**. An estimated **6 billion** have fewer than 10 views. **Over 1 billion** have exactly **zero views** — uploaded and never watched by a single human being. These are videos with default device filenames like `IMG 0001`, `DSCF0042`, or `MOV 0037`, uploaded and immediately forgotten.
 
 KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of forgotten content. This tool generates random search strings from those default filename patterns to help you discover zero-view YouTube videos yourself.
 

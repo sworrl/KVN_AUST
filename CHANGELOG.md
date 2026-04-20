@@ -4,6 +4,17 @@ All notable changes to YouTube's Recycle Bin — KVN AUST Game Tool.
 
 ---
 
+## [4.1.0] - 2026-04-20
+
+### Fixed
+- **Video metadata fetch**: CORS was blocking all Invidious requests from browser. Added `allorigins.win` CORS proxy as fallback. Fetch chain: hosted proxy → direct Invidious → CORS-proxied Invidious. Uses `AbortController` instead of `AbortSignal.timeout` for wider browser support.
+
+### Changed
+- **Wheel pointer**: upgraded from flat triangle to 3D gradient pointer with metallic gradient fill, specular highlight, idle bob animation, and segment-color glow pulse during spin. Locks to landed segment color after spin.
+- **Bubble z-index**: lowered from 5 to 1 — bubbles now properly render behind all game UI, spinner, and buttons
+- **Anchor wipe**: added teal splash radial gradient at bottom when anchor lands, reverse splash on exit
+- **README**: updated YouTube stats — estimated 6 billion videos with <10 views, 1 billion+ with exactly zero views
+
 ## [4.0.3] - 2026-04-20
 
 ### Fixed

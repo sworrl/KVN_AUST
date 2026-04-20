@@ -112,16 +112,20 @@ body.deep-dive .credit-footer{background:linear-gradient(0deg,rgba(2,6,8,.95) 0%
 .anchor-wipe .anchor-bg{position:absolute;inset:0;background:linear-gradient(180deg,#020810,#041420,#061828);transform:translateY(-100%);animation:anchorBgDrop 1.2s cubic-bezier(.4,0,.2,1) forwards}
 .anchor-wipe .anchor-icon{position:relative;z-index:1;font-size:4rem;animation:anchorFall 1.2s cubic-bezier(.4,0,.2,1) forwards;opacity:0}
 .anchor-wipe .anchor-text{position:relative;z-index:1;color:#4dd0e1;font-weight:900;font-size:1.2rem;letter-spacing:3px;opacity:0;animation:anchorTextFade .5s .8s ease forwards}
+.anchor-wipe .anchor-splash{position:absolute;bottom:0;left:0;right:0;height:60px;background:radial-gradient(ellipse at 50% 100%,rgba(0,188,212,.4),transparent 70%);opacity:0;animation:splashIn .4s .9s ease forwards}
 .anchor-wipe.rising .anchor-bg{animation:anchorBgRise 1s cubic-bezier(.4,0,.2,1) forwards}
 .anchor-wipe.rising .anchor-icon{animation:anchorRise 1s cubic-bezier(.4,0,.2,1) forwards}
 .anchor-wipe.rising .anchor-text{animation:anchorTextOut .3s ease forwards}
+.anchor-wipe.rising .anchor-splash{animation:splashOut .5s ease forwards}
 @keyframes anchorBgDrop{0%{transform:translateY(-100%)}100%{transform:translateY(0)}}
 @keyframes anchorFall{0%{transform:translateY(-120vh);opacity:0}20%{opacity:1}100%{transform:translateY(0);opacity:1}}
 @keyframes anchorTextFade{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes anchorBgRise{0%{transform:translateY(0)}100%{transform:translateY(100%)}}
 @keyframes anchorRise{0%{transform:translateY(0);opacity:1}80%{opacity:1}100%{transform:translateY(120vh);opacity:0}}
 @keyframes anchorTextOut{0%{opacity:1}100%{opacity:0}}
-#bubbleCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;display:none}
+@keyframes splashIn{0%{opacity:0;transform:scaleY(0)}60%{opacity:1;transform:scaleY(1.5)}100%{opacity:.6;transform:scaleY(1)}}
+@keyframes splashOut{0%{opacity:.6;transform:scaleY(1)}100%{opacity:0;transform:scaleY(2)}}
+#bubbleCanvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;display:none}
 body.deep-dive #bubbleCanvas{display:block}
 body.deep-dive .deep-dive-badge{display:inline-block}
 .deep-dive-badge{display:none;font-size:.55rem;padding:2px 8px;border-radius:4px;background:rgba(0,188,212,.15);color:#00bcd4;font-weight:700;letter-spacing:1px;margin-left:6px;vertical-align:middle;animation:daubPulse 3s ease-in-out infinite}
@@ -223,8 +227,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 .wheel-mode-btns button.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .wheel-container{position:relative;width:min(68vh,68vw,520px);height:min(68vh,68vw,520px)}
 canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 0 20px rgba(0,0,0,.5))}
-.wheel-pointer{position:absolute;top:-14px;left:50%;transform:translateX(-50%);z-index:10}
-.wheel-pointer svg{filter:drop-shadow(0 3px 6px rgba(0,0,0,.6))}
+.wheel-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);z-index:10;animation:pointerIdle 2s ease-in-out infinite}
+.wheel-pointer svg{filter:drop-shadow(0 4px 8px rgba(0,0,0,.7)) drop-shadow(0 0 6px var(--pointer-glow,transparent));transition:filter .15s}
+@keyframes pointerIdle{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(3px)}}
 /* Big spin button with avatar */
 .spin-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:130px;height:130px;border-radius:50%;
   background:var(--bg);cursor:pointer;z-index:11;border:4px solid #555;
@@ -604,7 +609,11 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       <span id="wheelSlotCount" style="font-size:.65rem;color:var(--muted)"></span>
     </div>
     <div class="wheel-container">
-      <div class="wheel-pointer"><svg width="36" height="40" viewBox="0 0 36 40"><polygon points="18,40 0,0 36,0" fill="var(--bg)" stroke="#555" stroke-width="2"/></svg></div>
+      <div class="wheel-pointer" id="wheelPointer"><svg width="40" height="44" viewBox="0 0 40 44">
+  <defs><linearGradient id="ptrGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#666"/><stop offset="40%" stop-color="#333"/><stop offset="100%" stop-color="#111"/></linearGradient></defs>
+  <polygon points="20,44 1,0 39,0" fill="url(#ptrGrad)" stroke="#888" stroke-width="2" id="ptrFill"/>
+  <polygon points="20,38 6,4 20,0" fill="rgba(255,255,255,.08)"/>
+</svg></div>
       <canvas id="wheelCanvas" width="800" height="800"></canvas>
       <button class="spin-btn" id="spinBtn" onclick="spinWheel()"><img id="spinAvatar" alt="SPIN"></button>
       <div class="spin-label">SPIN</div>
@@ -1392,7 +1401,7 @@ function saveGameToHistory(){
   if(games.length>50)games.length=50;saveAllGames(games);
 }
 
-function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel()}
+function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel();const ptr=document.getElementById('wheelPointer');if(ptr){ptr.style.animation='';ptr.style.setProperty('--pointer-glow','transparent')}const pf=document.getElementById('ptrFill');if(pf)pf.setAttribute('stroke','#888')}
 function newSession(){sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showScreen('start-screen')}
 
 // ═══════════════════════════════════
@@ -1643,7 +1652,8 @@ function drawWheel(){
   const n=wheelFormats.length;if(!n)return;const arc=2*Math.PI/n;
   ctx.clearRect(0,0,sz,sz);ctx.save();ctx.translate(cx,cy);ctx.rotate(wheelAngle);ctx.translate(-cx,-cy);
   const DEEP_COLORS=['#004d40','#006064','#01579b','#0d47a1','#1a237e','#004d40','#00695c','#00838f','#0097a7','#00796b','#00897b','#1565c0','#283593','#003d5b','#005f73','#0a3d62','#1b4332','#2d6a4f','#0b525b','#3a506b','#1c3144','#0f4c5c','#274c77','#044a6e','#03312e','#023047','#1a535c','#184e77','#1b263b','#0d3b66','#14213d','#002855'];
-  const colors=deepDiveActive?DEEP_COLORS:WHEEL_COLORS;
+  activeWheelColors=deepDiveActive?DEEP_COLORS:WHEEL_COLORS;
+  const colors=activeWheelColors;
   // Pass 1: fill all segments (no strokes yet — prevents bleed-through)
   for(let i=0;i<n;i++){
     const a=i*arc;
@@ -1700,6 +1710,7 @@ function drawWheel(){
 }
 
 let hasSpunOnce=false;
+let activeWheelColors=WHEEL_COLORS;
 
 // Determine which segment index is under the pointer (top = 3*PI/2 in screen space)
 function getSegmentAtPointer(){
@@ -1742,7 +1753,15 @@ function spinWheel(){
     const p=Math.min((now-t0)/dur,1);wheelAngle=start+target*(1-Math.pow(1-p,5));drawWheel();
     // Tick sound on segment change
     const curSeg=Math.floor(((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI)/arc)%n;
-    if(curSeg!==lastTickSegment){lastTickSegment=curSeg;playTick(1-p)}
+    if(curSeg!==lastTickSegment){
+      lastTickSegment=curSeg;playTick(1-p);
+      // Pulse pointer with segment color
+      const segColor=activeWheelColors[curSeg%activeWheelColors.length];
+      const ptr=document.getElementById('wheelPointer');
+      if(ptr)ptr.style.setProperty('--pointer-glow',segColor);
+      const ptrFill=document.getElementById('ptrFill');
+      if(ptrFill)ptrFill.setAttribute('stroke',segColor);
+    }
     if(p<1)requestAnimationFrame(anim);
     else{
       spinning=false;btn.style.pointerEvents='';
@@ -1750,6 +1769,10 @@ function spinWheel(){
       const landed=getSegmentAtPointer();
       chosenFormat=wheelFormats[landed];
       usedFormats.add(chosenFormat.label);
+      // Lock pointer to landed segment color
+      const landedColor=activeWheelColors[landed%activeWheelColors.length];
+      const ptr=document.getElementById('wheelPointer');
+      if(ptr){ptr.style.setProperty('--pointer-glow',landedColor);ptr.style.animation='none'}
       playWinSound();setTimeout(advanceFromWheel,700);
     }
   })(performance.now());
@@ -1771,7 +1794,7 @@ function toggleDeepDive(){
   if(deepDiveActive){
     // Anchor drop wipe IN
     const wipe=document.createElement('div');wipe.className='anchor-wipe';
-    wipe.innerHTML='<div class="anchor-bg"></div><div class="anchor-icon">&#9875;</div><div class="anchor-text">DEEP DIVE</div>';
+    wipe.innerHTML='<div class="anchor-bg"></div><div class="anchor-icon">&#9875;</div><div class="anchor-text">DEEP DIVE</div><div class="anchor-splash"></div>';
     document.body.appendChild(wipe);
     playAnchorDrop();
 
@@ -1995,6 +2018,7 @@ function searchYouTube(){const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE
 //  IN-APP SEARCH RESULTS
 // ═══════════════════════════════════
 const INVIDIOUS_INSTANCES=['https://iv.melmac.space'];
+const CORS_PROXIES=['https://api.allorigins.win/raw?url='];
 let currentSearchVideos=[]; // {videoId,title,author,viewCount,thumbnail,clicked,rating:{}}
 let searchResultsOpen=false;
 
@@ -2231,49 +2255,50 @@ async function fetchVideoMeta(vid){
   const now=new Date();
   const today=now.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'});
   const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-  let filled=false;
 
-  // Try 1: Invidious (full data: views, date, channel)
+  function applyData(d){
+    if(d.published){const dt=typeof d.published==='number'?new Date(d.published*1000):new Date(d.published);document.getElementById('vtDatePosted').value=dt.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'})}
+    if(d.viewCount!==undefined)document.getElementById('vtViews').value=`${d.viewCount} (found ${today} ${time})`;
+    else if(d.views!==undefined)document.getElementById('vtViews').value=`${d.views} (found ${today} ${time})`;
+    if(d.channelVideos)document.getElementById('vtChannelVids').value=d.channelVideos;
+  }
+
+  async function tryFetch(url,timeout){
+    const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),timeout||6000);
+    try{const r=await fetch(url,{signal:ctrl.signal});clearTimeout(t);return r}catch{clearTimeout(t);return null}
+  }
+
+  // Try 1: Hosted proxy (fastest, no CORS issues when on falcontechnix.com)
+  try{
+    const r=await tryFetch(`/KVN_AUST/videometa.php?v=${vid}`,5000);
+    if(r&&r.ok){const d=await r.json();if(d.ok){applyData(d);if(status)status.textContent='auto-filled';setTimeout(()=>{if(status)status.textContent=''},3000);return}}
+  }catch{}
+
+  // Try 2: Invidious via CORS proxy (works from file:// and any origin)
   for(const instance of INVIDIOUS_INSTANCES){
-    try{
-      const r=await fetch(`${instance}/api/v1/videos/${vid}?fields=title,viewCount,published,author,authorId,subCountText`,{signal:AbortSignal.timeout(6000)});
-      if(!r.ok)continue;
-      const d=await r.json();
-      if(d.published){document.getElementById('vtDatePosted').value=new Date(d.published*1000).toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'})}
-      if(d.viewCount!==undefined)document.getElementById('vtViews').value=`${d.viewCount} (found ${today} ${time})`;
-      if(d.authorId){try{
-        const cr=await fetch(`${instance}/api/v1/channels/${d.authorId}?fields=videoCount`,{signal:AbortSignal.timeout(5000)});
-        if(cr.ok){const cd=await cr.json();if(cd.videoCount!==undefined)document.getElementById('vtChannelVids').value=cd.videoCount}
-      }catch{}}
-      filled=true;break;
-    }catch{}
+    const apiUrl=`${instance}/api/v1/videos/${vid}?fields=title,viewCount,published,author,authorId`;
+    // Try direct first (might work if instance sends CORS headers)
+    let r=await tryFetch(apiUrl,5000);
+    // If direct fails, try via CORS proxy
+    if(!r||!r.ok){for(const proxy of CORS_PROXIES){r=await tryFetch(proxy+encodeURIComponent(apiUrl),6000);if(r&&r.ok)break}}
+    if(r&&r.ok){
+      try{
+        const d=await r.json();
+        applyData(d);
+        // Try channel video count
+        if(d.authorId){
+          const chUrl=`${instance}/api/v1/channels/${d.authorId}?fields=videoCount`;
+          let cr=await tryFetch(chUrl,4000);
+          if(!cr||!cr.ok){for(const proxy of CORS_PROXIES){cr=await tryFetch(proxy+encodeURIComponent(chUrl),5000);if(cr&&cr.ok)break}}
+          if(cr&&cr.ok){try{const cd=await cr.json();if(cd.videoCount)document.getElementById('vtChannelVids').value=cd.videoCount}catch{}}
+        }
+        if(status)status.textContent='auto-filled';
+        setTimeout(()=>{if(status)status.textContent=''},3000);return;
+      }catch{}
+    }
   }
 
-  // Try 2: Hosted proxy (if on falcontechnix.com)
-  if(!filled){
-    try{
-      const r=await fetch(`/KVN_AUST/videometa.php?v=${vid}`,{signal:AbortSignal.timeout(5000)});
-      if(r.ok){const d=await r.json();if(d.ok){
-        if(d.published)document.getElementById('vtDatePosted').value=d.published;
-        if(d.views!==undefined)document.getElementById('vtViews').value=`${d.views} (found ${today} ${time})`;
-        if(d.channelVideos)document.getElementById('vtChannelVids').value=d.channelVideos;
-        filled=true;
-      }}
-    }catch{}
-  }
-
-  // Try 3: YouTube oEmbed (title + author only, no views/date, but always works)
-  if(!filled){
-    try{
-      const r=await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${vid}&format=json`,{signal:AbortSignal.timeout(5000)});
-      if(r.ok){const d=await r.json();
-        // Can't get views/date from oEmbed, but at least confirm the video exists
-        if(d.title){if(status)status.textContent='partial (no view data)';setTimeout(()=>{if(status)status.textContent=''},4000);return}
-      }
-    }catch{}
-  }
-
-  if(status)status.textContent=filled?'auto-filled':'could not fetch';
+  if(status)status.textContent='could not fetch';
   setTimeout(()=>{if(status)status.textContent=''},3000);
 }
 function saveVideo(){sessionRounds.push(makeRound());clearVtLink();showToast('Saved!');setTimeout(()=>{resetTracker();startNextRound()},600)}
@@ -3480,9 +3505,9 @@ setInterval(fetchCommunityRecords,60000);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "4.0.3",
+  "version": "4.1.0",
   "build": "2026-04-20T12:00:00",
-  "changelog": "Fix Invidious instances, anchor wipe, auto-fetch video metadata, sound persistence fix",
+  "changelog": "CORS proxy fetch fix, 3D pointer with color pulse, bubble z-fix, anchor splash",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
