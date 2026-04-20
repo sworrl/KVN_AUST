@@ -188,6 +188,8 @@ Query with `?category=camera-img`, `?source=discord`, `?since=2026-01-01T00:00:0
 
 ### Community Leaderboard
 
+> This table auto-updates every 3 hours from the [Finds API](https://www.falcontechnix.com/KVN_AUST/finds.php) via GitHub Actions. Do not edit manually — changes will be overwritten. To submit a find, share it in the [KVN AUST Discord](https://www.youtube.com/@KVNAUST) or contact [@Chegnus](https://x.com/Chegnus).
+
 <!-- LEADERBOARD-START -->
 **14 community finds** — oldest: 2005-09-05 · newest: 2025-12-10
 

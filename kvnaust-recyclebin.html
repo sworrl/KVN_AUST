@@ -834,6 +834,10 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       <span class="r-blue">COMMON (2013+)</span>
     </div>
     <div id="recordHolder" style="text-align:center;font-size:.72rem;color:#888;margin-bottom:8px"></div>
+    <div style="display:flex;justify-content:center;gap:8px;margin-bottom:6px">
+      <button class="s-btn" style="font-size:.62rem;padding:3px 10px" id="filterAllBtn" onclick="setTimelineFilter('all')">All Finds</button>
+      <button class="s-btn" style="font-size:.62rem;padding:3px 10px" id="filterZeroBtn" onclick="setTimelineFilter('zero')">Zero Views Only</button>
+    </div>
     <div class="rec-timeline"><canvas id="recordsCanvas" onclick="handleTimelineClick(event)" onmousemove="handleTimelineHover(event)" onmouseleave="document.getElementById('timelineTooltip').style.display='none'" style="cursor:pointer"></canvas><div id="timelineTooltip" style="display:none;position:absolute;background:#111;border:1px solid #333;border-radius:8px;padding:8px 10px;font-size:.65rem;color:#ccc;pointer-events:none;z-index:10;max-width:220px;box-shadow:0 4px 16px rgba(0,0,0,.6)"></div></div>
     <div class="rec-form">
       <input type="date" id="recDate" style="width:140px">
@@ -2870,7 +2874,18 @@ function getRarityLabel(y){
 }
 
 let timelineDotPositions=[]; // {x,y,type:'local'|'community',idx,data}
+let timelineFilter='all'; // 'all' or 'zero'
 const SOURCE_SYMBOLS={discord:'D',github:'G','google doc':'GD',manual:'M',kvn:'K'};
+
+function setTimelineFilter(f){
+  timelineFilter=f;
+  document.getElementById('filterAllBtn').style.background=f==='all'?'var(--accent)':'';
+  document.getElementById('filterAllBtn').style.borderColor=f==='all'?'var(--accent)':'';
+  document.getElementById('filterZeroBtn').style.background=f==='zero'?'#ffd700':'';
+  document.getElementById('filterZeroBtn').style.borderColor=f==='zero'?'#ffd700':'';
+  document.getElementById('filterZeroBtn').style.color=f==='zero'?'#000':'';
+  drawRecordsTimeline();
+}
 
 function findNearestDot(e){
   const canvas=document.getElementById('recordsCanvas');
@@ -3039,10 +3054,12 @@ function drawRecordsTimeline(){
   }
 
   recs.forEach((r,ri)=>{
+    const views=r.views||0;
+    if(timelineFilter==='zero'&&views!==0)return;
     const d=new Date(r.date);
     const yearFrac=d.getFullYear()+(d.getMonth()/12)+(d.getDate()/365);
     const x=padL+((yearFrac-startYear)/totalYears)*chartW;
-    const y=viewsToY(r.views);
+    const y=viewsToY(views);
     const color=getRecordColor(d);
     const rarity=getRarityLabel(d.getFullYear());
     const isRare=d.getFullYear()<=2008;
@@ -3094,21 +3111,36 @@ function drawRecordsTimeline(){
   const rarityColors={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
   if(communityFinds.length){
     communityFinds.forEach((f,fi)=>{
+      const views=f.views_when_found||0;
+      const isZero=views===0;
+      // Filter
+      if(timelineFilter==='zero'&&!isZero)return;
       const d=new Date(f.date_posted);
       const yearFrac=d.getFullYear()+(d.getMonth()/12)+(d.getDate()/365);
       const x=padL+((yearFrac-startYear)/totalYears)*chartW;
-      const y=viewsToY(f.views_when_found||0);
+      const y=viewsToY(views);
       const color=rarityColors[f.rarity]||'#555';
-      // Small dot with source symbol
-      ctx.globalAlpha=0.5;
-      ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
-      ctx.strokeStyle='rgba(255,255,255,.2)';ctx.lineWidth=1;ctx.stroke();
-      // Source symbol inside dot
+      // Zero views: big, bright, fully saturated. Non-zero: smaller, desaturated
+      const dotR=isZero?7:Math.max(3,5-Math.min(views,20)*.1);
+      const alpha=isZero?0.9:Math.max(0.2,0.5-views*.02);
+      const beamW=isZero?2.5:1;
+      ctx.globalAlpha=alpha;
+      // Beam
+      if(isZero){
+        const beamGrad=ctx.createLinearGradient(0,padT+chartH,0,y);
+        beamGrad.addColorStop(0,color);beamGrad.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.strokeStyle=beamGrad;
+      }else{ctx.strokeStyle=color}
+      ctx.lineWidth=beamW;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,y);ctx.stroke();
+      // Dot
+      ctx.beginPath();ctx.arc(x,y,dotR,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+      ctx.strokeStyle=isZero?'rgba(255,255,255,.4)':'rgba(255,255,255,.15)';ctx.lineWidth=isZero?1.5:1;ctx.stroke();
+      // Zero-view glow
+      if(isZero){ctx.shadowColor=color;ctx.shadowBlur=12;ctx.beginPath();ctx.arc(x,y,dotR*.6,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.shadowBlur=0}
+      // Source symbol
       const src=f.source||'';const srcSym=SOURCE_SYMBOLS[src.toLowerCase()]||'?';
-      ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='bold 6px Inter,sans-serif';ctx.textAlign='center';
-      ctx.fillText(srcSym,x,y+2);
-      // Thin beam
-      ctx.strokeStyle=color;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,y);ctx.stroke();
+      ctx.fillStyle=isZero?'rgba(255,255,255,.8)':'rgba(255,255,255,.5)';ctx.font=`bold ${isZero?7:6}px Inter,sans-serif`;ctx.textAlign='center';
+      ctx.fillText(srcSym,x,y+(isZero?2.5:2));
       ctx.globalAlpha=1;
       timelineDotPositions.push({x,y,type:'community',idx:fi,data:f});
     });
@@ -3620,9 +3652,9 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "4.3.0",
+  "version": "4.4.0",
   "build": "2026-04-20T12:00:00",
-  "changelog": "Hover tooltips, click detail modals, record holder banner, responsive zone labels",
+  "changelog": "Zero-view emphasis on timeline, filter toggle, leaderboard auto-updates every 3h",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
