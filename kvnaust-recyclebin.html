@@ -833,7 +833,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       <span class="r-green">RARE (2009-2012)</span>
       <span class="r-blue">COMMON (2013+)</span>
     </div>
-    <div class="rec-timeline"><canvas id="recordsCanvas"></canvas></div>
+    <div class="rec-timeline"><canvas id="recordsCanvas" onclick="handleTimelineClick(event)" style="cursor:pointer"></canvas><div id="timelineTooltip" style="display:none;position:absolute;background:#111;border:1px solid #333;border-radius:8px;padding:10px;font-size:.7rem;color:#ccc;pointer-events:none;z-index:10;max-width:260px;box-shadow:0 4px 20px rgba(0,0,0,.6)"></div></div>
     <div class="rec-form">
       <input type="date" id="recDate" style="width:140px">
       <input type="number" id="recViews" placeholder="Views" min="0" value="0" style="width:70px">
@@ -2864,6 +2864,44 @@ function getRarityLabel(y){
   return'COMMON';
 }
 
+let timelineDotPositions=[]; // {x,y,type:'local'|'community',idx,data}
+const SOURCE_SYMBOLS={discord:'D',github:'G','google doc':'GD',manual:'M',kvn:'K'};
+
+function handleTimelineClick(e){
+  const canvas=document.getElementById('recordsCanvas');
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  // Find nearest dot within 15px
+  let best=null,bestDist=15;
+  for(const dot of timelineDotPositions){
+    const dx=dot.x-mx,dy=dot.y-my,dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<bestDist){bestDist=dist;best=dot}
+  }
+  const tip=document.getElementById('timelineTooltip');
+  if(!best){tip.style.display='none';return}
+  const d=best.data;
+  if(best.type==='community'){
+    const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
+    const color=rc[d.rarity]||'#888';
+    const src=d.source||'unknown';const srcSym=SOURCE_SYMBOLS[src.toLowerCase()]||src[0].toUpperCase();
+    tip.innerHTML=`<div style="font-weight:700;color:${color};margin-bottom:4px">${esc(d.rarity)} ${d.video_title?'— '+esc(d.video_title):''}</div>
+      <div>Date: ${esc(d.date_posted)}</div>
+      <div>Views: ${d.views_when_found??'?'}</div>
+      <div>Lead: ${esc(d.lead||'')}</div>
+      ${d.channel_name?`<div>Channel: ${esc(d.channel_name)}</div>`:''}
+      <div style="margin-top:4px;color:#666">Found by <strong style="color:#aaa">${esc(d.found_by||'?')}</strong></div>
+      <div style="color:#555">[${srcSym}] ${esc(d.server||src)}</div>
+      ${d.video_url?`<div style="margin-top:4px"><a href="${esc(d.video_url)}" target="_blank" style="color:#5b7fc7;font-size:.65rem">Watch on YouTube</a></div>`:''}`;
+  }else{
+    tip.innerHTML=`<div style="font-weight:700;color:#e74c3c;margin-bottom:4px">Your Find</div>
+      <div>Date: ${esc(d.date)}</div><div>Views: ${esc(d.views+'')}</div>
+      ${d.url?`<div><a href="${esc(d.url)}" target="_blank" style="color:#5b7fc7;font-size:.65rem">Watch</a></div>`:''}`;
+  }
+  // Position tooltip near click
+  const tx=Math.min(mx+12,rect.width-270),ty=Math.max(my-60,4);
+  tip.style.left=tx+'px';tip.style.top=ty+'px';tip.style.display='block';
+}
+
 function drawRecordsTimeline(){
   const canvas=document.getElementById('recordsCanvas');
   const dpr=window.devicePixelRatio||1;
@@ -2873,6 +2911,7 @@ function drawRecordsTimeline(){
   const ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
   const W=rect.width,H=rect.height;
+  timelineDotPositions=[];
 
   // Background gradient
   const bgGrad=ctx.createLinearGradient(0,0,0,H);
@@ -2904,10 +2943,11 @@ function drawRecordsTimeline(){
     const dGrad=ctx.createLinearGradient(0,padT,0,padT+chartH);
     dGrad.addColorStop(0,'rgba(255,255,255,.02)');dGrad.addColorStop(.5,'rgba(255,255,255,.08)');dGrad.addColorStop(1,'rgba(255,255,255,.03)');
     ctx.strokeStyle=dGrad;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x2,padT);ctx.lineTo(x2,padT+chartH);ctx.stroke();
-    // Zone label
+    // Zone label — only if zone is wide enough to fit
     if(z.label){
-      ctx.fillStyle='rgba(255,255,255,.12)';ctx.font='bold 12px Inter,sans-serif';ctx.textAlign='center';
-      ctx.fillText(z.label,(x1+x2)/2,padT+20);
+      const zoneW=x2-x1;
+      const fs=zoneW<60?0:zoneW<90?8:zoneW<130?10:12;
+      if(fs>0){ctx.fillStyle='rgba(255,255,255,.12)';ctx.font=`bold ${fs}px Inter,sans-serif`;ctx.textAlign='center';ctx.fillText(z.label,(x1+x2)/2,padT+18)}
     }
   });
 
@@ -2990,6 +3030,7 @@ function drawRecordsTimeline(){
     const hlGrad=ctx.createRadialGradient(x-2,y-2,0,x-2,y-2,dotR*.4);
     hlGrad.addColorStop(0,'rgba(255,255,255,.4)');hlGrad.addColorStop(1,'rgba(255,255,255,0)');
     ctx.fillStyle=hlGrad;ctx.fill();
+    timelineDotPositions.push({x,y,type:'local',idx:ri,data:r});
 
     // Date label with background
     const dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
@@ -3013,19 +3054,24 @@ function drawRecordsTimeline(){
   // Community finds (smaller, dimmer, behind personal records)
   const rarityColors={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
   if(communityFinds.length){
-    communityFinds.forEach(f=>{
+    communityFinds.forEach((f,fi)=>{
       const d=new Date(f.date_posted);
       const yearFrac=d.getFullYear()+(d.getMonth()/12)+(d.getDate()/365);
       const x=padL+((yearFrac-startYear)/totalYears)*chartW;
       const y=viewsToY(f.views_when_found||0);
       const color=rarityColors[f.rarity]||'#555';
-      // Small dim dot
-      ctx.globalAlpha=0.4;
-      ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
-      ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=1;ctx.stroke();
+      // Small dot with source symbol
+      ctx.globalAlpha=0.5;
+      ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,.2)';ctx.lineWidth=1;ctx.stroke();
+      // Source symbol inside dot
+      const src=f.source||'';const srcSym=SOURCE_SYMBOLS[src.toLowerCase()]||'?';
+      ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='bold 6px Inter,sans-serif';ctx.textAlign='center';
+      ctx.fillText(srcSym,x,y+2);
       // Thin beam
       ctx.strokeStyle=color;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,padT+chartH);ctx.lineTo(x,y);ctx.stroke();
       ctx.globalAlpha=1;
+      timelineDotPositions.push({x,y,type:'community',idx:fi,data:f});
     });
     // Label
     ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='9px Inter,sans-serif';ctx.textAlign='right';
@@ -3525,9 +3571,9 @@ setInterval(fetchCommunityRecords,60000);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "4.1.1",
+  "version": "4.2.0",
   "build": "2026-04-20T12:00:00",
-  "changelog": "Pointer bite-down lock, inner color fill pulse, videometa.php confirmed working",
+  "changelog": "Clickable timeline dots with tooltips, source symbols, responsive zone labels",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
