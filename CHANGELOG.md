@@ -14,6 +14,16 @@
 
 ---
 
+## [4.5.0] - 2026-04-20
+
+### Changed
+- **Records form redesigned**: YouTube link is now required (not optional). Paste a URL and metadata auto-fetches (date posted, view count) via the videometa.php → Invidious → CORS proxy chain. Date and Views fields stay disabled until data arrives or fetch fails to manual fallback.
+- **Duplicate prevention**: can't add the same video ID twice to your records
+- **Add button**: disabled until valid metadata is populated
+- **Docs finalized**: all markdown files have standard headers, changelog is complete through v4.5.0
+
+---
+
 ## [4.4.0] - 2026-04-20
 
 ### Added
