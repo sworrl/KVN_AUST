@@ -188,7 +188,9 @@ Query with `?category=camera-img`, `?source=discord`, `?since=2026-01-01T00:00:0
 
 ### Community Leaderboard
 
-> This table auto-updates every 3 hours from the [Finds API](https://www.falcontechnix.com/KVN_AUST/finds.php) via GitHub Actions. Do not edit manually — changes will be overwritten. To get on the leaderboard, [play the hosted version](https://falcontechnix.com/KVN_AUST/) — anyone with a user account who submits a validated zero-view video will appear here automatically.
+> This table auto-updates every 3 hours from the [Finds API](https://www.falcontechnix.com/KVN_AUST/finds.php) via GitHub Actions. Do not edit manually — changes will be overwritten.
+>
+> **Get on the leaderboard:** [Play the hosted version](https://falcontechnix.com/KVN_AUST/) and create an account. Submit a validated zero-view video during gameplay or directly via the [Records timeline](https://falcontechnix.com/KVN_AUST/#records) — you don't need to play a full game to submit a find. See also: [Discord Integration Guide](DISCORD_INTEGRATION.md)
 
 <!-- LEADERBOARD-START -->
 **14 community finds** — oldest: 2005-09-05 · newest: 2025-12-10
