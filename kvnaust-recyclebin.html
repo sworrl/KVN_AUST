@@ -82,6 +82,9 @@ body.deep-dive .start-btn{background:linear-gradient(135deg,#00838f,#006064)}
 body.deep-dive .start-btn:hover{box-shadow:0 6px 35px rgba(0,188,212,.45)}
 body.deep-dive .header-banner img{filter:hue-rotate(160deg) saturate(.7) brightness(.8)}
 body.deep-dive .main{background:radial-gradient(ellipse at 50% 100%,rgba(0,40,60,.15),transparent 70%)}
+#bubbleCanvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;display:none}
+body.deep-dive #bubbleCanvas{display:block}
+body.deep-dive .screen{z-index:2}
 body.deep-dive .spin-btn{box-shadow:0 6px 30px rgba(0,0,0,.7),0 0 20px rgba(0,188,212,.2)}
 body.deep-dive .deep-dive-badge{display:inline-block}
 .deep-dive-badge{display:none;font-size:.55rem;padding:2px 8px;border-radius:4px;background:rgba(0,188,212,.15);color:#00bcd4;font-weight:700;letter-spacing:1px;margin-left:6px;vertical-align:middle;animation:daubPulse 3s ease-in-out infinite}
@@ -525,6 +528,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
         <option value="tick">Tick</option>
         <option value="retro">Retro</option>
         <option value="casino">Casino</option>
+        <option value="nautical">Nautical</option>
         <option value="none">Off</option>
       </select>
     </div>
@@ -545,6 +549,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 <button class="screen-nav" id="navFwd" onclick="goNext()">&#9654;</button>
 
 <div class="main">
+  <canvas id="bubbleCanvas"></canvas>
   <div id="start-screen" class="screen active">
     <div class="logo-area">
       <img class="big-avatar" id="bigAvatarImg" alt="KVN AUST">
@@ -997,11 +1002,43 @@ function playTick(pitch){
     if(soundMode==='tick'){osc.type='sine';osc.frequency.value=800+pitch*400;gain.gain.setValueAtTime(.08,t);gain.gain.exponentialRampToValueAtTime(.001,t+.06);osc.start(t);osc.stop(t+.06)}
     else if(soundMode==='retro'){osc.type='square';osc.frequency.value=200+pitch*600;gain.gain.setValueAtTime(.05,t);gain.gain.exponentialRampToValueAtTime(.001,t+.05);osc.start(t);osc.stop(t+.05)}
     else if(soundMode==='casino'){osc.type='triangle';osc.frequency.value=1200+pitch*800;gain.gain.setValueAtTime(.06,t);gain.gain.exponentialRampToValueAtTime(.001,t+.08);osc.start(t);osc.stop(t+.08)}
+    else if(soundMode==='nautical'){
+      // Sonar ping: filtered sine with reverb tail
+      const o=ctx.createOscillator();const g=ctx.createGain();const f=ctx.createBiquadFilter();
+      o.connect(f);f.connect(g);g.connect(ctx.destination);
+      o.type='sine';o.frequency.value=600+pitch*800;f.type='bandpass';f.frequency.value=800+pitch*600;f.Q.value=8;
+      g.gain.setValueAtTime(.06,t);g.gain.exponentialRampToValueAtTime(.001,t+.15);
+      o.start(t);o.stop(t+.15);
+    }
+  }catch{}
+}
+
+// Nautical win sound: whale call + sonar pings
+function playNauticalWin(){
+  if(soundMode!=='nautical'||!audioUnlocked)return;
+  try{
+    const ctx=getAudioCtx();const t=ctx.currentTime;
+    // Low whale-like sweep
+    const w=ctx.createOscillator();const wg=ctx.createGain();const wf=ctx.createBiquadFilter();
+    w.connect(wf);wf.connect(wg);wg.connect(ctx.destination);
+    w.type='sine';w.frequency.setValueAtTime(180,t);w.frequency.exponentialRampToValueAtTime(320,t+.4);w.frequency.exponentialRampToValueAtTime(200,t+.8);
+    wf.type='lowpass';wf.frequency.value=400;wf.Q.value=5;
+    wg.gain.setValueAtTime(.1,t);wg.gain.linearRampToValueAtTime(.12,t+.3);wg.gain.exponentialRampToValueAtTime(.001,t+1.0);
+    w.start(t);w.stop(t+1.0);
+    // Sonar pings ascending
+    [0,.2,.35,.5].forEach((d,i)=>{
+      const o=ctx.createOscillator();const g=ctx.createGain();const f=ctx.createBiquadFilter();
+      o.connect(f);f.connect(g);g.connect(ctx.destination);
+      o.type='sine';o.frequency.value=800+i*200;f.type='bandpass';f.frequency.value=1000+i*300;f.Q.value=12;
+      g.gain.setValueAtTime(.04+i*.01,t+d);g.gain.exponentialRampToValueAtTime(.001,t+d+.25);
+      o.start(t+d);o.stop(t+d+.25);
+    });
   }catch{}
 }
 
 function playWinSound(){
   if(soundMode==='none'||!audioUnlocked)return;
+  if(soundMode==='nautical'){playNauticalWin();return}
   try{
     const ctx=getAudioCtx();const t=ctx.currentTime;
     // Triumphant ascending fanfare: C5-E5-G5-C6 with increasing duration
@@ -1667,28 +1704,119 @@ function toggleDeepDive(){
   document.body.classList.toggle('deep-dive',deepDiveActive);
   document.getElementById('modeDeepDive').classList.toggle('active',deepDiveActive);
   if(deepDiveActive){
+    // Switch to nautical sounds
+    prevSoundMode=soundMode;
+    setSound('nautical');document.getElementById('soundPick').value='nautical';
     // Auto-select deep dive formats
     selectedFormats.clear();
     formats.forEach((f,i)=>{
       if(DEEP_DIVE_LABELS.has(f.label))selectedFormats.add(i);
-      // Also include any format with date sp and minY < 2013
       if(f.sp==='date'&&(f.minY||2006)<2013)selectedFormats.add(i);
-      // Include any ancient-era static keyphrases
       if(f.sp==='static'&&DEEP_DIVE_LABELS.has(f.label))selectedFormats.add(i);
     });
     wheelMode='selected';
     document.getElementById('modeSelected').classList.add('active');
     document.getElementById('modeRandom').classList.remove('active');
-    buildFormatPanel();rebuildWheel();
+    buildFormatPanel();rebuildWheel();startBubbles();
     showToast(`Deep Dive: ${selectedFormats.size} old-video formats, Before:${DEEP_DIVE_YEAR}`);
   }else{
+    // Restore previous sound
+    if(prevSoundMode){setSound(prevSoundMode);document.getElementById('soundPick').value=prevSoundMode}
     wheelMode='random';
     document.getElementById('modeRandom').classList.add('active');
     document.getElementById('modeSelected').classList.remove('active');
     selectedFormats=new Set(formats.map((_,i)=>i));
-    buildFormatPanel();rebuildWheel();
+    buildFormatPanel();rebuildWheel();stopBubbles();
     showToast('Normal mode');
   }
+}
+let prevSoundMode=null;
+
+// ═══════════════════════════════════
+//  BUBBLE PHYSICS (Deep Dive mode)
+// ═══════════════════════════════════
+let bubbles=[];let bubbleAnim=null;
+const MAX_BUBBLES=40;
+
+function spawnBubble(W,H){
+  return{
+    x:Math.random()*W,
+    y:H+Math.random()*50,
+    r:3+Math.random()*12,
+    vx:(Math.random()-.5)*.3,
+    vy:-(0.4+Math.random()*0.8),
+    wobbleAmp:0.3+Math.random()*0.6,
+    wobbleFreq:0.01+Math.random()*0.015,
+    wobblePhase:Math.random()*Math.PI*2,
+    opacity:0.15+Math.random()*0.25,
+    age:0
+  };
+}
+
+function startBubbles(){
+  const c=document.getElementById('bubbleCanvas');
+  if(!c)return;
+  const dpr=window.devicePixelRatio||1;
+  function resize(){
+    c.width=window.innerWidth*dpr;c.height=window.innerHeight*dpr;
+    c.style.width=window.innerWidth+'px';c.style.height=window.innerHeight+'px';
+  }
+  resize();window.addEventListener('resize',resize);
+  const ctx=c.getContext('2d');
+  bubbles=[];
+  for(let i=0;i<MAX_BUBBLES;i++)bubbles.push(spawnBubble(window.innerWidth,window.innerHeight));
+  // Spread initial bubbles across screen
+  bubbles.forEach(b=>{b.y=Math.random()*window.innerHeight});
+
+  function frame(){
+    if(!deepDiveActive){bubbleAnim=null;return}
+    const W=window.innerWidth,H=window.innerHeight;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,W,H);
+
+    // Spawn new bubbles from bottom
+    if(bubbles.length<MAX_BUBBLES&&Math.random()<.08)bubbles.push(spawnBubble(W,H));
+
+    for(let i=bubbles.length-1;i>=0;i--){
+      const b=bubbles[i];
+      b.age++;
+      // Physics: rise + sinusoidal wobble
+      b.y+=b.vy;
+      b.x+=b.vx+Math.sin(b.age*b.wobbleFreq+b.wobblePhase)*b.wobbleAmp;
+      // Slight acceleration upward as bubble rises (lighter = faster)
+      b.vy-=0.001;
+      // Remove if off top
+      if(b.y<-b.r*2){bubbles.splice(i,1);continue}
+      // Wrap horizontally
+      if(b.x<-b.r)b.x=W+b.r;
+      if(b.x>W+b.r)b.x=-b.r;
+      // Fade out near top
+      const fadeZone=H*0.15;
+      const alpha=b.y<fadeZone?b.opacity*(b.y/fadeZone):b.opacity;
+
+      // Draw bubble
+      ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(100,210,230,${alpha})`;ctx.lineWidth=1;ctx.stroke();
+      // Inner gradient for glass effect
+      const g=ctx.createRadialGradient(b.x-b.r*.3,b.y-b.r*.3,b.r*.1,b.x,b.y,b.r);
+      g.addColorStop(0,`rgba(180,240,255,${alpha*.5})`);
+      g.addColorStop(.5,`rgba(80,200,220,${alpha*.15})`);
+      g.addColorStop(1,`rgba(40,160,180,${alpha*.05})`);
+      ctx.fillStyle=g;ctx.fill();
+      // Specular highlight
+      ctx.beginPath();ctx.arc(b.x-b.r*.25,b.y-b.r*.3,b.r*.25,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${alpha*.4})`;ctx.fill();
+    }
+    bubbleAnim=requestAnimationFrame(frame);
+  }
+  bubbleAnim=requestAnimationFrame(frame);
+}
+
+function stopBubbles(){
+  if(bubbleAnim){cancelAnimationFrame(bubbleAnim);bubbleAnim=null}
+  bubbles=[];
+  const c=document.getElementById('bubbleCanvas');
+  if(c){const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height)}
 }
 
 // ═══════════════════════════════════
@@ -3148,9 +3276,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "3.4.0",
+  "version": "3.5.0",
   "build": "2026-04-20T12:00:00",
-  "changelog": "Deep Dive mode, semantic heading hierarchy, ocean wheel theme",
+  "changelog": "Deep Dive bubbles, nautical sonar sounds, whale call win fanfare",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
