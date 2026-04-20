@@ -1407,7 +1407,7 @@ function closeBingoFlash(){
 // ═══════════════════════════════════
 //  DOC FETCH
 // ═══════════════════════════════════
-const DOC_CACHE_KEY='kvn_doc_formats_v2'; // v2: bust old cache from broken regex
+const DOC_CACHE_KEY='kvn_doc_formats_v3'; // v3: now parses static keyphrases + extensions
 const DOC_CACHE_TS_KEY='kvn_doc_ts';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
@@ -1469,7 +1469,6 @@ async function fetchDocFormats(){
         if(dm){
           const lbl=dm[1];
           const minY=parseInt(dm[2]);
-          // Check for max year: (<YYYY) pattern
           const maxM=line.match(/<\s*(\d{4})/);
           const maxY=maxM?parseInt(maxM[1]):new Date().getFullYear();
           if(!existing.has(lbl)){
@@ -1477,9 +1476,18 @@ async function fetchDocFormats(){
             ALL_FORMATS.push({label:lbl,tpl:tpl,sp:'date',minY:minY,maxY:maxY});
             existing.add(lbl);newCount++;
           }else{
-            // Update year limits on existing format
             const ex=ALL_FORMATS.find(f=>f.label===lbl);
             if(ex&&ex.sp==='date'){ex.minY=minY;ex.maxY=maxY}
+          }
+          continue;
+        }
+        // Static keyphrases/extensions: | `"something"` | or | `.EXT` | — anything in backticks not caught above
+        const sm=line.match(/\|\s*`([^`]{2,})`\s*\|/);
+        if(sm&&!sm[1].match(/XXXX|YYYY|format/i)){
+          const lbl=sm[1];
+          if(!existing.has(lbl)){
+            ALL_FORMATS.push({label:lbl,tpl:lbl,sp:'static'});
+            existing.add(lbl);newCount++;
           }
         }
       }
@@ -3045,9 +3053,9 @@ checkForUpdates();
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "3.2.0",
-  "build": "2026-04-19T12:00:00",
-  "changelog": "Lighthouse fixes: accessibility, performance, SEO improvements",
+  "version": "3.3.0",
+  "build": "2026-04-20T12:00:00",
+  "changelog": "Parser now loads 177 formats (was 62): static keyphrases, extensions, ancient YT all playable",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
