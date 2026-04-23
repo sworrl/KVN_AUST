@@ -600,6 +600,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       <h1>YouTube's Recycle Bin</h1>
       <div class="tagline">The internet's largest video graveyard</div>
       <button class="start-btn" onclick="startGame()">NEW GAME</button>
+      <button class="start-btn" onclick="showRecords()" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000;font-size:.8rem;padding:8px 24px;margin-top:8px">Submit a Find</button>
       <div style="margin-top:10px;font-size:.68rem;color:#333">Formats synced from <a href="https://github.com/sworrl/KVN_AUST/blob/main/FORMAT-MAP.md" target="_blank" style="color:#2ecc71">FORMAT-MAP.md</a> on GitHub</div>
     </div>
   </div>
@@ -690,6 +691,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       <div class="vt-row">
         <button class="vt-btn" style="background:linear-gradient(135deg,#3498db,#2980b9)" onclick="exportShareCard()">Share Card (SVG)</button>
         <button class="vt-btn" style="background:linear-gradient(135deg,#5865F2,#4752C4)" onclick="shareToDiscord()">Copy for Discord</button>
+        <button class="vt-btn" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000" onclick="addCurrentToRecords()">Add to Records</button>
       </div>
     </div>
   </div>
@@ -2888,6 +2890,33 @@ async function fetchRecordMeta(vid){
   setTimeout(()=>{if(status)status.textContent=''},5000);
 }
 
+let lastAddedRecordUrl=null; // for highlighting new entries
+
+function addCurrentToRecords(){
+  const url=document.getElementById('vtLink').value.trim();
+  const vid=getVideoId(url);
+  if(!vid){showToast('Paste a YouTube link first','warn');return}
+  const datePosted=document.getElementById('vtDatePosted').value.trim();
+  const viewsRaw=document.getElementById('vtViews').value.trim();
+  const views=parseInt(viewsRaw)||0;
+  const recs=getRecords();
+  if(recs.some(r=>r.url&&getVideoId(r.url)===vid)){showToast('Already in your records','warn');showRecords();return}
+  // Parse date — vtDatePosted is DD/MM/YYYY, need ISO for storage
+  let isoDate='';
+  if(datePosted){
+    const parts=datePosted.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    if(parts)isoDate=`${parts[3]}-${parts[2]}-${parts[1]}`;
+    else isoDate=datePosted; // fallback
+  }
+  if(!isoDate){showToast('No date available — fetch metadata first','warn');return}
+  recs.push({date:isoDate,views:views,url:url,added:new Date().toISOString()});
+  recs.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  saveRecords(recs);
+  lastAddedRecordUrl=url;
+  showRecords();
+  showToast('Added to Records!');
+}
+
 function addRecord(){
   const url=document.getElementById('recUrl').value.trim();
   const vid=getVideoId(url);
@@ -2921,8 +2950,12 @@ function renderRecords(){
     const d=new Date(r.date);
     const dateStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
     const color=getRecordColor(d);
-    return`<div class="rec-entry"><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views">${r.views} views</span>${r.url?`<a class="rec-link" href="${esc(r.url)}" target="_blank">${esc(r.url).substring(0,50)}</a>`:'<span style="color:#333;flex:1">no link</span>'}<button class="rec-del" onclick="deleteRecord(${i})" title="Remove">&times;</button></div>`;
+    const isNew=lastAddedRecordUrl&&r.url&&r.url===lastAddedRecordUrl;
+    const highlight=isNew?'border-color:'+color+';box-shadow:0 0 12px '+color+';animation:daubPulse 1.5s ease-in-out 3':'';
+    return`<div class="rec-entry" style="${highlight}"><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views">${r.views} views</span>${r.url?`<a class="rec-link" href="${esc(r.url)}" target="_blank">${esc(r.url).substring(0,50)}</a>`:'<span style="color:#333;flex:1">no link</span>'}<button class="rec-del" onclick="deleteRecord(${i})" title="Remove">&times;</button></div>`;
   }).join('');
+  // Clear highlight after render
+  if(lastAddedRecordUrl)setTimeout(()=>{lastAddedRecordUrl=null},5000);
 }
 
 function getRecordColor(d){
@@ -3132,6 +3165,7 @@ function drawRecordsTimeline(){
     const color=getRecordColor(d);
     const rarity=getRarityLabel(d.getFullYear());
     const isRare=d.getFullYear()<=2008;
+    const isNewlyAdded=lastAddedRecordUrl&&r.url&&r.url===lastAddedRecordUrl;
 
     // Vertical beam from bottom to dot
     const beamGrad=ctx.createLinearGradient(0,padT+chartH,0,y);
@@ -3146,10 +3180,12 @@ function drawRecordsTimeline(){
     ctx.fillStyle=ambGrad;ctx.beginPath();ctx.arc(x,y,glowR,0,Math.PI*2);ctx.fill();
 
     // Dot with metallic ring
-    const dotR=isRare?8:6;
+    const dotR=isNewlyAdded?10:isRare?8:6;
+    if(isNewlyAdded){ctx.shadowColor='#fff';ctx.shadowBlur=20}
     ctx.beginPath();ctx.arc(x,y,dotR,0,Math.PI*2);
     ctx.fillStyle=color;ctx.fill();
-    ctx.strokeStyle='rgba(255,255,255,.3)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.strokeStyle=isNewlyAdded?'#fff':'rgba(255,255,255,.3)';ctx.lineWidth=isNewlyAdded?2.5:1.5;ctx.stroke();
+    if(isNewlyAdded){ctx.shadowBlur=0}
     // Inner highlight
     ctx.beginPath();ctx.arc(x-2,y-2,dotR*.4,0,Math.PI*2);
     const hlGrad=ctx.createRadialGradient(x-2,y-2,0,x-2,y-2,dotR*.4);
