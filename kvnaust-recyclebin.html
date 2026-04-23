@@ -186,7 +186,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 #start-screen h1{font-size:clamp(1.5rem,4vw,2.4rem);font-weight:900;text-align:center;color:#fff;letter-spacing:2px;
   text-shadow:0 0 12px rgba(231,76,60,.7),0 0 25px rgba(231,76,60,.4),0 0 50px rgba(231,76,60,.2),0 2px 8px #000}
 #start-screen .tagline{color:var(--muted);font-size:.85rem;margin-bottom:20px;text-align:center}
-.start-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:16px 52px;font-size:1.1rem;font-weight:900;border-radius:12px;cursor:pointer;letter-spacing:2px;transition:transform .15s,box-shadow .3s;box-shadow:0 4px 25px rgba(231,76,60,.35)}
+.start-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:16px 52px;font-size:1.1rem;font-weight:900;border-radius:12px;cursor:pointer;letter-spacing:2px;transition:transform .15s,box-shadow .3s;box-shadow:0 4px 25px rgba(231,76,60,.35);position:relative;overflow:hidden}
+.start-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.1) 0%,transparent 50%);pointer-events:none;border-radius:12px}
 .start-btn:hover{transform:scale(1.05);box-shadow:0 6px 35px rgba(231,76,60,.45)}.start-btn:active{transform:scale(.97);box-shadow:0 2px 15px rgba(231,76,60,.25)}
 
 /* ── BINGO FLASH (start-of-round w/ per-cell animation) ── */
@@ -263,19 +264,37 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 
 /* ── RESULT ── */
 #result-screen{background:radial-gradient(ellipse at center,#1a2030,var(--bg));overflow-y:auto;padding-bottom:80px}
-.result-pill{background:var(--card);border:2px solid #3a3a55;border-radius:50px;padding:28px 56px;font-family:'Space Mono',monospace;
-  font-size:clamp(1.8rem,4.5vw,2.8rem);color:#fff;box-shadow:0 10px 40px rgba(0,0,0,.5);cursor:pointer;user-select:all;animation:popBounce .5s cubic-bezier(.17,.67,.35,1.3);transition:border-color .2s}
+.result-pill{background:linear-gradient(145deg,var(--card),var(--card2));border:2px solid #3a3a55;border-radius:50px;padding:28px 56px;font-family:'Space Mono',monospace;
+  font-size:clamp(1.8rem,4.5vw,2.8rem);color:#fff;box-shadow:0 10px 40px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);cursor:pointer;user-select:all;animation:popBounce .5s cubic-bezier(.17,.67,.35,1.3);transition:border-color .2s,box-shadow .2s}
 .result-pill:hover{border-color:var(--accent);box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 15px rgba(231,76,60,.15);cursor:pointer}
 .result-sub{color:var(--muted);font-size:.8rem;margin-top:10px}
-.video-tracker{margin-top:16px;animation:fadeUp .5s .2s ease both;display:flex;flex-direction:column;align-items:center;gap:8px;width:min(90vw,480px);padding-bottom:60px}
-.vt-row{display:flex;gap:6px;width:100%;align-items:center;flex-wrap:wrap;justify-content:center}
-.vt-input{flex:1;min-width:200px;background:var(--card2);border:1px solid #3a3a55;color:#fff;padding:9px 12px;border-radius:8px;font-size:.82rem;font-family:'Inter',sans-serif}
-.vt-input::placeholder{color:#444}
-.vt-btn{border:none;color:#fff;padding:9px 18px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.78rem;transition:all .15s;white-space:nowrap;flex:1;min-width:0;text-align:center}
-.vt-btn.save{background:linear-gradient(135deg,#2ecc71,#27ae60)}.vt-btn.save:hover{box-shadow:0 3px 12px rgba(46,204,113,.3)}
-.vt-btn.skip{background:var(--card2);border:1px solid #3a3a55}.vt-btn.skip:hover{background:#2a2a45}
-.vt-btn.end{background:linear-gradient(135deg,var(--accent),var(--accent2))}.vt-btn.end:hover{box-shadow:0 3px 12px rgba(231,76,60,.3)}
-.vt-btn.endonly{background:linear-gradient(135deg,#f39c12,#e67e22)}.vt-btn.endonly:hover{box-shadow:0 3px 12px rgba(243,156,18,.3)}
+/* ── SUBTLE BACKGROUND TEXTURE ── */
+body::before{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23fff' stroke-width='.5'/%3E%3C/svg%3E");
+  background-size:60px 60px;animation:bgDrift 30s linear infinite}
+@keyframes bgDrift{0%{background-position:0 0}100%{background-position:60px 60px}}
+.video-tracker{margin-top:16px;animation:fadeUp .5s .2s ease both;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(92vw,500px);padding-bottom:60px}
+.vt-row{display:flex;gap:8px;width:100%;align-items:stretch;flex-wrap:wrap;justify-content:center}
+.vt-input{flex:1;min-width:200px;background:var(--card2);border:1px solid #2a2a45;color:#fff;padding:10px 14px;border-radius:10px;font-size:.82rem;font-family:'Inter',sans-serif;transition:border-color .2s,box-shadow .2s}
+.vt-input:focus{border-color:var(--accent);box-shadow:0 0 8px rgba(231,76,60,.15)}
+.vt-input::placeholder{color:#3a3a50}
+.vt-btn{border:none;color:#fff;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;font-size:.78rem;transition:all .2s;white-space:nowrap;flex:1;min-width:0;text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);position:relative;overflow:hidden}
+.vt-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08) 0%,transparent 60%);pointer-events:none;border-radius:10px}
+.vt-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.vt-btn:active{transform:scale(.97);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+/* Bespoke button colors */
+.vt-btn.copy-btn{background:linear-gradient(135deg,#37474f,#263238)}
+.vt-btn.yt-btn{background:linear-gradient(135deg,#e74c3c,#c0392b)}
+.vt-btn.rerand-btn{background:linear-gradient(135deg,#7e57c2,#5e35b1)}
+.vt-btn.save{background:linear-gradient(135deg,#2ecc71,#1a9c55)}.vt-btn.save:hover{box-shadow:0 4px 14px rgba(46,204,113,.35)}
+.vt-btn.save-rerand{background:linear-gradient(135deg,#9b59b6,#7d3c98)}
+.vt-btn.skip{background:linear-gradient(135deg,#546e7a,#37474f);border:none}.vt-btn.skip:hover{box-shadow:0 4px 14px rgba(84,110,122,.3)}
+.vt-btn.end{background:linear-gradient(135deg,#e74c3c,#c0392b)}.vt-btn.end:hover{box-shadow:0 4px 14px rgba(231,76,60,.35)}
+.vt-btn.endonly{background:linear-gradient(135deg,#f39c12,#d68910)}.vt-btn.endonly:hover{box-shadow:0 4px 14px rgba(243,156,18,.35)}
+.vt-btn.share-svg{background:linear-gradient(135deg,#3498db,#2176ae)}
+.vt-btn.share-discord{background:linear-gradient(135deg,#5865F2,#4752C4)}
+.vt-btn.add-records{background:linear-gradient(135deg,#ffd700,#daa520);color:#1a1a2e}
 .vt-stars{display:flex;gap:3px}
 .vt-star{font-size:1.5rem;cursor:pointer;color:#333;transition:color .12s,transform .12s;user-select:none}
 .vt-star:hover,.vt-star.lit{color:#f39c12;transform:scale(1.12)}
@@ -646,9 +665,9 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
     <div class="result-pill" id="resultPill" onclick="copyResult()"></div>
     <div class="video-tracker">
       <div class="vt-row">
-        <button class="vt-btn" style="background:#444" onclick="copyResult()">Copy</button>
-        <button class="vt-btn" style="background:var(--accent)" onclick="searchYouTube()">Open in YouTube</button>
-        <button class="vt-btn" style="background:linear-gradient(135deg,#7e57c2,#5e35b1)" onclick="reRandomize()">Re-Randomize</button>
+        <button class="vt-btn copy-btn" onclick="copyResult()">Copy</button>
+        <button class="vt-btn yt-btn" onclick="searchYouTube()">Open in YouTube</button>
+        <button class="vt-btn rerand-btn" onclick="reRandomize()">Re-Randomize</button>
       </div>
       <div class="vt-label" style="margin-top:6px">Found a video? Paste the link &amp; rate it:</div>
       <div class="vt-row"><input class="vt-input" id="vtLink" type="text" placeholder="https://youtube.com/watch?v=..." oninput="onVideoLinkChange(this.value)"><span id="vtFetchStatus" style="font-size:.55rem;color:var(--muted);margin-left:4px"></span></div>
@@ -681,7 +700,7 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
       </div>
       <div class="vt-row">
         <button class="vt-btn save" onclick="saveVideo()">Save &amp; Next Round</button>
-        <button class="vt-btn" style="background:linear-gradient(135deg,#7e57c2,#5e35b1)" onclick="saveAndReRandomize()">Save &amp; Re-randomize</button>
+        <button class="vt-btn save-rerand" onclick="saveAndReRandomize()">Save &amp; Re-randomize</button>
         <button class="vt-btn skip" onclick="skipVideo()">Skip</button>
       </div>
       <div class="vt-row">
@@ -689,9 +708,9 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
         <button class="vt-btn end" onclick="endSession()">End Game</button>
       </div>
       <div class="vt-row">
-        <button class="vt-btn" style="background:linear-gradient(135deg,#3498db,#2980b9)" onclick="exportShareCard()">Share Card (SVG)</button>
-        <button class="vt-btn" style="background:linear-gradient(135deg,#5865F2,#4752C4)" onclick="shareToDiscord()">Copy for Discord</button>
-        <button class="vt-btn" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000" onclick="addCurrentToRecords()">Add to Records</button>
+        <button class="vt-btn share-svg" onclick="exportShareCard()">Share Card (SVG)</button>
+        <button class="vt-btn share-discord" onclick="shareToDiscord()">Copy for Discord</button>
+        <button class="vt-btn add-records" onclick="addCurrentToRecords()">Add to Records</button>
       </div>
     </div>
   </div>
@@ -2764,9 +2783,10 @@ function saveRecords(r){localStorage.setItem(RECORDS_KEY,JSON.stringify(r))}
 function showRecords(){
   document.getElementById('recordsOverlay').classList.add('open');
   renderRecords();
-  drawRecordsTimeline();
   updateRecordHolder();
   if(!communityFetchedOnce)fetchCommunityRecords();
+  // Delay canvas draw until modal transition completes (scale .9→1)
+  setTimeout(()=>drawRecordsTimeline(),350);
 }
 function closeRecords(){document.getElementById('recordsOverlay').classList.remove('open')}
 
@@ -2795,7 +2815,8 @@ async function fetchCommunityRecords(){
       const color=rc[f.rarity]||getRecordColor(new Date(f.date_posted));
       const medal=i===0?'&#x1F947; ':i===1?'&#x1F948; ':i===2?'&#x1F949; ':'';
       const dateStr=new Date(f.date_posted).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-      return`<div class="rec-entry" style="cursor:pointer" onclick="showFindDetail(${i})"><span style="min-width:20px;font-size:.8rem">${medal}</span><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views" title="Views when found">${f.views_when_found??'?'} views</span><span style="color:${color};font-size:.6rem;font-weight:700;min-width:65px">${esc(f.rarity||'')}</span><span style="color:#666;font-size:.62rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(f.lead)}">${esc(f.lead)}</span><span style="color:#444;font-size:.58rem">${esc(f.found_by||'')}</span></div>`;
+      const addedStr=f.discovered_at?new Date(f.discovered_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})+' ':'';
+      return`<div class="rec-entry" style="cursor:pointer" onclick="showFindDetail(${i})"><span style="min-width:20px;font-size:.8rem">${medal}</span><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views" title="Views when found">${f.views_when_found??'?'} views</span><span style="color:${color};font-size:.6rem;font-weight:700;min-width:55px">${esc(f.rarity||'')}</span><span style="color:#fff;font-size:.68rem;font-weight:700;min-width:70px;text-shadow:0 0 6px ${color}">${esc(f.found_by||'?')}</span><span style="color:#444;font-size:.55rem">${addedStr}</span></div>`;
     }).join('')+`<div style="text-align:center;font-size:.6rem;color:#333;margin-top:6px">${data.total} finds &#183; oldest: ${data.oldest_post_date} &#183; newest: ${data.newest_post_date}</div>`;
     // Redraw timeline with community data
     drawRecordsTimeline();updateRecordHolder();
@@ -3757,9 +3778,9 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "4.5.0",
-  "build": "2026-04-20T12:00:00",
-  "changelog": "Records auto-fetch from YT link, required URL validation, 11 screenshots, Discord guide",
+  "version": "4.6.0",
+  "build": "2026-04-23T12:00:00",
+  "changelog": "Visual overhaul: bespoke buttons, bg texture, refined result screen, Records canvas fix",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
