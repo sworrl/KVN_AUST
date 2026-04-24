@@ -112,25 +112,42 @@ body.deep-dive .credit-footer{background:linear-gradient(0deg,rgba(2,6,8,.95) 0%
 /* Anchor drop wipe */
 .anchor-wipe{position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
 .anchor-wipe .anchor-bg{position:absolute;inset:0;background:linear-gradient(180deg,#010408 0%,#021020 30%,#041830 60%,#062040 100%);transform:translateY(-100%);animation:anchorBgDrop 1.4s cubic-bezier(.4,0,.2,1) forwards}
-.anchor-wipe .anchor-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(0,188,212,.06),transparent 70%);pointer-events:none}
+/* Water texture overlay — animated caustics pattern */
+.anchor-wipe .anchor-bg::before{content:'';position:absolute;inset:0;opacity:.06;
+  background:url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.015' numOctaves='3' seed='2'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='30'/%3E%3C/filter%3E%3Crect width='200' height='200' fill='%2300bcd4' filter='url(%23w)' opacity='.5'/%3E%3C/svg%3E");
+  background-size:200px 200px;animation:waterShift 8s linear infinite;mix-blend-mode:screen}
+.anchor-wipe .anchor-bg::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 60%,rgba(0,188,212,.08),transparent 70%),
+  repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(0,188,212,.02) 40px,rgba(0,188,212,.02) 80px);pointer-events:none}
+@keyframes waterShift{0%{background-position:0 0}100%{background-position:200px 100px}}
+/* Water surface line at top */
+.anchor-wipe .water-surface{position:absolute;top:0;left:0;right:0;height:4px;z-index:3;
+  background:linear-gradient(90deg,transparent,rgba(0,188,212,.3) 20%,rgba(100,220,240,.5) 50%,rgba(0,188,212,.3) 80%,transparent);
+  opacity:0;animation:surfaceAppear .3s .2s ease forwards}
+@keyframes surfaceAppear{0%{opacity:0;transform:scaleX(0)}100%{opacity:1;transform:scaleX(1)}}
+/* Splash droplets */
+.anchor-wipe .splash-drop{position:absolute;z-index:3;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(180,240,255,.6),rgba(0,188,212,.2));
+  opacity:0;animation:splashDrop 1s ease-out forwards}
+@keyframes splashDrop{0%{opacity:0;transform:translateY(0) scale(0)}20%{opacity:1;transform:translateY(-60px) scale(1)}60%{opacity:.6}100%{opacity:0;transform:translateY(80px) scale(.3)}}
 .anchor-wipe .anchor-icon{position:relative;z-index:2;font-size:5rem;animation:anchorFall 1.4s cubic-bezier(.4,0,.2,1) forwards;opacity:0;
   filter:drop-shadow(0 0 20px rgba(0,188,212,.5)) drop-shadow(0 4px 12px rgba(0,0,0,.8))}
 .anchor-wipe .anchor-text{position:relative;z-index:2;font-weight:900;font-size:1.5rem;letter-spacing:6px;opacity:0;animation:anchorTextFade .6s .9s ease forwards;
   background:linear-gradient(135deg,#4dd0e1,#00bcd4,#0097a7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
   filter:drop-shadow(0 0 12px rgba(0,188,212,.4))}
 .anchor-wipe .anchor-sub{position:relative;z-index:2;color:#006064;font-size:.7rem;font-weight:600;letter-spacing:2px;opacity:0;animation:anchorTextFade .4s 1.1s ease forwards}
-.anchor-wipe .anchor-splash{position:absolute;bottom:0;left:0;right:0;height:80px;
-  background:radial-gradient(ellipse at 50% 100%,rgba(0,188,212,.5),rgba(0,150,180,.2) 40%,transparent 70%);
-  opacity:0;animation:splashIn .5s 1s ease forwards}
+.anchor-wipe .anchor-splash{position:absolute;bottom:0;left:0;right:0;height:100px;z-index:2;
+  background:radial-gradient(ellipse at 50% 100%,rgba(0,188,212,.5),rgba(0,150,180,.25) 30%,rgba(0,100,120,.1) 60%,transparent 80%);
+  opacity:0;animation:splashIn .6s .9s cubic-bezier(.2,0,.3,1) forwards}
 .anchor-wipe .anchor-rings{position:absolute;z-index:1;width:200px;height:200px;border-radius:50%;
   border:2px solid rgba(0,188,212,.15);animation:sonarRing 1.5s .6s ease-out forwards;opacity:0}
-.anchor-wipe .anchor-rings:nth-child(5){animation-delay:.8s;width:300px;height:300px}
-.anchor-wipe .anchor-rings:nth-child(6){animation-delay:1s;width:400px;height:400px}
+.anchor-wipe .anchor-rings:nth-child(6){animation-delay:.8s;width:300px;height:300px}
+.anchor-wipe .anchor-rings:nth-child(7){animation-delay:1s;width:400px;height:400px}
 @keyframes sonarRing{0%{transform:scale(0);opacity:.4}100%{transform:scale(2);opacity:0}}
 .anchor-wipe .anchor-particles{position:absolute;inset:0;z-index:1;overflow:hidden}
 .anchor-wipe .anchor-particle{position:absolute;width:2px;height:2px;background:rgba(0,188,212,.3);border-radius:50%;animation:particleDrift 2s linear forwards}
 @keyframes particleDrift{0%{transform:translateY(0);opacity:.5}100%{transform:translateY(-100px);opacity:0}}
 .anchor-wipe.rising .anchor-bg{animation:anchorBgRise 1.1s cubic-bezier(.4,0,.2,1) forwards}
+.anchor-wipe.rising .water-surface{animation:anchorTextOut .3s ease forwards}
 .anchor-wipe.rising .anchor-icon{animation:anchorRise 1.1s cubic-bezier(.4,0,.2,1) forwards}
 .anchor-wipe.rising .anchor-text{animation:anchorTextOut .3s ease forwards}
 .anchor-wipe.rising .anchor-sub{animation:anchorTextOut .2s ease forwards}
@@ -1998,12 +2015,17 @@ function toggleDeepDive(){
   if(deepDiveActive){
     // Anchor drop wipe IN
     const wipe=document.createElement('div');wipe.className='anchor-wipe';
-    // Build premium wipe with sonar rings + particles
-    let wipeHtml='<div class="anchor-bg"></div>';
+    // Build premium wipe with water texture, sonar rings, splash droplets, particles
+    let wipeHtml='<div class="anchor-bg"></div><div class="water-surface"></div>';
     wipeHtml+='<div class="anchor-rings"></div><div class="anchor-rings"></div><div class="anchor-rings"></div>';
+    // Splash droplets flying up from where the anchor hits
+    for(let i=0;i<8;i++){
+      const x=40+Math.random()*20,sz=4+Math.random()*8,d=.6+Math.random()*.6,delay=.85+Math.random()*.3;
+      wipeHtml+=`<div class="splash-drop" style="left:${x}%;bottom:45%;width:${sz}px;height:${sz}px;animation-duration:${d}s;animation-delay:${delay}s"></div>`;
+    }
     wipeHtml+='<div class="anchor-particles">';
-    for(let i=0;i<20;i++){const x=Math.random()*100,d=.5+Math.random()*1.5,delay=Math.random()*1.2;
-      wipeHtml+=`<div class="anchor-particle" style="left:${x}%;bottom:${Math.random()*40}%;animation-duration:${d}s;animation-delay:${delay}s"></div>`}
+    for(let i=0;i<25;i++){const x=Math.random()*100,d=.5+Math.random()*1.5,delay=Math.random()*1.2;
+      wipeHtml+=`<div class="anchor-particle" style="left:${x}%;bottom:${Math.random()*50}%;animation-duration:${d}s;animation-delay:${delay}s"></div>`}
     wipeHtml+='</div>';
     wipeHtml+='<div class="anchor-icon">&#9875;</div><div class="anchor-text">DEEP DIVE</div><div class="anchor-sub">SEARCHING THE ABYSS</div><div class="anchor-splash"></div>';
     wipe.innerHTML=wipeHtml;
