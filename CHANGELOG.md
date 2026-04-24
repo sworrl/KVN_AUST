@@ -24,6 +24,30 @@
 
 ---
 
+## [4.7.0] - 2026-04-23
+
+### Fixed
+- **All 187 FORMAT-MAP entries now parse** — zero skips, zero hardcoded fallbacks
+- **4XXX / Trim 4XXX**: properly detected as hex format (generates AAA-FFF range)
+- **"HHMMSS"**: generates valid time-of-day strings (000000-235959)
+- **Video0XX, Vid0XX, MOV000XX, muuvee00XX, 0_VIDEO_0XX**: small-range Ancient YouTube formats now parse from parenthetical `(00-10)` notation
+- **XXXX.MP4, 0XXXX.MTS, MOVXXXXA**: formats with X at start or suffixes after X now parse correctly
+- **GX01XXXX, YDXJXXXX**: formats with X in the prefix (like GoPro `GX01`) now parse — regex uses lookahead to distinguish prefix-X from variable-X
+- **Date formats in Search Keyphrases section**: now caught without requiring `>YYYY` column
+- **Spacebar ghost spin**: spacebar on non-number screens no longer activates focused buttons (was triggering spin sounds in background)
+
+### Changed
+- **All hardcoded formats removed** — `ALL_FORMATS=[]`, everything comes from FORMAT-MAP.md fetch + cache
+- Numbered regex: `(?:[^X]|X(?!X))*` prefix allows X in format names while correctly identifying the trailing variable X run
+- Cache key bumped to v6
+
+### Added
+- `sp:'time'` format type — generates HHMMSS with valid hour/minute/second ranges
+- Small-range parser for Ancient YouTube formats in `(XX-YY)` parenthetical notation
+- Visual overhaul: bespoke button colors, background diamond texture, gloss overlays
+
+---
+
 ## [4.4.0] - 2026-04-20
 
 ### Added

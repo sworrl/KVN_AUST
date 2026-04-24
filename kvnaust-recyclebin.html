@@ -1182,19 +1182,8 @@ function playBingoWinSound(){
 // ═══════════════════════════════════
 //  FORMATS
 // ═══════════════════════════════════
-// Minimal fallback formats - full list fetched from GitHub FORMAT-MAP.md
-const ALL_FORMATS=[
-{label:"IMG XXXX",tpl:"IMG {V}",min:0,max:9999,pad:4},{label:"MVI XXXX",tpl:"MVI {V}",min:0,max:9999,pad:4},
-{label:"MOV XXXX",tpl:"MOV {V}",min:0,max:9999,pad:4},{label:"DSC XXXX",tpl:"DSC {V}",min:0,max:9999,pad:4},
-{label:"DSCFXXXX",tpl:"DSCF{V}",min:0,max:9999,pad:4},{label:"GOPRXXXX",tpl:"GOPR{V}",min:0,max:9999,pad:4},
-{label:"XXXX.MP4",tpl:"{V}.mp4",min:0,max:9999,pad:4},{label:"VideoXXXX",tpl:"Video{V}",min:0,max:9999,pad:4},
-{label:"YYYYMMDD",tpl:"{V}",sp:"date",minY:2006,maxY:2026},
-{label:"VID YYYYMMDD",tpl:"VID {V}",sp:"date",minY:2008,maxY:2026},
-{label:'".MP4"',tpl:'".MP4"',sp:"static"},{label:'".MOV"',tpl:'".MOV"',sp:"static"},
-{label:"Trim 4XXX",tpl:"Trim {V}",sp:"hex4"},
-{label:"R001XXXX",tpl:"R001{V}",min:1,max:9999,pad:4},{label:"VIRB0XXX",tpl:"VIRB0{V}",min:1,max:999,pad:3},
-{label:"STE_XXXX",tpl:"STE_{V}",min:1,max:9999,pad:4},
-];
+// All formats fetched from GitHub FORMAT-MAP.md — no hardcoded fallbacks
+const ALL_FORMATS=[];
 
 // Empty - bingo-categories.json is required
 const BINGO_CATS=[];
@@ -1571,8 +1560,8 @@ function closeBingoFlash(){
 // ═══════════════════════════════════
 //  DOC FETCH
 // ═══════════════════════════════════
-const DOC_CACHE_KEY='kvn_fmt_v5'; // v5: nuclear cache bust — all 177 formats
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v5';
+const DOC_CACHE_KEY='kvn_fmt_v6'; // v6: no hardcodes, improved parser handles hex/time/small-range
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v6';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -1615,34 +1604,63 @@ async function fetchDocFormats(){
       // Parse markdown table rows
       for(const line of md.split('\n')){
         // Numbered formats: | `KEYPHRASEXXXX` | 0000-9999 | ...
-        const m=line.match(/\|\s*`?([A-Z][A-Za-z0-9_ ]*?)(X{2,4})`?\s*\|\s*(\d+)-(\d+)/);
+        // Also matches digit-start like `4XXX`, `0XXXX.MTS`, `100 XXXX`
+        const m=line.match(/\|\s*`((?:[^`X]|X(?!X))*)(X{2,5})([^`]*?)`\s*\|\s*(\d+)-(\d+)/);
         if(m){
-          const lbl=m[1]+m[2];
+          const suffix=m[3]||''; // e.g. '.MTS', 'A', ''
+          const lbl=m[1]+m[2]+suffix;
           const hasSpace=m[1].endsWith(' ');
-          const tpl=hasSpace?m[1].trimEnd()+' {V}':m[1]+'{V}';
-          const lo=parseInt(m[3]),hi=parseInt(m[4]);
+          const tpl=hasSpace?m[1].trimEnd()+' {V}'+suffix:m[1]+'{V}'+suffix;
+          const lo=parseInt(m[4]),hi=parseInt(m[5]);
           if(lo<=hi){
             const fmt={label:lbl,tpl:tpl,min:lo,max:hi,pad:m[2].length};
+            // Detect hex ranges
+            if(line.match(/[Hh]ex/i)||lbl.match(/^4X|^Trim 4/))fmt.sp='hex4';
             fetched.push(fmt);
             if(!existing.has(lbl)){ALL_FORMATS.push(fmt);existing.add(lbl);newCount++}
           }
           continue;
         }
-        // Date-based formats: | `PREFIX YYYYMMDD` | >YYYY | ...
-        const dm=line.match(/\|\s*`([^`]*YYYY[^`]*)`\s*\|\s*>?\s*(\d{4})/);
+        // Special: "HHMMSS" time-of-day format
+        const tm=line.match(/\|\s*`"?HHMMSS"?`\s*\|\s*(\d+)-(\d+)/);
+        if(tm){
+          if(!existing.has('"HHMMSS"')){
+            ALL_FORMATS.push({label:'"HHMMSS"',tpl:'"{V}"',sp:'time',min:0,max:235959,pad:6});
+            fetched.push({label:'"HHMMSS"',tpl:'"{V}"',sp:'time',min:0,max:235959,pad:6});
+            existing.add('"HHMMSS"');newCount++;
+          }
+          continue;
+        }
+        // Small-range formats in Ancient YouTube: `Video0XX` (00-10) etc
+        const ar=line.match(/\|\s*`([^`]+)`\s*\((\d+)-(\d+)\)/);
+        if(ar){
+          const lbl=ar[1];const lo=parseInt(ar[2]),hi=parseInt(ar[3]);
+          if(!existing.has(lbl)&&lo<=hi){
+            // Parse the variable part from XX pattern
+            const xm=lbl.match(/(X+)/);const pad=xm?xm[1].length:2;
+            const prefix=lbl.replace(/X+/,'{V}');
+            ALL_FORMATS.push({label:lbl,tpl:prefix,min:lo,max:hi,pad:pad});
+            fetched.push({label:lbl,tpl:prefix,min:lo,max:hi,pad:pad});
+            existing.add(lbl);newCount++;
+          }
+          continue;
+        }
+        // Date-based formats: | `PREFIX YYYYMMDD` | >YYYY | ... OR just has YYYY in label
+        const dm=line.match(/\|\s*`([^`]*YYYY[^`]*)`\s*\|/);
         if(dm){
           const lbl=dm[1];
-          const minY=parseInt(dm[2]);
-          const maxM=line.match(/<\s*(\d{4})/);
+          // Try to extract year limits from the rest of the line
+          const minM=line.match(/>\s*(\d{4})/);const maxM=line.match(/<\s*(\d{4})/);
+          const minY=minM?parseInt(minM[1]):2006;
           const maxY=maxM?parseInt(maxM[1]):new Date().getFullYear();
           if(!existing.has(lbl)){
-            const tpl=lbl.replace('YYYYMMDD','{V}').replace('YYYY MM DD','{V}').replace('YYYY MM','{V}').replace('YYYY-MM-DD','{V}');
+            const tpl=lbl.replace('YYYYMMDD','{V}').replace('YYYY MM DD','{V}').replace('YYYY MM','{V}').replace('YYYY-MM-DD','{V}').replace('YYYY','{V}');
             const fmt={label:lbl,tpl:tpl,sp:'date',minY:minY,maxY:maxY};
             ALL_FORMATS.push(fmt);fetched.push(fmt);
             existing.add(lbl);newCount++;
           }else{
             const ex=ALL_FORMATS.find(f=>f.label===lbl);
-            if(ex&&ex.sp==='date'){ex.minY=minY;ex.maxY=maxY}
+            if(ex&&ex.sp==='date'&&minM){ex.minY=minY;ex.maxY=maxY}
           }
           continue;
         }
@@ -1980,6 +1998,7 @@ function showFormatReveal(){
   if(f.sp==='static')finalHtml=`<span>${esc(f.tpl)}</span>`;
   else if(f.sp==='date'||f.sp==='monthdate')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (random)</span>`;
   else if(f.sp==='hex4')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (hex)</span>`;
+  else if(f.sp==='time')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (time of day)</span>`;
   else{const p=f.pad||4;finalHtml=`${f.tpl.replace('{V}',`<span class="vp">${'X'.repeat(p)}</span>`)}<span class="rng">(${String(f.min).padStart(p,'0')}-${String(f.max).padStart(p,'0')})</span>`}
   // Rainbow text shuffle for 1.5s then reveal
   const plainText=f.label;
@@ -2005,6 +2024,7 @@ function setupNumberScreen(){
   if(f.sp==='date'){mn.textContent=f.minY||'2006';mx.textContent=f.maxY||'2026';nm.textContent='--------'}
   else if(f.sp==='monthdate'){mn.textContent='2007';mx.textContent='2013';nm.textContent='--- --, ----'}
   else if(f.sp==='hex4'){mn.textContent='0000';mx.textContent='FFFF';nm.textContent='----'}
+  else if(f.sp==='time'){mn.textContent='000000';mx.textContent='235959';nm.textContent='------'}
   else{const p=f.pad||4;mn.textContent=String(f.min).padStart(p,'0');mx.textContent=String(f.max).padStart(p,'0');nm.textContent='0'.repeat(p)}
 }
 
@@ -2205,6 +2225,7 @@ function generateFinalNumber(){
   if(f.sp==='date')return randDate(f.minY,f.maxY);
   if(f.sp==='monthdate')return randMonthDate();
   if(f.sp==='hex4')return randHex();
+  if(f.sp==='time'){const h=Math.floor(Math.random()*24),m=Math.floor(Math.random()*60),s=Math.floor(Math.random()*60);return String(h).padStart(2,'0')+String(m).padStart(2,'0')+String(s).padStart(2,'0')}
   if(f.sp!=='static'){const p=f.pad||4;return String(Math.floor(Math.random()*(f.max-f.min+1))+f.min).padStart(p,'0')}
   return'';
 }
@@ -3649,8 +3670,10 @@ function downloadFile(name,content,type){
 document.addEventListener('keydown',e=>{
   const inInput=document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='SELECT';
   if((e.key==='r'||e.key==='R')&&!inInput&&currentScreen==='summary-screen'&&!e.ctrlKey)newSession();
-  if(e.ctrlKey&&e.key==='Enter'&&currentScreen==='wheel-screen'&&!spinning)spinWheel();
+  if(e.ctrlKey&&e.key==='Enter'&&currentScreen==='wheel-screen'&&!spinning){e.preventDefault();spinWheel()}
   if((e.key===' '||e.key==='Enter')&&currentScreen==='number-screen'&&!inInput){e.preventDefault();generateNumber()}
+  // Prevent spacebar from activating focused buttons on other screens (which could trigger sounds)
+  if(e.key===' '&&!inInput&&currentScreen!=='number-screen'){e.preventDefault()}
   if((e.key==='b'||e.key==='B')&&!inInput)toggleBingo();
   if(e.key==='ArrowRight'&&!inInput&&(currentScreen==='format-screen'))goNext();
   if(e.key==='ArrowLeft'&&!inInput)goPrev();
@@ -3778,9 +3801,9 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "4.6.0",
+  "version": "4.7.0",
   "build": "2026-04-23T12:00:00",
-  "changelog": "Visual overhaul: bespoke buttons, bg texture, refined result screen, Records canvas fix",
+  "changelog": "All 187 formats parsed (zero hardcodes), hex/time/small-range support, spacebar fix",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
