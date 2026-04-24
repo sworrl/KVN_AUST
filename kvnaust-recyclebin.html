@@ -3082,32 +3082,106 @@ async function fetchCommunityRecords(){
   }
 }
 
-function showFindDetail(idx){
-  const f=communityFinds[idx];if(!f)return;
+// Unified record detail modal — works for community finds and local records
+function showFindDetail(idx){showRecordModal(communityFinds[idx],'community')}
+function showLocalRecordModal(idx){const recs=getRecords();if(recs[idx])showRecordModal(recs[idx],'local')}
+
+function showRecordModal(f,type){
+  if(!f)return;
+  const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
+  // Normalize fields between community and local
+  const datePosted=f.date_posted||f.date||'unknown';
+  const views=f.views_when_found??f.views??'?';
+  const url=f.video_url||f.url||'';
+  const vid=url?getVideoId(url):'';
+  const thumb=vid?`https://img.youtube.com/vi/${vid}/mqdefault.jpg`:'';
+  const title=f.video_title||'';
+  const rarity=f.rarity||getRarityLabel(new Date(datePosted).getFullYear());
+  const color=rc[rarity]||'#888';
+  const lead=f.lead||'';
+  const channel=f.channel_name||'';
+  const chVids=f.channel_videos||'';
+  const chSubs=f.channel_subs||'';
+  const foundBy=f.found_by||(type==='local'?'You':'anonymous');
+  const src=f.source||'';const srcSym=SOURCE_SYMBOLS[src.toLowerCase()]||'';
+  const server=f.server||'';
+  const addedAt=f.discovered_at||f.added||'';
+
+  const d=document.createElement('div');d.className='rec-find-detail';
+  d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)';
+  d.onclick=e=>{if(e.target===d)d.remove()};
+
+  let html=`<div style="text-align:center;padding:22px;background:linear-gradient(145deg,#111,#0a0a14);border:1px solid #2a2a40;border-radius:16px;max-width:400px;width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.04)">`;
+  // Thumbnail
+  if(thumb)html+=`<img src="${esc(thumb)}" style="width:300px;max-width:100%;border-radius:10px;border:2px solid ${color};margin-bottom:12px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.5)" alt="${esc(title)}" onclick="window.open('${esc(url)}','_blank','noopener')">`;
+  // Title
+  if(title)html+=`<div style="font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:4px;text-shadow:0 1px 4px rgba(0,0,0,.5)">${esc(title)}</div>`;
+  // Rarity badge
+  html+=`<div style="display:inline-block;font-size:.75rem;color:${color};font-weight:900;padding:3px 14px;border:1px solid ${color};border-radius:20px;margin-bottom:12px;background:rgba(0,0,0,.3);text-shadow:0 0 8px ${color}">${esc(rarity)}</div>`;
+  // Detail grid
+  html+=`<div style="font-size:.78rem;color:#bbb;line-height:2;text-align:left;padding:0 14px">`;
+  html+=`<div>&#10038; <strong style="color:#e74c3c">Date posted:</strong> ${esc(datePosted)}</div>`;
+  html+=`<div>&#10038; <strong style="color:#2ecc71">Views when found:</strong> ${views}</div>`;
+  if(lead)html+=`<div>&#10038; <strong style="color:#f39c12">Lead:</strong> <code style="background:#1a1a2e;padding:2px 6px;border-radius:4px;font-size:.72rem">${esc(lead)}</code></div>`;
+  if(channel)html+=`<div>&#10038; <strong style="color:#3498db">Channel:</strong> ${esc(channel)}${chVids?' ('+chVids+' videos)':''}${chSubs?' &#183; '+chSubs+' subs':''}</div>`;
+  // Found by — prominent
+  html+=`<div style="margin-top:8px;padding:6px 10px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid rgba(255,255,255,.06)">`;
+  html+=`<span style="color:#888">Found by</span> <strong style="color:#fff;font-size:.85rem;text-shadow:0 0 8px ${color}">${esc(foundBy)}</strong>`;
+  if(srcSym)html+=` <span style="color:#555;font-size:.65rem">[${srcSym}]</span>`;
+  if(server)html+=` <span style="color:#444;font-size:.62rem">in ${esc(server)}</span>`;
+  if(addedAt)html+=`<div style="color:#333;font-size:.58rem;margin-top:2px">Added ${new Date(addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>`;
+  html+=`</div></div>`;
+  // Buttons
+  html+=`<div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">`;
+  if(url)html+=`<button class="vt-btn yt-btn" style="flex:0;padding:8px 16px;font-size:.72rem" onclick="window.open('${esc(url)}','_blank','noopener')">Watch on YouTube</button>`;
+  html+=`<button class="vt-btn share-svg" style="flex:0;padding:8px 14px;font-size:.72rem" onclick="exportFindSVG(${JSON.stringify({datePosted,views:views+'',lead,rarity,foundBy,url,title,channel}).replace(/"/g,'&quot;')})">Share SVG</button>`;
+  html+=`<button class="vt-btn share-discord" style="flex:0;padding:8px 14px;font-size:.72rem" onclick="copyFindForDiscord(${JSON.stringify({datePosted,views:views+'',lead,rarity,foundBy,url,title,channel}).replace(/"/g,'&quot;')})">Discord</button>`;
+  html+=`<button class="nav-btn" style="font-size:.72rem;padding:6px 14px" onclick="this.closest('.rec-find-detail').remove()">Close</button>`;
+  html+=`</div></div>`;
+
+  d.innerHTML=html;
+  document.body.appendChild(d);
+}
+
+function exportFindSVG(f){
+  const w=420,h=240,pad=20;
   const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
   const color=rc[f.rarity]||'#888';
-  const src=f.source||'';const srcSym=SOURCE_SYMBOLS[src.toLowerCase()]||'?';
-  const d=document.createElement('div');d.className='rec-find-detail';
-  d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)';
-  d.onclick=e=>{if(e.target===d)d.remove()};
-  d.innerHTML=`<div style="text-align:center;padding:20px;background:#111;border:1px solid #2a2a40;border-radius:14px;max-width:380px;width:90vw">
-    <img src="${esc(f.thumbnail_url)}" style="width:280px;max-width:100%;border-radius:8px;border:2px solid ${color};margin-bottom:10px;cursor:pointer" alt="${esc(f.video_title)}" onclick="window.open('${esc(f.video_url)}','_blank','noopener')">
-    <div style="font-weight:900;font-size:1.1rem;color:#fff;margin-bottom:4px">${esc(f.video_title||'Untitled')}</div>
-    <div style="font-size:.8rem;color:${color};font-weight:700;margin-bottom:10px">${esc(f.rarity)}</div>
-    <div style="font-size:.75rem;color:#aaa;line-height:1.8;text-align:left;padding:0 12px">
-      <div>&#10038; <strong>Date posted:</strong> ${esc(f.date_posted)}</div>
-      <div>&#10038; <strong>Views when found:</strong> ${f.views_when_found??'unknown'}</div>
-      <div>&#10038; <strong>Lead:</strong> ${esc(f.lead)}</div>
-      ${f.channel_name?`<div>&#10038; <strong>Channel:</strong> ${esc(f.channel_name)}${f.channel_videos?' ('+f.channel_videos+' videos)':''}${f.channel_subs?' &#183; '+f.channel_subs+' subs':''}</div>`:''}
-      <div style="margin-top:6px;color:#666">Found by <strong style="color:#aaa">${esc(f.found_by||'anonymous')}</strong></div>
-      <div style="color:#555">[${srcSym}] ${esc(f.server||src)}</div>
-    </div>
-    <div style="margin-top:12px;display:flex;gap:8px;justify-content:center">
-      <button class="nav-btn primary" style="font-size:.75rem;padding:6px 18px" onclick="window.open('${esc(f.video_url)}','_blank','noopener')">Watch on YouTube</button>
-      <button class="nav-btn" style="font-size:.75rem;padding:6px 14px" onclick="this.closest('.rec-find-detail').remove()">Close</button>
-    </div>
-  </div>`;
-  document.body.appendChild(d);
+  let svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`;
+  svg+=`<rect width="${w}" height="${h}" rx="14" fill="#0d0d14"/>`;
+  svg+=`<rect x="1" y="1" width="${w-2}" height="${h-2}" rx="13" fill="none" stroke="#2a2a40" stroke-width="1"/>`;
+  svg+=`<text x="${w/2}" y="${pad+22}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="12" fill="${color}">${escXml(f.rarity)}</text>`;
+  if(f.title)svg+=`<text x="${w/2}" y="${pad+42}" text-anchor="middle" font-family="Inter,sans-serif" font-weight="700" font-size="14" fill="#fff">${escXml(f.title.substring(0,40))}</text>`;
+  let y=pad+65;
+  svg+=`<text x="${pad}" y="${y}" font-family="Inter,sans-serif" font-size="11" fill="#e74c3c">&#10038; Date: ${escXml(f.datePosted)}</text>`;y+=20;
+  svg+=`<text x="${pad}" y="${y}" font-family="Inter,sans-serif" font-size="11" fill="#2ecc71">&#10038; Views: ${escXml(f.views)}</text>`;y+=20;
+  if(f.lead){svg+=`<text x="${pad}" y="${y}" font-family="Inter,sans-serif" font-size="11" fill="#f39c12">&#10038; Lead: ${escXml(f.lead)}</text>`;y+=20}
+  if(f.channel){svg+=`<text x="${pad}" y="${y}" font-family="Inter,sans-serif" font-size="11" fill="#3498db">&#10038; Channel: ${escXml(f.channel)}</text>`;y+=20}
+  svg+=`<text x="${pad}" y="${y+5}" font-family="Inter,sans-serif" font-size="10" fill="#888">Found by </text><text x="${pad+55}" y="${y+5}" font-family="Inter,sans-serif" font-weight="700" font-size="10" fill="#fff">${escXml(f.foundBy)}</text>`;
+  svg+=`<text x="${w/2}" y="${h-12}" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" fill="#555">YouTube&apos;s Recycle Bin &#183; @KVNAUST &#183; falcontechnix.com/KVN_AUST</text>`;
+  svg+=`</svg>`;
+  downloadFile('kvnaust-find-'+f.datePosted.replace(/\//g,'-')+'.svg',svg,'image/svg+xml');
+  showToast('Find exported as SVG!');
+}
+
+function copyFindForDiscord(f){
+  const rc={'LEGENDARY':'🏆','SUPER RARE':'🔴','VERY RARE':'🟠','RARE':'🟢','COMMON':'🔵'};
+  const emoji=rc[f.rarity]||'';
+  const lines=[
+    `## ${emoji} ${f.rarity} — Recycle Bin Find`,
+    f.title?`**${f.title}**`:'',
+    '',
+    `✮ **Date posted:** ${f.datePosted}`,
+    `✮ **Views when found:** ${f.views}`,
+    f.lead?`✮ **Lead:** ${f.lead}`:'',
+    f.channel?`✮ **Channel:** ${f.channel}`:'',
+    '',
+    `Found by **${f.foundBy}**`,
+    f.url?`🔗 ${f.url}`:'',
+    '',
+    `*[YouTube's Recycle Bin](<https://falcontechnix.com/KVN_AUST/>) — @KVNAUST*`
+  ].filter(Boolean);
+  navigator.clipboard.writeText(lines.join('\n')).then(()=>showToast('Copied for Discord!')).catch(()=>showToast('Copy failed','err'));
 }
 
 let recFetchTimer=null;
@@ -3230,7 +3304,7 @@ function renderRecords(){
     const color=getRecordColor(d);
     const isNew=lastAddedRecordUrl&&r.url&&r.url===lastAddedRecordUrl;
     const highlight=isNew?'border-color:'+color+';box-shadow:0 0 12px '+color+';animation:daubPulse 1.5s ease-in-out 3':'';
-    return`<div class="rec-entry" style="${highlight}"><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views">${r.views} views</span>${r.url?`<a class="rec-link" href="${esc(r.url)}" target="_blank">${esc(r.url).substring(0,50)}</a>`:'<span style="color:#333;flex:1">no link</span>'}<button class="rec-del" onclick="deleteRecord(${i})" title="Remove">&times;</button></div>`;
+    return`<div class="rec-entry" style="cursor:pointer;${highlight}" onclick="showLocalRecordModal(${i})"><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views">${r.views} views</span>${r.url?`<span class="rec-link" style="color:#5b7fc7">${esc(r.url).substring(0,50)}</span>`:'<span style="color:#333;flex:1">no link</span>'}<button class="rec-del" onclick="event.stopPropagation();deleteRecord(${i})" title="Remove">&times;</button></div>`;
   }).join('');
   // Clear highlight after render
   if(lastAddedRecordUrl)setTimeout(()=>{lastAddedRecordUrl=null},5000);
@@ -3298,17 +3372,15 @@ function handleTimelineHover(e){
   tip.style.left=tx+'px';tip.style.top=ty+'px';tip.style.display='block';
 }
 
-// Click: full detail modal
+// Click: full detail modal (both community and local)
 function handleTimelineClick(e){
   const{best}=findNearestDot(e);
   document.getElementById('timelineTooltip').style.display='none';
   if(!best)return;
-  const d=best.data;const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
   if(best.type==='community'){
     showFindDetail(best.idx);
   }else{
-    // Local find — open URL if available
-    if(d.url)window.open(d.url,'_blank','noopener');
+    showLocalRecordModal(best.idx);
   }
 }
 
@@ -4037,9 +4109,9 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "5.2.0",
+  "version": "5.3.0",
   "build": "2026-04-23T12:00:00",
-  "changelog": "Deep Dive pointer fix, premium anchor wipe with sonar rings, visual sweep, holidays",
+  "changelog": "Unified record modals with share buttons, water texture wipe, all dots clickable",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
