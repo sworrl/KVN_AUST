@@ -14,6 +14,27 @@
 
 ---
 
+## [5.0.0] - 2026-04-23
+
+### Changed — Full Visual Overhaul
+- **Header**: deeper gradient, bottom border glow `rgba(231,76,60,.12)`, 2px animated accent line with breathing keyframes, backdrop blur on buttons
+- **Start screen**: animated gradient title (white→red→gold shifting), stronger avatar glow, tagline with letter-spacing, buttons with inset highlights and bottom shadow
+- **Bingo card**: cells have inner shadow for depth + bottom highlight, hover glow, grid gets dark background pad, mosaic desaturated slightly
+- **Number screen**: gradient number box, multi-layer shadow, rolling digits with blue text-glow, GENERATE button with gloss + inset highlight + border
+- **Result screen**: pill with inset bottom shadow, stronger hover glow, lit stars have text-shadow glow, inputs recessed with inset shadow
+- **All modals**: gradient backgrounds, inset edge highlights, stronger overlay blur, improved dividers
+- **Format/History panels**: gradient backgrounds, inner edge lines, improved search inputs, hover depth on items
+- **Footer**: stronger gradient, top border line
+- **Custom scrollbars**: 8px webkit scrollbars with dark track, semi-transparent thumb, hover state
+- **Selection colors**: `::selection` themed red (default) / teal (Deep Dive)
+- **Nav arrows**: deeper shadows, primary buttons get accent glow
+- **Toasts**: subtle border added
+- **Spin button**: inset white highlight
+- **Summary cards**: shadow + hover border
+- **Bingo setup**: matches format panel treatment
+
+---
+
 ## [4.7.0] - 2026-04-23
 
 ### Fixed
