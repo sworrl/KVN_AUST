@@ -74,7 +74,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 <p align="center">
   <img src="screenshots/05-spinner.png" width="720" alt="KVN AUST Recycle Bin - Format Spinner Wheel">
-  <br><sub>3D Format Spinner — 170+ formats from the community map</sub>
+  <br><sub>3D Format Spinner — 192 formats from the community map</sub>
 </p>
 
 <p align="center">

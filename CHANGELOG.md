@@ -14,20 +14,10 @@
 
 ---
 
-## [4.5.0] - 2026-04-20
-
-### Changed
-- **Records form redesigned**: YouTube link is now required (not optional). Paste a URL and metadata auto-fetches (date posted, view count) via the videometa.php → Invidious → CORS proxy chain. Date and Views fields stay disabled until data arrives or fetch fails to manual fallback.
-- **Duplicate prevention**: can't add the same video ID twice to your records
-- **Add button**: disabled until valid metadata is populated
-- **Docs finalized**: all markdown files have standard headers, changelog is complete through v4.5.0
-
----
-
 ## [4.7.0] - 2026-04-23
 
 ### Fixed
-- **All 187 FORMAT-MAP entries now parse** — zero skips, zero hardcoded fallbacks
+- **All 192 FORMAT-MAP entries now parse** — zero skips, zero hardcoded fallbacks
 - **4XXX / Trim 4XXX**: properly detected as hex format (generates AAA-FFF range)
 - **"HHMMSS"**: generates valid time-of-day strings (000000-235959)
 - **Video0XX, Vid0XX, MOV000XX, muuvee00XX, 0_VIDEO_0XX**: small-range Ancient YouTube formats now parse from parenthetical `(00-10)` notation
@@ -35,6 +25,7 @@
 - **GX01XXXX, YDXJXXXX**: formats with X in the prefix (like GoPro `GX01`) now parse — regex uses lookahead to distinguish prefix-X from variable-X
 - **Date formats in Search Keyphrases section**: now caught without requiring `>YYYY` column
 - **Spacebar ghost spin**: spacebar on non-number screens no longer activates focused buttons (was triggering spin sounds in background)
+- **OG/Twitter meta image**: fixed broken `screenshots/spinner.png` reference to `screenshots/05-spinner.png`
 
 ### Changed
 - **All hardcoded formats removed** — `ALL_FORMATS=[]`, everything comes from FORMAT-MAP.md fetch + cache
@@ -44,7 +35,30 @@
 ### Added
 - `sp:'time'` format type — generates HHMMSS with valid hour/minute/second ranges
 - Small-range parser for Ancient YouTube formats in `(XX-YY)` parenthetical notation
-- Visual overhaul: bespoke button colors, background diamond texture, gloss overlays
+
+---
+
+## [4.6.0] - 2026-04-23
+
+### Added
+- **Visual overhaul**: bespoke button colors per action (copy/youtube/save/skip/end/share/discord/records), background diamond texture with slow drift animation, gloss overlays on all buttons
+- **"Add to Records" button** on result screen — grabs current video data and opens Records with highlighted entry
+- **"Submit a Find" button** on start screen — opens Records modal directly, no game required
+
+### Changed
+- Buttons use named CSS classes instead of inline styles
+- Result pill has gradient background with inset highlight
+- Records canvas delayed 350ms after modal open (fixes smaller-than-viewport on first render)
+- Community leaderboard entries show finder name prominently (white, bold, rarity text-shadow) with discovered_at date
+
+---
+
+## [4.5.0] - 2026-04-20
+
+### Changed
+- **Records form redesigned**: YouTube link is now required (not optional). Paste a URL and metadata auto-fetches via videometa.php → Invidious → CORS proxy chain
+- **Duplicate prevention**: can't add the same video ID twice to your records
+- **Add button**: disabled until valid metadata is populated
 
 ---
 
