@@ -86,7 +86,8 @@ body.deep-dive .main{background:linear-gradient(180deg,rgba(0,8,16,.4) 0%,rgba(0
 body.deep-dive::before{background:url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='40' cy='40' r='1.5' fill='%2300bcd4' fill-opacity='.15'/%3E%3Ccircle cx='10' cy='15' r='1' fill='%23006064' fill-opacity='.1'/%3E%3Ccircle cx='65' cy='70' r='.8' fill='%230097a7' fill-opacity='.12'/%3E%3C/svg%3E");background-size:80px 80px;animation:bgDrift 40s linear infinite;opacity:.04}
 body.deep-dive .spin-btn{box-shadow:0 6px 30px rgba(0,0,0,.7),0 0 25px rgba(0,188,212,.3);border-color:#0097a7}
 body.deep-dive .spin-label{color:#00bcd4}
-body.deep-dive .wheel-pointer svg polygon{fill:var(--bg);stroke:#0097a7}
+body.deep-dive .wheel-pointer svg polygon#ptrFill{fill:url(#ptrGrad);stroke:var(--pointer-glow,#0097a7)}
+body.deep-dive .wheel-pointer svg{filter:drop-shadow(0 4px 8px rgba(0,0,0,.7)) drop-shadow(0 0 8px var(--pointer-glow,rgba(0,188,212,.4)))}
 body.deep-dive .number-box{border-color:#0a2a3a;box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 30px rgba(0,188,212,.08)}
 body.deep-dive .rolling-number{color:#4dd0e1}
 body.deep-dive .result-pill{border-color:#0a2a3a;color:#4dd0e1}
@@ -109,18 +110,34 @@ body.deep-dive .wheel-count-wrap{border-color:#0a2a3a}
 body.deep-dive .wheel-mode-btns button.active{background:#00838f;border-color:#00838f}
 body.deep-dive .credit-footer{background:linear-gradient(0deg,rgba(2,6,8,.95) 0%,rgba(2,6,8,.6) 60%,transparent)}
 /* Anchor drop wipe */
-.anchor-wipe{position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;align-items:center;justify-content:center;flex-direction:column}
-.anchor-wipe .anchor-bg{position:absolute;inset:0;background:linear-gradient(180deg,#020810,#041420,#061828);transform:translateY(-100%);animation:anchorBgDrop 1.2s cubic-bezier(.4,0,.2,1) forwards}
-.anchor-wipe .anchor-icon{position:relative;z-index:1;font-size:4rem;animation:anchorFall 1.2s cubic-bezier(.4,0,.2,1) forwards;opacity:0}
-.anchor-wipe .anchor-text{position:relative;z-index:1;color:#4dd0e1;font-weight:900;font-size:1.2rem;letter-spacing:3px;opacity:0;animation:anchorTextFade .5s .8s ease forwards}
-.anchor-wipe .anchor-splash{position:absolute;bottom:0;left:0;right:0;height:60px;background:radial-gradient(ellipse at 50% 100%,rgba(0,188,212,.4),transparent 70%);opacity:0;animation:splashIn .4s .9s ease forwards}
-.anchor-wipe.rising .anchor-bg{animation:anchorBgRise 1s cubic-bezier(.4,0,.2,1) forwards}
-.anchor-wipe.rising .anchor-icon{animation:anchorRise 1s cubic-bezier(.4,0,.2,1) forwards}
+.anchor-wipe{position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
+.anchor-wipe .anchor-bg{position:absolute;inset:0;background:linear-gradient(180deg,#010408 0%,#021020 30%,#041830 60%,#062040 100%);transform:translateY(-100%);animation:anchorBgDrop 1.4s cubic-bezier(.4,0,.2,1) forwards}
+.anchor-wipe .anchor-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(0,188,212,.06),transparent 70%);pointer-events:none}
+.anchor-wipe .anchor-icon{position:relative;z-index:2;font-size:5rem;animation:anchorFall 1.4s cubic-bezier(.4,0,.2,1) forwards;opacity:0;
+  filter:drop-shadow(0 0 20px rgba(0,188,212,.5)) drop-shadow(0 4px 12px rgba(0,0,0,.8))}
+.anchor-wipe .anchor-text{position:relative;z-index:2;font-weight:900;font-size:1.5rem;letter-spacing:6px;opacity:0;animation:anchorTextFade .6s .9s ease forwards;
+  background:linear-gradient(135deg,#4dd0e1,#00bcd4,#0097a7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 12px rgba(0,188,212,.4))}
+.anchor-wipe .anchor-sub{position:relative;z-index:2;color:#006064;font-size:.7rem;font-weight:600;letter-spacing:2px;opacity:0;animation:anchorTextFade .4s 1.1s ease forwards}
+.anchor-wipe .anchor-splash{position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:radial-gradient(ellipse at 50% 100%,rgba(0,188,212,.5),rgba(0,150,180,.2) 40%,transparent 70%);
+  opacity:0;animation:splashIn .5s 1s ease forwards}
+.anchor-wipe .anchor-rings{position:absolute;z-index:1;width:200px;height:200px;border-radius:50%;
+  border:2px solid rgba(0,188,212,.15);animation:sonarRing 1.5s .6s ease-out forwards;opacity:0}
+.anchor-wipe .anchor-rings:nth-child(5){animation-delay:.8s;width:300px;height:300px}
+.anchor-wipe .anchor-rings:nth-child(6){animation-delay:1s;width:400px;height:400px}
+@keyframes sonarRing{0%{transform:scale(0);opacity:.4}100%{transform:scale(2);opacity:0}}
+.anchor-wipe .anchor-particles{position:absolute;inset:0;z-index:1;overflow:hidden}
+.anchor-wipe .anchor-particle{position:absolute;width:2px;height:2px;background:rgba(0,188,212,.3);border-radius:50%;animation:particleDrift 2s linear forwards}
+@keyframes particleDrift{0%{transform:translateY(0);opacity:.5}100%{transform:translateY(-100px);opacity:0}}
+.anchor-wipe.rising .anchor-bg{animation:anchorBgRise 1.1s cubic-bezier(.4,0,.2,1) forwards}
+.anchor-wipe.rising .anchor-icon{animation:anchorRise 1.1s cubic-bezier(.4,0,.2,1) forwards}
 .anchor-wipe.rising .anchor-text{animation:anchorTextOut .3s ease forwards}
-.anchor-wipe.rising .anchor-splash{animation:splashOut .5s ease forwards}
+.anchor-wipe.rising .anchor-sub{animation:anchorTextOut .2s ease forwards}
+.anchor-wipe.rising .anchor-splash{animation:splashOut .6s ease forwards}
 @keyframes anchorBgDrop{0%{transform:translateY(-100%)}100%{transform:translateY(0)}}
-@keyframes anchorFall{0%{transform:translateY(-120vh);opacity:0}20%{opacity:1}100%{transform:translateY(0);opacity:1}}
-@keyframes anchorTextFade{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes anchorFall{0%{transform:translateY(-120vh) rotate(-10deg);opacity:0}15%{opacity:1}85%{transform:translateY(10px) rotate(2deg)}100%{transform:translateY(0) rotate(0);opacity:1}}
+@keyframes anchorTextFade{0%{opacity:0;transform:translateY(15px) scale(.9)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes anchorBgRise{0%{transform:translateY(0)}100%{transform:translateY(100%)}}
 @keyframes anchorRise{0%{transform:translateY(0);opacity:1}80%{opacity:1}100%{transform:translateY(120vh);opacity:0}}
 @keyframes anchorTextOut{0%{opacity:1}100%{opacity:0}}
@@ -1981,7 +1998,15 @@ function toggleDeepDive(){
   if(deepDiveActive){
     // Anchor drop wipe IN
     const wipe=document.createElement('div');wipe.className='anchor-wipe';
-    wipe.innerHTML='<div class="anchor-bg"></div><div class="anchor-icon">&#9875;</div><div class="anchor-text">DEEP DIVE</div><div class="anchor-splash"></div>';
+    // Build premium wipe with sonar rings + particles
+    let wipeHtml='<div class="anchor-bg"></div>';
+    wipeHtml+='<div class="anchor-rings"></div><div class="anchor-rings"></div><div class="anchor-rings"></div>';
+    wipeHtml+='<div class="anchor-particles">';
+    for(let i=0;i<20;i++){const x=Math.random()*100,d=.5+Math.random()*1.5,delay=Math.random()*1.2;
+      wipeHtml+=`<div class="anchor-particle" style="left:${x}%;bottom:${Math.random()*40}%;animation-duration:${d}s;animation-delay:${delay}s"></div>`}
+    wipeHtml+='</div>';
+    wipeHtml+='<div class="anchor-icon">&#9875;</div><div class="anchor-text">DEEP DIVE</div><div class="anchor-sub">SEARCHING THE ABYSS</div><div class="anchor-splash"></div>';
+    wipe.innerHTML=wipeHtml;
     document.body.appendChild(wipe);
     playAnchorDrop();
 
@@ -3990,9 +4015,9 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "5.1.0",
+  "version": "5.2.0",
   "build": "2026-04-23T12:00:00",
-  "changelog": "Visual sweep, poppable bubbles, holiday easter eggs (KVN birthday Oct 18), Deep Dive upgrades",
+  "changelog": "Deep Dive pointer fix, premium anchor wipe with sonar rings, visual sweep, holidays",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
