@@ -14,6 +14,23 @@
 
 ---
 
+## [5.1.0] - 2026-04-23
+
+### Added
+- **Holiday easter eggs**: automatic detection for 10 holidays — New Year, Valentine's, St. Patrick's, April Fools, 4th of July, KVN AUST's Birthday (Oct 18), Halloween, Christmas Eve, Christmas, New Year's Eve
+- Each holiday: themed tagline, toast greeting, holiday-colored confetti, custom free space phrases (Halloween/Christmas)
+- **KVN AUST Day** (Oct 18): auto-confetti + birthday greeting
+- **April Fools**: reversed bingo letters
+- **Poppable bubbles**: click any Deep Dive bubble to burst it — spawns 6-16 HSL particles with gravity + pop sound (high-pass noise + sine ping)
+- **Bubble visual upgrade**: per-bubble HSL hue, outer ring rainbow refraction, prismatic refraction arc on large bubbles, pop particles inherit parent hue
+- **Deep Dive background**: swaps to underwater dot texture pattern
+
+### Changed
+- Visual sweep: 17 elements upgraded with premium treatment — bingo flash, bingo win, bingo cells, confetti, error panels, spin label, format banner, click hint, range display, wheel controls, summary screen/title/cards, plus transitions on all interactive elements
+- Confetti uses holiday colors when a holiday is active
+
+---
+
 ## [5.0.0] - 2026-04-23
 
 ### Changed — Full Visual Overhaul
