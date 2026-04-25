@@ -14,6 +14,24 @@
 
 ---
 
+## [5.3.0] - 2026-04-23
+
+### Added
+- **Unified record modals**: all finds (community AND local) open the same premium detail modal with thumbnail, rarity pill badge, color-coded metadata, prominent finder attribution box, and added-at date
+- **Share SVG from modal**: generates a branded find card with rarity header, metadata, finder credit, and KVN AUST footer
+- **Discord copy from modal**: formatted markdown with rarity emoji, ✮ metadata lines, finder attribution, and app link
+- All timeline dots and local record list entries are now clickable (open modals)
+
+---
+
+## [5.2.0] - 2026-04-23
+
+### Changed
+- **Deep Dive pointer**: CSS override uses `var(--pointer-glow)` for stroke — segment colors flash correctly through deep ocean palette during spin
+- **Anchor wipe major upgrade**: water caustics texture (SVG fractalNoise with screen blend), water surface line, 8 splash droplets with gravity arc, 25 rising particles, 3 sonar rings, taller splash pad, "SEARCHING THE ABYSS" subtitle
+
+---
+
 ## [5.1.0] - 2026-04-23
 
 ### Added
