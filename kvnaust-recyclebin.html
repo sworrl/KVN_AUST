@@ -3261,7 +3261,7 @@ function addCurrentToRecords(){
     else isoDate=datePosted; // fallback
   }
   if(!isoDate){showToast('No date available — fetch metadata first','warn');return}
-  recs.push({date:isoDate,views:views,url:url,added:new Date().toISOString()});
+  recs.push({date:isoDate,views:views,url:url,lead:chosenFormat?chosenFormat.label:'',added:new Date().toISOString()});
   recs.sort((a,b)=>new Date(a.date)-new Date(b.date));
   saveRecords(recs);
   lastAddedRecordUrl=url;
@@ -3279,7 +3279,7 @@ function addRecord(){
   const recs=getRecords();
   // Prevent duplicate video IDs
   if(recs.some(r=>r.url&&getVideoId(r.url)===vid)){showToast('This video is already in your records','warn');return}
-  recs.push({date:dateVal,views:views,url:url,added:new Date().toISOString()});
+  recs.push({date:dateVal,views:views,url:url,lead:'',added:new Date().toISOString()});
   recs.sort((a,b)=>new Date(a.date)-new Date(b.date));
   saveRecords(recs);
   document.getElementById('recDate').value='';document.getElementById('recDate').disabled=true;
