@@ -44,27 +44,49 @@ jobs:
               'COMMON': '🔵'
           }
 
+          zero_views = [f for f in finds if (f.get('views_when_found') or 0) == 0]
+          has_views = [f for f in finds if (f.get('views_when_found') or 0) > 0]
+
           lines = []
           lines.append(f'**{total} community finds** — oldest: {oldest} · newest: {newest}')
-          lines.append('')
-          lines.append('| # | Rarity | Date Posted | Views | Lead | Found By |')
-          lines.append('|:-:|:-------|:-----------|------:|:-----|:---------|')
 
-          for i, f in enumerate(finds[:25]):
-              medal = '🥇' if i == 0 else '🥈' if i == 1 else '🥉' if i == 2 else str(i+1)
-              emoji = rarity_emoji.get(f.get('rarity', ''), '')
-              date = f.get('date_posted', '?')
-              views = f.get('views_when_found', '?')
-              lead = f.get('lead', '?')
-              if len(lead) > 25:
-                  lead = lead[:22] + '...'
-              found_by = f.get('found_by', '?')
-              rarity = f.get('rarity', '?')
-              vid = f.get('video_id', '')
-              title = f.get('video_title', '')
-              link = f'[{date}](https://youtube.com/watch?v={vid})' if vid else date
+          # Zero-view finds first (the holy grail)
+          if zero_views:
+              lines.append('')
+              lines.append(f'#### ⭐ Zero-View Finds ({len(zero_views)})')
+              lines.append('')
+              lines.append('| # | Rarity | Date Posted | Lead | Found By |')
+              lines.append('|:-:|:-------|:-----------|:-----|:---------|')
+              for i, f in enumerate(zero_views[:25]):
+                  medal = '🥇' if i == 0 else '🥈' if i == 1 else '🥉' if i == 2 else str(i+1)
+                  emoji = rarity_emoji.get(f.get('rarity', ''), '')
+                  date = f.get('date_posted', '?')
+                  lead = f.get('lead', '?') or '—'
+                  if len(lead) > 25: lead = lead[:22] + '...'
+                  found_by = f.get('found_by', '?')
+                  rarity = f.get('rarity', '?')
+                  vid = f.get('video_id', '')
+                  link = f'[{date}](https://youtube.com/watch?v={vid})' if vid else date
+                  lines.append(f'| {medal} | {emoji} **{rarity}** | {link} | `{lead}` | **{found_by}** |')
 
-              lines.append(f'| {medal} | {emoji} {rarity} | {link} | {views} | `{lead}` | {found_by} |')
+          # Non-zero finds below
+          if has_views:
+              lines.append('')
+              lines.append(f'#### All Finds ({len(has_views)} with views)')
+              lines.append('')
+              lines.append('| # | Rarity | Date Posted | Views | Lead | Found By |')
+              lines.append('|:-:|:-------|:-----------|------:|:-----|:---------|')
+              for i, f in enumerate(has_views[:25]):
+                  emoji = rarity_emoji.get(f.get('rarity', ''), '')
+                  date = f.get('date_posted', '?')
+                  views = f.get('views_when_found', '?')
+                  lead = f.get('lead', '?') or '—'
+                  if len(lead) > 25: lead = lead[:22] + '...'
+                  found_by = f.get('found_by', '?')
+                  rarity = f.get('rarity', '?')
+                  vid = f.get('video_id', '')
+                  link = f'[{date}](https://youtube.com/watch?v={vid})' if vid else date
+                  lines.append(f'| {i+1} | {emoji} {rarity} | {link} | {views} | `{lead}` | {found_by} |')
 
           lines.append('')
           lines.append(f'*Live leaderboard at [falcontechnix.com/KVN_AUST/#records](https://falcontechnix.com/KVN_AUST/#records) · [API endpoint](https://www.falcontechnix.com/KVN_AUST/finds.php)*')
