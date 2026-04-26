@@ -222,6 +222,17 @@ Query with `?category=camera-img`, `?source=discord`, `?since=2026-01-01T00:00:0
 | 8 | 🔴 SUPER RARE | [2006-10-30](https://youtube.com/watch?v=KeOXi_GyFdk) | 12 | `dustin before:2007` | Ross from wii music |
 | 9 | 🔴 SUPER RARE | [2006-11-14](https://youtube.com/watch?v=MHZmEcDUSA0) | 175 | `` | root |
 | 10 | 🔴 SUPER RARE | [2006-11-24](https://youtube.com/watch?v=kj0CI8tQzbE) | 4 | `testing before:2007` | Ross from wii music |
+| 11 | 🟢 RARE | [2009-01-28](https://youtube.com/watch?v=ktWZiOebkxM) | 112 | `` | root |
+| 12 | 🟢 RARE | [2009-04-24](https://youtube.com/watch?v=o2DY-QOs6RY) | 1 | `MVI` | soph |
+| 13 | 🟢 RARE | [2011-07-09](https://youtube.com/watch?v=z-QCzV5FLWk) | 10 | `.mts` | Ross from wii music |
+| 14 | 🟢 RARE | [2011-12-18](https://youtube.com/watch?v=DolOBs_wvYE) | 3 | `` | root |
+| 15 | 🔵 COMMON | [2013-10-06](https://youtube.com/watch?v=lgqeJunecBo) | 1 | `MOVXXXXA` | Ross from wii music |
+| 16 | 🔵 COMMON | [2013-10-11](https://youtube.com/watch?v=o8WYiF0kidQ) | 1 | `` | root |
+| 17 | 🔵 COMMON | [2014-01-26](https://youtube.com/watch?v=KDjg3E7PVPA) | 0 | `` | root |
+| 18 | 🔵 COMMON | [2015-03-26](https://youtube.com/watch?v=sBlZbPbgwyE) | 4 | `` | root |
+| 19 | 🔵 COMMON | [2016-11-03](https://youtube.com/watch?v=vqFJJpIcvgI) | 2 | `Trim 4XXX` | Ross from wii music |
+| 20 | 🔵 COMMON | [2018-06-24](https://youtube.com/watch?v=2Sp8_zmPy-U) | 1370 | `IMG XXXX` | fivezies |
+| 21 | 🔵 COMMON | [2025-12-10](https://youtube.com/watch?v=aT7FJT7I7Jw) | 201 | `Sprint PictureMail` | Ross from wii music |
 
 *Live leaderboard at [falcontechnix.com/KVN_AUST/#records](https://falcontechnix.com/KVN_AUST/#records) · [API endpoint](https://www.falcontechnix.com/KVN_AUST/finds.php)*
 <!-- LEADERBOARD-END -->
