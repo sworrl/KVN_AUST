@@ -14,6 +14,14 @@
 
 ---
 
+## [5.3.1] - 2026-04-25
+
+### Fixed
+- **Records entries now include `lead` field** — format label saved when adding from result screen, enables wrapper→finds.php bridge to include the lead/keyphrase used
+- **SOLVED_MYSTERIES.md** now included in server sync pull list and .htaccess allowlist
+
+---
+
 ## [5.3.0] - 2026-04-23
 
 ### Added
