@@ -17,7 +17,7 @@ jobs:
 
       - name: Fetch leaderboard from API
         run: |
-          curl -s "https://www.falcontechnix.com/KVN_AUST/finds.php?limit=10&order=asc" -o /tmp/finds.json
+          curl -s "https://www.falcontechnix.com/KVN_AUST/finds.php?limit=25&order=asc" -o /tmp/finds.json
 
       - name: Generate leaderboard markdown
         run: |
@@ -50,7 +50,7 @@ jobs:
           lines.append('| # | Rarity | Date Posted | Views | Lead | Found By |')
           lines.append('|:-:|:-------|:-----------|------:|:-----|:---------|')
 
-          for i, f in enumerate(finds[:10]):
+          for i, f in enumerate(finds[:25]):
               medal = '🥇' if i == 0 else '🥈' if i == 1 else '🥉' if i == 2 else str(i+1)
               emoji = rarity_emoji.get(f.get('rarity', ''), '')
               date = f.get('date_posted', '?')
@@ -81,7 +81,7 @@ jobs:
           with open('README.md', 'w') as f:
               f.write(readme)
 
-          print(f"Updated leaderboard with {len(finds[:10])} entries")
+          print(f"Updated leaderboard with {len(finds[:25])} entries")
           PYEOF
 
       - name: Commit if changed
