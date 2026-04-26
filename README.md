@@ -208,7 +208,7 @@ Query with `?category=camera-img`, `?source=discord`, `?since=2026-01-01T00:00:0
 > **Get on the leaderboard:** [Play the hosted version](https://falcontechnix.com/KVN_AUST/) and create an account. Submit a validated zero-view video during gameplay or directly via the [Records timeline](https://falcontechnix.com/KVN_AUST/#records) — you don't need to play a full game to submit a find. See also: [Discord Integration Guide](DISCORD_INTEGRATION.md)
 
 <!-- LEADERBOARD-START -->
-**14 community finds** — oldest: 2005-09-05 · newest: 2025-12-10
+**21 community finds** — oldest: 2005-09-05 · newest: 2025-12-10
 
 | # | Rarity | Date Posted | Views | Lead | Found By |
 |:-:|:-------|:-----------|------:|:-----|:---------|
@@ -218,10 +218,10 @@ Query with `?category=camera-img`, `?source=discord`, `?since=2026-01-01T00:00:0
 | 4 | 🔴 SUPER RARE | [2006-04-11](https://youtube.com/watch?v=qnBuwBBNeF0) | 14 | `kelly 5` | susgod_bro_69 |
 | 5 | 🔴 SUPER RARE | [2006-05-04](https://youtube.com/watch?v=DuI02uPgDOs) | 13 | `testing before:2007` | fivezies |
 | 6 | 🔴 SUPER RARE | [2006-08-01](https://youtube.com/watch?v=hzvZ2MtjrtA) | 9 | `You have new Picture M...` | fivezies |
-| 7 | 🔴 SUPER RARE | [2006-10-30](https://youtube.com/watch?v=KeOXi_GyFdk) | 12 | `dustin before:2007` | Ross from wii music |
-| 8 | 🔴 SUPER RARE | [2006-11-24](https://youtube.com/watch?v=kj0CI8tQzbE) | 4 | `testing before:2007` | Ross from wii music |
-| 9 | 🟢 RARE | [2009-04-24](https://youtube.com/watch?v=o2DY-QOs6RY) | 1 | `MVI` | soph |
-| 10 | 🟢 RARE | [2011-07-09](https://youtube.com/watch?v=z-QCzV5FLWk) | 10 | `.mts` | Ross from wii music |
+| 7 | 🔴 SUPER RARE | [2006-10-17](https://youtube.com/watch?v=F1BA07OuiaA) | 280 | `` | root |
+| 8 | 🔴 SUPER RARE | [2006-10-30](https://youtube.com/watch?v=KeOXi_GyFdk) | 12 | `dustin before:2007` | Ross from wii music |
+| 9 | 🔴 SUPER RARE | [2006-11-14](https://youtube.com/watch?v=MHZmEcDUSA0) | 175 | `` | root |
+| 10 | 🔴 SUPER RARE | [2006-11-24](https://youtube.com/watch?v=kj0CI8tQzbE) | 4 | `testing before:2007` | Ross from wii music |
 
 *Live leaderboard at [falcontechnix.com/KVN_AUST/#records](https://falcontechnix.com/KVN_AUST/#records) · [API endpoint](https://www.falcontechnix.com/KVN_AUST/finds.php)*
 <!-- LEADERBOARD-END -->
