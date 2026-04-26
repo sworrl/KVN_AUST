@@ -210,29 +210,36 @@ Query with `?category=camera-img`, `?source=discord`, `?since=2026-01-01T00:00:0
 <!-- LEADERBOARD-START -->
 **21 community finds** — oldest: 2005-09-05 · newest: 2025-12-10
 
+#### ⭐ Zero-View Finds (1)
+
+| # | Rarity | Date Posted | Lead | Found By |
+|:-:|:-------|:-----------|:-----|:---------|
+| 🥇 | 🔵 **COMMON** | [2014-01-26](https://youtube.com/watch?v=KDjg3E7PVPA) | `—` | **Eurrl** |
+
+#### All Finds (20 with views)
+
 | # | Rarity | Date Posted | Views | Lead | Found By |
 |:-:|:-------|:-----------|------:|:-----|:---------|
-| 🥇 | 🏆 LEGENDARY | [2005-09-05](https://youtube.com/watch?v=ExMSFNh7Sp0) | 197 | `testing before:2007` | fivezies |
-| 🥈 | 🔴 SUPER RARE | [2006-03-14](https://youtube.com/watch?v=7tH0sdugVEU) | 25 | `good show` | susgod_bro_69 |
-| 🥉 | 🔴 SUPER RARE | [2006-03-20](https://youtube.com/watch?v=oP8jSAmt1M8) | 27 | `new` | susgod_bro_69 |
+| 1 | 🏆 LEGENDARY | [2005-09-05](https://youtube.com/watch?v=ExMSFNh7Sp0) | 197 | `testing before:2007` | fivezies |
+| 2 | 🔴 SUPER RARE | [2006-03-14](https://youtube.com/watch?v=7tH0sdugVEU) | 25 | `good show` | susgod_bro_69 |
+| 3 | 🔴 SUPER RARE | [2006-03-20](https://youtube.com/watch?v=oP8jSAmt1M8) | 27 | `new` | susgod_bro_69 |
 | 4 | 🔴 SUPER RARE | [2006-04-11](https://youtube.com/watch?v=qnBuwBBNeF0) | 14 | `kelly 5` | susgod_bro_69 |
 | 5 | 🔴 SUPER RARE | [2006-05-04](https://youtube.com/watch?v=DuI02uPgDOs) | 13 | `testing before:2007` | fivezies |
 | 6 | 🔴 SUPER RARE | [2006-08-01](https://youtube.com/watch?v=hzvZ2MtjrtA) | 9 | `You have new Picture M...` | fivezies |
-| 7 | 🔴 SUPER RARE | [2006-10-17](https://youtube.com/watch?v=F1BA07OuiaA) | 280 | `` | root |
+| 7 | 🔴 SUPER RARE | [2006-10-17](https://youtube.com/watch?v=F1BA07OuiaA) | 280 | `—` | Eurrl |
 | 8 | 🔴 SUPER RARE | [2006-10-30](https://youtube.com/watch?v=KeOXi_GyFdk) | 12 | `dustin before:2007` | Ross from wii music |
-| 9 | 🔴 SUPER RARE | [2006-11-14](https://youtube.com/watch?v=MHZmEcDUSA0) | 175 | `` | root |
+| 9 | 🔴 SUPER RARE | [2006-11-14](https://youtube.com/watch?v=MHZmEcDUSA0) | 175 | `—` | Eurrl |
 | 10 | 🔴 SUPER RARE | [2006-11-24](https://youtube.com/watch?v=kj0CI8tQzbE) | 4 | `testing before:2007` | Ross from wii music |
-| 11 | 🟢 RARE | [2009-01-28](https://youtube.com/watch?v=ktWZiOebkxM) | 112 | `` | root |
+| 11 | 🟢 RARE | [2009-01-28](https://youtube.com/watch?v=ktWZiOebkxM) | 112 | `—` | Eurrl |
 | 12 | 🟢 RARE | [2009-04-24](https://youtube.com/watch?v=o2DY-QOs6RY) | 1 | `MVI` | soph |
 | 13 | 🟢 RARE | [2011-07-09](https://youtube.com/watch?v=z-QCzV5FLWk) | 10 | `.mts` | Ross from wii music |
-| 14 | 🟢 RARE | [2011-12-18](https://youtube.com/watch?v=DolOBs_wvYE) | 3 | `` | root |
+| 14 | 🟢 RARE | [2011-12-18](https://youtube.com/watch?v=DolOBs_wvYE) | 3 | `—` | Eurrl |
 | 15 | 🔵 COMMON | [2013-10-06](https://youtube.com/watch?v=lgqeJunecBo) | 1 | `MOVXXXXA` | Ross from wii music |
-| 16 | 🔵 COMMON | [2013-10-11](https://youtube.com/watch?v=o8WYiF0kidQ) | 1 | `` | root |
-| 17 | 🔵 COMMON | [2014-01-26](https://youtube.com/watch?v=KDjg3E7PVPA) | 0 | `` | root |
-| 18 | 🔵 COMMON | [2015-03-26](https://youtube.com/watch?v=sBlZbPbgwyE) | 4 | `` | root |
-| 19 | 🔵 COMMON | [2016-11-03](https://youtube.com/watch?v=vqFJJpIcvgI) | 2 | `Trim 4XXX` | Ross from wii music |
-| 20 | 🔵 COMMON | [2018-06-24](https://youtube.com/watch?v=2Sp8_zmPy-U) | 1370 | `IMG XXXX` | fivezies |
-| 21 | 🔵 COMMON | [2025-12-10](https://youtube.com/watch?v=aT7FJT7I7Jw) | 201 | `Sprint PictureMail` | Ross from wii music |
+| 16 | 🔵 COMMON | [2013-10-11](https://youtube.com/watch?v=o8WYiF0kidQ) | 1 | `—` | Eurrl |
+| 17 | 🔵 COMMON | [2015-03-26](https://youtube.com/watch?v=sBlZbPbgwyE) | 4 | `—` | Eurrl |
+| 18 | 🔵 COMMON | [2016-11-03](https://youtube.com/watch?v=vqFJJpIcvgI) | 2 | `Trim 4XXX` | Ross from wii music |
+| 19 | 🔵 COMMON | [2018-06-24](https://youtube.com/watch?v=2Sp8_zmPy-U) | 1370 | `IMG XXXX` | fivezies |
+| 20 | 🔵 COMMON | [2025-12-10](https://youtube.com/watch?v=aT7FJT7I7Jw) | 201 | `Sprint PictureMail` | Ross from wii music |
 
 *Live leaderboard at [falcontechnix.com/KVN_AUST/#records](https://falcontechnix.com/KVN_AUST/#records) · [API endpoint](https://www.falcontechnix.com/KVN_AUST/finds.php)*
 <!-- LEADERBOARD-END -->
