@@ -4289,7 +4289,7 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
 checkForUpdates();checkHoliday();
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+// Service worker registration handled by hosted wrapper (sw.js not bundled in monolithic HTML)
 // Fetch community finds in background, poll every 60s
 setTimeout(fetchCommunityRecords,2000);
 setInterval(fetchCommunityRecords,60000);
