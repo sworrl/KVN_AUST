@@ -161,21 +161,26 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 > **[Play YouTube's Recycle Bin at falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/)** — always up to date, cloud save, community leaderboard, and more.
 
-The hosted version wraps the same HTML file from this repo with additional features:
+The hosted version (wrapper v1.12.0) wraps the same HTML from this repo with exclusive features:
 
 | Feature | Hosted | Standalone |
 |:--------|:------:|:----------:|
-| Full game (spinner, bingo, rating, achievements, gallery) | Yes | Yes |
-| Format sync, Deep Dive mode, Share Card / Discord copy | Yes | Yes |
+| Full game (spinner, bingo, achievements, gallery, Deep Dive) | Yes | Yes |
+| Format sync, Share Card / Discord copy | Yes | Yes |
 | **Cloud Save** — game history, bingo state, settings synced across devices | Yes | No |
-| **Player Profiles** — XP, levels, badges, streaks, [shareable profile cards](https://falcontechnix.com/KVN_AUST/profile_card.php?u=root) | Yes | No |
+| **Player Profiles** — XP, levels, 28 badges, streaks, [shareable SVG cards](https://falcontechnix.com/KVN_AUST/profile_card.php?u=root) | Yes | No |
 | **Seasons** — 90-day competitive windows with season leaderboards | Yes | No |
-| **Multiplayer** — co-op rooms via SSE for signed-in users | Yes | No |
-| **Permanent Discovery Pages** — every find gets a shareable URL with OG card | Yes | No |
-| **Community Finds** — live leaderboard with heatmap, filtering by player/season | Yes | Fetch only |
-| **Auto-updates** — new versions deploy within 5 minutes of a push to this repo | Yes | Manual |
-| **Atom Feed** — subscribe to new finds at [`/feed.xml`](https://falcontechnix.com/KVN_AUST/feed.xml) | Yes | No |
-| **OpenAPI Spec** — full API documentation at [`/openapi.json`](https://falcontechnix.com/KVN_AUST/openapi.json) | Yes | No |
+| **Multiplayer & Co-Watching** — SSE rooms + synchronized video playback on discovery pages | Yes | No |
+| **Daily Challenges** — format-of-the-day with streak tracking and leaderboard | Yes | No |
+| **Find Verification** — server validates videos exist and view count is plausible | Yes | No |
+| **Discovery Pages** — every find gets a [permanent shareable URL](https://falcontechnix.com/KVN_AUST/discoveries/) with OG card | Yes | No |
+| **Web Push** — notifications for record-broken, season events, verified finds | Yes | No |
+| **Pattern Recommendations** — "users who found X also found Y" co-occurrence analysis | Yes | No |
+| **Personal Webhooks** — Discord/Slack notifications on new finds and streaks | Yes | No |
+| **Atom Feeds** — [community feed](https://falcontechnix.com/KVN_AUST/feed.xml) + per-user feeds | Yes | No |
+| **JS SDK** — [`sdk.js`](https://falcontechnix.com/KVN_AUST/sdk.js) for third-party integrations | Yes | No |
+| **Embed Widget** — iframe-ready latest-finds widget for any site | Yes | No |
+| **[OpenAPI Spec](https://falcontechnix.com/KVN_AUST/openapi.json)** — full API documentation | Yes | No |
 
 ### Offline / Standalone
 
@@ -189,20 +194,27 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 
 | Endpoint | What |
 |:---------|:-----|
-| [`/finds.php`](https://falcontechnix.com/KVN_AUST/finds.php) | Full leaderboard JSON — filter by `?category=`, `?source=`, `?found_by=`, `?season=current`, `?order=`, `?limit=` |
+| [`/finds.php`](https://falcontechnix.com/KVN_AUST/finds.php) | Leaderboard JSON — filter by `?category=`, `?source=`, `?found_by=`, `?season=current`, `?order=`, `?limit=` |
 | [`/finds.php?heatmap=1`](https://falcontechnix.com/KVN_AUST/finds.php?heatmap=1) | Category × decade heatmap matrix |
-| `/discoveries/<video_id>` | Permanent shareable page per find with OG card |
-| [`/profile.php?u=<name>`](https://falcontechnix.com/KVN_AUST/profile.php?u=root) | Player profile: level, XP, badges, rank, top finds |
+| [`/finds.php?heatmap=date`](https://falcontechnix.com/KVN_AUST/finds.php?heatmap=date) | Year × month matrix by upload date |
+| `/discoveries/<video_id>` | Permanent shareable page with OG card and co-watch |
+| [`/profile.php?u=<name>`](https://falcontechnix.com/KVN_AUST/profile.php?u=root) | Player profile: level, XP, 28 badges, rank, streaks |
+| [`/profile.php?u=A&vs=B`](https://falcontechnix.com/KVN_AUST/profile.php?u=root&vs=root) | Side-by-side player comparison |
 | [`/profile_card.php?u=<name>`](https://falcontechnix.com/KVN_AUST/profile_card.php?u=root) | 1200×630 SVG share card |
-| [`/feed.xml`](https://falcontechnix.com/KVN_AUST/feed.xml) | Atom feed of recent finds |
-| [`/openapi.json`](https://falcontechnix.com/KVN_AUST/openapi.json) | OpenAPI 3.0 spec for the full API surface |
+| [`/badges.php?u=<name>`](https://falcontechnix.com/KVN_AUST/badges.php?catalog=1) | Player badges + full badge catalog |
+| [`/clusters.php?reco=<name>`](https://falcontechnix.com/KVN_AUST/clusters.php?reco=root) | Pattern recommendations: leads to try next |
+| [`/daily.php`](https://falcontechnix.com/KVN_AUST/daily.php) | Daily challenge + streak leaderboard |
+| [`/random.php`](https://falcontechnix.com/KVN_AUST/random.php) | Random discovery redirect (or `?json=1`) |
+| [`/feed.xml`](https://falcontechnix.com/KVN_AUST/feed.xml) | Community Atom feed |
+| `/feed.php?u=<name>` | Per-user Atom feed |
 | [`/status.php`](https://falcontechnix.com/KVN_AUST/status.php) | Live status: counts, online users, active season |
+| [`/openapi.json`](https://falcontechnix.com/KVN_AUST/openapi.json) | OpenAPI 3.0 spec |
 
 - **Rate limit**: 3 requests per 60 seconds per IP (ETag conditional GET is free)
-- **20+ community finds** spanning 2005 to 2025
-- **Rarity tiers**: LEGENDARY (2005), SUPER RARE (2006), VERY RARE (2007-2008), RARE (2009-2012), COMMON (2013+)
+- **Verified finds**: server validates videos exist and view count is ≤500 views
 - **Seasons**: 90-day competitive windows, filter with `?season=current`
-- **Player profiles**: XP, levels, badges, streaks, lifetime rank
+- **Daily challenges**: format-of-the-day with streak tracking
+- **28 badges**: 15 in-game (client) + 13 wrapper-exclusive (server-verified achievements)
 
 ### Direct Links
 
@@ -297,5 +309,5 @@ The community-maintained database of every known default filename keyphrase that
 ---
 
 <p align="center">
-  <sub>GPL-3.0 | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Play Now</a> | <a href="FORMAT-MAP.md">Format Map</a> | <a href="SOLVED_MYSTERIES.md">Solved Mysteries</a> | <a href="DISCORD_INTEGRATION.md">Discord</a> | <a href="CHANGELOG.md">Changelog</a></sub>
+  <sub>GPL-3.0 | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Play Now</a> | <a href="FORMAT-MAP.md">Format Map</a> | <a href="SOLVED_MYSTERIES.md">Solved Mysteries</a> | <a href="DISCORD_INTEGRATION.md">Discord</a> | <a href="CHANGELOG.md">Game Changelog</a> | <a href="WRAPPER_CHANGELOG.md">Wrapper Changelog</a></sub>
 </p>

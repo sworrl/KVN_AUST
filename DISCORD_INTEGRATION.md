@@ -48,11 +48,16 @@ GET https://www.falcontechnix.com/KVN_AUST/finds.php
 
 | Endpoint | Use |
 |:---------|:----|
-| `GET /KVN_AUST/profile.php?u=<name>` | Player profile JSON: level, XP, badges, rank, top finds |
+| `GET /KVN_AUST/profile.php?u=<name>` | Player profile JSON: level, XP, 28 badges, rank, streaks |
 | `GET /KVN_AUST/profile_card.php?u=<name>` | 1200×630 SVG share card — embed directly in Discord |
-| `GET /KVN_AUST/feed.xml` | Atom feed of recent finds — use for RSS-style alerts |
+| `GET /KVN_AUST/badges.php?u=<name>` | Player badges with progress, or `?catalog=1` for full badge list |
+| `GET /KVN_AUST/clusters.php?reco=<name>` | Personalized lead recommendations based on find history |
+| `GET /KVN_AUST/daily.php` | Today's challenge format + streak leaderboard |
+| `GET /KVN_AUST/random.php` | 302 redirect to random discovery (or `?json=1` for metadata) |
+| `GET /KVN_AUST/feed.xml` | Community Atom feed — use for RSS-style alerts |
+| `GET /KVN_AUST/feed.php?u=<name>` | Per-user Atom feed |
 | `GET /KVN_AUST/status.php` | Live status: total finds, online users, active season |
-| `GET /KVN_AUST/discoveries/<video_id>` | Permanent shareable page per find (has OG card for Discord embeds) |
+| `GET /KVN_AUST/discoveries/<video_id>` | Permanent shareable page with OG card (auto-embeds in Discord) |
 
 ## Response Shape
 

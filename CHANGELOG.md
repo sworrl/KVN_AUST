@@ -14,9 +14,11 @@
 
 ---
 
-## [6.0.0] - 2026-04-27 (Wrapper 1.9.0)
+## [6.0.0] - 2026-04-27 (Wrapper 1.12.0)
 
-### Hosted Platform (Wrapper 1.9.0)
+> See [WRAPPER_CHANGELOG.md](WRAPPER_CHANGELOG.md) for the full hosted platform changelog.
+
+### Hosted Platform (Wrapper 1.12.0)
 - **Player profiles**: XP, levels (sqrt scaling), 15 server-side badges, lifetime rank, streaks. Shareable profile cards (1200×630 SVG). Compare two players side-by-side.
 - **Seasons**: 90-day competitive windows, auto-seeded. Filter leaderboard by `?season=current`. iCalendar feed at `/seasons.ics`.
 - **Multiplayer**: SSE-based co-op rooms for signed-in users. Create room → share link → play together.
