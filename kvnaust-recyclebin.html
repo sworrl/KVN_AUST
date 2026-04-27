@@ -717,6 +717,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
     <button class="hdr-btn" id="bingoToggle" onclick="handleBingoBtn()">Setup Bingo</button>
     <button class="hdr-btn" onclick="showRecords()" style="color:#e74c3c">Records</button>
     <button class="hdr-btn" onclick="showStats()">Stats</button>
+    <button class="hdr-btn" onclick="showAchievements()" style="color:#ffd700">Badges</button>
     <button class="hdr-btn" id="formatsBtn" onclick="toggleFormatPanel()">Formats</button>
     <button class="hdr-btn" onclick="showShortcuts()" title="Keyboard Shortcuts" style="padding:5px 8px;font-weight:900">?</button>
     <button class="hdr-btn" onclick="toggleSettings()" title="Settings" style="padding:5px 8px">
@@ -958,6 +959,16 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <div style="display:flex;justify-content:space-between"><span style="color:#777">Close modals</span><kbd style="background:var(--card2);padding:2px 8px;border-radius:4px;font-size:.7rem;border:1px solid #3a3a55;color:#fff">Escape</kbd></div>
     </div>
     <div style="text-align:center;margin-top:12px"><button class="s-btn" onclick="closeShortcuts()">Close</button></div>
+  </div>
+</div>
+
+<!-- ACHIEVEMENTS MODAL -->
+<div class="settings-overlay" id="achievementsOverlay" onclick="if(event.target===this)closeAchievements()">
+  <div class="settings-modal" style="max-width:500px">
+    <h3 style="text-align:center;margin-bottom:4px">Achievements</h3>
+    <div style="text-align:center;font-size:.65rem;color:var(--muted);margin-bottom:12px" id="achievProgress"></div>
+    <div id="achievList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px"></div>
+    <div style="text-align:center;margin-top:12px"><button class="s-btn" onclick="closeAchievements()">Close</button></div>
   </div>
 </div>
 
@@ -1355,6 +1366,62 @@ function checkHoliday(){
   }
 }
 let CONFETTI_HOLIDAY_COLORS=null;
+
+// ═══════════════════════════════════
+//  ACHIEVEMENTS
+// ═══════════════════════════════════
+const ACHIEVEMENTS={
+  first_game:{name:'First Dive',desc:'Play your first game',icon:'🎮',check:()=>getAllGames().length>=1},
+  ten_games:{name:'Veteran Diver',desc:'Play 10 games',icon:'🏊',check:()=>getAllGames().length>=10},
+  fifty_rounds:{name:'Deep Searcher',desc:'Complete 50 rounds',icon:'🔍',check:()=>getAllGames().reduce((t,g)=>t+g.rounds.length,0)>=50},
+  first_find:{name:'First Blood',desc:'Add your first zero-view record',icon:'🩸',check:()=>getRecords().length>=1},
+  zero_view:{name:'Ghost Hunter',desc:'Find a video with exactly 0 views',icon:'👻',check:()=>getRecords().some(r=>r.views===0)},
+  five_finds:{name:'Record Collector',desc:'Add 5 records to the timeline',icon:'📀',check:()=>getRecords().length>=5},
+  legendary:{name:'Legendary Find',desc:'Discover a video from 2005 or earlier',icon:'🏆',check:()=>getRecords().some(r=>new Date(r.date).getFullYear()<=2005)},
+  super_rare:{name:'Super Rare',desc:'Discover a video from 2006',icon:'💎',check:()=>getRecords().some(r=>new Date(r.date).getFullYear()===2006)},
+  very_rare:{name:'Time Traveler',desc:'Discover a video from 2007-2008',icon:'⏳',check:()=>getRecords().some(r=>{const y=new Date(r.date).getFullYear();return y>=2007&&y<=2008})},
+  bingo:{name:'BINGO!',desc:'Complete a bingo line',icon:'🎯',check:()=>(localStorage.getItem('kvn_achievement_bingo')==='1')},
+  deep_diver:{name:'Deep Diver',desc:'Use Deep Dive mode',icon:'🤿',check:()=>(localStorage.getItem('kvn_achievement_deepdive')==='1')},
+  bubble_popper:{name:'Bubble Pop',desc:'Pop 50 bubbles',icon:'🫧',check:()=>(parseInt(localStorage.getItem('kvn_bubbles_popped')||'0')>=50)},
+  all_formats:{name:'Format Master',desc:'Use 20 different formats',icon:'🎰',check:()=>{const used=new Set();getAllGames().forEach(g=>g.rounds.forEach(r=>{if(r.format)used.add(r.format)}));return used.size>=20}},
+  five_star:{name:'Gem Finder',desc:'Rate a video 5 stars on Gem Factor',icon:'⭐',check:()=>getAllGames().some(g=>g.rounds.some(r=>r.metrics&&r.metrics.gem>=5))},
+  share_card:{name:'Show & Tell',desc:'Export a share card',icon:'🃏',check:()=>(localStorage.getItem('kvn_achievement_shared')==='1')},
+};
+const ACHIEV_KEY='kvn_achievements';
+
+function getUnlockedAchievements(){try{return JSON.parse(localStorage.getItem(ACHIEV_KEY)||'{}')}catch{return{}}}
+function saveAchievements(a){localStorage.setItem(ACHIEV_KEY,JSON.stringify(a))}
+
+function checkAchievements(){
+  const unlocked=getUnlockedAchievements();let newCount=0;
+  for(const[id,a]of Object.entries(ACHIEVEMENTS)){
+    if(unlocked[id])continue;
+    try{if(a.check()){unlocked[id]=new Date().toISOString();newCount++;showAchievementToast(a)}}catch{}
+  }
+  if(newCount)saveAchievements(unlocked);
+}
+
+function showAchievementToast(a){
+  showToast(`${a.icon} Achievement: ${a.name}!`);
+  // Play a special achievement sound
+  if(audioUnlocked){try{
+    const ctx=getAudioCtx();const t=ctx.currentTime;
+    [{f:523,d:.1},{f:659,d:.1},{f:784,d:.1},{f:1047,d:.2}].forEach((n,i)=>{
+      const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
+      o.type='triangle';o.frequency.value=n.f;g.gain.setValueAtTime(.08,t+i*.1);
+      g.gain.exponentialRampToValueAtTime(.001,t+i*.1+n.d+.1);o.start(t+i*.1);o.stop(t+i*.1+n.d+.1);
+    });
+  }catch{}}
+}
+
+// Track bubble pops
+function trackBubblePop(){
+  const n=parseInt(localStorage.getItem('kvn_bubbles_popped')||'0')+1;
+  localStorage.setItem('kvn_bubbles_popped',String(n));
+}
+
+// Hook: mark achievements from specific actions
+function markAchievement(key){localStorage.setItem('kvn_achievement_'+key,'1')}
 
 // ═══════════════════════════════════
 //  STATE
@@ -2050,7 +2117,7 @@ function toggleDeepDive(){
     },600);
 
     // Remove wipe overlay after animation completes
-    setTimeout(()=>{wipe.remove();showToast(`Deep Dive: ${selectedFormats.size} formats, Before:${DEEP_DIVE_YEAR}`)},1800);
+    setTimeout(()=>{wipe.remove();showToast(`Deep Dive: ${selectedFormats.size} formats, Before:${DEEP_DIVE_YEAR}`);markAchievement('deepdive');checkAchievements()},1800);
 
   }else{
     // Anchor rising wipe OUT
@@ -2130,7 +2197,7 @@ function popBubbleAt(mx,my){
           r:1+Math.random()*2,life:1,hue:b.hue});
       }
       bubbles.splice(i,1);
-      playBubblePop();
+      playBubblePop();trackBubblePop();checkAchievements();
       return true;
     }
   }
@@ -2608,7 +2675,7 @@ async function fetchVideoMeta(vid){
   if(status)status.textContent='could not fetch';
   setTimeout(()=>{if(status)status.textContent=''},3000);
 }
-function saveVideo(){sessionRounds.push(makeRound());clearVtLink();showToast('Saved!');setTimeout(()=>{resetTracker();startNextRound()},600)}
+function saveVideo(){sessionRounds.push(makeRound());clearVtLink();showToast('Saved!');checkAchievements();setTimeout(()=>{resetTracker();startNextRound()},600)}
 function skipVideo(){sessionRounds.push({...makeRound(),link:'',rating:0,metrics:{entertainment:0,weirdness:0,gem:0,liked:0}});clearVtLink();resetTracker();startNextRound()}
 function saveAndReRandomize(){
   sessionRounds.push(makeRound());
@@ -2621,7 +2688,7 @@ function saveAndEnd(){
   const round=makeRound();
   sessionRounds.push(round);
   clearVtLink();resetTracker();
-  saveGameToHistory();
+  saveGameToHistory();checkAchievements();
   showSummary();
   gameActive=false;
 }
@@ -2632,7 +2699,7 @@ function endSession(){
     sessionRounds.push(round);
   }
   clearVtLink();resetTracker();
-  saveGameToHistory();
+  saveGameToHistory();checkAchievements();
   showSummary();
   gameActive=false;
 }
@@ -2885,7 +2952,7 @@ function setDaubColor(c){const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slic
 function setDaubOpacity(v){const c=document.getElementById('daubColor').value;const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];document.documentElement.style.setProperty('--daub',`rgba(${r},${g},${b},${v/100})`);localStorage.setItem('kvn_daub',JSON.stringify({color:c,opacity:+v}))}
 function resetBingoCard(){bingoState=Array(25).fill(false);bingoState[12]=true;bingoWinShown=false;buildBingoFromPicked();saveBingoState()}
 function checkBingo(){if(bingoWinShown)return;const s=bingoState;for(let r=0;r<5;r++)if(s[r*5]&&s[r*5+1]&&s[r*5+2]&&s[r*5+3]&&s[r*5+4]){triggerBingo();return}for(let c=0;c<5;c++)if(s[c]&&s[5+c]&&s[10+c]&&s[15+c]&&s[20+c]){triggerBingo();return}if(s[0]&&s[6]&&s[12]&&s[18]&&s[24]){triggerBingo();return}if(s[4]&&s[8]&&s[12]&&s[16]&&s[20])triggerBingo()}
-function triggerBingo(){bingoWinShown=true;document.getElementById('easterMsg').textContent=EASTER_EGGS[Math.floor(Math.random()*EASTER_EGGS.length)];document.getElementById('bingoWin').classList.add('show');const mainEl=document.querySelector('.main');mainEl.style.animation='screenShake .6s';setTimeout(()=>mainEl.style.animation='',700);spawnConfetti();playBingoWinSound()}
+function triggerBingo(){bingoWinShown=true;document.getElementById('easterMsg').textContent=EASTER_EGGS[Math.floor(Math.random()*EASTER_EGGS.length)];document.getElementById('bingoWin').classList.add('show');const mainEl=document.querySelector('.main');mainEl.style.animation='screenShake .6s';setTimeout(()=>mainEl.style.animation='',700);spawnConfetti();playBingoWinSound();markAchievement('bingo');checkAchievements()}
 function dismissBingoWin(){document.getElementById('bingoWin').classList.remove('show');document.getElementById('confettiBox').innerHTML=''}
 function spawnConfetti(){const box=document.getElementById('confettiBox');box.innerHTML='';const defaultColors=['#e74c3c','#f39c12','#2ecc71','#3498db','#9b59b6','#e91e63','#00bcd4','#ff5722','#ffeb3b','#8bc34a'];const colors=CONFETTI_HOLIDAY_COLORS||defaultColors;for(let i=0;i<140;i++){const c=document.createElement('div');c.className='confetti';const sz=6+Math.random()*10;c.style.cssText=`width:${sz}px;height:${sz}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;top:-20px;border-radius:${Math.random()>.5?'50%':'2px'};animation:confettiFall ${2+Math.random()*3}s ${Math.random()*1.5}s ease-in forwards`;box.appendChild(c)}}
 
@@ -2956,6 +3023,27 @@ function showCredits(){
   if(!creditsLoaded)fetchCredits();
 }
 function closeCredits(){document.getElementById('creditsOverlay').classList.remove('open')}
+
+function showAchievements(){
+  document.getElementById('achievementsOverlay').classList.add('open');
+  checkAchievements();
+  const unlocked=getUnlockedAchievements();
+  const total=Object.keys(ACHIEVEMENTS).length;
+  const done=Object.keys(unlocked).length;
+  document.getElementById('achievProgress').textContent=`${done} / ${total} unlocked`;
+  const list=document.getElementById('achievList');
+  list.innerHTML=Object.entries(ACHIEVEMENTS).map(([id,a])=>{
+    const u=unlocked[id];
+    const dateStr=u?new Date(u).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
+    return`<div style="background:${u?'linear-gradient(145deg,#1a2a1a,#0a1a0a)':'linear-gradient(145deg,#1a1a1a,#0a0a0a)'};border:1px solid ${u?'rgba(46,204,113,.3)':'#222'};border-radius:10px;padding:10px;text-align:center;transition:all .2s;${u?'box-shadow:0 0 8px rgba(46,204,113,.1)':'opacity:.5'}">
+      <div style="font-size:1.6rem;margin-bottom:4px;${u?'':'filter:grayscale(1) brightness(.5)'}">${a.icon}</div>
+      <div style="font-size:.72rem;font-weight:700;color:${u?'#2ecc71':'#555'}">${a.name}</div>
+      <div style="font-size:.58rem;color:#666;margin-top:2px">${a.desc}</div>
+      ${u?`<div style="font-size:.5rem;color:#444;margin-top:4px">${dateStr}</div>`:''}
+    </div>`;
+  }).join('');
+}
+function closeAchievements(){document.getElementById('achievementsOverlay').classList.remove('open')}
 
 function showStats(){
   document.getElementById('statsOverlay').classList.add('open');
@@ -3288,7 +3376,7 @@ function addRecord(){
   document.getElementById('recAddBtn').disabled=true;document.getElementById('recAddBtn').style.opacity='.5';
   document.getElementById('recFetchStatus').textContent='';
   renderRecords();drawRecordsTimeline();updateRecordHolder();
-  showToast('Record added!');
+  showToast('Record added!');checkAchievements();
 }
 
 function deleteRecord(i){
@@ -3932,7 +4020,7 @@ function exportShareCard(){
   svg+=`<text x="${w/2}" y="${fy+16}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#555">@KVNAUST &#183; @MingKasterMK</text>`;
   svg+=`</svg>`;
   downloadFile('kvnaust-share-'+finalString.replace(/[^a-zA-Z0-9]/g,'')+'.svg',svg,'image/svg+xml');
-  showToast('Share card exported!');
+  showToast('Share card exported!');markAchievement('shared');checkAchievements();
 }
 
 function shareToDiscord(){
@@ -3997,6 +4085,7 @@ document.addEventListener('keydown',e=>{
     if(document.getElementById('settingsOverlay').classList.contains('open'))toggleSettings();
     if(document.getElementById('statsOverlay').classList.contains('open'))closeStats();
     if(document.getElementById('shortcutsOverlay').classList.contains('open'))closeShortcuts();
+    if(document.getElementById('achievementsOverlay').classList.contains('open'))closeAchievements();
   }
 });
 
@@ -4094,6 +4183,7 @@ function handleHash(){
   const h=location.hash.toLowerCase().replace('#','');
   if(h==='records')setTimeout(showRecords,300);
   else if(h==='stats')setTimeout(showStats,300);
+  else if(h==='achievements'||h==='badges')setTimeout(showAchievements,300);
   else if(h==='shortcuts')setTimeout(showShortcuts,300);
   else if(h==='credits')setTimeout(showCredits,300);
 }
@@ -4109,9 +4199,9 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "5.3.1",
-  "build": "2026-04-25T12:00:00",
-  "changelog": "Add lead field to records for wrapper bridge, SOLVED_MYSTERIES.md now synced",
+  "version": "6.0.0",
+  "build": "2026-04-27T12:00:00",
+  "changelog": "Achievement system: 15 badges, toast+sound on unlock, Badges modal, hash routing",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
