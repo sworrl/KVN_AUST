@@ -17,16 +17,15 @@
 ## [6.0.0] - 2026-04-27
 
 ### Added
-- **Achievement system**: 15 badges tracked in localStorage, unlocked by gameplay milestones
-  - First Dive, Veteran Diver (10 games), Deep Searcher (50 rounds)
-  - First Blood (first record), Ghost Hunter (0-view find), Record Collector (5 records)
-  - Legendary Find (2005), Super Rare (2006), Time Traveler (2007-2008)
-  - BINGO!, Deep Diver, Bubble Pop (50 pops), Format Master (20 formats)
-  - Gem Finder (5-star gem), Show & Tell (export share card)
-- **Achievement toast + sound**: ascending triangle fanfare on unlock
-- **Badges modal**: grid display with icons, names, descriptions, unlock dates. Locked badges greyed out. Accessible via header button or `#achievements`/`#badges` hash
-- **Bubble pop counter**: tracks total pops in localStorage
-- Achievement checks hooked into: save round, end game, BINGO, Deep Dive toggle, bubble pop, share card export, add record
+- **Achievement system**: 15 badges tracked in localStorage — First Dive, Veteran Diver, Deep Searcher, First Blood, Ghost Hunter, Record Collector, Legendary Find, Super Rare, Time Traveler, BINGO!, Deep Diver, Bubble Pop, Format Master, Gem Finder, Show & Tell. Toast + triangle fanfare on unlock. Badges modal with grid display. Hash routing `#achievements`/`#badges`.
+- **Timeline zoom/pan**: scroll to zoom (1x–10x), drag to pan, touch support, "Reset Zoom" button. Year labels scale with zoom level. Dots, zones, and beams all respond to zoom.
+- **Video gallery**: grid of all found videos with thumbnails. Search, sort by recent/oldest/views/rating. Click to open on YouTube. Accessible via header "Gallery" button or `#gallery` hash.
+- **Service worker**: `sw.js` caches app assets for full offline PWA support. Network-first for API calls, cache-first for static assets. Auto-updates on new version.
+- **Starfield background**: subtle star pattern with colored nebula dots on a second layer, both slowly drifting at different speeds.
+
+### Changed
+- **Screen transitions**: cinematic blur+scale on entry, 3D perspective rotation on exit
+- **Mobile responsive**: comprehensive breakpoints at 600px and 380px covering header, spinner, bingo, result screen, modals, panels, number display, nav arrows, and summary
 
 ---
 

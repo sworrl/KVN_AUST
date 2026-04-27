@@ -175,12 +175,36 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
   background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),var(--accent),transparent);
   opacity:.5;animation:headerAccentShift 4s ease-in-out infinite}
 @keyframes headerAccentShift{0%,100%{opacity:.3;filter:blur(0px)}50%{opacity:.6;filter:blur(1px)}}
-@media(max-width:600px){.header{height:120px;padding:0 10px 8px;gap:8px}
+@media(max-width:600px){.header{height:110px;padding:0 8px 6px;gap:6px}
   .header-banner img{object-position:center 40%}
-  .header-title{font-size:.9rem}.header-subtitle{font-size:.6rem}
-  .yt-avatar{width:32px;height:32px}
-  .header-right{gap:3px}.hdr-btn{font-size:.6rem;padding:3px 6px}
-  .main{top:120px}.bingo-overlay,.format-panel,.history-panel,.bingo-setup{top:120px}
+  .header-title{font-size:.85rem}.header-subtitle{font-size:.55rem}
+  .yt-avatar{width:28px;height:28px}
+  .header-right{gap:2px;flex-wrap:wrap;max-width:60%}.hdr-btn{font-size:.55rem;padding:2px 5px}
+  .main{top:110px}.bingo-overlay,.format-panel,.history-panel,.bingo-setup{top:110px}
+  .wheel-container{width:min(85vw,85vh)!important;height:min(85vw,85vh)!important}
+  .spin-btn{width:90px!important;height:90px!important}
+  .result-pill{padding:18px 28px;font-size:clamp(1.2rem,4vw,2rem)}
+  .video-tracker{width:95vw!important}
+  .vt-row{gap:4px}.vt-btn{font-size:.7rem;padding:8px 10px}
+  .vt-input{font-size:.75rem;padding:8px 10px;min-width:0!important}
+  .number-box{padding:24px 20px}
+  .rolling-number{font-size:clamp(2rem,8vw,3.5rem)!important}
+  .bingo-card{padding:10px;max-width:95vw!important}
+  .bf-cell{font-size:clamp(.4rem,1vw,.6rem)!important}
+  .start-btn{padding:12px 36px;font-size:.95rem}
+  .big-avatar{width:80px!important;height:80px!important}
+  .settings-modal{width:96vw!important;padding:16px!important}
+  .records-modal{width:98vw!important;padding:16px 12px!important}
+  .rec-timeline{height:min(40vh,320px)!important}
+  .format-panel,.history-panel{width:85vw!important}
+  .screen-nav{width:32px!important;height:56px!important;font-size:.8rem}
+  .summary-wrap{padding:10px!important}
+}
+@media(max-width:380px){
+  .hdr-btn{font-size:.5rem;padding:2px 4px}
+  .header-right{gap:1px}
+  .wheel-container{width:min(92vw,92vh)!important;height:min(92vw,92vh)!important}
+  .vt-btn{font-size:.65rem;padding:6px 8px}
 }
 .header-banner{position:absolute;inset:0;z-index:-1;overflow:hidden}
 .header-banner img{width:100%;height:100%;object-fit:cover;object-position:center 20%;opacity:.55;transition:opacity 1s}
@@ -202,9 +226,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 
 /* ── SCREENS ── */
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  opacity:0;pointer-events:none;transform:scale(.95) translateY(20px);transition:opacity var(--trans),transform var(--trans) cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
-.screen.active{opacity:1;pointer-events:auto;transform:scale(1) translateY(0)}
-.screen.exit-left{opacity:0;transform:scale(.92) translateX(-60px);transition:opacity .35s ease-in,transform .35s cubic-bezier(.6,0,.7,.2)}
+  opacity:0;pointer-events:none;transform:scale(.93) translateY(30px);filter:blur(4px);
+  transition:opacity var(--trans),transform var(--trans) cubic-bezier(.4,0,.2,1),filter var(--trans);will-change:opacity,transform,filter}
+.screen.active{opacity:1;pointer-events:auto;transform:scale(1) translateY(0);filter:blur(0)}
+.screen.exit-left{opacity:0;transform:scale(.9) translateX(-80px) rotateY(5deg);filter:blur(6px);transition:opacity .4s ease-in,transform .4s cubic-bezier(.6,0,.7,.2),filter .4s}
 
 /* ── NAV ARROWS ── */
 .screen-nav{position:fixed;top:50%;z-index:80;transform:translateY(-50%);width:48px;height:80px;
@@ -344,9 +369,12 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 .result-pill:hover{border-color:var(--accent);box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 20px rgba(231,76,60,.18),inset 0 1px 0 rgba(255,255,255,.06);cursor:pointer}
 .result-sub{color:var(--muted);font-size:.8rem;margin-top:10px}
 /* ── SUBTLE BACKGROUND TEXTURE ── */
-body::before{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
-  background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23fff' stroke-width='.5'/%3E%3C/svg%3E");
-  background-size:60px 60px;animation:bgDrift 30s linear infinite}
+body::before{content:'';position:fixed;inset:0;z-index:-1;opacity:.06;
+  background:url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='23' cy='45' r='.8' fill='%23fff'/%3E%3Ccircle cx='98' cy='12' r='.5' fill='%23fff' opacity='.7'/%3E%3Ccircle cx='167' cy='78' r='1' fill='%23fff'/%3E%3Ccircle cx='45' cy='134' r='.6' fill='%23fff' opacity='.5'/%3E%3Ccircle cx='134' cy='156' r='.7' fill='%23fff'/%3E%3Ccircle cx='78' cy='189' r='.4' fill='%23fff' opacity='.6'/%3E%3Ccircle cx='189' cy='34' r='.9' fill='%23fff' opacity='.4'/%3E%3Ccircle cx='56' cy='67' r='.3' fill='%23fff' opacity='.8'/%3E%3Ccircle cx='145' cy='112' r='.5' fill='%23fff' opacity='.5'/%3E%3C/svg%3E");
+  background-size:200px 200px;animation:bgDrift 60s linear infinite}
+body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
+  background:url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='80' r='1.2' fill='%23e74c3c' opacity='.3'/%3E%3Ccircle cx='230' cy='45' r='1' fill='%233498db' opacity='.3'/%3E%3Ccircle cx='150' cy='250' r='.8' fill='%232ecc71' opacity='.3'/%3E%3C/svg%3E");
+  background-size:300px 300px;animation:bgDrift 90s linear infinite reverse}
 @keyframes bgDrift{0%{background-position:0 0}100%{background-position:60px 60px}}
 .video-tracker{margin-top:16px;animation:fadeUp .5s .2s ease both;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(92vw,500px);padding-bottom:60px}
 .vt-row{display:flex;gap:8px;width:100%;align-items:stretch;flex-wrap:wrap;justify-content:center}
@@ -718,6 +746,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
     <button class="hdr-btn" onclick="showRecords()" style="color:#e74c3c">Records</button>
     <button class="hdr-btn" onclick="showStats()">Stats</button>
     <button class="hdr-btn" onclick="showAchievements()" style="color:#ffd700">Badges</button>
+    <button class="hdr-btn" onclick="showGallery()">Gallery</button>
     <button class="hdr-btn" id="formatsBtn" onclick="toggleFormatPanel()">Formats</button>
     <button class="hdr-btn" onclick="showShortcuts()" title="Keyboard Shortcuts" style="padding:5px 8px;font-weight:900">?</button>
     <button class="hdr-btn" onclick="toggleSettings()" title="Settings" style="padding:5px 8px">
@@ -972,6 +1001,25 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
   </div>
 </div>
 
+<!-- GALLERY MODAL -->
+<div class="settings-overlay" id="galleryOverlay" onclick="if(event.target===this)closeGallery()">
+  <div class="settings-modal" style="max-width:700px">
+    <h3 style="text-align:center;margin-bottom:4px">Video Gallery</h3>
+    <div style="text-align:center;font-size:.65rem;color:var(--muted);margin-bottom:8px">Every video found across all games</div>
+    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;flex-wrap:wrap">
+      <input type="text" id="galSearch" placeholder="Search..." oninput="renderGallery()" style="background:var(--card2);border:1px solid #2a2a45;color:#fff;padding:5px 10px;border-radius:6px;font-size:.72rem;width:160px">
+      <select id="galSort" onchange="renderGallery()" style="background:var(--card2);border:1px solid #2a2a45;color:#fff;padding:5px 8px;border-radius:6px;font-size:.72rem" aria-label="Sort gallery">
+        <option value="recent">Most Recent</option>
+        <option value="oldest">Oldest Video</option>
+        <option value="views">Fewest Views</option>
+        <option value="rating">Highest Rated</option>
+      </select>
+    </div>
+    <div id="galleryGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;max-height:55vh;overflow-y:auto"></div>
+    <div style="text-align:center;margin-top:10px"><button class="s-btn" onclick="closeGallery()">Close</button></div>
+  </div>
+</div>
+
 <!-- RECORDS TIMELINE MODAL -->
 <div class="records-overlay" id="recordsOverlay" onclick="if(event.target===this)closeRecords()">
   <div class="records-modal">
@@ -988,6 +1036,8 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
     <div style="display:flex;justify-content:center;gap:8px;margin-bottom:6px">
       <button class="s-btn" style="font-size:.62rem;padding:3px 10px" id="filterAllBtn" onclick="setTimelineFilter('all')">All Finds</button>
       <button class="s-btn" style="font-size:.62rem;padding:3px 10px" id="filterZeroBtn" onclick="setTimelineFilter('zero')">Zero Views Only</button>
+      <button class="s-btn" style="font-size:.62rem;padding:3px 10px" onclick="resetTimelineZoom()">Reset Zoom</button>
+      <span style="font-size:.55rem;color:#444">scroll to zoom &#183; drag to pan</span>
     </div>
     <div class="rec-timeline"><canvas id="recordsCanvas" onclick="handleTimelineClick(event)" onmousemove="handleTimelineHover(event)" onmouseleave="document.getElementById('timelineTooltip').style.display='none'" style="cursor:pointer"></canvas><div id="timelineTooltip" style="display:none;position:absolute;background:#111;border:1px solid #333;border-radius:8px;padding:8px 10px;font-size:.65rem;color:#ccc;pointer-events:none;z-index:10;max-width:220px;box-shadow:0 4px 16px rgba(0,0,0,.6)"></div></div>
     <div class="rec-form">
@@ -3024,6 +3074,51 @@ function showCredits(){
 }
 function closeCredits(){document.getElementById('creditsOverlay').classList.remove('open')}
 
+function showGallery(){
+  document.getElementById('galleryOverlay').classList.add('open');
+  renderGallery();
+}
+function closeGallery(){document.getElementById('galleryOverlay').classList.remove('open')}
+
+function renderGallery(){
+  const grid=document.getElementById('galleryGrid');
+  const search=(document.getElementById('galSearch').value||'').toLowerCase();
+  const sort=document.getElementById('galSort').value;
+  // Collect all videos from game history
+  let videos=[];
+  getAllGames().forEach(g=>g.rounds.forEach(r=>{
+    if(!r.link)return;
+    const vid=getVideoId(r.link);if(!vid)return;
+    videos.push({vid,search:r.search||'',format:r.format||'',link:r.link,
+      date:r.date,metrics:r.metrics||{},datePosted:r.datePosted||'',views:r.viewsWhenFound||''});
+  }));
+  // Dedup by video ID
+  const seen=new Set();videos=videos.filter(v=>{if(seen.has(v.vid))return false;seen.add(v.vid);return true});
+  // Filter
+  if(search)videos=videos.filter(v=>(v.search+v.format+v.vid).toLowerCase().includes(search));
+  // Sort
+  if(sort==='oldest')videos.sort((a,b)=>new Date(a.datePosted||a.date)-new Date(b.datePosted||b.date));
+  else if(sort==='views')videos.sort((a,b)=>(parseInt(a.views)||9999)-(parseInt(b.views)||9999));
+  else if(sort==='rating')videos.sort((a,b)=>{const ar=Object.values(b.metrics).reduce((s,v)=>s+v,0);const br=Object.values(a.metrics).reduce((s,v)=>s+v,0);return ar-br});
+  else videos.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  if(!videos.length){grid.innerHTML='<div style="text-align:center;color:#555;font-size:.75rem;padding:20px;grid-column:1/-1">No videos found yet. Play some rounds and paste YouTube links!</div>';return}
+  grid.innerHTML=videos.map(v=>{
+    const thumb=`https://img.youtube.com/vi/${v.vid}/mqdefault.jpg`;
+    const avgR=Object.values(v.metrics).filter(x=>x>0);
+    const avg=avgR.length?(avgR.reduce((s,x)=>s+x,0)/avgR.length).toFixed(1):'—';
+    return`<div style="background:linear-gradient(145deg,var(--card),#0a0a14);border:1px solid #2a2a40;border-radius:8px;overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.3)" onclick="window.open('${esc(v.link)}','_blank','noopener')" onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#2a2a40';this.style.transform=''">
+      <img src="${thumb}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block" alt="${esc(v.search)}" loading="lazy">
+      <div style="padding:6px 8px">
+        <div style="font-size:.7rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(v.search)}</div>
+        <div style="font-size:.58rem;color:#666;display:flex;justify-content:space-between;margin-top:2px">
+          <span>${esc(v.format)}</span><span style="color:#f39c12">${avg==='—'?'':'★'+avg}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function showAchievements(){
   document.getElementById('achievementsOverlay').classList.add('open');
   checkAchievements();
@@ -3131,7 +3226,7 @@ function showRecords(){
   updateRecordHolder();
   if(!communityFetchedOnce)fetchCommunityRecords();
   // Delay canvas draw until modal transition completes (scale .9→1)
-  setTimeout(()=>drawRecordsTimeline(),350);
+  setTimeout(()=>{drawRecordsTimeline();initTimelineInteraction()},350);
 }
 function closeRecords(){document.getElementById('recordsOverlay').classList.remove('open')}
 
@@ -3496,6 +3591,32 @@ function updateRecordHolder(){
   el.innerHTML=`&#x1F3C6; <strong style="color:${color}">Record Holder:</strong> <span style="color:#fff">${dateStr}</span> <span style="color:${color}">(${best.rarity})</span> &#183; ${viewsTxt}${chTxt?' &#183; '+chTxt:''} &#183; <strong style="color:#aaa">${esc(best.found_by||'?')}</strong>`;
 }
 
+// Timeline zoom/pan state
+let tlZoom=1,tlPanX=0,tlDragging=false,tlDragStartX=0,tlDragStartPan=0;
+function initTimelineInteraction(){
+  const c=document.getElementById('recordsCanvas');if(!c)return;
+  c.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const rect=c.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)/rect.width;
+    const oldZoom=tlZoom;
+    tlZoom=Math.max(1,Math.min(10,tlZoom*(e.deltaY<0?1.15:.87)));
+    // Zoom toward mouse position
+    tlPanX=mx-(mx-tlPanX)*(tlZoom/oldZoom);
+    tlPanX=Math.max(0,Math.min(1-1/tlZoom,tlPanX));
+    drawRecordsTimeline();
+  },{passive:false});
+  c.addEventListener('mousedown',e=>{tlDragging=true;tlDragStartX=e.clientX;tlDragStartPan=tlPanX;c.style.cursor='grabbing'});
+  c.addEventListener('mousemove',e=>{if(!tlDragging)return;const rect=c.getBoundingClientRect();const dx=(e.clientX-tlDragStartX)/rect.width/tlZoom;tlPanX=Math.max(0,Math.min(1-1/tlZoom,tlDragStartPan-dx));drawRecordsTimeline()});
+  c.addEventListener('mouseup',()=>{tlDragging=false;document.getElementById('recordsCanvas').style.cursor='pointer'});
+  c.addEventListener('mouseleave',()=>{if(tlDragging){tlDragging=false;c.style.cursor='pointer'}});
+  // Touch support
+  let touchStartX=0,touchStartPan=0;
+  c.addEventListener('touchstart',e=>{if(e.touches.length===1){touchStartX=e.touches[0].clientX;touchStartPan=tlPanX}},{passive:true});
+  c.addEventListener('touchmove',e=>{if(e.touches.length===1){const rect=c.getBoundingClientRect();const dx=(e.touches[0].clientX-touchStartX)/rect.width/tlZoom;tlPanX=Math.max(0,Math.min(1-1/tlZoom,touchStartPan-dx));drawRecordsTimeline()}},{passive:true});
+}
+function resetTimelineZoom(){tlZoom=1;tlPanX=0;drawRecordsTimeline()}
+
 function drawRecordsTimeline(){
   const canvas=document.getElementById('recordsCanvas');
   const dpr=window.devicePixelRatio||1;
@@ -3513,8 +3634,13 @@ function drawRecordsTimeline(){
   ctx.fillStyle=bgGrad;ctx.fillRect(0,0,W,H);
 
   // Timeline config
-  const startYear=2005,endYear=new Date().getFullYear()+1;
-  const totalYears=endYear-startYear;
+  const fullStartYear=2005,fullEndYear=new Date().getFullYear()+1;
+  const fullRange=fullEndYear-fullStartYear;
+  // Apply zoom/pan
+  const viewRange=fullRange/tlZoom;
+  const startYear=fullStartYear+tlPanX*fullRange;
+  const endYear=startYear+viewRange;
+  const totalYears=viewRange;
   const padL=52,padR=24,padT=36,padB=44;
   const chartW=W-padL-padR,chartH=H-padT-padB;
 
@@ -4086,6 +4212,7 @@ document.addEventListener('keydown',e=>{
     if(document.getElementById('statsOverlay').classList.contains('open'))closeStats();
     if(document.getElementById('shortcutsOverlay').classList.contains('open'))closeShortcuts();
     if(document.getElementById('achievementsOverlay').classList.contains('open'))closeAchievements();
+    if(document.getElementById('galleryOverlay').classList.contains('open'))closeGallery();
   }
 });
 
@@ -4175,6 +4302,7 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
 checkForUpdates();checkHoliday();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 // Fetch community finds in background, poll every 60s
 setTimeout(fetchCommunityRecords,2000);
 setInterval(fetchCommunityRecords,60000);
@@ -4184,6 +4312,7 @@ function handleHash(){
   if(h==='records')setTimeout(showRecords,300);
   else if(h==='stats')setTimeout(showStats,300);
   else if(h==='achievements'||h==='badges')setTimeout(showAchievements,300);
+  else if(h==='gallery')setTimeout(showGallery,300);
   else if(h==='shortcuts')setTimeout(showShortcuts,300);
   else if(h==='credits')setTimeout(showCredits,300);
 }
@@ -4201,7 +4330,7 @@ window.addEventListener('hashchange',handleHash);
 {
   "version": "6.0.0",
   "build": "2026-04-27T12:00:00",
-  "changelog": "Achievement system: 15 badges, toast+sound on unlock, Badges modal, hash routing",
+  "changelog": "Achievements, timeline zoom/pan, video gallery, service worker, starfield bg, mobile responsive, cinematic transitions",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
 }
