@@ -35,11 +35,24 @@ GET https://www.falcontechnix.com/KVN_AUST/finds.php
 
 | Param | Example | Effect |
 |:------|:--------|:-------|
-| `since` | `2026-04-20T00:00:00` | Only finds ingested after this timestamp — use this to detect new additions |
+| `since` | `2026-04-20T00:00:00` | Only finds ingested after this timestamp — detect new additions |
 | `category` | `camera-mvi` | Filter by lead category |
 | `source` | `discord` | Filter by submission source |
+| `found_by` | `fivezies` | Filter by player name |
+| `season` | `current` | Only finds within the active 90-day season |
 | `order` | `desc` | `asc` (default) or `desc` by `date_posted` |
 | `limit` | `10` | Cap results (max 500, default 500) |
+| `heatmap` | `1` | Returns category × decade aggregation matrix instead of finds list |
+
+### Additional Endpoints for Bots
+
+| Endpoint | Use |
+|:---------|:----|
+| `GET /KVN_AUST/profile.php?u=<name>` | Player profile JSON: level, XP, badges, rank, top finds |
+| `GET /KVN_AUST/profile_card.php?u=<name>` | 1200×630 SVG share card — embed directly in Discord |
+| `GET /KVN_AUST/feed.xml` | Atom feed of recent finds — use for RSS-style alerts |
+| `GET /KVN_AUST/status.php` | Live status: total finds, online users, active season |
+| `GET /KVN_AUST/discoveries/<video_id>` | Permanent shareable page per find (has OG card for Discord embeds) |
 
 ## Response Shape
 

@@ -14,7 +14,21 @@
 
 ---
 
-## [6.0.0] - 2026-04-27
+## [6.0.0] - 2026-04-27 (Wrapper 1.9.0)
+
+### Hosted Platform (Wrapper 1.9.0)
+- **Player profiles**: XP, levels (sqrt scaling), 15 server-side badges, lifetime rank, streaks. Shareable profile cards (1200×630 SVG). Compare two players side-by-side.
+- **Seasons**: 90-day competitive windows, auto-seeded. Filter leaderboard by `?season=current`. iCalendar feed at `/seasons.ics`.
+- **Multiplayer**: SSE-based co-op rooms for signed-in users. Create room → share link → play together.
+- **Permanent discovery pages**: every find gets a shareable URL at `/discoveries/<video_id>` with OG card and embed.
+- **Format heatmap**: `?heatmap=1` returns category × decade aggregation matrix.
+- **Atom feed**: subscribe to new finds at `/feed.xml`.
+- **OpenAPI spec**: full API documentation at `/openapi.json`.
+- **Display names**: public alias separate from login. Set via account settings, auto-updates all leaderboard attributions.
+- **Records bridge**: in-game records auto-submit to the public leaderboard with video metadata enrichment.
+- **Live status**: `/status.php` returns online users, find counts, active season, data quality metrics.
+
+---
 
 ### Added
 - **Achievement system**: 15 badges tracked in localStorage — First Dive, Veteran Diver, Deep Searcher, First Blood, Ghost Hunter, Record Collector, Legendary Find, Super Rare, Time Traveler, BINGO!, Deep Diver, Bubble Pop, Format Master, Gem Finder, Show & Tell. Toast + triangle fanfare on unlock. Badges modal with grid display. Hash routing `#achievements`/`#badges`.

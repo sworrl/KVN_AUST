@@ -165,17 +165,17 @@ The hosted version wraps the same HTML file from this repo with additional featu
 
 | Feature | Hosted | Standalone |
 |:--------|:------:|:----------:|
-| Full game (spinner, bingo, rating, export) | Yes | Yes |
-| Format sync from FORMAT-MAP.md | Yes | Yes |
-| Deep Dive mode | Yes | Yes |
-| Share Card / Discord copy | Yes | Yes |
+| Full game (spinner, bingo, rating, achievements, gallery) | Yes | Yes |
+| Format sync, Deep Dive mode, Share Card / Discord copy | Yes | Yes |
 | **Cloud Save** — game history, bingo state, settings synced across devices | Yes | No |
-| **Welcome Back** — resume in-progress games, see your stats on return | Yes | No |
-| **Community Finds** — live leaderboard of oldest zero-view discoveries from the community | Yes | Fetch only |
-| **Auto-updates** — new versions deploy within 5 minutes of a push to this repo | Yes | Manual download |
-| **Version badge** — shows current version, sync status, countdown to next check | Yes | Basic |
-| **Bingo capture** — completed bingo cards saved and synced automatically | Yes | Local only |
-| **PWA install** — add to home screen as a standalone app | Yes | No |
+| **Player Profiles** — XP, levels, badges, streaks, [shareable profile cards](https://falcontechnix.com/KVN_AUST/profile_card.php?u=root) | Yes | No |
+| **Seasons** — 90-day competitive windows with season leaderboards | Yes | No |
+| **Multiplayer** — co-op rooms via SSE for signed-in users | Yes | No |
+| **Permanent Discovery Pages** — every find gets a shareable URL with OG card | Yes | No |
+| **Community Finds** — live leaderboard with heatmap, filtering by player/season | Yes | Fetch only |
+| **Auto-updates** — new versions deploy within 5 minutes of a push to this repo | Yes | Manual |
+| **Atom Feed** — subscribe to new finds at [`/feed.xml`](https://falcontechnix.com/KVN_AUST/feed.xml) | Yes | No |
+| **OpenAPI Spec** — full API documentation at [`/openapi.json`](https://falcontechnix.com/KVN_AUST/openapi.json) | Yes | No |
 
 ### Offline / Standalone
 
@@ -185,14 +185,24 @@ Download [`kvnaust-recyclebin.html`](kvnaust-recyclebin.html) and [`bingo-catego
 
 ## Community Finds API
 
-The hosted version serves a public API of community-discovered zero-view YouTube videos at [`/KVN_AUST/finds.php`](https://falcontechnix.com/KVN_AUST/finds.php). The standalone HTML polls this automatically.
+The hosted version serves a public API of community-discovered zero-view YouTube videos. The standalone HTML polls this automatically.
 
-- **Rate limit**: 3 requests per 60 seconds per IP (conditional GET with ETag doesn't count)
-- **20+ community finds** spanning 2005 to 2025, sourced from the KVN AUST Discord and in-game submissions
+| Endpoint | What |
+|:---------|:-----|
+| [`/finds.php`](https://falcontechnix.com/KVN_AUST/finds.php) | Full leaderboard JSON — filter by `?category=`, `?source=`, `?found_by=`, `?season=current`, `?order=`, `?limit=` |
+| [`/finds.php?heatmap=1`](https://falcontechnix.com/KVN_AUST/finds.php?heatmap=1) | Category × decade heatmap matrix |
+| `/discoveries/<video_id>` | Permanent shareable page per find with OG card |
+| [`/profile.php?u=<name>`](https://falcontechnix.com/KVN_AUST/profile.php?u=root) | Player profile: level, XP, badges, rank, top finds |
+| [`/profile_card.php?u=<name>`](https://falcontechnix.com/KVN_AUST/profile_card.php?u=root) | 1200×630 SVG share card |
+| [`/feed.xml`](https://falcontechnix.com/KVN_AUST/feed.xml) | Atom feed of recent finds |
+| [`/openapi.json`](https://falcontechnix.com/KVN_AUST/openapi.json) | OpenAPI 3.0 spec for the full API surface |
+| [`/status.php`](https://falcontechnix.com/KVN_AUST/status.php) | Live status: counts, online users, active season |
+
+- **Rate limit**: 3 requests per 60 seconds per IP (ETag conditional GET is free)
+- **20+ community finds** spanning 2005 to 2025
 - **Rarity tiers**: LEGENDARY (2005), SUPER RARE (2006), VERY RARE (2007-2008), RARE (2009-2012), COMMON (2013+)
-- Each find includes: video URL, title, channel, date posted, views when found, lead used, who found it, and which server
-
-Query with `?category=camera-img`, `?source=discord`, `?since=2026-01-01T00:00:00`, `?order=desc`, `?limit=100`.
+- **Seasons**: 90-day competitive windows, filter with `?season=current`
+- **Player profiles**: XP, levels, badges, streaks, lifetime rank
 
 ### Direct Links
 
