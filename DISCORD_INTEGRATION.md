@@ -46,8 +46,8 @@ GET https://www.falcontechnix.com/KVN_AUST/finds.php
 ```json
 {
   "ok": true,
-  "total": 14,
-  "returned": 14,
+  "total": 21,
+  "returned": 21,
   "oldest_post_date": "2005-09-05",
   "newest_post_date": "2025-12-10",
   "last_ingest_at": "2026-04-20 03:45:09",

@@ -116,37 +116,39 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 **Core**
 - Single HTML file — no install, no build step, no dependencies
-- Works offline from `file://` or any web server
-- Runs on Windows, Mac, Linux, Chromebook — any browser
-- Auto-update checking against this GitHub repo
-- Embedded Web Audio sound effects (tick, retro, casino presets)
+- Works offline via service worker (full PWA)
+- Runs on Windows, Mac, Linux, Chromebook, mobile — any browser
+- 192 formats parsed from FORMAT-MAP.md, zero hardcoded
+- Embedded Web Audio (tick, retro, casino, nautical Deep Dive presets)
+- 15 achievements with badge modal, toast + sound on unlock
 
 </td><td>
 
 **Online (Hosted)**
 - Live format sync from [FORMAT-MAP.md](FORMAT-MAP.md) every 30 minutes
 - Password-backed cloud save for game history
-- Always running the latest version
+- Community finds leaderboard with live API
+- Auto-updates within 5 minutes of a push
 
 </td></tr>
 <tr><td>
 
 **Recycle Bin Bingo**
-- 101 categories from KVN AUST originals + community submissions
-- Mosaic of KVN AUST's profile image through bingo cells
-- Slide-puzzle reveal animation with real 15-puzzle physics
-- BINGO detection with confetti explosion & screen shake
-- Customizable daub colors & 50 unique SVG stamp designs
+- 101 categories from KVN AUST originals + community
+- Mosaic slide-puzzle reveal with real 15-puzzle physics
+- Progressive daub stamps that glow near BINGO
+- 50 unique SVG stamp designs, customizable colors
 - Export completed cards as SVG
 
 </td><td>
 
 **Tracking & Scoring**
 - 4 rating metrics: Entertainment, Weirdness, Gem Factor, "I Just Liked It"
-- Full game and round history saved in localStorage
-- Oldest Zero-View Record timeline with rarity zones
-- Per-game and all-time score averages
-- Export game summaries as SVG
+- Oldest Zero-View Record timeline with zoom/pan and rarity tiers
+- Video gallery with thumbnail grid, search, and sort
+- Deep Dive mode: underwater theme, Before:2010 filter, poppable bubbles
+- Share cards (SVG) and Copy for Discord
+- Holiday easter eggs (10 holidays + KVN AUST's birthday)
 
 </td></tr>
 </table>
@@ -186,7 +188,7 @@ Download [`kvnaust-recyclebin.html`](kvnaust-recyclebin.html) and [`bingo-catego
 The hosted version serves a public API of community-discovered zero-view YouTube videos at [`/KVN_AUST/finds.php`](https://falcontechnix.com/KVN_AUST/finds.php). The standalone HTML polls this automatically.
 
 - **Rate limit**: 3 requests per 60 seconds per IP (conditional GET with ETag doesn't count)
-- **14+ seeded finds** spanning 2005 to 2025, sourced from the KVN AUST Discord
+- **20+ community finds** spanning 2005 to 2025, sourced from the KVN AUST Discord and in-game submissions
 - **Rarity tiers**: LEGENDARY (2005), SUPER RARE (2006), VERY RARE (2007-2008), RARE (2009-2012), COMMON (2013+)
 - Each find includes: video URL, title, channel, date posted, views when found, lead used, who found it, and which server
 

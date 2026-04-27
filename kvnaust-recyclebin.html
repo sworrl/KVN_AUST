@@ -737,7 +737,6 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
         <option value="tick">Tick</option>
         <option value="retro">Retro</option>
         <option value="casino">Casino</option>
-        <option value="nautical">Nautical</option>
         <option value="none">Off</option>
       </select>
     </div>
@@ -3572,7 +3571,7 @@ function updateRecordHolder(){
   // Score: oldest date (heaviest) + lowest views + lowest channel videos
   function scoreFind(f){
     const d=new Date(f.date_posted||f.date);
-    const age=(2026-d.getFullYear())*365; // older = higher score
+    const age=(new Date().getFullYear()-d.getFullYear())*365; // older = higher score
     const views=-(f.views_when_found??f.views??9999); // fewer views = higher score (negative so lower is better)
     const chVids=-(f.channel_videos||9999); // fewer channel vids = higher
     return age*1000+views*10+chVids; // age weighted heaviest
@@ -3704,7 +3703,7 @@ function drawRecordsTimeline(){
   ctx.strokeStyle=blGrad;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(padL,padT+chartH);ctx.lineTo(padL+chartW,padT+chartH);ctx.stroke();
   // Year labels
   ctx.font='bold 11px Inter,sans-serif';ctx.textAlign='center';
-  for(let y=startYear;y<endYear;y++){
+  for(let y=Math.ceil(startYear);y<endYear;y++){
     const x=padL+((y-startYear)/totalYears)*chartW;
     ctx.fillStyle='#666';
     ctx.fillText("'"+String(y).slice(2),x,padT+chartH+18);
@@ -4213,30 +4212,18 @@ document.addEventListener('keydown',e=>{
     if(document.getElementById('shortcutsOverlay').classList.contains('open'))closeShortcuts();
     if(document.getElementById('achievementsOverlay').classList.contains('open'))closeAchievements();
     if(document.getElementById('galleryOverlay').classList.contains('open'))closeGallery();
+    if(document.getElementById('recordsOverlay').classList.contains('open'))closeRecords();
+    if(document.getElementById('creditsOverlay').classList.contains('open'))closeCredits();
+    const findDetail=document.querySelector('.rec-find-detail');if(findDetail)findDetail.remove();
   }
 });
 
 // ═══════════════════════════════════
 //  BINGO SETUP PANEL
 // ═══════════════════════════════════
-function togglePerLetter(checked){
-  bingoPerLetter=checked;
-  localStorage.setItem('kvn_bingo_perLetter',checked?'1':'0');
-  document.getElementById('bingoModeDesc').textContent=checked
-    ?'Each B-I-N-G-O column draws from its own category pool.'
-    :'Categories are shuffled randomly across all squares (default).';
-}
-
-function loadPerLetterSetting(){
-  const v=localStorage.getItem('kvn_bingo_perLetter');
-  bingoPerLetter=v==='1';
-  const el=document.getElementById('bingoPerLetterToggle');
-  if(el)el.checked=bingoPerLetter;
-  const desc=document.getElementById('bingoModeDesc');
-  if(desc)desc.textContent=bingoPerLetter
-    ?'Each B-I-N-G-O column draws from its own category pool.'
-    :'Categories are shuffled randomly across all squares (default).';
-}
+// Per-letter bingo removed — functions kept as stubs for wrapper compat
+function togglePerLetter(){}
+function loadPerLetterSetting(){}
 
 function toggleBingoSetup(){
   const p=document.getElementById('bingoSetup');p.classList.toggle('open');
