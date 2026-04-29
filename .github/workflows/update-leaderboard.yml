@@ -16,10 +16,20 @@ jobs:
           ref: main
 
       - name: Fetch leaderboard from API
+        id: fetch
         run: |
-          curl -s "https://www.falcontechnix.com/KVN_AUST/finds.php?limit=25&order=asc" -o /tmp/finds.json
+          if curl -sS --fail --retry 5 --retry-delay 10 --retry-all-errors --max-time 30 \
+               "https://www.falcontechnix.com/KVN_AUST/finds.php?limit=25&order=asc" \
+               -o /tmp/finds.json \
+             && python3 -c "import json,sys; json.load(open('/tmp/finds.json'))"; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "API fetch/parse failed — skipping update" >&2
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Generate leaderboard markdown
+        if: steps.fetch.outputs.ok == 'true'
         run: |
           python3 << 'PYEOF'
           import json, re
@@ -107,6 +117,7 @@ jobs:
           PYEOF
 
       - name: Commit if changed
+        if: steps.fetch.outputs.ok == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
