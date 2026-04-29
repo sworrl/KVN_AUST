@@ -229,6 +229,8 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 
 > This table auto-updates every 3 hours from the [Finds API](https://www.falcontechnix.com/KVN_AUST/finds.php) via GitHub Actions. Do not edit manually — changes will be overwritten.
 >
+> The sync workflow authenticates with the host using an `X-KVN-Sync-Token` header. The token is stored as the `KVN_SYNC_TOKEN` repo secret; if it's ever rotated, update the secret in **Settings → Secrets and variables → Actions** — the next scheduled run picks it up.
+>
 > **Get on the leaderboard:** [Play the hosted version](https://falcontechnix.com/KVN_AUST/) and create an account. Submit a validated zero-view video during gameplay or directly via the [Records timeline](https://falcontechnix.com/KVN_AUST/#records) — you don't need to play a full game to submit a find. See also: [Discord Integration Guide](DISCORD_INTEGRATION.md)
 
 <!-- LEADERBOARD-START -->

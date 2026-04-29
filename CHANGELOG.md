@@ -14,6 +14,14 @@
 
 ---
 
+## [Unreleased] - 2026-04-29
+
+### Infrastructure
+- **Leaderboard sync workflow hardened**: `update-leaderboard.yml` now retries the `finds.php` fetch (5×, 10s delay), validates JSON before processing, and skips the run cleanly on persistent failure instead of marking it red. Stops the Actions tab from filling up with sync errors when the API hiccups.
+- **Authenticated sync**: workflow now sends `X-KVN-Sync-Token: ${{ secrets.KVN_SYNC_TOKEN }}` so the host can whitelist GitHub Actions traffic without opening `finds.php` to the world. Set `KVN_SYNC_TOKEN` in repo secrets to enable.
+
+---
+
 ## [6.0.0] - 2026-04-27 (Wrapper 1.12.0)
 
 > See [WRAPPER_CHANGELOG.md](WRAPPER_CHANGELOG.md) for the full hosted platform changelog.
