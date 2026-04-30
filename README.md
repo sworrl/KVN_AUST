@@ -19,11 +19,11 @@
 </p>
 
 <p align="center">
-  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-280-e74c3c?style=flat-square&labelColor=1a1a2e" alt="192 Total Formats"></a>
-  <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-58-3498db?style=flat-square&labelColor=1a1a2e" alt="43 Search Keyphrases"></a>
+  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-280-e74c3c?style=flat-square&labelColor=1a1a2e" alt="280 Total Formats"></a>
+  <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-58-3498db?style=flat-square&labelColor=1a1a2e" alt="58 Search Keyphrases"></a>
   <a href="FORMAT-MAP.md#file-extensions"><img src="https://img.shields.io/badge/Extensions-13-9b59b6?style=flat-square&labelColor=1a1a2e" alt="13 File Extensions"></a>
-  <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-134-2ecc71?style=flat-square&labelColor=1a1a2e" alt="78 Numbered Formats"></a>
-  <a href="FORMAT-MAP.md#date-based-formats"><img src="https://img.shields.io/badge/Date--Based-38-e67e22?style=flat-square&labelColor=1a1a2e" alt="21 Date-Based Formats"></a>
+  <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-134-2ecc71?style=flat-square&labelColor=1a1a2e" alt="134 Numbered Formats"></a>
+  <a href="FORMAT-MAP.md#date-based-formats"><img src="https://img.shields.io/badge/Date--Based-38-e67e22?style=flat-square&labelColor=1a1a2e" alt="38 Date-Based Formats"></a>
   <a href="FORMAT-MAP.md#ancient-youtube-2006-2008"><img src="https://img.shields.io/badge/Ancient_YT-37-f39c12?style=flat-square&labelColor=1a1a2e" alt="37 Ancient YouTube Formats"></a>
 </p>
 
@@ -42,7 +42,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 | Step | Feature | Description |
 |:----:|:--------|:------------|
 | 1 | **Recycle Bin Bingo** | Randomized 5x5 bingo card with 101 video categories from KVN AUST's series. Slide-puzzle reveal animation. 50 unique SVG daub stamps per game. |
-| 2 | **Format Spinner** | 3D-textured wheel loaded with 60+ filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md). No-repeat spins with red dots marking used formats. |
+| 2 | **Format Spinner** | 3D-textured wheel loaded with 280 filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md) (KVN Map 4.0). No-repeat spins with red dots marking used formats. When bingo is active, dark-red **Lose a Space** penalty segments may sprinkle in. |
 | 3 | **Rainbow Number Generator** | Character-by-character rainbow shuffle animation generates the random search number for your format. |
 | 4 | **Search YouTube & Rate** | Copy the search string, open directly in YouTube, or re-randomize. Rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." Log date posted, views, and channel size. Share via SVG card or copy for Discord. |
 | 5 | **Game Summary & Export** | End-of-session recap with video thumbnails, per-metric breakdowns, and averages. Export bingo cards and summaries as SVG. |
@@ -74,7 +74,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 <p align="center">
   <img src="screenshots/05-spinner.png" width="720" alt="KVN AUST Recycle Bin - Format Spinner Wheel">
-  <br><sub>3D Format Spinner — 192 formats from the community map</sub>
+  <br><sub>3D Format Spinner — 280 formats from the community map (KVN Map 4.0)</sub>
 </p>
 
 <p align="center">
@@ -118,7 +118,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 - Single HTML file — no install, no build step, no dependencies
 - Works offline via service worker (full PWA)
 - Runs on Windows, Mac, Linux, Chromebook, mobile — any browser
-- 192 formats parsed from FORMAT-MAP.md, zero hardcoded
+- 280 formats parsed from FORMAT-MAP.md (KVN Map 4.0), zero hardcoded
 - Embedded Web Audio (tick, retro, casino, nautical Deep Dive presets)
 - 15 achievements with badge modal, toast + sound on unlock
 
@@ -138,6 +138,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 - Mosaic slide-puzzle reveal with real 15-puzzle physics
 - Progressive daub stamps that glow near BINGO
 - 50 unique SVG stamp designs, customizable colors
+- **Lose a Space** spinner penalty (Hard Mode, KVN-style) — toggleable
 - Export completed cards as SVG
 
 </td><td>
@@ -284,7 +285,7 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 
 > **[VIEW THE COMPLETE FORMAT MAP](FORMAT-MAP.md)**
 
-The community-maintained database of every known default filename keyphrase that surfaces YouTube's hidden zero-view video graveyard. Organized by search keyphrases, file extensions, numbered device formats, date-based formats, and ancient YouTube (2006-2008) patterns. 60+ numbered formats with ranges, 70+ contributors.
+The community-maintained database of every known default filename keyphrase that surfaces YouTube's hidden zero-view video graveyard. Organized by search keyphrases, file extensions, numbered device formats, date-based formats, and ancient YouTube (2006-2008) patterns. **280 formats** across all sections (KVN AUST Map 4.0), **70+ contributors**.
 
 ---
 

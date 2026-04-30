@@ -13,11 +13,11 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/TOTAL_FORMATS-280-e74c3c?style=flat-square&labelColor=1a1a2e" alt="192 Total Formats">
-  <img src="https://img.shields.io/badge/Search_Keyphrases-58-3498db?style=flat-square&labelColor=1a1a2e" alt="43 Search Keyphrases">
+  <img src="https://img.shields.io/badge/TOTAL_FORMATS-280-e74c3c?style=flat-square&labelColor=1a1a2e" alt="280 Total Formats">
+  <img src="https://img.shields.io/badge/Search_Keyphrases-58-3498db?style=flat-square&labelColor=1a1a2e" alt="58 Search Keyphrases">
   <img src="https://img.shields.io/badge/File_Extensions-13-9b59b6?style=flat-square&labelColor=1a1a2e" alt="13 File Extensions">
-  <img src="https://img.shields.io/badge/Numbered_Formats-134-2ecc71?style=flat-square&labelColor=1a1a2e" alt="78 Numbered Formats">
-  <img src="https://img.shields.io/badge/Date--Based-38-e67e22?style=flat-square&labelColor=1a1a2e" alt="21 Date-Based Formats">
+  <img src="https://img.shields.io/badge/Numbered_Formats-134-2ecc71?style=flat-square&labelColor=1a1a2e" alt="134 Numbered Formats">
+  <img src="https://img.shields.io/badge/Date--Based-38-e67e22?style=flat-square&labelColor=1a1a2e" alt="38 Date-Based Formats">
   <img src="https://img.shields.io/badge/Ancient_YouTube-37-f39c12?style=flat-square&labelColor=1a1a2e" alt="37 Ancient YouTube Formats">
 </p>
 
