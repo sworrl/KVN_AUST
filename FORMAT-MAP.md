@@ -102,6 +102,18 @@ The only way to access these videos is to search for the **keyphrase** associate
 
 ---
 
+## Map 4.0 Sync (April 2026)
+
+> Bulk import from KVN AUST's [Map 4.0 Google Doc](https://tinyurl.com/y5xx29bj) — published alongside the *"Exploring 0-View YouTube until I get a Bingo (Hard Mode)"* video. Credits flow back to the original contributors named in the doc.
+
+**~50 new numbered formats** (mostly long-tail camera/trail-cam/action-cam patterns), **17 new date-based formats** spanning game-capture, screen-recorder, and webcam eras, and **a dozen new keyphrases** including the `"копия видео"` Russian Photo Story duplicates, the `"Moviemakeronline com"` family, and the `Clips4Sale` / `XXXp` playlist-filter set.
+
+**Multi-variable patterns** (`P1XX0XXX`, `PAXX0XXX`, `PBXX0XXX`, `VXX0XXX`, `PCXX00XX`, `"Sequence XX X"`) are documented in this map for human reference, but the spinner only auto-parses single-range entries — those need manual substitution at search time.
+
+**NSFW filter-playlist keyphrases** (`240p 400k`, `480p 600k`, `480p 2000k`, `720p 1500k`, `720p 4000k`, `Clips4Sale`) are listed for completeness but should be searched with care and the **Filter: Playlist** option active.
+
+---
+
 ## Search Keyphrases
 
 > **Sort by:** Upload Date **(MANDATORY)**
@@ -154,6 +166,21 @@ Generic keyphrases that surface brand new zero-view uploads when sorted by uploa
 | `"Untitled Design"` | Video Editor | | [@BladeOscReal](https://youtube.com/@BladeOscReal) |
 | `"Javaw"` | Game Capture | Minecraft | |
 | `"Injected"` | 360 Video | Filter: 360 Video | [@PnfrmEnm](https://youtube.com/@PnfrmEnm) |
+| `"Video_ts.vob"` | DVD | | [@BastienSante1902](https://youtube.com/@BastienSante1902) |
+| `"MicrosoftTeams Video"` | Misc | | [@H2knad](https://youtube.com/@H2knad) |
+| `"Test upload"` | Misc | | |
+| `"Moviemakeronline com"` | Misc | | [@Hrotmaister](https://youtube.com/@Hrotmaister) |
+| `"myvideo convert2video com"` | Misc | | [@Hrotmaister](https://youtube.com/@Hrotmaister) |
+| `"Myvideo imagetovideo com"` | Misc | | [@Hrotmaister](https://youtube.com/@Hrotmaister) |
+| `"копия видео"` | Misc | Russia — Photo Story duplicates | [@sScorpioNn1](https://youtube.com/@sScorpioNn1) |
+| `"копия видео Копия видео"` | Misc | Russia — double-duplicate | [@sScorpioNn1](https://youtube.com/@sScorpioNn1) |
+| `"My Slideshow"` | Video Editor | | |
+| `240p 400k` | NSFW Playlist | Filter: Playlist | |
+| `480p 600k` | NSFW Playlist | Filter: Playlist | |
+| `480p 2000k` | NSFW Playlist | Filter: Playlist | |
+| `720p 1500k` | NSFW Playlist | Filter: Playlist | |
+| `720p 4000k` | NSFW Playlist | Filter: Playlist | |
+| `Clips4Sale` | NSFW Playlist | Filter: Playlist | |
 
 ---
 
@@ -266,6 +293,69 @@ Device-specific filename patterns with numeric ranges. Best for finding old, for
 | `"Month DD, YYYY"` | - | Phone | |
 | `AVSEQXX` | 00-99 | Misc | [@Set_Your_Handle10](https://youtube.com/@Set_Your_Handle10) |
 | `"My Videolicious Video"` | - | Video Editor | [@slurrygeyser8133](https://youtube.com/@slurrygeyser8133) |
+| `VTS XXX 1` | 000-999 | DVD | |
+| `VTS 01 XXX` | 000-999 | DVD | |
+| `"My Slideshow XX"` | 00-99 | Video Editor | |
+| `"My Stupeflix Video XXXX"` | 0000-1050 | Video Editor | |
+| `AVSEQXX.DAT` | 00-99 | Misc | |
+| `AVI 0XXX` | 001-150 | Camera | |
+| `00XXXXA` | 0001-2000 | Action Cam | |
+| `ВидеоXXXX` | 0000-1000 | Camera | Russia. [@_Mag10_](https://youtube.com/@_Mag10_) |
+| `im000XXX` | 001-899 | Camera | [@Lorenzorentniop717](https://youtube.com/@Lorenzorentniop717) |
+| `SV A0XXX` | 001-600 | Camera | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `Videoplayback XXX` | 1-500 | Misc | |
+| `GEDV0XXX` | 001-500 | Camera | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `"0001 0XXX"` | 019-500 | Blender 3D | [@BladeOscReal](https://youtube.com/@BladeOscReal) |
+| `ACTP0XXX` | 001-400 | Action Cam | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `IM000XXX` | 000-400 | Trail Cam / Camera | |
+| `MAV 0XXX` | 000-399 | Camera | Japan |
+| `MOVIE 0XXX` | 000-300 | Camera | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `ANMR0XXX` | 000-300 | Camera | [@Jannik323](https://youtube.com/@Jannik323) |
+| `Snímek XXX` | 001-300 | Camera | Czech. [@Jannik323](https://youtube.com/@Jannik323) |
+| `DIGI0XXX` | 001-300 | Camera | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `ASF 0XXX` | 001-300 | Camera | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `IONX0XXX` | 001-250 | Camera | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `VICO0XXX` | 001-250 | Dashcam | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `ArcSoft VideoXXX` | 1-249 | Camera | [@KappenKonundrum](https://x.com/KappenKonundrum) |
+| `PRMS0XXX` | 001-200 | Trail Cam | [@Chloe.in.mae](https://instagram.com/chloe.in.mae) |
+| `SMOV0XXX` | 001-200 | Camera | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `RCA 0XXX` | 001-200 | Camera | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `MOVA0XXX` | 001-200 | Camera | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `"Sequence XXX"` | 001-200 | Video Editor | |
+| `WideoXXX` | 000-199 | Camera | [@EvilyArised](https://youtube.com/@EvilyArised) |
+| `MAX 0XXX` | 001-150 | Drone | [@UsuallyLime](https://youtube.com/@UsuallyLime) |
+| `MDGC0XXX` | 001-150 | Trail Cam | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `PCDV0XXX` | 001-150 | Camera | [@Ron2600_](https://youtube.com/@Ron2600_) |
+| `HD0 0XXX` | 000-120 | Camera | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `"Filmato 0XXX"` | 001-120 | Misc | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `LOOP0XXX` | 001-100 | Action Cam | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `SMDC0XXX` | 001-100 | Camera | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `HUNT0XXX` | 001-100 | Trail Cam | [@Harrisonmoss1310](https://youtube.com/@Harrisonmoss1310) |
+| `ACXS0XXX` | 001-100 | Action Cam | [@saso1901](https://youtube.com/@saso1901) |
+| `MVC XXXV` | 001-100 | Camera | [@Evanlee1](https://instagram.com/evanlee1) |
+| `MA0 00XX` | 00-99 | Camera | Japan |
+| `MMF00XX` | 00-99 | Camera | [@CharlesMontgomeryBurns.](https://youtube.com/@CharlesMontgomeryBurns.) |
+| `G01000XX` | 10-99 | GoPro | |
+| `"Kazam Screencast 000XX"` | 01-50 | Screen Recorder | [@СтаниславШолтанюк](https://youtube.com/@%D0%A1%D1%82%D0%B0%D0%BD%D0%B8%D1%81%D0%BB%D0%B0%D0%B2%D0%A8%D0%BE%D0%BB%D1%82%D0%B0%D0%BD%D1%8E%D0%BA) |
+| `CADDX0000XX` | 01-50 | Drone | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `ZOE 00XX` | 01-50 | Camera | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+
+### Multi-Variable Patterns (manual substitution required)
+
+These need two random values to construct a search. The spinner won't auto-generate them — substitute by hand.
+
+| Keyphrase | Variable 1 | Variable 2 | Source | Credit |
+|:----------|:-----------|:-----------|:-------|:-------|
+| `P1XX0XXX` | 01-35 | 001-999 | Camera | |
+| `PAXX0XXX` | 00-30 | 001-499 | Camera | |
+| `PBXX0XXX` | 00-30 | 001-499 | Camera | |
+| `VXX0XXX` | 00-50 | 101-300 | Camera | [@AymonAdren](https://x.com/AdrenAymon) |
+| `PCXX00XX` | 00-30 | 01-99 | Camera | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
+| `"Sequence XX X"` | 01-99 | 1-3 | Video Editor | |
+| `Copy 4XXX` | AAA-FFF | 000-999 | Phone (hex) | |
+| `Video 4XXX` | AAA-FFF | 000-999 | Phone (hex) | |
+| `"My Project X"` | 0-50 | — | Video Editor | [@Coletale](https://youtube.com/@Coletale) |
+| `"Il mio filmato X"` | 1-100 | — | Misc (Italy) | |
 
 ---
 
@@ -296,6 +386,23 @@ Device-specific filename patterns with numeric ranges. Best for finding old, for
 | `Grand Theft Auto 5 YYYY MM DD` | >2008 | Game Capture (GTA V) | [@Laxesthecorgi9824](https://youtube.com/@Laxesthecorgi9824) |
 | `YouCut YYYYMMDD` | >May 2018 | Video Editor | |
 | `XRecorder YYYYMMDD` | >2024 | Screen Recorder | [@Dayve8977](https://youtube.com/@Dayve8977) |
+| `AUD-YYYYMMDD` | >2017 | Misc | |
+| `GMTYYYYMMDD` | - | Zoom | [@zxz41_Kristian](https://x.com/zxz41_Kristian) |
+| `Webcam Recorded Video - Month D, YYYY` | 2008-2010 | Webcam | |
+| `Webcam video Month D, YYYY` | 2010-2012 | Webcam | |
+| `Webcam video from Month D, YYYY` | 2011-2016 | Webcam | [@flizzycat](https://youtube.com/@flizzycat) |
+| `SCR YYYYMMDD` | 2014-2018 | Screen Recorder | [@GaspacoZanis](https://youtube.com/@GaspacoZanis) |
+| `Flipagram Month YYYY` | 2013-2019 | Video Editor | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `Iw3mp YYYYMMDD` | 2008-2020 | Game Capture (COD 4) | [@Zeebdy](https://youtube.com/@Zeebdy) |
+| `"AR.Drone 2.0 Video: YYYY"` | 2015-2021 | Drone | [@Whenwhowhathow](https://x.com/whenwhowhathow) |
+| `WA VID YYYYMMDD` | 2018-2023 | App | [@Hrotmaister](https://x.com/Hrotmaister) |
+| `XRecorder DDMMYYYY` | 2021-2024 | Screen Recorder | [@Dayve8977](https://youtube.com/@Dayve8977) |
+| `CODWAWMP YYYY MM DD` | 2008-2023 | Game Capture (COD WAW) | [@Zeebdy](https://youtube.com/@Zeebdy) |
+| `Hl2 YYYY MM DD` | 2008-2023 | Game Capture (Half-Life) | [@Zeebdy](https://youtube.com/@Zeebdy) |
+| `Chrome YYYY MM DD` | >2010 | Screen Recorder | [@Lemonposting](https://youtube.com/@Lemonposting) |
+| `Simplescreenrecorder YYYY MM DD` | >2023 | Screen Recorder | [@RadieForge](https://youtube.com/@RadieForge) |
+| `720p YYMMDD` | >2023 | VYond / GoAnimate | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"Project of DD Mth 2011 PDT"` | 2011 | Video Editor | [@Machine___angel](https://x.com/machine___angel) |
 
 ---
 
@@ -356,7 +463,7 @@ The deepest layer of the Recycle Bin. These keyphrases surface videos from the f
 
 > Thank you to everyone who helped discover new format leads. This list grows because of you.
 
-[@Junoeclipse7715](https://youtube.com/@Junoeclipse7715) | [@ZuperDarkk](https://youtube.com/@ZuperDarkk) | [@zxz41_Kristian](https://youtube.com/@zxz41_Kristian) | [@TheLimeyDragon](https://youtube.com/@TheLimeyDragon) | [@nellip.683](https://youtube.com/@nellip.683) | [@Hassan-zw9tb](https://youtube.com/@Hassan-zw9tb) | [@Oopse47](https://youtube.com/@Oopse47) | [@slurrygeyser8133](https://youtube.com/@slurrygeyser8133) | [@denzelkrocker1673](https://youtube.com/@denzelkrocker1673) | [@Set_Your_Handle10](https://youtube.com/@Set_Your_Handle10) | [@StormSplurge](https://youtube.com/@StormSplurge) | [@CharlesMontgomeryBurns.](https://youtube.com/@CharlesMontgomeryBurns.) | [@kyle6266](https://youtube.com/@kyle6266) | [@czechgop7631](https://youtube.com/@czechgop7631) | [@KILOPOWER](https://youtube.com/@KILOPOWER) | [@T1MAGEDDON](https://youtube.com/@T1MAGEDDON) | [@stickmandaninacan](https://youtube.com/@stickmandaninacan) | [@blissom](https://youtube.com/@blissom) | [@thevoid6756](https://youtube.com/@thevoid6756) | [@Jannik323](https://youtube.com/@Jannik323) | [@Coletale](https://youtube.com/@Coletale) | [@Laxesthecorgi9824](https://youtube.com/@Laxesthecorgi9824) | [@Infinitysnapz](https://youtube.com/@Infinitysnapz) | [@AymonAdren](https://youtube.com/@AymonAdren) | [@misterherman](https://youtube.com/@misterherman) | [@Fraigo](https://youtube.com/@Fraigo) | [@UsuallyLime](https://youtube.com/@UsuallyLime) | [@Thatoneguy59-x9l](https://youtube.com/@Thatoneguy59-x9l) | [@Chernyat5048](https://youtube.com/@Chernyat5048) | [@BladeOscReal](https://youtube.com/@BladeOscReal) | [@sScorpioNn1](https://youtube.com/@sScorpioNn1) | [@H2knad](https://youtube.com/@H2knad) | [@Lorenzorentniop717](https://youtube.com/@Lorenzorentniop717) | [@Mort3534](https://youtube.com/@Mort3534) | [@_Mag10_](https://youtube.com/@_Mag10_) | [@EvilyArised](https://youtube.com/@EvilyArised) | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) | [@i664k](https://youtube.com/@i664k) | [@Piggypiggyyoinkyoink](https://youtube.com/@Piggypiggyyoinkyoink) | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) | [@Pagenonfound](https://youtube.com/@Pagenonfound) | [@flizzycat](https://youtube.com/@flizzycat) | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) | [@Ron2600_](https://youtube.com/@Ron2600_) | [@Huebirdfan2.0](https://youtube.com/@Huebirdfan2.0) | [@Hrotmaister](https://youtube.com/@Hrotmaister) | [@Harrisonmoss1310](https://youtube.com/@Harrisonmoss1310) | [@Dayve8977](https://youtube.com/@Dayve8977) | [@Zeebdy](https://youtube.com/@Zeebdy) | [@Lemonposting](https://youtube.com/@Lemonposting) | [@Dontzky](https://youtube.com/@Dontzky) | [@Alexanderhunt9263](https://youtube.com/@Alexanderhunt9263) | [@Techyarchivuma](https://youtube.com/@Techyarchivuma) | [@Mackhill8851](https://youtube.com/@Mackhill8851) | [@A0V1](https://youtube.com/@A0V1) | [@PrimeroAtreides](https://youtube.com/@PrimeroAtreides) | [@YeoungBraxx](https://youtube.com/@YeoungBraxx) | [@BastienSante1902](https://youtube.com/@BastienSante1902) | [@RadieForge](https://youtube.com/@RadieForge) | [@GaspacoZanis](https://youtube.com/@GaspacoZanis) | [@Qrde](https://youtube.com/@Qrde) | [@saso1901](https://youtube.com/@saso1901) | [@__atob__](https://youtube.com/@__atob__) | [@Whenwhowhathow](https://youtube.com/@Whenwhowhathow) | [@Machine___angel](https://youtube.com/@Machine___angel) | [@KappenKonundrum](https://youtube.com/@KappenKonundrum) | [@Chloe.in.mae](https://youtube.com/@Chloe.in.mae) | [@Evanlee1](https://youtube.com/@Evanlee1) | [@Daldosbm](https://youtube.com/@Daldosbm) | [@PnfrmEnm](https://youtube.com/@PnfrmEnm) | [@Chegnus](https://youtube.com/@BASHnBRASS)
+[@Junoeclipse7715](https://youtube.com/@Junoeclipse7715) | [@ZuperDarkk](https://youtube.com/@ZuperDarkk) | [@zxz41_Kristian](https://youtube.com/@zxz41_Kristian) | [@TheLimeyDragon](https://youtube.com/@TheLimeyDragon) | [@nellip.683](https://youtube.com/@nellip.683) | [@Hassan-zw9tb](https://youtube.com/@Hassan-zw9tb) | [@Oopse47](https://youtube.com/@Oopse47) | [@slurrygeyser8133](https://youtube.com/@slurrygeyser8133) | [@denzelkrocker1673](https://youtube.com/@denzelkrocker1673) | [@Set_Your_Handle10](https://youtube.com/@Set_Your_Handle10) | [@StormSplurge](https://youtube.com/@StormSplurge) | [@CharlesMontgomeryBurns.](https://youtube.com/@CharlesMontgomeryBurns.) | [@kyle6266](https://youtube.com/@kyle6266) | [@czechgop7631](https://youtube.com/@czechgop7631) | [@KILOPOWER](https://youtube.com/@KILOPOWER) | [@T1MAGEDDON](https://youtube.com/@T1MAGEDDON) | [@stickmandaninacan](https://youtube.com/@stickmandaninacan) | [@blissom](https://youtube.com/@blissom) | [@thevoid6756](https://youtube.com/@thevoid6756) | [@Jannik323](https://youtube.com/@Jannik323) | [@Coletale](https://youtube.com/@Coletale) | [@Laxesthecorgi9824](https://youtube.com/@Laxesthecorgi9824) | [@Infinitysnapz](https://youtube.com/@Infinitysnapz) | [@AymonAdren](https://youtube.com/@AymonAdren) | [@misterherman](https://youtube.com/@misterherman) | [@Fraigo](https://youtube.com/@Fraigo) | [@UsuallyLime](https://youtube.com/@UsuallyLime) | [@Thatoneguy59-x9l](https://youtube.com/@Thatoneguy59-x9l) | [@Chernyat5048](https://youtube.com/@Chernyat5048) | [@BladeOscReal](https://youtube.com/@BladeOscReal) | [@sScorpioNn1](https://youtube.com/@sScorpioNn1) | [@H2knad](https://youtube.com/@H2knad) | [@Lorenzorentniop717](https://youtube.com/@Lorenzorentniop717) | [@Mort3534](https://youtube.com/@Mort3534) | [@_Mag10_](https://youtube.com/@_Mag10_) | [@EvilyArised](https://youtube.com/@EvilyArised) | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) | [@i664k](https://youtube.com/@i664k) | [@Piggypiggyyoinkyoink](https://youtube.com/@Piggypiggyyoinkyoink) | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) | [@Pagenonfound](https://youtube.com/@Pagenonfound) | [@flizzycat](https://youtube.com/@flizzycat) | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) | [@Ron2600_](https://youtube.com/@Ron2600_) | [@Huebirdfan2.0](https://youtube.com/@Huebirdfan2.0) | [@Hrotmaister](https://youtube.com/@Hrotmaister) | [@Harrisonmoss1310](https://youtube.com/@Harrisonmoss1310) | [@Dayve8977](https://youtube.com/@Dayve8977) | [@Zeebdy](https://youtube.com/@Zeebdy) | [@Lemonposting](https://youtube.com/@Lemonposting) | [@Dontzky](https://youtube.com/@Dontzky) | [@Alexanderhunt9263](https://youtube.com/@Alexanderhunt9263) | [@Techyarchivuma](https://youtube.com/@Techyarchivuma) | [@Mackhill8851](https://youtube.com/@Mackhill8851) | [@A0V1](https://youtube.com/@A0V1) | [@PrimeroAtreides](https://youtube.com/@PrimeroAtreides) | [@YeoungBraxx](https://youtube.com/@YeoungBraxx) | [@BastienSante1902](https://youtube.com/@BastienSante1902) | [@RadieForge](https://youtube.com/@RadieForge) | [@GaspacoZanis](https://youtube.com/@GaspacoZanis) | [@Qrde](https://youtube.com/@Qrde) | [@saso1901](https://youtube.com/@saso1901) | [@__atob__](https://youtube.com/@__atob__) | [@Whenwhowhathow](https://youtube.com/@Whenwhowhathow) | [@Machine___angel](https://youtube.com/@Machine___angel) | [@KappenKonundrum](https://youtube.com/@KappenKonundrum) | [@Chloe.in.mae](https://youtube.com/@Chloe.in.mae) | [@Evanlee1](https://youtube.com/@Evanlee1) | [@Daldosbm](https://youtube.com/@Daldosbm) | [@PnfrmEnm](https://youtube.com/@PnfrmEnm) | [@СтаниславШолтанюк](https://youtube.com/@%D0%A1%D1%82%D0%B0%D0%BD%D0%B8%D1%81%D0%BB%D0%B0%D0%B2%D0%A8%D0%BE%D0%BB%D1%82%D0%B0%D0%BD%D1%8E%D0%BA) | [@Chegnus](https://youtube.com/@BASHnBRASS)
 
 ---
 
