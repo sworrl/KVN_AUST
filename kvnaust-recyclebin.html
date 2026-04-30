@@ -502,6 +502,21 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .hist-item .hi-format{color:var(--muted);font-size:.65rem;margin-top:2px}
 .hist-item .hi-date{color:#444;font-size:.6rem;margin-top:1px}
 .hp-close{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer}
+
+/* ── KVN VIDEOS GALLERY ── */
+.kvn-videos-panel{position:fixed;top:220px;right:0;bottom:0;width:380px;background:linear-gradient(180deg,var(--card),#111120);border-left:1px solid #2a2a40;z-index:450;
+  transform:translateX(100%);transition:transform .35s ease;box-shadow:-4px 0 30px rgba(0,0,0,.5),-1px 0 0 rgba(255,255,255,.03);overflow-y:auto;padding:14px}
+.kvn-videos-panel.open{transform:translateX(0)}
+.kvp-close{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer}
+.kvp-card{position:relative;display:flex;gap:10px;background:var(--card2);border:1px solid #2a2a40;border-radius:8px;padding:8px;margin-bottom:8px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s;text-decoration:none;color:inherit}
+.kvp-card:hover{transform:translateY(-1px);border-color:#3a3a55;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.kvp-card.is-new{border-color:#e74c3c;box-shadow:0 0 0 1px #e74c3c,0 0 22px rgba(231,76,60,.35),0 4px 14px rgba(0,0,0,.4);animation:kvpNewPulse 2.4s ease-in-out infinite}
+.kvp-thumb{width:120px;height:68px;border-radius:5px;object-fit:cover;background:#000;flex-shrink:0}
+.kvp-title{font-size:.74rem;font-weight:700;color:#ddd;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.kvp-meta{font-size:.6rem;color:#666;margin-top:auto;display:flex;align-items:center;gap:6px}
+.kvp-card .kvp-info{display:flex;flex-direction:column;flex:1;min-width:0;padding:2px 0}
+.kvp-new-badge{position:absolute;top:-6px;right:-6px;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-size:.55rem;font-weight:900;letter-spacing:.06em;padding:3px 8px;border-radius:10px;box-shadow:0 2px 8px rgba(231,76,60,.5),0 0 0 2px var(--card2);text-transform:uppercase;z-index:2}
+@keyframes kvpNewPulse{0%,100%{box-shadow:0 0 0 1px #e74c3c,0 0 22px rgba(231,76,60,.35),0 4px 14px rgba(0,0,0,.4)}50%{box-shadow:0 0 0 1px #ff6b5b,0 0 32px rgba(231,76,60,.6),0 4px 18px rgba(231,76,60,.3)}}
 .hist-empty{color:var(--muted);font-size:.82rem;text-align:center;margin-top:36px}
 
 /* ── BINGO WIN ── */
@@ -784,6 +799,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <div class="tagline">The internet's largest video graveyard</div>
       <button class="start-btn" onclick="startGame()">NEW GAME</button>
       <button class="start-btn" onclick="showRecords()" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000;font-size:.8rem;padding:8px 24px;margin-top:8px">Submit a Find</button>
+      <button class="start-btn" id="kvnVideosBtn" onclick="toggleKvnVideos()" style="background:linear-gradient(135deg,#c4302b,#8b1a1a);color:#fff;font-size:.8rem;padding:8px 24px;margin-top:8px;position:relative">KVN's Recycle Bin Videos<span id="kvnVideosNewDot" style="display:none;position:absolute;top:-4px;right:-4px;background:#fff;color:#c0392b;font-size:.55rem;font-weight:900;letter-spacing:.04em;padding:2px 6px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.4)">NEW</span></button>
       <div class="game-setup" id="gameSetup" style="margin-top:14px;padding:10px 14px;border:1px solid #2a2a3e;border-radius:8px;background:rgba(20,20,32,.55);max-width:380px;display:flex;flex-direction:column;gap:8px;font-size:.7rem;color:#aab">
         <div style="font-weight:700;letter-spacing:.04em;color:#ccd;text-align:center;font-size:.66rem;text-transform:uppercase;opacity:.7">Game Setup</div>
         <label style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span title="Penalty segments on the spinner. Set to 0 to disable.">Lose-a-Space slots</span><input type="number" id="setupLoseSlots" min="0" max="10" value="2" style="width:54px;background:#0e0e18;border:1px solid #2a2a40;color:#ddd;padding:3px 6px;border-radius:4px;font-size:.7rem" onchange="saveGameSetup()"></label>
@@ -940,6 +956,11 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
   <div class="fp-count" id="fpCount"></div>
   <div class="fp-actions"><button onclick="fpSelectAll()">All</button><button onclick="fpSelectNone()">None</button><button onclick="fpSelectRandom()">Random 20</button><button onclick="fpBingoPicks()" style="background:#e74c3c;color:#fff">KVN Picks</button></div><div id="formatList"></div></section>
 <section class="history-panel" id="historyPanel" aria-label="Game History"><button class="hp-close" onclick="toggleHistory()">&times;</button><h2 style="font-size:.9rem;margin-bottom:8px;color:#aaa">Game History</h2><div id="historyList"></div></section>
+<section class="kvn-videos-panel" id="kvnVideosPanel" aria-label="KVN AUST Recycle Bin Videos"><button class="kvp-close" onclick="toggleKvnVideos()">&times;</button>
+  <h2 style="font-size:.9rem;margin-bottom:4px;color:#aaa">KVN AUST · Recycle Bin Series</h2>
+  <div style="font-size:.62rem;color:#666;margin-bottom:10px">Every Recycle Bin / 0-View / mapping video on <a href="https://www.youtube.com/@KVNAUST" target="_blank" style="color:#e74c3c">@KVNAUST</a></div>
+  <div id="kvnVideosList"></div>
+</section>
 
 <!-- BINGO WIN / CONFETTI / TOAST -->
 <div class="bingo-win" id="bingoWin"><h2 style="font-size:inherit">BINGO!</h2><div class="easter-msg" id="easterMsg"></div><button class="dismiss" onclick="dismissBingoWin()">Nice!</button></div>
@@ -3261,6 +3282,66 @@ function spawnConfetti(){const box=document.getElementById('confettiBox');box.in
 function toggleBingo(){const o=document.getElementById('bingoOverlay');o.classList.toggle('open');document.getElementById('bingoToggle').classList.toggle('active',o.classList.contains('open'))}
 function toggleFormatPanel(){const p=document.getElementById('formatPanel');p.classList.toggle('open');document.getElementById('formatsBtn').classList.toggle('active',p.classList.contains('open'))}
 function toggleHistory(){const p=document.getElementById('historyPanel');p.classList.toggle('open');document.getElementById('historyBtn').classList.toggle('active',p.classList.contains('open'));if(p.classList.contains('open'))renderHistory()}
+
+// ─── KVN AUST Recycle Bin video gallery ───
+// Curated to ONLY include Recycle Bin / 0-View / mapping topic videos. Update this list
+// when KVN drops a new one. Dates are ISO YYYY-MM-DD; videos within 24h get a NEW highlight.
+const KVN_RECYCLE_BIN_VIDEOS=[
+  {id:'RmQ24cXNOfA',title:'Exploring "0-View YouTube" until I get a Bingo (Hard Mode)',published:'2026-04-29'},
+  {id:'efXJwWPxOOw',title:'The oldest YouTube video with NO VIEWS has been found',published:'2026-04-15'},
+  {id:'LHyzYxSEtpg',title:'Exploring "0-View YouTube" until I get a Bingo #4',published:'2026-03-29'},
+  {id:'PcLeBHcF39k',title:'We mapped out "0-view YouTube" | YouTube\'s Recycle Bin 5',published:'2025-12-29'},
+  {id:'Mx-Mna6u4lc',title:'Exploring "0-View YouTube" until I get a Bingo (Halloween)',published:'2025-10-29'},
+  {id:'UVfMdyTD0W4',title:'Weird Anomalies on 0-View YouTube',published:'2025-10-29'},
+  {id:'mfyKkr4o1jg',title:'Exploring "0-View YouTube" Until We Get a Bingo (RACE)',published:'2025-09-29'},
+  {id:'4s12Hs40rUU',title:'I mapped out "0-view YouTube" | YouTube\'s Recycle Bin 4',published:'2025-09-29'},
+  {id:'id1vDi42kjU',title:'Finding Low-view Videos from "Old YouTube" (2005-2007)',published:'2025-08-29'},
+  {id:'zYmkOInF6Us',title:'Exploring "0-View YouTube" Until I Get a Bingo',published:'2025-08-29'},
+  {id:'KBJB9Cj8Qj8',title:'YouTube\'s Recycle Bin: The Rarest, Oldest, & Least Viewed Videos 2',published:'2025-04-29'},
+  {id:'8uHFm6LK6PE',title:'I mapped out "0-view YouTube" | YouTube\'s Recycle Bin 3',published:'2025-04-29'},
+  {id:'QDWkJeYtz0o',title:'YouTube\'s Recycle Bin: Weird & Funny Finds w/ 0 views #3',published:'2025-04-29'},
+  {id:'igGBVqFzMcs',title:'YouTube\'s Recycle Bin: The Rarest, Oldest, & Least Viewed Videos 1',published:'2024-04-29'},
+  {id:'0TBxX9CB12o',title:'YouTube\'s Recycle Bin: Weird & Funny Finds w/ 0 views #2',published:'2024-04-29'},
+  {id:'9Zo4lv0CbHU',title:'YouTube\'s Recycle Bin: Weird & Funny Finds w/ 0 views #1',published:'2024-04-29'},
+  {id:'zc3SpIc8OUE',title:'I mapped out "0-view YouTube" | YouTube\'s Recycle Bin 2',published:'2024-04-29'},
+  {id:'-0kmMJ6F9WM',title:'I mapped out "0-view YouTube" | YouTube\'s Recycle Bin',published:'2024-04-29'}
+];
+
+function isKvnVideoNew(pub){
+  if(!pub)return false;
+  const d=new Date(pub+'T00:00:00');
+  const ms=Date.now()-d.getTime();
+  return ms>=0 && ms < 24*60*60*1000;
+}
+
+function fmtKvnDate(pub){
+  if(!pub)return'';
+  try{return new Date(pub+'T00:00:00').toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'})}catch{return pub}
+}
+
+function renderKvnVideos(){
+  const list=document.getElementById('kvnVideosList');
+  if(!list)return;
+  list.innerHTML=KVN_RECYCLE_BIN_VIDEOS.map(v=>{
+    const isNew=isKvnVideoNew(v.published);
+    const newBadge=isNew?'<span class="kvp-new-badge">NEW</span>':'';
+    return `<a class="kvp-card${isNew?' is-new':''}" href="https://www.youtube.com/watch?v=${esc(v.id)}" target="_blank" rel="noopener">${newBadge}<img class="kvp-thumb" src="https://i.ytimg.com/vi/${esc(v.id)}/mqdefault.jpg" loading="lazy" alt=""><div class="kvp-info"><div class="kvp-title">${esc(v.title)}</div><div class="kvp-meta">${esc(fmtKvnDate(v.published))}${isNew?' · <span style="color:#e74c3c;font-weight:900">JUST DROPPED</span>':''}</div></div></a>`;
+  }).join('');
+}
+
+function toggleKvnVideos(){
+  const p=document.getElementById('kvnVideosPanel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open'))renderKvnVideos();
+}
+
+// On load: show NEW dot on the start-screen button if any video is fresh
+function refreshKvnVideoDot(){
+  const dot=document.getElementById('kvnVideosNewDot');
+  if(!dot)return;
+  const anyNew=KVN_RECYCLE_BIN_VIDEOS.some(v=>isKvnVideoNew(v.published));
+  dot.style.display=anyNew?'':'none';
+}
 function buildFormatPanel(){
   const list=document.getElementById('formatList');list.innerHTML='';
   formats.forEach((f,i)=>{
@@ -4536,7 +4617,9 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 // Restore saved sound preference
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadGameSetup();loadWheelTheme();
-loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
+loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();refreshKvnVideoDot();
+// Re-check NEW status periodically (every 10 min) so the "JUST DROPPED" badge ages out without a reload
+setInterval(refreshKvnVideoDot,10*60*1000);
 checkForUpdates();checkHoliday();
 // Service worker registration handled by hosted wrapper (sw.js not bundled in monolithic HTML)
 // Fetch community finds in background, poll every 60s

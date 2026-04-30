@@ -47,6 +47,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 | 4 | **Search YouTube & Rate** | Copy the search string, open directly in YouTube, or re-randomize. Rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." Log date posted, views, and channel size. Share via SVG card or copy for Discord. |
 | 5 | **Game Summary & Export** | End-of-session recap with video thumbnails, per-metric breakdowns, and averages. Export bingo cards and summaries as SVG. |
 | 6 | **Oldest Zero-View Record** | Track the oldest zero-view videos you discover on a canvas timeline with rarity zones — from YouTube's launch in 2005 to present day. |
+| 7 | **KVN's Video Gallery** | Curated list of every KVN AUST Recycle Bin / 0-View / mapping / Bingo video. Thumbnails, titles, publish dates, click-to-watch. New releases get a pulsing red **NEW** badge for the first 24 hours after publish. |
 
 ---
 
