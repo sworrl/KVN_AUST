@@ -13,17 +13,17 @@
 <p align="center">
   <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-KVN_AUST-red?style=flat-square&logo=youtube" alt="KVN AUST YouTube Channel"></a>
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
-  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-43ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
+  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-58ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v6.0.0-1a1a2e?style=flat-square" alt="Changelog"></a>
 </p>
 
 <p align="center">
-  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-192-e74c3c?style=flat-square&labelColor=1a1a2e" alt="192 Total Formats"></a>
-  <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-43-3498db?style=flat-square&labelColor=1a1a2e" alt="43 Search Keyphrases"></a>
+  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-280-e74c3c?style=flat-square&labelColor=1a1a2e" alt="192 Total Formats"></a>
+  <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-58-3498db?style=flat-square&labelColor=1a1a2e" alt="43 Search Keyphrases"></a>
   <a href="FORMAT-MAP.md#file-extensions"><img src="https://img.shields.io/badge/Extensions-13-9b59b6?style=flat-square&labelColor=1a1a2e" alt="13 File Extensions"></a>
-  <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-78-2ecc71?style=flat-square&labelColor=1a1a2e" alt="78 Numbered Formats"></a>
-  <a href="FORMAT-MAP.md#date-based-formats"><img src="https://img.shields.io/badge/Date--Based-21-e67e22?style=flat-square&labelColor=1a1a2e" alt="21 Date-Based Formats"></a>
+  <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-134-2ecc71?style=flat-square&labelColor=1a1a2e" alt="78 Numbered Formats"></a>
+  <a href="FORMAT-MAP.md#date-based-formats"><img src="https://img.shields.io/badge/Date--Based-38-e67e22?style=flat-square&labelColor=1a1a2e" alt="21 Date-Based Formats"></a>
   <a href="FORMAT-MAP.md#ancient-youtube-2006-2008"><img src="https://img.shields.io/badge/Ancient_YT-37-f39c12?style=flat-square&labelColor=1a1a2e" alt="37 Ancient YouTube Formats"></a>
 </p>
 
