@@ -155,6 +155,14 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 ---
 
+## Free, Forever, No Catch
+
+The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`) is **GPL-3.0**. Fork it, host it, mod it, run it offline — do whatever you want. No attribution required to KVN AUST or to us, though it'd be cool of you.
+
+The **hosted version at [falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/)** runs the same HTML from this repo, plus the community layer (cloud save, leaderboards, player profiles, multiplayer, discovery pages, daily challenges). We pay for that hosting out of our own pocket because we think it's fun. **No ads. No paywalls. No tracking pixels. No "premium" tier. No monetization. Not now, not ever.** If you want the community side, come play with us. If you don't, grab the standalone file and run it however you like.
+
+---
+
 ## Play Now
 
 ### Online (Recommended)

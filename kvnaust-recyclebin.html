@@ -516,6 +516,23 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
   box-shadow:0 4px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);transition:background .2s,box-shadow .2s}
 .bingo-win .dismiss:hover{background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.1));box-shadow:0 6px 24px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1)}
 
+/* ── LOSE-A-SPACE OVERLAY ── */
+.lose-space{position:fixed;inset:0;z-index:610;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 40%,rgba(50,8,8,.95) 0%,rgba(0,0,0,.96) 100%);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .35s}
+.lose-space.show{opacity:1;pointer-events:auto}
+.lose-space .ls-skull{font-size:clamp(3rem,9vw,5rem);filter:drop-shadow(0 0 40px #e74c3c);animation:lsShake .5s ease infinite}
+.lose-space .ls-title{font-size:clamp(1.6rem,5.5vw,3rem);font-weight:900;letter-spacing:.06em;color:#ff5252;text-shadow:0 0 30px #b71c1c,0 0 60px #4a0000;margin-top:8px}
+.lose-space .ls-sub{font-size:1.05rem;color:#e8c4c4;margin-top:18px;text-align:center;max-width:520px;min-height:1.4em}
+.lose-space .ls-roll{font-size:clamp(2.5rem,7vw,4.2rem);font-weight:900;color:#fff;margin-top:14px;font-variant-numeric:tabular-nums;text-shadow:0 0 24px rgba(255,82,82,.6);min-height:1.1em}
+.lose-space .ls-target{font-size:1rem;color:#ffb3b3;margin-top:10px;text-align:center;min-height:1.4em}
+.lose-space .ls-dismiss{margin-top:26px;background:linear-gradient(135deg,#7a1f1f,#3d0d0d);border:1px solid rgba(255,82,82,.4);color:#fff;padding:10px 28px;border-radius:8px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);opacity:0;transition:opacity .3s,background .2s}
+.lose-space .ls-dismiss.show{opacity:1}
+.lose-space .ls-dismiss:hover{background:linear-gradient(135deg,#a02a2a,#5a1414)}
+@keyframes lsShake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-4px) rotate(-3deg)}75%{transform:translateX(4px) rotate(3deg)}}
+@keyframes losePoof{0%{transform:scale(1);opacity:1}40%{transform:scale(1.25);filter:hue-rotate(-30deg) brightness(1.4)}100%{transform:scale(.6) rotate(8deg);opacity:0}}
+.bingo-cell.losing{animation:losePoof .55s ease forwards;position:relative;z-index:5}
+
 /* ── SUMMARY ── */
 #summary-screen{background:radial-gradient(ellipse at 50% 0%,#1a1a2e 0%,var(--bg) 60%);overflow-y:auto;padding-bottom:80px;justify-content:flex-start}
 .summary-wrap{max-width:620px;width:92vw;padding:24px 10px 60px}
@@ -768,6 +785,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <button class="start-btn" onclick="startGame()">NEW GAME</button>
       <button class="start-btn" onclick="showRecords()" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000;font-size:.8rem;padding:8px 24px;margin-top:8px">Submit a Find</button>
       <div style="margin-top:10px;font-size:.68rem;color:#333">Formats synced from <a href="https://github.com/sworrl/KVN_AUST/blob/main/FORMAT-MAP.md" target="_blank" style="color:#2ecc71">FORMAT-MAP.md</a> on GitHub</div>
+      <div style="margin-top:8px;font-size:.62rem;color:#3a3a52;max-width:380px;line-height:1.45;text-align:center">Free &amp; open source (GPL-3.0) — do whatever you want with the tool. The hosted version + community features are run at our own expense for fun. No ads, no paywalls, no tracking, no monetization plans, ever.</div>
     </div>
   </div>
 
@@ -894,6 +912,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <label>Daub:</label><input type="color" id="daubColor" value="#4caf50" onchange="setDaubColor(this.value)">
       <label>Op:</label><input type="range" id="daubOpacity" min="30" max="100" value="65" oninput="setDaubOpacity(this.value)">
       <button style="font-size:.6rem;padding:2px 7px;background:var(--card2);border:1px solid #3a3a55;color:#ccc;border-radius:4px;cursor:pointer" onclick="resetBingoCard()">Reset</button>
+      <label title="Adds Lose-a-Space penalty segments to the wheel" style="display:flex;align-items:center;gap:4px;margin-left:6px;font-size:.7rem;color:#e8c4c4"><input type="checkbox" id="bingoLoseEnabled" checked onchange="if(currentScreen==='wheel-screen'&&!spinning){pickWheelFormats();drawWheel()}"> Lose-a-Space</label>
     </div>
     <div style="text-align:center;margin-top:6px"><button class="hdr-btn" style="font-size:.62rem;padding:2px 8px" onclick="document.getElementById('colorTool').classList.toggle('show')">Colors</button></div>
   </div>
@@ -919,6 +938,14 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 
 <!-- BINGO WIN / CONFETTI / TOAST -->
 <div class="bingo-win" id="bingoWin"><h2 style="font-size:inherit">BINGO!</h2><div class="easter-msg" id="easterMsg"></div><button class="dismiss" onclick="dismissBingoWin()">Nice!</button></div>
+<div class="lose-space" id="loseSpaceOverlay">
+  <div class="ls-skull">💀</div>
+  <div class="ls-title">LOSE A SPACE</div>
+  <div class="ls-sub" id="lsSub"></div>
+  <div class="ls-roll" id="lsRoll"></div>
+  <div class="ls-target" id="lsTarget"></div>
+  <button class="ls-dismiss" id="lsDismiss" onclick="closeLoseSpace()">Continue</button>
+</div>
 <div class="confetti-container" id="confettiBox"></div>
 <div class="toast ok" id="toast"></div>
 
@@ -1357,6 +1384,31 @@ function playBingoWinSound(){
   }catch{}
 }
 
+// Sad trombone descending fanfare for losing a bingo space.
+function playLoseSound(){
+  if(soundMode==='none'||!audioUnlocked)return;
+  try{
+    const ctx=getAudioCtx();const t=ctx.currentTime;
+    const notes=[{f:392,d:.14,l:.22,v:.12},{f:349,d:.14,l:.22,v:.13},{f:311,d:.16,l:.26,v:.14},{f:233,d:.34,l:.55,v:.16}];
+    let offset=0;
+    notes.forEach(n=>{
+      const o=ctx.createOscillator();const g=ctx.createGain();
+      o.connect(g);g.connect(ctx.destination);o.type='sawtooth';o.frequency.setValueAtTime(n.f,t+offset);
+      // Pitch droop on the last note for the trombone slide
+      if(n===notes[notes.length-1])o.frequency.exponentialRampToValueAtTime(n.f*0.6,t+offset+n.l);
+      g.gain.setValueAtTime(n.v,t+offset);g.gain.exponentialRampToValueAtTime(.001,t+offset+n.l);
+      o.start(t+offset);o.stop(t+offset+n.l);
+      offset+=n.d;
+    });
+    // Low thud on impact
+    const o2=ctx.createOscillator(),g2=ctx.createGain();
+    o2.connect(g2);g2.connect(ctx.destination);o2.type='sine';
+    o2.frequency.setValueAtTime(110,t);o2.frequency.exponentialRampToValueAtTime(40,t+.4);
+    g2.gain.setValueAtTime(.18,t);g2.gain.exponentialRampToValueAtTime(.001,t+.4);
+    o2.start(t);o2.stop(t+.4);
+  }catch{}
+}
+
 // ═══════════════════════════════════
 //  FORMATS
 // ═══════════════════════════════════
@@ -1653,6 +1705,7 @@ function handleBingoBtn(){
 
 // Called directly after spin - bypasses nav guards
 function advanceFromWheel(){
+  if(chosenFormat&&chosenFormat.sp==='losespace'){triggerLoseSpace();return}
   showScreen('format-screen');showFormatReveal();
 }
 
@@ -1968,11 +2021,30 @@ async function fetchDocFormats(){
 // ═══════════════════════════════════
 //  WHEEL (3D textured slices)
 // ═══════════════════════════════════
+// Pseudo-format that, when landed on, removes a random marked bingo space.
+// Injected into wheelFormats only when bingo is active.
+const LOSE_SPACE_FORMAT={label:'LOSE A SPACE',sp:'losespace',isPenalty:true};
+
 function pickWheelFormats(){
   const raw=document.getElementById('wheelCount').value;
   const count=Math.max(4,Math.min(60,parseInt(raw,10)||20));
   let pool=wheelMode==='selected'?[...selectedFormats].map(i=>formats[i]).filter(Boolean):[...formats];
   shuffle(pool);wheelFormats=pool.slice(0,count);if(wheelFormats.length<2)wheelFormats=formats.slice(0,count);
+  // When bingo is active, sprinkle 1–2 "LOSE A SPACE" segments by replacing random non-penalty slots.
+  // Skips injection if the toggle is off or there are no marked spaces to lose.
+  const enabled=document.getElementById('bingoLoseEnabled');
+  const losesEnabled=!enabled||enabled.checked;
+  const hasMarked=bingoState.some((v,i)=>v&&i!==12);
+  if(bingoPicked&&losesEnabled&&hasMarked&&wheelFormats.length>=8){
+    const slots=wheelFormats.length>=20?2:1;
+    const used=new Set();
+    for(let s=0;s<slots;s++){
+      let idx;let tries=0;
+      do{idx=Math.floor(Math.random()*wheelFormats.length);tries++}while(used.has(idx)&&tries<20);
+      used.add(idx);
+      wheelFormats[idx]={...LOSE_SPACE_FORMAT};
+    }
+  }
   //console.log(`Wheel: input="${raw}" count=${count} mode=${wheelMode} pool=${pool.length} showing=${wheelFormats.length}`);
   const sc=document.getElementById('wheelSlotCount');
   if(sc)sc.textContent=`Showing ${wheelFormats.length} of ${pool.length} formats`;
@@ -1993,7 +2065,8 @@ function drawWheel(){
   for(let i=0;i<n;i++){
     const a=i*arc;
     ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+arc);ctx.closePath();
-    ctx.fillStyle=colors[i%colors.length];ctx.fill();
+    // Penalty segments get a danger-red so the player can see them coming
+    ctx.fillStyle=wheelFormats[i].isPenalty?'#8b0000':colors[i%colors.length];ctx.fill();
   }
   // Pass 2: depth overlay on all segments
   const grad=ctx.createRadialGradient(cx,cy,r*.1,cx,cy,r);
@@ -2103,14 +2176,17 @@ function spinWheel(){
       // Read the ACTUAL segment under the pointer — what you see is what you get
       const landed=getSegmentAtPointer();
       chosenFormat=wheelFormats[landed];
-      usedFormats.add(chosenFormat.label);
+      // Don't track penalty segments as "used formats" — they can land repeatedly
+      if(!chosenFormat.isPenalty)usedFormats.add(chosenFormat.label);
       // Lock pointer — bite down into segment
       const landedColor=activeWheelColors[landed%activeWheelColors.length];
       const ptr=document.getElementById('wheelPointer');
       if(ptr){ptr.style.setProperty('--pointer-glow',landedColor);ptr.style.setProperty('--pointer-inner',landedColor);ptr.classList.add('locked')}
       const pf=document.getElementById('ptrFill');
       if(pf)pf.setAttribute('stroke',landedColor);
-      playWinSound();setTimeout(advanceFromWheel,700);
+      // Skip the celebratory win sound on penalty landings — triggerLoseSpace plays its own sound
+      if(!chosenFormat.isPenalty)playWinSound();
+      setTimeout(advanceFromWheel,700);
     }
   })(performance.now());
 }
@@ -3003,6 +3079,68 @@ function resetBingoCard(){bingoState=Array(25).fill(false);bingoState[12]=true;b
 function checkBingo(){if(bingoWinShown)return;const s=bingoState;for(let r=0;r<5;r++)if(s[r*5]&&s[r*5+1]&&s[r*5+2]&&s[r*5+3]&&s[r*5+4]){triggerBingo();return}for(let c=0;c<5;c++)if(s[c]&&s[5+c]&&s[10+c]&&s[15+c]&&s[20+c]){triggerBingo();return}if(s[0]&&s[6]&&s[12]&&s[18]&&s[24]){triggerBingo();return}if(s[4]&&s[8]&&s[12]&&s[16]&&s[20])triggerBingo()}
 function triggerBingo(){bingoWinShown=true;document.getElementById('easterMsg').textContent=EASTER_EGGS[Math.floor(Math.random()*EASTER_EGGS.length)];document.getElementById('bingoWin').classList.add('show');const mainEl=document.querySelector('.main');mainEl.style.animation='screenShake .6s';setTimeout(()=>mainEl.style.animation='',700);spawnConfetti();playBingoWinSound();markAchievement('bingo');checkAchievements()}
 function dismissBingoWin(){document.getElementById('bingoWin').classList.remove('show');document.getElementById('confettiBox').innerHTML=''}
+
+// Lose-a-Space: count daubed (non-free) cells, dramatically pick one, unmark it.
+// Open the bingo overlay so the player can see the cell get poofed.
+function triggerLoseSpace(){
+  const overlay=document.getElementById('loseSpaceOverlay');
+  const sub=document.getElementById('lsSub'),roll=document.getElementById('lsRoll'),tgt=document.getElementById('lsTarget'),dismiss=document.getElementById('lsDismiss');
+  sub.textContent='';roll.textContent='';tgt.textContent='';dismiss.classList.remove('show');
+  overlay.classList.add('show');
+  const mainEl=document.querySelector('.main');if(mainEl){mainEl.style.animation='screenShake .5s';setTimeout(()=>mainEl.style.animation='',600)}
+  const marked=bingoState.map((v,i)=>(v&&i!==12)?i:null).filter(i=>i!==null);
+  if(!marked.length){
+    sub.textContent='Lucky escape — no marked spaces to lose.';
+    dismiss.classList.add('show');
+    return;
+  }
+  setTimeout(()=>{sub.textContent=`You have ${marked.length} marked space${marked.length===1?'':'s'}…`},350);
+  // Roll a random index 1..N with a quick rolling animation
+  setTimeout(()=>{
+    const finalPick=Math.floor(Math.random()*marked.length);
+    const targetIdx=marked[finalPick];
+    const dur=1200,t0=performance.now();
+    (function frame(now){
+      const p=Math.min((now-t0)/dur,1);
+      if(p<1){
+        roll.textContent='#'+(Math.floor(Math.random()*marked.length)+1);
+        requestAnimationFrame(frame);
+      }else{
+        roll.textContent='#'+(finalPick+1);
+        playLoseSound();
+        unmarkBingoCell(targetIdx);
+      }
+    })(performance.now());
+  },1100);
+}
+
+function unmarkBingoCell(idx){
+  const cells=document.querySelectorAll('#bingoGrid .bingo-cell');
+  const cell=cells[idx];
+  const cols=['B','I','N','G','O'];
+  const row=Math.floor(idx/5),ci=idx%5;
+  const label=bingoPicked&&bingoPicked[cols[ci]]?bingoPicked[cols[ci]][row]:'space';
+  document.getElementById('lsTarget').textContent=`${cols[ci]} · ${label}`;
+  if(cell){
+    cell.classList.add('losing');
+    setTimeout(()=>{
+      cell.classList.remove('losing','daubed');
+      bingoState[idx]=false;
+      saveBingoState();
+      updateAllProximity();
+      document.getElementById('lsDismiss').classList.add('show');
+    },550);
+  }else{
+    bingoState[idx]=false;saveBingoState();updateAllProximity();
+    document.getElementById('lsDismiss').classList.add('show');
+  }
+}
+
+function closeLoseSpace(){
+  document.getElementById('loseSpaceOverlay').classList.remove('show');
+  // Return to wheel for next spin
+  setTimeout(()=>{showScreen('wheel-screen');pickWheelFormats();drawWheel();resetPointer()},250);
+}
 function spawnConfetti(){const box=document.getElementById('confettiBox');box.innerHTML='';const defaultColors=['#e74c3c','#f39c12','#2ecc71','#3498db','#9b59b6','#e91e63','#00bcd4','#ff5722','#ffeb3b','#8bc34a'];const colors=CONFETTI_HOLIDAY_COLORS||defaultColors;for(let i=0;i<140;i++){const c=document.createElement('div');c.className='confetti';const sz=6+Math.random()*10;c.style.cssText=`width:${sz}px;height:${sz}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;top:-20px;border-radius:${Math.random()>.5?'50%':'2px'};animation:confettiFall ${2+Math.random()*3}s ${Math.random()*1.5}s ease-in forwards`;box.appendChild(c)}}
 
 // ═══════════════════════════════════
