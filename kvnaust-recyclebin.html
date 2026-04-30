@@ -784,8 +784,14 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <div class="tagline">The internet's largest video graveyard</div>
       <button class="start-btn" onclick="startGame()">NEW GAME</button>
       <button class="start-btn" onclick="showRecords()" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000;font-size:.8rem;padding:8px 24px;margin-top:8px">Submit a Find</button>
+      <div class="game-setup" id="gameSetup" style="margin-top:14px;padding:10px 14px;border:1px solid #2a2a3e;border-radius:8px;background:rgba(20,20,32,.55);max-width:380px;display:flex;flex-direction:column;gap:8px;font-size:.7rem;color:#aab">
+        <div style="font-weight:700;letter-spacing:.04em;color:#ccd;text-align:center;font-size:.66rem;text-transform:uppercase;opacity:.7">Game Setup</div>
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span title="Penalty segments on the spinner. Set to 0 to disable.">Lose-a-Space slots</span><input type="number" id="setupLoseSlots" min="0" max="10" value="2" style="width:54px;background:#0e0e18;border:1px solid #2a2a40;color:#ddd;padding:3px 6px;border-radius:4px;font-size:.7rem" onchange="saveGameSetup()"></label>
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span title="If off, all 25 cells are real categories">Free Space (center cell)</span><input type="checkbox" id="setupFreeSpace" checked onchange="saveGameSetup()"></label>
+        <div style="font-size:.6rem;color:#566;text-align:center;opacity:.7;margin-top:2px">Spinner theme rotates daily — Deep Dive toggle is in the wheel</div>
+      </div>
       <div style="margin-top:10px;font-size:.68rem;color:#333">Formats synced from <a href="https://github.com/sworrl/KVN_AUST/blob/main/FORMAT-MAP.md" target="_blank" style="color:#2ecc71">FORMAT-MAP.md</a> on GitHub</div>
-      <div style="margin-top:8px;font-size:.62rem;color:#3a3a52;max-width:380px;line-height:1.45;text-align:center">Free &amp; open source (GPL-3.0) — do whatever you want with the tool. The hosted version + community features are run at our own expense for fun. No ads, no paywalls, no tracking, no monetization plans, ever.</div>
+      <div style="margin-top:8px;font-size:.62rem;color:#3a3a52;max-width:380px;line-height:1.5;text-align:center"><b style="color:#5a5a72">Free, GPL-3.0, no catch.</b> <a href="https://github.com/sworrl/KVN_AUST/blob/main/kvnaust-recyclebin.html" target="_blank" style="color:#2ecc71">Download this file</a> and run it locally — that's the whole tool, no install, no account, no ads, ever. Play here only if you want the community side (cloud save, leaderboards, multiplayer). Either way: <b>no ads, no paywalls, no tracking, no monetization, ever.</b></div>
     </div>
   </div>
 
@@ -912,7 +918,6 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <label>Daub:</label><input type="color" id="daubColor" value="#4caf50" onchange="setDaubColor(this.value)">
       <label>Op:</label><input type="range" id="daubOpacity" min="30" max="100" value="65" oninput="setDaubOpacity(this.value)">
       <button style="font-size:.6rem;padding:2px 7px;background:var(--card2);border:1px solid #3a3a55;color:#ccc;border-radius:4px;cursor:pointer" onclick="resetBingoCard()">Reset</button>
-      <label title="Adds Lose-a-Space penalty segments to the wheel" style="display:flex;align-items:center;gap:4px;margin-left:6px;font-size:.7rem;color:#e8c4c4"><input type="checkbox" id="bingoLoseEnabled" checked onchange="if(currentScreen==='wheel-screen'&&!spinning){pickWheelFormats();drawWheel()}"> Lose-a-Space</label>
     </div>
     <div style="text-align:center;margin-top:6px"><button class="hdr-btn" style="font-size:.62rem;padding:2px 8px" onclick="document.getElementById('colorTool').classList.toggle('show')">Colors</button></div>
   </div>
@@ -1524,6 +1529,61 @@ function trackBubblePop(){
 // Hook: mark achievements from specific actions
 function markAchievement(key){localStorage.setItem('kvn_achievement_'+key,'1')}
 
+// ─── Game setup (persisted) ───
+function loadGameSetup(){
+  try{
+    const s=JSON.parse(localStorage.getItem('kvn_setup')||'null');
+    if(s){
+      if(typeof s.loseSlots==='number')setupLoseSlots=Math.max(0,Math.min(10,s.loseSlots));
+      if(typeof s.freeSpace==='boolean')setupFreeSpace=s.freeSpace;
+    }
+  }catch{}
+  const ls=document.getElementById('setupLoseSlots');if(ls)ls.value=setupLoseSlots;
+  const fs=document.getElementById('setupFreeSpace');if(fs)fs.checked=setupFreeSpace;
+}
+function saveGameSetup(){
+  const ls=document.getElementById('setupLoseSlots');if(ls)setupLoseSlots=Math.max(0,Math.min(10,parseInt(ls.value,10)||0));
+  const fs=document.getElementById('setupFreeSpace');if(fs)setupFreeSpace=fs.checked;
+  try{localStorage.setItem('kvn_setup',JSON.stringify({loseSlots:setupLoseSlots,freeSpace:setupFreeSpace}))}catch{}
+}
+
+// ─── Auto-rotated wheel theme ───
+// Rotation rules:
+//  - If today's date != themeAssignedDate, pick a fresh theme (different from current).
+//  - Otherwise, if themeGamesSinceAssigned >= 2 (player has saved 2 full games), pick a fresh theme on the next startGame.
+//  - Soft refreshes preserve the current theme.
+//  - Deep Dive overrides everything via deepDiveActive.
+function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function loadWheelTheme(){
+  try{
+    const s=JSON.parse(localStorage.getItem('kvn_theme')||'null');
+    if(s&&s.name&&WHEEL_THEMES[s.name]){currentWheelTheme=s.name;themeAssignedDate=s.date||'';themeGamesSinceAssigned=s.count||0}
+  }catch{}
+  if(!themeAssignedDate||themeAssignedDate!==todayKey())rotateWheelTheme(); // first-load OR new day
+  saveWheelTheme();
+}
+function saveWheelTheme(){
+  try{localStorage.setItem('kvn_theme',JSON.stringify({name:currentWheelTheme,date:themeAssignedDate,count:themeGamesSinceAssigned}))}catch{}
+}
+function rotateWheelTheme(){
+  const names=Object.keys(WHEEL_THEMES).filter(n=>n!==currentWheelTheme);
+  currentWheelTheme=names[Math.floor(Math.random()*names.length)];
+  themeAssignedDate=todayKey();
+  themeGamesSinceAssigned=0;
+  saveWheelTheme();
+  if(currentScreen==='wheel-screen'&&!spinning&&typeof drawWheel==='function')drawWheel();
+}
+// Called from startGame: rotate if a new day OR ≥2 games saved since last rotation.
+function maybeRotateThemeOnStart(){
+  if(themeAssignedDate!==todayKey()){rotateWheelTheme();return}
+  if(themeGamesSinceAssigned>=2)rotateWheelTheme();
+}
+
+// ─── Bottom bar auto-hide ───
+function hideFooter(){document.getElementById('creditFooter').classList.add('hidden');footerUserHidden=true}
+function autoHideFooter(){if(!footerUserHidden)document.getElementById('creditFooter').classList.add('hidden')}
+function showFooter(){if(!footerUserHidden)document.getElementById('creditFooter').classList.remove('hidden')}
+
 // ═══════════════════════════════════
 //  STATE
 // ═══════════════════════════════════
@@ -1534,6 +1594,14 @@ let lastTickSegment=-1;
 let bingoPicked=null;
 let gameActive=false;
 let bingoPerLetter=false;
+// User-set game setup (persisted across sessions)
+let setupLoseSlots=2; // number of LOSE A SPACE penalty segments injected (0 = disabled)
+let setupFreeSpace=true; // whether the bingo center is a free space or a regular category
+// Auto-rotated wheel theme (NOT user-selectable beyond Deep Dive). Rotates daily or after 2 saved games.
+let currentWheelTheme='Carnival';
+let themeAssignedDate=''; // YYYY-MM-DD when current theme was picked
+let themeGamesSinceAssigned=0; // increments on saveGameToHistory
+let footerUserHidden=false; // true if user clicked X — game-end show should respect this
 let usedFormats=new Set(); // labels of formats already spun this game
 let allowRepeatFormats=false; // user setting
 let maxReachedIdx=0; // farthest screen reached in current flow (can't skip ahead past this)
@@ -1541,6 +1609,42 @@ let errorLog=[]; // {type:'warn'|'error', msg:string, ts:Date}
 
 const SCREENS=['start-screen','wheel-screen','format-screen','number-screen','result-screen'];
 const WHEEL_COLORS=['#b8860b','#2e8b57','#daa520','#1565c0','#c62828','#6a1b9a','#00838f','#ef6c00','#2e7d32','#ad1457','#4527a0','#00695c','#d84315','#1b5e20','#6d4c41','#37474f','#ff6f00','#283593','#004d40','#bf360c','#4e342e','#0d47a1','#827717','#880e4f','#33691e','#e65100','#1a237e','#3e2723','#006064','#f57f17','#311b92','#01579b'];
+
+// 30 distinct spinner themes — the user picks via setup. "Carnival" is the original WHEEL_COLORS.
+const WHEEL_THEMES={
+  Carnival:WHEEL_COLORS,
+  Pastels:['#f7c8c8','#f7e0c8','#f7f3c8','#dcf7c8','#c8f7d8','#c8f7ee','#c8e6f7','#c8cef7','#dcc8f7','#f0c8f7','#f7c8e0','#f7c8d0','#f5d3a3','#d7e9b8','#bfd9e8','#cdc1eb','#e6c2d4','#f3b89a','#a8d9c4','#c5b8e6','#f8d8b6','#cce4d4','#bcd0eb','#e8b9c2','#dac7ea','#a3d6dc','#f0e3a8','#cce0c0','#dbb8d6','#b6c9eb','#f3c1bd','#aac7e8'],
+  Primaries:['#ff0000','#0000ff','#ffff00','#00ff00','#ff00ff','#00ffff','#ff8000','#8000ff','#0080ff','#80ff00','#ff0080','#00ff80','#cc0000','#0000cc','#cccc00','#00cc00','#cc00cc','#00cccc','#cc6600','#6600cc','#0066cc','#66cc00','#cc0066','#00cc66','#990000','#000099','#999900','#009900','#990099','#009999','#996600','#660099'],
+  Mono:['#111','#222','#333','#444','#555','#666','#777','#888','#999','#aaa','#bbb','#ccc','#1a1a1a','#2a2a2a','#3a3a3a','#4a4a4a','#5a5a5a','#6a6a6a','#7a7a7a','#8a8a8a','#9a9a9a','#abacac','#bcbcbc','#cdcdcd','#202020','#303030','#404040','#505050','#606060','#707070','#808080','#909090'],
+  Sunset:['#ff7e5f','#feb47b','#ff6b6b','#ee5a6f','#c06c84','#6c5b7b','#355c7d','#f67280','#fab1a0','#ff9a8b','#ffafbd','#ffc3a0','#ff8c42','#ffa384','#efd9d1','#dba27c','#c87f5c','#bb6147','#a04848','#7a3d3d','#5e2d2d','#ff5e62','#ff9966','#ff5f6d','#ffc371','#f6d365','#fda085','#f093fb','#fcb69f','#ffdde1','#ee9ca7','#cd9cf2'],
+  Ocean:['#0077b6','#0096c7','#00b4d8','#48cae4','#90e0ef','#03045e','#023e8a','#0353a4','#0466c8','#62b6cb','#5e6973','#1a759f','#168aad','#34a0a4','#52b69a','#76c893','#99d98c','#1c5d99','#2a6f97','#1d3557','#457b9d','#a8dadc','#005f73','#0a9396','#94d2bd','#0e8388','#2e8a99','#003566','#0466b8','#13b5b1','#5fc8d1','#7edcd6'],
+  Forest:['#2d6a4f','#40916c','#52b788','#1b4332','#081c15','#74c69d','#95d5b2','#b7e4c7','#d8f3dc','#3d5a40','#588157','#a3b18a','#dad7cd','#344e41','#283618','#606c38','#84a98c','#52796f','#354f52','#2f3e46','#cad2c5','#83a598','#458588','#689d6a','#b8bb26','#98971a','#427b58','#3a5a40','#4a7c59','#76946a','#598b2c','#788e57'],
+  Neon:['#ff00ff','#00ffff','#ffff00','#39ff14','#ff073a','#fe019a','#bc13fe','#04d9ff','#fdfd00','#ff6ec7','#ccff00','#ff3131','#7df9ff','#ff5f1f','#08ff08','#fc0fc0','#9d00ff','#1bff00','#ff10f0','#19ffe6','#ffd300','#ff5050','#aaff00','#ee82ee','#3300cc','#ff00aa','#cc00ff','#00ff99','#ff66cc','#66ff66','#ff9933','#ccff33'],
+  Earth:['#8b6f47','#a0826d','#b58863','#9c6b3f','#7a5230','#6b4423','#5a3a1f','#8a6b3b','#a08163','#b89368','#c1a580','#d4b896','#9b7e5a','#7c5e3c','#5d4226','#a37c5b','#bb9876','#967049','#7a5a3a','#5e442a','#94714c','#80583a','#6e4a2c','#a98a6b','#b89a78','#a17a5a','#866147','#704a31','#856743','#9b7e5e','#b09177','#c2a98c'],
+  Candy:['#ff66b2','#ff99cc','#ff6699','#ff3385','#ffccff','#ff85c1','#ff5fa2','#ff007f','#ff44a8','#ffb1cb','#ff79ad','#ff60a8','#ffa3c8','#ff8eb3','#ff70b9','#ff5494','#ffd1dc','#ff9eb1','#ff80b3','#ff6ba0','#ffadcc','#ff85ad','#ff5586','#ff337a','#ffe4ec','#ffbfd4','#ff96b8','#ff6688','#ff4477','#ffaaaa','#ff8aa1','#ff708f'],
+  Vaporwave:['#ff71ce','#01cdfe','#05ffa1','#b967ff','#fffb96','#ff9de2','#a685e2','#85deff','#94f9c5','#fff7c2','#ff8fff','#9b5fff','#5fc5ff','#5fffd1','#ffd95f','#ff5fb2','#7d5fff','#5f9bff','#5fffaa','#fff45f','#ff5f99','#7d63ff','#54a3ff','#54ffd1','#fff154','#ff75d8','#a875ff','#75d3ff','#75ffae','#fff575','#ff89d4','#9c5cff'],
+  Autumn:['#a52a2a','#cd853f','#d2691e','#b8860b','#bf6f00','#a0522d','#8b4513','#704214','#5d2906','#7a3a0a','#9c4a14','#bd5e22','#dc7d2f','#e89942','#d18954','#a86829','#823f0f','#c25e1d','#e07b39','#f0a55a','#fac96d','#e9b870','#d8a85d','#b6802a','#945a1a','#723f0d','#5a2c08','#8b3a1c','#aa4f24','#c8693a','#dd824f','#ec9e6a'],
+  Spring:['#ffafcc','#ffc8dd','#bde0fe','#a2d2ff','#cdb4db','#caf0f8','#90e0ef','#fcbf49','#f4978e','#f8ad9d','#fbc4ab','#ffdab9','#ddffe1','#a3d9b1','#bef0bb','#d4f4dd','#e0f7da','#fff5b8','#fff0cc','#fce5cd','#fbd6c0','#f6c9b4','#e8c7c8','#d8b9d8','#c5b6e2','#b3d4f5','#a3e4f0','#9adcd1','#bce4d8','#dee5b4','#f8d8a6','#fcc7a5'],
+  Cyberpunk:['#ff0080','#7928ca','#00d4ff','#39ff14','#ff00ff','#ffd700','#ff003c','#0a00ff','#00ffea','#fc00ff','#fdff00','#ff5500','#9d00ff','#00aaff','#ff0066','#5e17eb','#00ffff','#ff8c00','#cc00ff','#0099ff','#ff1493','#7700ff','#00ff7f','#ff007f','#dd1414','#1a00ff','#00ddff','#ff00cc','#ff5e00','#aa00ff','#0fffff','#ff0033'],
+  MardiGras:['#a020f0','#ffd700','#008000','#7d12a0','#dab600','#006400','#9c2bd6','#ffc107','#228b22','#8a2be2','#ddc01a','#1c8f1c','#aa3df0','#e8b800','#0a7a0a','#7c25b8','#fff034','#0db70d','#9333d8','#cea800','#157e15','#a44ed4','#ffec45','#3aa83a','#893cb8','#cfa514','#1c9c1c','#984ed8','#fbe04d','#308f30','#7338a8','#dabd1f'],
+  Berry:['#3d0066','#660033','#990033','#330033','#6e0a4f','#8c1c5c','#ad2c6c','#5d0a52','#460a3a','#280028','#7d105a','#a02670','#3a004d','#5a0066','#6a3380','#5d0d4a','#88135a','#aa1d68','#400d40','#220033','#5e1a4a','#80285c','#a3346e','#3c0a32','#1f0026','#7e2266','#a83478','#5b0d4d','#9a1f6c','#c12d80','#3a002c','#530a3d'],
+  Tropical:['#ff6f61','#feb236','#6b5b95','#88b04b','#f7cac9','#92a8d1','#955251','#b565a7','#ff5733','#33ff57','#3357ff','#ff33a1','#fdcb6e','#00b894','#0984e3','#fd79a8','#fab1a0','#55efc4','#74b9ff','#a29bfe','#ffeaa7','#81ecec','#fdca27','#e17055','#00cec9','#6c5ce7','#ffb84d','#26de81','#2bcbba','#fc5c65','#fed330','#fa8231'],
+  Mute:['#7d7d7d','#8d8079','#9b8c75','#a89478','#a89e8b','#9d9b8e','#8e9d8a','#7d927d','#7c8c80','#84856d','#998c75','#a99c83','#b1a18b','#a59686','#90867f','#7e807d','#6f7775','#7e7867','#9d8b6e','#a99078','#b39a82','#a99481','#928176','#7b7271','#878783','#9c9085','#a89a85','#9b8a76','#867867','#80796d','#838171','#92907d'],
+  Royal:['#ffd700','#9b1b30','#1a3e72','#1a4d2e','#003366','#660033','#1a5f3e','#daa520','#7b1538','#0d2849','#0d3b1a','#001a40','#4d0024','#0a4226','#b8860b','#5a0f24','#0a2454','#0a2d12','#001233','#3a0019','#085e2a','#cd9b1d','#7b1c30','#0e3464','#10402a','#012047','#5a0c1f','#0c5e36','#a07014','#660028','#0a3160','#003322'],
+  Sunrise:['#ff9a8b','#ff6a88','#ff99ac','#ffc2c7','#fcb69f','#ffecd2','#fdfbfb','#fcedda','#ffd9a8','#ffaa86','#ff8484','#ffa07a','#ffd1aa','#fff1aa','#fde2af','#fbb89c','#f99898','#fc746e','#ff8c66','#ffb37a','#ffcc99','#ffe0b3','#fff5cc','#ffead0','#ffd6a3','#fb9b85','#f48072','#fcb997','#fbe2c8','#fcd2a4','#fab382','#ff8e64'],
+  Mint:['#a5e1bd','#86d6a8','#69cb95','#4cc183','#3ac678','#56d3a0','#74dcb1','#92e3c0','#aff0d0','#cdf7e4','#3eb489','#56c79b','#6cd1ad','#82dabd','#9ae1cb','#b1ecda','#c8f3e7','#7fbf9d','#9bd1ad','#b6e2c1','#ccecd5','#dcf2e1','#5eaf85','#71b890','#82c69d','#94d0aa','#a7d9b8','#b8e1c4','#c8e9d0','#d6f0db','#e2f5e2','#eef9ea'],
+  Crimson:['#8b0000','#b22222','#dc143c','#a52a2a','#800000','#660000','#4d0000','#7d0a0a','#a01515','#c21d22','#dc2828','#ec3838','#9c1414','#7c0c0c','#5c0606','#3d0000','#bf2828','#dc4040','#e85959','#a31818','#7e0e0e','#5d0808','#3a0000','#cd2828','#dd3636','#a91d1d','#831515','#5c0c0c','#3a0303','#dc1c3c','#bd1d33','#9d1828'],
+  Ice:['#a8d8e8','#bce0ed','#d0e9f2','#e5f1f7','#cae5ee','#b1d8e6','#98c8db','#7eb8d0','#65a9c5','#4c99b9','#3389ae','#1a799f','#caf0f8','#90e0ef','#48cae4','#00b4d8','#e0ecf4','#c6deea','#abd0e0','#90c2d6','#76b3cc','#5ba5c2','#4096b8','#bee9ed','#9fdce3','#80cfd9','#62c2cf','#43b5c5','#26a8ba','#dfeff3','#c1dfe7','#a3cfdb'],
+  Lava:['#ff0000','#ff4500','#ff6347','#ff8c00','#ffd700','#ff1100','#ee2200','#dd2500','#cc2900','#bc2c00','#ad2f00','#9d3300','#8e3600','#7e3a00','#6f3d00','#5f4100','#502d00','#3a0a00','#2a0500','#1a0000','#660000','#7c0a00','#9b1500','#b91f00','#d62a00','#f33500','#ff5500','#ff7f00','#ff9d00','#ffba00','#ffd900','#ffea00'],
+  Galaxy:['#0b0033','#16004c','#240b66','#3a0c84','#5b1ea0','#7d35bf','#a352d6','#c46ce0','#d989e8','#e9a6ed','#f2c3f1','#0e0d3a','#1d144d','#2c1c63','#46297f','#623c9d','#8156bb','#a173d2','#c290e5','#dab0ee','#ecd0f5','#0a0535','#1c0e54','#2f1c75','#4b3098','#664bb5','#856bca','#9e8cdb','#b6abe6','#cccaee','#e0eaf3','#f1f6f9','#fffafa'],
+  Jungle:['#1b4332','#2d6a4f','#40916c','#52b788','#74c69d','#95d5b2','#1a3300','#2b4d00','#3c6500','#4d7e00','#5e9700','#6faf00','#80c800','#92d900','#a4ec00','#b8ff00','#0d2818','#163b22','#1f4e2c','#286136','#317440','#3a874a','#439a54','#4cad5e','#55c068','#5ed372','#67e67c','#70f986','#1a2300','#2c3a00','#3e5200','#506a00'],
+  Desert:['#edc9af','#deb887','#f4a460','#daa520','#cd853f','#d2691e','#b8860b','#a0522d','#8b4513','#7c5423','#a87a3c','#b58a4f','#c39964','#d1a878','#dfb78d','#ddc498','#dbd1a3','#d9deae','#c4cf99','#aebf85','#98af71','#83a05d','#cea888','#bb8a64','#a76d40','#94511c','#a4683a','#b48058','#c39777','#d3ae97','#e2c5b6','#cebda6'],
+  Eighties:['#ff1493','#00ffff','#ffff00','#ff00ff','#ff6600','#9933ff','#33ccff','#ff3366','#66ff99','#ffcc00','#cc00ff','#0099ff','#ff66cc','#aaff00','#ff9966','#7700ff','#00ddff','#ff44aa','#bbff44','#ffaa33','#aa33ff','#33aaff','#ff77bb','#ccff55','#ffaa66','#8855ff','#22ccff','#ff5599','#ddff66','#ff8844','#9966ff','#44bbff'],
+  Nineties:['#008080','#800080','#ff8c00','#000000','#7fff00','#dc143c','#ff1493','#0000cd','#ff4500','#9932cc','#00fa9a','#dc143c','#16a085','#8e44ad','#e67e22','#1c1c1c','#7cb342','#c2185b','#e91e63','#1565c0','#d84315','#6a1b9a','#0f9d58','#c2185b','#0e7c61','#7e3994','#cd5c0d','#0f0f0f','#88a428','#a31149','#cf003a','#0d4ea0'],
+  Garden:['#ff6b9d','#fbb6ce','#c54b8c','#dda0dd','#9966cc','#7b68ee','#6495ed','#4682b4','#5f9ea0','#3cb371','#90ee90','#9acd32','#daa520','#ffd700','#f0e68c','#ffe4b5','#ffa07a','#fa8072','#ff7f50','#ff6347','#cd5c5c','#bc8f8f','#deb887','#d2691e','#bdb76b','#8fbc8f','#9370db','#ba55d3','#da70d6','#ee82ee','#dda0dd','#d8bfd8'],
+  Royal2:['#0d1b2a','#1b263b','#415a77','#778da9','#e0e1dd','#000814','#001d3d','#003566','#ffc300','#ffd60a','#240046','#3c096c','#5a189a','#7b2cbf','#9d4edd','#c77dff','#e0aaff','#03071e','#370617','#6a040f','#9d0208','#d00000','#dc2f02','#e85d04','#f48c06','#faa307','#ffba08','#0a0908','#22333b','#5e503f','#a9927d','#f2f4f3'],
+  Rainbow:['#ff0000','#ff4500','#ff8c00','#ffd700','#ffff00','#adff2f','#00ff00','#00ff7f','#00ffff','#1e90ff','#0000ff','#4b0082','#8a2be2','#ff00ff','#ff1493','#ff69b4','#ff6347','#ff7f50','#ffa500','#ffb6c1','#ffe4b5','#fffacd','#f0fff0','#e0ffff','#dda0dd','#d8bfd8','#ee82ee','#da70d6','#ba55d3','#9370db','#7b68ee','#4169e1']
+};
 
 // ═══════════════════════════════════
 //  BINGO CATEGORIES (localStorage)
@@ -1742,9 +1846,15 @@ function saveAllGames(g){localStorage.setItem('kvn_games',JSON.stringify(g))}
 function startGame(){
   // Close setup panel if open
   if(document.getElementById('bingoSetup').classList.contains('open'))toggleBingoSetup();
+  // Re-read setup options in case the user just changed them
+  saveGameSetup();
+  // Maybe rotate the wheel theme (new day, or 2 saved games elapsed)
+  maybeRotateThemeOnStart();
   currentGameId=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
   sessionRounds=[];bingoState=Array(25).fill(false);bingoWinShown=false;
+  if(setupFreeSpace)bingoState[12]=true;
   gameActive=true;maxReachedIdx=1;usedFormats=new Set();
+  autoHideFooter();
   pickGameStamps(); // 25 unique SVG stamps for this game
   // Pick bingo data from BINGO_LIVE (which may have been edited)
   pickBingoCategories();
@@ -1757,11 +1867,13 @@ function saveGameToHistory(){
   if(!sessionRounds.length)return;
   const games=getAllGames();games.unshift({id:currentGameId,date:new Date().toISOString(),rounds:sessionRounds});
   if(games.length>50)games.length=50;saveAllGames(games);
+  // Theme rotation counter: ≥2 saved games triggers a new theme on next startGame
+  themeGamesSinceAssigned++;saveWheelTheme();
 }
 
 function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel();resetPointer()}
 function resetPointer(){const ptr=document.getElementById('wheelPointer');if(ptr){ptr.classList.remove('locked');ptr.style.animation='';ptr.style.top='';ptr.style.setProperty('--pointer-glow','transparent');ptr.style.setProperty('--pointer-inner','#444');void ptr.offsetHeight;ptr.style.animation='pointerIdle 2s ease-in-out infinite'}const pf=document.getElementById('ptrFill');if(pf)pf.setAttribute('stroke','#888')}
-function newSession(){sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showScreen('start-screen')}
+function newSession(){sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showFooter();showScreen('start-screen')}
 
 // ═══════════════════════════════════
 //  BINGO FLASH (per-cell, ~5s, free space click)
@@ -1777,7 +1889,7 @@ function showBingoFlash(){
   // 24 visible tiles + 1 invisible hole (cell 12 = FREE SPACE, hidden during puzzle)
   let cellEls=[];
   for(let i=0;i<25;i++){
-    const row=Math.floor(i/5),ci=i%5,isFree=i===12;
+    const row=Math.floor(i/5),ci=i%5,isFree=setupFreeSpace&&i===12;
     const txt=isFree?'FREE SPACE':bingoPicked[cols[ci]][row];
     const cell=document.createElement('div');
     cell.className='bf-cell'+(isFree?' free':'');
@@ -2030,13 +2142,12 @@ function pickWheelFormats(){
   const count=Math.max(4,Math.min(60,parseInt(raw,10)||20));
   let pool=wheelMode==='selected'?[...selectedFormats].map(i=>formats[i]).filter(Boolean):[...formats];
   shuffle(pool);wheelFormats=pool.slice(0,count);if(wheelFormats.length<2)wheelFormats=formats.slice(0,count);
-  // When bingo is active, sprinkle 1–2 "LOSE A SPACE" segments by replacing random non-penalty slots.
-  // Skips injection if the toggle is off or there are no marked spaces to lose.
-  const enabled=document.getElementById('bingoLoseEnabled');
-  const losesEnabled=!enabled||enabled.checked;
-  const hasMarked=bingoState.some((v,i)=>v&&i!==12);
-  if(bingoPicked&&losesEnabled&&hasMarked&&wheelFormats.length>=8){
-    const slots=wheelFormats.length>=20?2:1;
+  // When bingo is active, sprinkle "LOSE A SPACE" penalty segments configured in setup (0 = off).
+  // Skips injection if there are no marked spaces to lose, or if the wheel is too small to spare slots.
+  const hasMarked=bingoState.some((v,i)=>v&&(!setupFreeSpace||i!==12));
+  if(bingoPicked&&setupLoseSlots>0&&hasMarked&&wheelFormats.length>=4){
+    const maxInject=Math.max(0,wheelFormats.length-2); // always leave at least 2 real formats
+    const slots=Math.min(setupLoseSlots,maxInject);
     const used=new Set();
     for(let s=0;s<slots;s++){
       let idx;let tries=0;
@@ -2059,7 +2170,7 @@ function drawWheel(){
   const n=wheelFormats.length;if(!n)return;const arc=2*Math.PI/n;
   ctx.clearRect(0,0,sz,sz);ctx.save();ctx.translate(cx,cy);ctx.rotate(wheelAngle);ctx.translate(-cx,-cy);
   const DEEP_COLORS=['#004d40','#006064','#01579b','#0d47a1','#1a237e','#004d40','#00695c','#00838f','#0097a7','#00796b','#00897b','#1565c0','#283593','#003d5b','#005f73','#0a3d62','#1b4332','#2d6a4f','#0b525b','#3a506b','#1c3144','#0f4c5c','#274c77','#044a6e','#03312e','#023047','#1a535c','#184e77','#1b263b','#0d3b66','#14213d','#002855'];
-  activeWheelColors=deepDiveActive?DEEP_COLORS:WHEEL_COLORS;
+  activeWheelColors=deepDiveActive?DEEP_COLORS:(WHEEL_THEMES[currentWheelTheme]||WHEEL_COLORS);
   const colors=activeWheelColors;
   // Pass 1: fill all segments (no strokes yet — prevents bleed-through)
   for(let i=0;i<n;i++){
@@ -2843,6 +2954,7 @@ function metricBars(m){
 }
 
 async function showSummary(){
+  showFooter();
   const list=document.getElementById('summaryList');
   if(!sessionRounds.length){list.innerHTML='<div class="hist-empty">No rounds played.</div>';document.getElementById('summaryAvg').textContent='';showScreen('summary-screen');return}
   const cardColors=['#1a2535','#1f1a30','#1a2a25','#2a1a1a','#1a1a2a','#251a20','#1a2520','#201a2a'];
@@ -2980,7 +3092,7 @@ function buildBingoFromPicked(){
   const cols=['B','I','N','G','O'];
   const mSrc=getMosaicSrc();
   for(let row=0;row<5;row++){for(let ci=0;ci<5;ci++){
-    const isFree=row===2&&ci===2,idx=row*5+ci;
+    const isFree=setupFreeSpace&&row===2&&ci===2,idx=row*5+ci;
     const cell=document.createElement('div');cell.className='bingo-cell'+(isFree?' free':'');
     // Mosaic: <img> inside overflow:hidden wrapper, positioned to show this cell's 1/25th slice
     const imgLeft=-(ci*100);const imgTop=-(row*100);
@@ -3018,17 +3130,17 @@ function loadBingoState(){
 function pickBingoCategories(){
   const cols=['B','I','N','G','O'];
   bingoPicked={};
-  // Shuffle all categories, pick 24
+  // Shuffle all categories, pick 24 (or 25 if free space is disabled)
   let pool=[...BINGO_LIVE];
   pool=[...new Set(pool)]; // deduplicate
   shuffle(pool);
-  const picked=pool.slice(0,24);
-  // Distribute into 5 columns of 5 (center is free)
+  const need=setupFreeSpace?24:25;
+  const picked=pool.slice(0,need);
   let idx=0;
   for(const c of cols)bingoPicked[c]=[];
   for(let row=0;row<5;row++){
     for(let ci=0;ci<5;ci++){
-      if(row===2&&ci===2)bingoPicked[cols[ci]].push('FREE SPACE');
+      if(setupFreeSpace&&row===2&&ci===2)bingoPicked[cols[ci]].push('FREE SPACE');
       else bingoPicked[cols[ci]].push(picked[idx++]||'???');
     }
   }
@@ -3075,7 +3187,7 @@ function updateAllProximity(){
 }
 function setDaubColor(c){const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];const o=document.getElementById('daubOpacity').value;document.documentElement.style.setProperty('--daub',`rgba(${r},${g},${b},${o/100})`);localStorage.setItem('kvn_daub',JSON.stringify({color:c,opacity:+o}))}
 function setDaubOpacity(v){const c=document.getElementById('daubColor').value;const[r,g,b]=[parseInt(c.slice(1,3),16),parseInt(c.slice(3,5),16),parseInt(c.slice(5,7),16)];document.documentElement.style.setProperty('--daub',`rgba(${r},${g},${b},${v/100})`);localStorage.setItem('kvn_daub',JSON.stringify({color:c,opacity:+v}))}
-function resetBingoCard(){bingoState=Array(25).fill(false);bingoState[12]=true;bingoWinShown=false;buildBingoFromPicked();saveBingoState()}
+function resetBingoCard(){bingoState=Array(25).fill(false);if(setupFreeSpace)bingoState[12]=true;bingoWinShown=false;buildBingoFromPicked();saveBingoState()}
 function checkBingo(){if(bingoWinShown)return;const s=bingoState;for(let r=0;r<5;r++)if(s[r*5]&&s[r*5+1]&&s[r*5+2]&&s[r*5+3]&&s[r*5+4]){triggerBingo();return}for(let c=0;c<5;c++)if(s[c]&&s[5+c]&&s[10+c]&&s[15+c]&&s[20+c]){triggerBingo();return}if(s[0]&&s[6]&&s[12]&&s[18]&&s[24]){triggerBingo();return}if(s[4]&&s[8]&&s[12]&&s[16]&&s[20])triggerBingo()}
 function triggerBingo(){bingoWinShown=true;document.getElementById('easterMsg').textContent=EASTER_EGGS[Math.floor(Math.random()*EASTER_EGGS.length)];document.getElementById('bingoWin').classList.add('show');const mainEl=document.querySelector('.main');mainEl.style.animation='screenShake .6s';setTimeout(()=>mainEl.style.animation='',700);spawnConfetti();playBingoWinSound();markAchievement('bingo');checkAchievements()}
 function dismissBingoWin(){document.getElementById('bingoWin').classList.remove('show');document.getElementById('confettiBox').innerHTML=''}
@@ -3088,7 +3200,7 @@ function triggerLoseSpace(){
   sub.textContent='';roll.textContent='';tgt.textContent='';dismiss.classList.remove('show');
   overlay.classList.add('show');
   const mainEl=document.querySelector('.main');if(mainEl){mainEl.style.animation='screenShake .5s';setTimeout(()=>mainEl.style.animation='',600)}
-  const marked=bingoState.map((v,i)=>(v&&i!==12)?i:null).filter(i=>i!==null);
+  const marked=bingoState.map((v,i)=>(v&&(!setupFreeSpace||i!==12))?i:null).filter(i=>i!==null);
   if(!marked.length){
     sub.textContent='Lucky escape — no marked spaces to lose.';
     dismiss.classList.add('show');
@@ -3198,8 +3310,6 @@ function renderHistory(){
     }).join(' ');
     return`<div class="game-block"><div class="game-header"><span>Game ${games.length-gi} &middot; ${new Date(g.date).toLocaleDateString()} &middot; ${g.rounds.length}r</span><span class="gh-avg">${avgLine}</span></div>${g.rounds.map(r=>`<div class="hist-item" onclick="copyText('${esc(r.search).replace(/'/g,"\\'")}')"><div class="hi-search">${esc(r.search)}</div><div class="hi-format">${esc(r.format)} ${metricBars(r.metrics)}</div>${r.link?`<div class="hi-date"><a href="${esc(r.link)}" target="_blank" style="color:#5b7fc7;text-decoration:none" onclick="event.stopPropagation()">${esc(r.link).substring(0,45)}</a></div>`:''}${r.datePosted?`<div class="hi-date" style="color:#e74c3c">Posted: ${esc(r.datePosted)}${r.viewsWhenFound?' · '+esc(r.viewsWhenFound)+' views':''}${r.channelVids?' · '+esc(r.channelVids)+' ch vids':''}</div>`:''}<div class="hi-date">${new Date(r.date).toLocaleString()}</div></div>`).join('')}</div>`}).join('')}
 function copyText(t){navigator.clipboard.writeText(t).then(()=>showToast('Copied: '+t)).catch(()=>{})}
-
-function hideFooter(){document.getElementById('creditFooter').classList.add('hidden')}
 
 // ═══════════════════════════════════
 //  CREDITS MODAL (fetches from GitHub MD)
@@ -4135,7 +4245,7 @@ function exportBingoSVG(){
   // Cells
   for(let row=0;row<5;row++){
     for(let ci=0;ci<5;ci++){
-      const idx=row*5+ci;const isFree=row===2&&ci===2;
+      const idx=row*5+ci;const isFree=setupFreeSpace&&row===2&&ci===2;
       const x=pad+ci*(cw+gap);const y=pad+hdrH+ltH+row*(ch+gap);
       const daubed=bingoState[idx];
       svg+=`<rect x="${x}" y="${y}" width="${cw}" height="${ch}" rx="6" fill="${isFree?'#fff9c4':'#f5f5f0'}" stroke="${daubed?'#388e3c':'#bbb'}" stroke-width="2"/>`;
@@ -4425,6 +4535,7 @@ allowRepeatFormats=localStorage.getItem('kvn_allow_repeats')==='1';
 try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){document.getElementById('daubColor').value=daubSaved.color;document.getElementById('daubOpacity').value=daubSaved.opacity;setDaubColor(daubSaved.color)}}catch{}
 // Restore saved sound preference
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
+loadGameSetup();loadWheelTheme();
 loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();
 checkForUpdates();checkHoliday();
 // Service worker registration handled by hosted wrapper (sw.js not bundled in monolithic HTML)

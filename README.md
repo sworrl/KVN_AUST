@@ -41,8 +41,8 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 | Step | Feature | Description |
 |:----:|:--------|:------------|
-| 1 | **Recycle Bin Bingo** | Randomized 5x5 bingo card with 101 video categories from KVN AUST's series. Slide-puzzle reveal animation. 50 unique SVG daub stamps per game. |
-| 2 | **Format Spinner** | 3D-textured wheel loaded with 280 filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md) (KVN Map 4.0). No-repeat spins with red dots marking used formats. When bingo is active, dark-red **Lose a Space** penalty segments may sprinkle in. |
+| 1 | **Recycle Bin Bingo** | Randomized 5x5 bingo card with 101 video categories from KVN AUST's series. Slide-puzzle reveal animation. 50 unique SVG daub stamps per game. **Free Space** can be disabled in setup for a 25-category card. |
+| 2 | **Format Spinner** | 3D-textured wheel loaded with 280 filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md) (KVN Map 4.0). No-repeat spins with red dots marking used formats. **Lose-a-Space** penalty segment count is configurable in setup (0–10). Theme auto-rotates daily or every 2 saved games — 30 distinct palettes (Carnival, Pastels, Primaries, Mono, Sunset, Ocean, Forest, Neon, Vaporwave, Cyberpunk, …). Deep Dive mode is the only manually-toggled theme. |
 | 3 | **Rainbow Number Generator** | Character-by-character rainbow shuffle animation generates the random search number for your format. |
 | 4 | **Search YouTube & Rate** | Copy the search string, open directly in YouTube, or re-randomize. Rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." Log date posted, views, and channel size. Share via SVG card or copy for Discord. |
 | 5 | **Game Summary & Export** | End-of-session recap with video thumbnails, per-metric breakdowns, and averages. Export bingo cards and summaries as SVG. |
@@ -138,7 +138,9 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 - Mosaic slide-puzzle reveal with real 15-puzzle physics
 - Progressive daub stamps that glow near BINGO
 - 50 unique SVG stamp designs, customizable colors
-- **Lose a Space** spinner penalty (Hard Mode, KVN-style) — toggleable
+- **Pre-game setup**: configurable Lose-a-Space slot count (0–10), Free Space toggle
+- **30 auto-rotating spinner themes** (rotate daily or every 2 saved games) — Deep Dive is the only manual theme
+- **Bottom bar auto-hides** during gameplay, returns at game end (unless you've X'd it manually)
 - Export completed cards as SVG
 
 </td><td>
@@ -158,9 +160,15 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 ## Free, Forever, No Catch
 
+> **TL;DR — [Download `kvnaust-recyclebin.html`](kvnaust-recyclebin.html), open it in any browser, and you're playing the full game. That's it. No install, no account, no internet required after the first format sync.**
+
 The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`) is **GPL-3.0**. Fork it, host it, mod it, run it offline — do whatever you want. No attribution required to KVN AUST or to us, though it'd be cool of you.
 
-The **hosted version at [falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/)** runs the same HTML from this repo, plus the community layer (cloud save, leaderboards, player profiles, multiplayer, discovery pages, daily challenges). We pay for that hosting out of our own pocket because we think it's fun. **No ads. No paywalls. No tracking pixels. No "premium" tier. No monetization. Not now, not ever.** If you want the community side, come play with us. If you don't, grab the standalone file and run it however you like.
+**We actively encourage you to run it locally.** The whole tool is one HTML file. Drop it on a thumb drive, host it on your own server, embed it in a side project — go nuts. You don't need us, and we don't want you to feel like you do.
+
+**The only reason to play on [falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/) is if you want the community layer:** cloud save across devices, leaderboards, player profiles, multiplayer co-watching, discovery pages, daily challenges, season events. We pay for that hosting out of our own pocket because we think it's fun.
+
+**No ads. No paywalls. No tracking pixels. No "premium" tier. No "donate to unlock." No monetization. Not now, not ever.** If we ever change our minds, the offline copy in this repo will keep working forever — that's what GPL-3.0 protects. Pick whichever side suits you.
 
 ---
 
