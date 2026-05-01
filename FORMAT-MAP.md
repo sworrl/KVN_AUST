@@ -13,12 +13,12 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/TOTAL_FORMATS-270-e74c3c?style=flat-square&labelColor=1a1a2e" alt="280 Total Formats">
+  <img src="https://img.shields.io/badge/TOTAL_FORMATS-267-e74c3c?style=flat-square&labelColor=1a1a2e" alt="267 Total Formats">
   <img src="https://img.shields.io/badge/Search_Keyphrases-58-3498db?style=flat-square&labelColor=1a1a2e" alt="58 Search Keyphrases">
   <img src="https://img.shields.io/badge/File_Extensions-13-9b59b6?style=flat-square&labelColor=1a1a2e" alt="13 File Extensions">
-  <img src="https://img.shields.io/badge/Numbered_Formats-124-2ecc71?style=flat-square&labelColor=1a1a2e" alt="134 Numbered Formats">
+  <img src="https://img.shields.io/badge/Numbered_Formats-126-2ecc71?style=flat-square&labelColor=1a1a2e" alt="126 Numbered Formats">
   <img src="https://img.shields.io/badge/Date--Based-38-e67e22?style=flat-square&labelColor=1a1a2e" alt="38 Date-Based Formats">
-  <img src="https://img.shields.io/badge/Ancient_YouTube-37-f39c12?style=flat-square&labelColor=1a1a2e" alt="37 Ancient YouTube Formats">
+  <img src="https://img.shields.io/badge/Ancient_YouTube-32-f39c12?style=flat-square&labelColor=1a1a2e" alt="32 Ancient YouTube Formats">
 </p>
 
 ---
@@ -286,8 +286,10 @@ Device-specific filename patterns with numeric ranges. Best for finding old, for
 | `SVM AXXXX` | 0000-1000 | Camera | [@nellip.683](https://youtube.com/@nellip.683) |
 | `MUSIC0X.DAT` | 1-9 | DVD (Karaoke) | |
 | `AVI00XXX` | 000-100 | Camera | |
-| `4XXX` | AAA-FFF, 000-999 | Phone | |
-| `Trim 4XXX` | AAA-FFF, 000-999 | Phone | |
+| `4XXX` | AAA-FFF | Phone (hex) | |
+| `Trim 4XXX` | AAA-FFF | Phone (hex) | |
+| `Copy 4XXX` | AAA-FFF | Phone (hex) | |
+| `Video 4XXX` | AAA-FFF | Phone (hex) | |
 | `"Axon Body * Video"` | - | Body Cam | |
 | `"Axon Flex Video"` | - | Body Cam | |
 | `"Month DD, YYYY"` | - | Phone | |
@@ -352,8 +354,6 @@ These need two values to construct a search and aren't auto-loaded into the spin
 - **VXX0XXX** — variable 1: `00–50`, variable 2: `101–300` — Camera — [@AymonAdren](https://x.com/AdrenAymon)
 - **PCXX00XX** — variable 1: `00–30`, variable 2: `01–99` — Camera — [@Mackhill8851](https://youtube.com/@Mackhill8851)
 - **"Sequence XX X"** — variable 1: `01–99`, variable 2: `1–3` — Video Editor
-- **Copy 4XXX** — hex variable: `AAA–FFF`, numeric variable: `000–999` — Phone (hex)
-- **Video 4XXX** — hex variable: `AAA–FFF`, numeric variable: `000–999` — Phone (hex)
 - **"My Project X"** — single variable: `0–50` — Video Editor — [@Coletale](https://youtube.com/@Coletale)
 - **"Il mio filmato X"** — single variable: `1–100` — Misc (Italy)
 

@@ -18,30 +18,35 @@ jobs:
       - name: Count formats
         id: count
         run: |
-          search=$(grep -c '^| `' FORMAT-MAP.md | head -1 || echo 0)
-          # Count per section
+          # Count UNIQUE keyphrases per section. The 'Recently Added' section is intentionally
+          # ignored because every entry there appears again in its proper section. Multi-Variable
+          # Patterns subsection (bullet list) is also ignored because those aren't auto-loaded
+          # into the spinner. Total is the sum of the deduped section counts.
           python3 -c "
           import re
           with open('FORMAT-MAP.md') as f:
               md = f.read()
-          sections = {'search':0,'ext':0,'numbered':0,'date':0,'ancient':0}
+          sections = {'search':set(),'ext':set(),'numbered':set(),'date':set(),'ancient':set()}
           sec = ''
+          KP_RE = re.compile(r'^\|\s*\`([^\`]+)\`\s*\|')
           for line in md.split('\n'):
               if line.startswith('## Search Keyphrases'): sec='search'
               elif line.startswith('## File Extensions'): sec='ext'
               elif line.startswith('## Numbered Formats'): sec='numbered'
               elif line.startswith('## Date-Based Formats'): sec='date'
               elif line.startswith('## Ancient YouTube'): sec='ancient'
-              elif line.startswith('## Solved') or line.startswith('## Contributors') or line.startswith('## Recently'): sec=''
-              if sec and line.startswith('| \`'):
-                  sections[sec] += 1
-          total = sum(sections.values())
+              elif line.startswith('### Multi-Variable'): sec=''  # bullet list, not auto-loaded
+              elif line.startswith('## Solved') or line.startswith('## Contributors') or line.startswith('## Recently') or line.startswith('## Map 4'): sec=''
+              elif line.startswith('## '): sec=''
+              if sec and (m := KP_RE.match(line)):
+                  sections[sec].add(m.group(1).strip())
+          total = sum(len(s) for s in sections.values())
           print(f'total={total}')
-          print(f'search={sections[\"search\"]}')
-          print(f'ext={sections[\"ext\"]}')
-          print(f'numbered={sections[\"numbered\"]}')
-          print(f'date={sections[\"date\"]}')
-          print(f'ancient={sections[\"ancient\"]}')
+          print(f'search={len(sections[\"search\"])}')
+          print(f'ext={len(sections[\"ext\"])}')
+          print(f'numbered={len(sections[\"numbered\"])}')
+          print(f'date={len(sections[\"date\"])}')
+          print(f'ancient={len(sections[\"ancient\"])}')
           " >> $GITHUB_OUTPUT
 
       - name: Update badge counts in FORMAT-MAP.md

@@ -14,7 +14,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Interactive game tool for KVN AUST's YouTube Recycle Bin series. 280 format spinner (KVN Map 4.0), bingo card with Lose-a-Space penalty, Deep Dive mode, achievements, video gallery, community leaderboard. Discover zero-view YouTube videos. Free, GPL-3.0, no ads.">
+<meta name="description" content="Interactive game tool for KVN AUST's YouTube Recycle Bin series. 267 format spinner (KVN Map 4.0), bingo card with Lose-a-Space penalty, Deep Dive mode, achievements, video gallery, community leaderboard. Discover zero-view YouTube videos. Free, GPL-3.0, no ads.">
 <meta name="keywords" content="KVN AUST, YouTube Recycle Bin, zero view videos, YouTube hidden videos, recycle bin map, format map, default filename search, KVNAUST, MingKasterMK, bingo, spinner, deep dive, achievements, leaderboard, zero view finder">
 <meta name="author" content="Justin / @Chegnus / FalconTechnix">
 <meta name="robots" content="index, follow">
@@ -22,14 +22,14 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="YouTube's Recycle Bin — KVN AUST Game Tool">
-<meta property="og:description" content="280 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard. Discover zero-view YouTube videos. Free, no ads, no monetization.">
+<meta property="og:description" content="267 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard. Discover zero-view YouTube videos. Free, no ads, no monetization.">
 <meta property="og:url" content="https://falcontechnix.com/KVN_AUST/">
 <meta property="og:site_name" content="FalconTechnix">
 <meta property="og:image" content="https://falcontechnix.com/KVN_AUST/screenshots/05-spinner.png">
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="YouTube's Recycle Bin — KVN AUST Game Tool">
-<meta name="twitter:description" content="280 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard. Discover zero-view YouTube videos.">
+<meta name="twitter:description" content="267 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard. Discover zero-view YouTube videos.">
 <meta name="twitter:image" content="https://falcontechnix.com/KVN_AUST/screenshots/05-spinner.png">
 <meta name="twitter:creator" content="@Chegnus">
 <!-- JSON-LD Structured Data -->
@@ -38,7 +38,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "YouTube's Recycle Bin - KVN AUST",
-  "description": "Interactive game tool for KVN AUST's YouTube Recycle Bin series. 280 format spinner (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard, video gallery. Discover zero-view YouTube videos.",
+  "description": "Interactive game tool for KVN AUST's YouTube Recycle Bin series. 267 format spinner (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard, video gallery. Discover zero-view YouTube videos.",
   "url": "https://falcontechnix.com/KVN_AUST/",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Any",
@@ -2100,11 +2100,23 @@ async function fetchDocFormats(){
           const lo=parseInt(m[4]),hi=parseInt(m[5]);
           if(lo<=hi){
             const fmt={label:lbl,tpl:tpl,min:lo,max:hi,pad:m[2].length};
-            // Detect hex ranges
-            if(line.match(/[Hh]ex/i)||lbl.match(/^4X|^Trim 4/))fmt.sp='hex4';
             fetched.push(fmt);
             if(!existing.has(lbl)){ALL_FORMATS.push(fmt);existing.add(lbl);newCount++}
           }
+          continue;
+        }
+        // Hex/alpha-range numbered formats: | `4XXX` | AAA-FFF, 000-999 |
+        // | `MOL0XX` | A-F, 0-9 |  — each X is a hex digit (0-9 or A-F).
+        const hm=line.match(/\|\s*`((?:[^`X]|X(?!X))*)(X{2,5})([^`]*?)`\s*\|\s*([A-F]+)-([A-F]+)/);
+        if(hm){
+          const suffix=hm[3]||'';
+          if(/X/.test(suffix))continue; // multi-var, skip
+          const lbl=hm[1]+hm[2]+suffix;
+          const hasSpace=hm[1].endsWith(' ');
+          const tpl=hasSpace?hm[1].trimEnd()+' {V}'+suffix:hm[1]+'{V}'+suffix;
+          const fmt={label:lbl,tpl:tpl,sp:'hexN',pad:hm[2].length};
+          fetched.push(fmt);
+          if(!existing.has(lbl)){ALL_FORMATS.push(fmt);existing.add(lbl);newCount++}
           continue;
         }
         // Special: "HHMMSS" time-of-day format
@@ -2581,7 +2593,7 @@ function showFormatReveal(){
   let finalHtml;
   if(f.sp==='static')finalHtml=`<span>${esc(f.tpl)}</span>`;
   else if(f.sp==='date'||f.sp==='monthdate')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (random)</span>`;
-  else if(f.sp==='hex4')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (hex)</span>`;
+  else if(f.sp==='hex4'||f.sp==='hexN')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (hex)</span>`;
   else if(f.sp==='time')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (time of day)</span>`;
   else{const p=f.pad||4;finalHtml=`${f.tpl.replace('{V}',`<span class="vp">${'X'.repeat(p)}</span>`)}<span class="rng">(${String(f.min).padStart(p,'0')}-${String(f.max).padStart(p,'0')})</span>`}
   // Rainbow text shuffle for 1.5s then reveal
@@ -2608,6 +2620,7 @@ function setupNumberScreen(){
   if(f.sp==='date'){mn.textContent=f.minY||'2006';mx.textContent=f.maxY||'2026';nm.textContent='--------'}
   else if(f.sp==='monthdate'){mn.textContent='2007';mx.textContent='2013';nm.textContent='--- --, ----'}
   else if(f.sp==='hex4'){mn.textContent='0000';mx.textContent='FFFF';nm.textContent='----'}
+  else if(f.sp==='hexN'){const p=f.pad||3;mn.textContent='0'.repeat(p);mx.textContent='F'.repeat(p);nm.textContent='-'.repeat(p)}
   else if(f.sp==='time'){mn.textContent='000000';mx.textContent='235959';nm.textContent='------'}
   else{const p=f.pad||4;mn.textContent=String(f.min).padStart(p,'0');mx.textContent=String(f.max).padStart(p,'0');nm.textContent='0'.repeat(p)}
 }
@@ -2646,7 +2659,7 @@ function generateNumber(){
 
 function randDate(minY,maxY){const lo=minY||2006,hi=maxY||2026;const y=lo+Math.floor(Math.random()*(hi-lo+1)),m=1+Math.floor(Math.random()*12),d=1+Math.floor(Math.random()*28);return`${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}`}
 function randMonthDate(){const ms=['January','February','March','April','May','June','July','August','September','October','November','December'];return`${ms[Math.floor(Math.random()*12)]} ${String(1+Math.floor(Math.random()*28)).padStart(2,'0')}, ${2007+Math.floor(Math.random()*7)}`}
-function randHex(){let s='';for(let i=0;i<4;i++)s+='0123456789ABCDEF'[Math.floor(Math.random()*16)];return s}
+function randHex(n){const len=n||4;let s='';for(let i=0;i<len;i++)s+='0123456789ABCDEF'[Math.floor(Math.random()*16)];return s}
 
 function ytSearchUrl(q){return'https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'&sp=CAI%253D'}
 function showResult(){
@@ -2808,7 +2821,8 @@ function generateFinalNumber(){
   const f=chosenFormat;
   if(f.sp==='date')return randDate(f.minY,f.maxY);
   if(f.sp==='monthdate')return randMonthDate();
-  if(f.sp==='hex4')return randHex();
+  if(f.sp==='hex4')return randHex(4);
+  if(f.sp==='hexN')return randHex(f.pad||3);
   if(f.sp==='time'){const h=Math.floor(Math.random()*24),m=Math.floor(Math.random()*60),s=Math.floor(Math.random()*60);return String(h).padStart(2,'0')+String(m).padStart(2,'0')+String(s).padStart(2,'0')}
   if(f.sp!=='static'){const p=f.pad||4;return String(Math.floor(Math.random()*(f.max-f.min+1))+f.min).padStart(p,'0')}
   return'';
@@ -3373,7 +3387,7 @@ function buildFormatPanel(){
     let type='numbered',typeLabel='';
     if(f.sp==='static'){type='static';typeLabel='static'}
     else if(f.sp==='date'){type='date';typeLabel='date'}
-    else if(f.sp==='hex4'||f.sp==='monthdate'){type='special';typeLabel=f.sp}
+    else if(f.sp==='hex4'||f.sp==='hexN'||f.sp==='monthdate'){type='special';typeLabel=f.sp}
     else{typeLabel=`${String(f.min||0).padStart(f.pad||4,'0')}-${String(f.max||9999).padStart(f.pad||4,'0')}`}
     const rangeHtml=type==='numbered'?`<span class="fp-range">${typeLabel}</span>`:`<span class="fp-type ${type}">${typeLabel}</span>`;
     d.innerHTML=`<input type="checkbox" ${selectedFormats.has(i)?'checked':''} onchange="toggleFormat(${i},this.checked)"><span>${esc(f.label)}</span>${rangeHtml}`;
