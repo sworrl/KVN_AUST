@@ -342,20 +342,20 @@ Device-specific filename patterns with numeric ranges. Best for finding old, for
 
 ### Multi-Variable Patterns (manual substitution required)
 
-These need two random values to construct a search. The spinner won't auto-generate them — substitute by hand.
+These need two values to construct a search and aren't auto-loaded into the spinner — they're listed here for human reference and manual searching. Substitute the X-blocks yourself in YouTube's search bar.
 
-| Keyphrase | Variable 1 | Variable 2 | Source | Credit |
-|:----------|:-----------|:-----------|:-------|:-------|
-| `P1XX0XXX` | 01-35 | 001-999 | Camera | |
-| `PAXX0XXX` | 00-30 | 001-499 | Camera | |
-| `PBXX0XXX` | 00-30 | 001-499 | Camera | |
-| `VXX0XXX` | 00-50 | 101-300 | Camera | [@AymonAdren](https://x.com/AdrenAymon) |
-| `PCXX00XX` | 00-30 | 01-99 | Camera | [@Mackhill8851](https://youtube.com/@Mackhill8851) |
-| `"Sequence XX X"` | 01-99 | 1-3 | Video Editor | |
-| `Copy 4XXX` | AAA-FFF | 000-999 | Phone (hex) | |
-| `Video 4XXX` | AAA-FFF | 000-999 | Phone (hex) | |
-| `"My Project X"` | 0-50 | — | Video Editor | [@Coletale](https://youtube.com/@Coletale) |
-| `"Il mio filmato X"` | 1-100 | — | Misc (Italy) | |
+> **Note for tool maintainers:** these intentionally use bullets, not table rows, because the spinner's parser would otherwise pick up the first variable block and produce a half-substituted search string.
+
+- **P1XX0XXX** — variable 1: `01–35`, variable 2: `001–999` — Camera
+- **PAXX0XXX** — variable 1: `00–30`, variable 2: `001–499` — Camera
+- **PBXX0XXX** — variable 1: `00–30`, variable 2: `001–499` — Camera
+- **VXX0XXX** — variable 1: `00–50`, variable 2: `101–300` — Camera — [@AymonAdren](https://x.com/AdrenAymon)
+- **PCXX00XX** — variable 1: `00–30`, variable 2: `01–99` — Camera — [@Mackhill8851](https://youtube.com/@Mackhill8851)
+- **"Sequence XX X"** — variable 1: `01–99`, variable 2: `1–3` — Video Editor
+- **Copy 4XXX** — hex variable: `AAA–FFF`, numeric variable: `000–999` — Phone (hex)
+- **Video 4XXX** — hex variable: `AAA–FFF`, numeric variable: `000–999` — Phone (hex)
+- **"My Project X"** — single variable: `0–50` — Video Editor — [@Coletale](https://youtube.com/@Coletale)
+- **"Il mio filmato X"** — single variable: `1–100` — Misc (Italy)
 
 ---
 

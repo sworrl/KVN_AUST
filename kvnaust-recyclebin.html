@@ -2091,6 +2091,9 @@ async function fetchDocFormats(){
         const m=line.match(/\|\s*`((?:[^`X]|X(?!X))*)(X{2,5})([^`]*?)`\s*\|\s*(\d+)-(\d+)/);
         if(m){
           const suffix=m[3]||''; // e.g. '.MTS', 'A', ''
+          // Reject multi-variable formats: if the suffix still contains X's, the format
+          // has more than one variable block (e.g. P1XX0XXX) and we can't auto-substitute.
+          if(/X/.test(suffix))continue;
           const lbl=m[1]+m[2]+suffix;
           const hasSpace=m[1].endsWith(' ');
           const tpl=hasSpace?m[1].trimEnd()+' {V}'+suffix:m[1]+'{V}'+suffix;
@@ -2149,7 +2152,11 @@ async function fetchDocFormats(){
         }
         // Static keyphrases/extensions: | `"something"` | or | `.EXT` | — anything in backticks not caught above
         const sm=line.match(/\|\s*`([^`]{2,})`\s*\|/);
-        if(sm&&!sm[1].match(/XXXX|YYYY|format/i)){
+        // Skip entries whose label still contains X-blocks (templated formats with non-digit
+        // ranges like `MOL0XX` (A-F, 0-9), `4XXX` (AAA-FFF), `Trim 4XXX` — historically these
+        // got picked up as literal static keyphrases and the wheel searched for the X's verbatim.
+        // Better to skip than to ship a broken search.
+        if(sm&&!sm[1].match(/X{2,}|YYYY|format/i)){
           const lbl=sm[1];
           if(!existing.has(lbl)){
             const fmt={label:lbl,tpl:lbl,sp:'static'};
