@@ -14,22 +14,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Interactive game tool for KVN AUST's YouTube Recycle Bin series. 267 format spinner (KVN Map 4.0), bingo card with Lose-a-Space penalty, Deep Dive mode, achievements, video gallery, community leaderboard. Discover zero-view YouTube videos. Free, GPL-3.0, no ads.">
+<meta name="description" content="Sonder — a free game tool for KVN AUST's YouTube Recycle Bin. 267 format spinner (KVN Map 4.0), bingo card with Lose-a-Space penalty, Deep Dive mode, achievements, video gallery, community leaderboard. Discover zero-view YouTube videos. GPL-3.0, no ads, no monetization.">
 <meta name="keywords" content="KVN AUST, YouTube Recycle Bin, zero view videos, YouTube hidden videos, recycle bin map, format map, default filename search, KVNAUST, MingKasterMK, bingo, spinner, deep dive, achievements, leaderboard, zero view finder">
 <meta name="author" content="Justin / @Chegnus / FalconTechnix">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://falcontechnix.com/KVN_AUST/">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="YouTube's Recycle Bin — KVN AUST Game Tool">
-<meta property="og:description" content="267 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard. Discover zero-view YouTube videos. Free, no ads, no monetization.">
+<meta property="og:title" content="Sonder — for KVN AUST's YouTube Recycle Bin">
+<meta property="og:description" content="A tool for the videos no one ever watched. 267 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard. Free, GPL-3.0, no ads, no monetization.">
 <meta property="og:url" content="https://falcontechnix.com/KVN_AUST/">
 <meta property="og:site_name" content="FalconTechnix">
 <meta property="og:image" content="https://falcontechnix.com/KVN_AUST/screenshots/05-spinner.png">
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="YouTube's Recycle Bin — KVN AUST Game Tool">
-<meta name="twitter:description" content="267 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard. Discover zero-view YouTube videos.">
+<meta name="twitter:title" content="Sonder — for KVN AUST's YouTube Recycle Bin">
+<meta name="twitter:description" content="A tool for the videos no one ever watched. 267 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard.">
 <meta name="twitter:image" content="https://falcontechnix.com/KVN_AUST/screenshots/05-spinner.png">
 <meta name="twitter:creator" content="@Chegnus">
 <!-- JSON-LD Structured Data -->
@@ -37,8 +37,9 @@
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "YouTube's Recycle Bin - KVN AUST",
-  "description": "Interactive game tool for KVN AUST's YouTube Recycle Bin series. 267 format spinner (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard, video gallery. Discover zero-view YouTube videos.",
+  "name": "Sonder — for KVN AUST's YouTube Recycle Bin",
+  "alternateName": "Sonder",
+  "description": "Sonder — a tool for the videos no one ever watched. 267 format spinner (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard, video gallery. Discover zero-view YouTube videos.",
   "url": "https://falcontechnix.com/KVN_AUST/",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Any",
@@ -65,7 +66,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Space+Mono:wght@700&display=swap">
 <link rel="icon" type="image/png" id="favicon">
 <link rel="manifest" href="manifest.json">
-<title>YouTube's Recycle Bin - KVN AUST | Interactive Game Tool</title>
+<title>Sonder — for KVN AUST's YouTube Recycle Bin</title>
 <style>
 /* Fonts loaded via <link> in <head> for performance */
 *{margin:0;padding:0;box-sizing:border-box}
@@ -520,6 +521,24 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
   50%{filter:drop-shadow(0 0 12px rgba(46,204,113,.55)) drop-shadow(0 0 22px rgba(31,199,255,.4)) drop-shadow(0 0 34px rgba(168,85,247,.3))}
 }
 
+/* ── SONDER MODAL ── */
+.sonder-modal{position:fixed;inset:0;z-index:700;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,rgba(20,15,32,.94) 0%,rgba(0,0,0,.96) 100%);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .35s;padding:20px}
+.sonder-modal.show{opacity:1;pointer-events:auto}
+.sonder-card{max-width:640px;width:100%;background:linear-gradient(180deg,#1a1825,#0f0d18);border:1px solid #2e2a44;border-radius:14px;padding:38px 36px 30px;position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.04),0 0 60px rgba(155,89,182,.08);
+  font-family:'Inter',system-ui,sans-serif;color:#cfd0d8}
+.sonder-close{position:absolute;top:10px;right:14px;background:none;border:none;color:#666;font-size:1.4rem;cursor:pointer;padding:4px 8px;line-height:1;transition:color .15s}
+.sonder-close:hover{color:#ddd}
+.sonder-word{font-size:clamp(2rem,5.5vw,3rem);font-weight:300;letter-spacing:.04em;color:#fff;
+  background:linear-gradient(90deg,#ff6b9d,#ffd27d,#a8e6cf,#7ec8e3,#c39bd3,#ff6b9d);background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  animation:freeGlowFlow 12s linear infinite;margin-bottom:2px}
+.sonder-pos{font-size:.85rem;color:#888;margin-bottom:18px;font-style:italic}
+.sonder-def{font-size:.92rem;line-height:1.7;color:#d8d8e0;margin-bottom:14px;font-weight:300;letter-spacing:.005em}
+.sonder-cite{font-size:.78rem;color:#888;text-align:right;margin-bottom:24px;letter-spacing:.01em}
+.sonder-kvn{font-size:.78rem;color:#aab;line-height:1.6;padding-top:18px;border-top:1px solid #2a2840;font-style:normal}
+.sonder-kvn em{color:#e6d5b8}
+
 /* ── KVN VIDEOS GALLERY ── */
 .kvn-videos-panel{position:fixed;top:220px;right:0;bottom:0;width:380px;background:linear-gradient(180deg,var(--card),#111120);border-left:1px solid #2a2a40;z-index:450;
   transform:translateX(100%);transition:transform .35s ease;box-shadow:-4px 0 30px rgba(0,0,0,.5),-1px 0 0 rgba(255,255,255,.03);overflow-y:auto;padding:14px}
@@ -778,7 +797,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 <div class="header">
   <div class="header-banner"><img id="bannerImg" alt="banner"></div>
   <img class="yt-avatar" id="avatarImg" alt="KVN AUST">
-  <div><div class="header-title">YouTube's Recycle Bin</div><div class="header-subtitle">KVN AUST<span class="deep-dive-badge">DEEP DIVE</span></div></div>
+  <div><div class="header-title" title="Click for the Koenig passage that named this tool" onclick="showSonderModal()" style="cursor:help">Sonder</div><div class="header-subtitle">for KVN AUST's Recycle Bin<span class="deep-dive-badge">DEEP DIVE</span></div></div>
   <div class="header-right">
     <div class="sound-pick">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
@@ -812,8 +831,8 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
   <div id="start-screen" class="screen active">
     <div class="logo-area">
       <img class="big-avatar" id="bigAvatarImg" alt="KVN AUST">
-      <h1>YouTube's Recycle Bin</h1>
-      <div class="tagline">The internet's largest video graveyard</div>
+      <h1 title="Click for the Koenig passage that named this tool" onclick="showSonderModal()" style="cursor:help">Sonder</h1>
+      <div class="tagline" style="font-style:italic">for <a href="https://www.youtube.com/@KVNAUST" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dotted currentColor">KVN AUST</a>'s YouTube Recycle Bin</div>
       <button class="start-btn" onclick="startGame()">NEW GAME</button>
       <button class="start-btn" onclick="showRecords()" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000;font-size:.8rem;padding:8px 24px;margin-top:8px">Submit a Find</button>
       <button class="start-btn" id="kvnVideosBtn" onclick="toggleKvnVideos()" style="background:linear-gradient(135deg,#c4302b,#8b1a1a);color:#fff;font-size:.8rem;padding:8px 24px;margin-top:8px;position:relative">KVN's Recycle Bin Videos<span id="kvnVideosNewDot" style="display:none;position:absolute;top:-4px;right:-4px;background:#fff;color:#c0392b;font-size:.55rem;font-weight:900;letter-spacing:.04em;padding:2px 6px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.4)">NEW</span></button>
@@ -978,6 +997,18 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
   <div style="font-size:.62rem;color:#666;margin-bottom:10px">Every Recycle Bin / 0-View / mapping video on <a href="https://www.youtube.com/@KVNAUST" target="_blank" style="color:#e74c3c">@KVNAUST</a></div>
   <div id="kvnVideosList"></div>
 </section>
+
+<!-- SONDER MODAL — etymology / Koenig poetic quote -->
+<div class="sonder-modal" id="sonderModal" onclick="if(event.target===this)closeSonderModal()">
+  <div class="sonder-card">
+    <button class="sonder-close" onclick="closeSonderModal()" aria-label="Close">&times;</button>
+    <div class="sonder-word">sonder</div>
+    <div class="sonder-pos"><em>n.</em></div>
+    <div class="sonder-def">the realization that each random passerby is living a life as vivid and complex as your own — populated with their own ambitions, friends, routines, worries and inherited craziness — an epic story that continues invisibly around you like an anthill sprawling deep underground, with elaborate passageways to thousands of other lives that you'll never know existed, in which you might appear only once, as an extra sipping coffee in the background, as a blur of traffic passing on the highway, as a lighted window at dusk.</div>
+    <div class="sonder-cite">— John Koenig, <em>The Dictionary of Obscure Sorrows</em></div>
+    <div class="sonder-kvn">KVN AUST said it best in his Map preface: <em>"This feels like sonder, like the way YouTube used to be."</em> That's the whole pitch for this tool — every spin pulls up someone's nephew's recital from 2009 that nobody else has ever clicked. Their whole life, one click away, entirely unwitnessed.</div>
+  </div>
+</div>
 
 <!-- BINGO WIN / CONFETTI / TOAST -->
 <div class="bingo-win" id="bingoWin"><h2 style="font-size:inherit">BINGO!</h2><div class="easter-msg" id="easterMsg"></div><button class="dismiss" onclick="dismissBingoWin()">Nice!</button></div>
@@ -3320,6 +3351,10 @@ function spawnConfetti(){const box=document.getElementById('confettiBox');box.in
 function toggleBingo(){const o=document.getElementById('bingoOverlay');o.classList.toggle('open');document.getElementById('bingoToggle').classList.toggle('active',o.classList.contains('open'))}
 function toggleFormatPanel(){const p=document.getElementById('formatPanel');p.classList.toggle('open');document.getElementById('formatsBtn').classList.toggle('active',p.classList.contains('open'))}
 function toggleHistory(){const p=document.getElementById('historyPanel');p.classList.toggle('open');document.getElementById('historyBtn').classList.toggle('active',p.classList.contains('open'));if(p.classList.contains('open'))renderHistory()}
+
+// Sonder etymology modal — opens when the H1 on the start screen is clicked.
+function showSonderModal(){const m=document.getElementById('sonderModal');if(m)m.classList.add('show')}
+function closeSonderModal(){const m=document.getElementById('sonderModal');if(m)m.classList.remove('show')}
 
 // ─── KVN AUST Recycle Bin video gallery ───
 // Curated to ONLY include Recycle Bin / 0-View / mapping topic videos. Update this list

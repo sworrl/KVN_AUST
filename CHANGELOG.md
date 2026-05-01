@@ -14,7 +14,15 @@
 
 ---
 
-## [Unreleased] - 2026-04-29
+## [Unreleased] - 2026-05-01
+
+### Naming
+- **The tool is now named "Sonder"** — for the John Koenig word ("the realization that each random passerby is living a life as vivid and complex as your own…"). KVN AUST uses the word himself in the preface of his Map: *"This feels like sonder, like the way YouTube used to be."* That callback is the entire pitch — every spin pulls up someone's whole-ass life one click away, entirely unwitnessed.
+- **Sonder = the tool. YouTube's Recycle Bin = KVN AUST's content concept.** The two names are kept distinct on purpose: KVN's series identity stays his, our tool gets its own banner. In-tool branding always pairs them ("Sonder · for KVN AUST's Recycle Bin") so the attribution is unmistakable.
+- Carefully scoped rename: `<title>`, start-screen H1, header bar, all four SEO meta surfaces (description, og, twitter, JSON-LD `name` + new `alternateName`), README h1 + opening prose, GitHub repo description. Filename `kvnaust-recyclebin.html` and repo name `KVN_AUST` deliberately UNCHANGED — renaming either would break the wrapper at falcontechnix.com, every existing bookmark, and every offline-downloaded copy.
+- New **Sonder etymology modal** opens when the player clicks the H1 ("Sonder") on the start screen or the header title — shows the full Koenig poetic passage with attribution + KVN's "feels like sonder" callback. Animated rainbow gradient on the headline word. Esc-friendly close.
+
+## [6.1.1] - 2026-04-30
 
 ### Format Map
 - **Map 4.0 sync** ([source](https://tinyurl.com/y5xx29bj)): bulk import from KVN AUST's latest map alongside the *"0-View YouTube until I get a Bingo (Hard Mode)"* video. ~50 new numbered formats (long-tail camera/trail-cam/action-cam/drone), 17 new date-based formats (game-capture, screen-recorder, webcam eras), 16 new keyphrases (Russian Photo Story duplicates, `"Moviemakeronline com"` family, NSFW playlist filters). Net total +75 unique formats (192 → 267). New multi-variable patterns documented separately. Badge counts auto-update via `update-format-count.yml`.

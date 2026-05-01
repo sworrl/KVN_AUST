@@ -1,14 +1,22 @@
 <h1 align="center">
   <br>
-  YouTube's Recycle Bin
+  Sonder
   <br>
-  <sub>Interactive Game Tool for <a href="https://www.youtube.com/@KVNAUST">KVN AUST</a></sub>
+  <sub><em>a tool for <a href="https://www.youtube.com/@KVNAUST">KVN AUST</a>'s YouTube Recycle Bin</em></sub>
   <br>
 </h1>
 
 <p align="center">
-  <a href="https://falcontechnix.com/KVN_AUST/"><img src="https://img.shields.io/badge/%F0%9F%8E%AE_PLAY_NOW-falcontechnix.com%2FKVN__AUST-e74c3c?style=for-the-badge&labelColor=1a1a2e" alt="Play YouTube's Recycle Bin Game Tool"></a>
+  <a href="https://falcontechnix.com/KVN_AUST/"><img src="https://img.shields.io/badge/%F0%9F%8E%AE_PLAY_NOW-falcontechnix.com%2FKVN__AUST-e74c3c?style=for-the-badge&labelColor=1a1a2e" alt="Play Sonder — for KVN AUST's YouTube Recycle Bin"></a>
 </p>
+
+> ***sonder***, *n.* the realization that each random passerby is living a life as vivid and complex as your own — populated with their own ambitions, friends, routines, worries and inherited craziness — an epic story that continues invisibly around you like an anthill sprawling deep underground, with elaborate passageways to thousands of other lives that you'll never know existed, in which you might appear only once, as an extra sipping coffee in the background, as a blur of traffic passing on the highway, as a lighted window at dusk.
+>
+> — John Koenig, *[The Dictionary of Obscure Sorrows](https://www.dictionaryofobscuresorrows.com/post/23536922667/sonder)*
+
+KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like sonder, like the way YouTube used to be."* That's the entire pitch for this tool. Every spin pulls up someone's nephew's recital from 2009 that nobody else has ever clicked. Their whole life, one click away, entirely unwitnessed.
+
+> **Heads up — naming.** **Sonder** is the name of *this tool*. **YouTube's Recycle Bin** is **KVN AUST's** term for the *content* (the graveyard of zero-view videos this tool helps you explore). The two names are intentionally distinct so KVN's series identity stays his and we don't claim it.
 
 <p align="center">
   <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-KVN_AUST-red?style=flat-square&logo=youtube" alt="KVN AUST YouTube Channel"></a>
@@ -31,7 +39,7 @@
 
 YouTube hosts over **20 billion videos**. An estimated **6 billion** have fewer than 10 views. **Over 1 billion** have exactly **zero views** — uploaded and never watched by a single human being. These are videos with default device filenames like `IMG 0001`, `DSCF0042`, or `MOV 0037`, uploaded and immediately forgotten.
 
-KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of forgotten content. This tool generates random search strings from those default filename patterns to help you discover zero-view YouTube videos yourself.
+KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of forgotten content. **Sonder** generates random search strings from those default filename patterns to help you discover zero-view YouTube videos yourself.
 
 > **[The Complete Recycle Bin Format Map](FORMAT-MAP.md)** — Every known default filename keyphrase, range, source device, and contributor credit. Community-maintained.
 
