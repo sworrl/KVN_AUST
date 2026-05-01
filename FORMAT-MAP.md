@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-@KVNAUST-red?style=for-the-badge&logo=youtube" alt="YouTube"></a>
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=for-the-badge&logo=x" alt="X/Twitter"></a>
-  <a href="https://falcontechnix.com/KVN_AUST/"><img src="https://img.shields.io/badge/PLAY_NOW-falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
+  <a href="https://kvnaust.falcontechnix.com/"><img src="https://img.shields.io/badge/PLAY_NOW-kvnaust.falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
 </p>
 
 <p align="center">
@@ -27,7 +27,7 @@ YouTube currently hosts over **20 billion videos**. **93%** have under 1,000 vie
 
 The only way to access these videos is to search for the **keyphrase** associated with the device or application used to record them. These are usually the default filenames given to recorded or downloaded videos.
 
-> **For contributors:** The [Recycle Bin tool](https://falcontechnix.com/KVN_AUST/) parses this file to populate its format spinner. To ensure new numbered formats are picked up, they **must** follow this exact table format:
+> **For contributors:** The [Recycle Bin tool](https://kvnaust.falcontechnix.com/) parses this file to populate its format spinner. To ensure new numbered formats are picked up, they **must** follow this exact table format:
 >
 > ```
 > | `formatXXXX` | 0000-9999 | Source | Credit |
@@ -468,5 +468,5 @@ The deepest layer of the Recycle Bin. These keyphrases surface videos from the f
 ---
 
 <p align="center">
-  <sub>Maintained by <a href="https://youtube.com/@KVNAUST">KVN AUST</a> &amp; the community | Tool by <a href="https://x.com/Chegnus">@Chegnus</a> / <a href="https://falcontechnix.com">FalconTechnix</a> | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Play</a></sub>
+  <sub>Maintained by <a href="https://youtube.com/@KVNAUST">KVN AUST</a> &amp; the community | Tool by <a href="https://x.com/Chegnus">@Chegnus</a> / <a href="https://falcontechnix.com">FalconTechnix</a> | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://kvnaust.falcontechnix.com/">Play</a></sub>
 </p>

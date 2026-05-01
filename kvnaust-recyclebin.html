@@ -1,7 +1,7 @@
 <!--
   YouTube's Recycle Bin - KVN AUST
   https://github.com/sworrl/KVN_AUST
-  https://falcontechnix.com/KVN_AUST/
+  https://kvnaust.falcontechnix.com/
 
   FORMAT SYNC: Formats fetched from GitHub FORMAT-MAP.md (works from file:// and hosted).
   For offline/file:// usage, formats are hardcoded below. To update them,
@@ -18,19 +18,19 @@
 <meta name="keywords" content="KVN AUST, YouTube Recycle Bin, zero view videos, YouTube hidden videos, recycle bin map, format map, default filename search, KVNAUST, MingKasterMK, bingo, spinner, deep dive, achievements, leaderboard, zero view finder">
 <meta name="author" content="Justin / @Chegnus / FalconTechnix">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://falcontechnix.com/KVN_AUST/">
+<link rel="canonical" href="https://kvnaust.falcontechnix.com/">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Sonder — for KVN AUST's YouTube Recycle Bin">
 <meta property="og:description" content="A tool for the videos no one ever watched. 267 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard. Free, GPL-3.0, no ads, no monetization.">
-<meta property="og:url" content="https://falcontechnix.com/KVN_AUST/">
+<meta property="og:url" content="https://kvnaust.falcontechnix.com/">
 <meta property="og:site_name" content="FalconTechnix">
-<meta property="og:image" content="https://falcontechnix.com/KVN_AUST/screenshots/05-spinner.png">
+<meta property="og:image" content="https://kvnaust.falcontechnix.com/screenshots/05-spinner.png">
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sonder — for KVN AUST's YouTube Recycle Bin">
 <meta name="twitter:description" content="A tool for the videos no one ever watched. 267 formats (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard.">
-<meta name="twitter:image" content="https://falcontechnix.com/KVN_AUST/screenshots/05-spinner.png">
+<meta name="twitter:image" content="https://kvnaust.falcontechnix.com/screenshots/05-spinner.png">
 <meta name="twitter:creator" content="@Chegnus">
 <!-- JSON-LD Structured Data -->
 <script type="application/ld+json">
@@ -40,7 +40,7 @@
   "name": "Sonder — for KVN AUST's YouTube Recycle Bin",
   "alternateName": "Sonder",
   "description": "Sonder — a tool for the videos no one ever watched. 267 format spinner (KVN Map 4.0), bingo with Lose-a-Space penalty, achievements, Deep Dive mode, community leaderboard, video gallery. Discover zero-view YouTube videos.",
-  "url": "https://falcontechnix.com/KVN_AUST/",
+  "url": "https://kvnaust.falcontechnix.com/",
   "applicationCategory": "GameApplication",
   "operatingSystem": "Any",
   "author": {
@@ -1253,7 +1253,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 const REPO_OWNER='sworrl',REPO_NAME='KVN_AUST';
 const REPO_URL=`https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 const RAW_URL=`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main`;
-const LIVE_URL='https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html';
+const LIVE_URL='https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html';
 // Version is read from embedded JSON at bottom of file
 function getEmbeddedVersion(){try{return JSON.parse(document.getElementById('app-version-data').textContent)}catch{return{version:'0.0.0',build:'unknown'}}}
 const _v=getEmbeddedVersion();
@@ -3639,7 +3639,7 @@ function showRecordTab(tab){
 }
 
 let communityFinds=[];let communityFetchedOnce=false;
-const FINDS_API='https://www.falcontechnix.com/KVN_AUST/finds.php';
+const FINDS_API='https://kvnaust.falcontechnix.com/finds.php';
 
 async function fetchCommunityRecords(){
   const list=document.getElementById('communityRecordsList');
@@ -3662,7 +3662,7 @@ async function fetchCommunityRecords(){
     // Redraw timeline with community data
     drawRecordsTimeline();updateRecordHolder();
   }catch(e){
-    if(!communityFetchedOnce)list.innerHTML=`<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Could not load community finds.<br><a href="https://falcontechnix.com/KVN_AUST/" style="color:#5b7fc7">Play on falcontechnix.com</a> for the full leaderboard.</div>`;
+    if(!communityFetchedOnce)list.innerHTML=`<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Could not load community finds.<br><a href="https://kvnaust.falcontechnix.com/" style="color:#5b7fc7">Play on falcontechnix.com</a> for the full leaderboard.</div>`;
   }
 }
 
@@ -3742,7 +3742,7 @@ function exportFindSVG(f){
   if(f.lead){svg+=`<text x="${pad}" y="${y}" font-family="Inter,sans-serif" font-size="11" fill="#f39c12">&#10038; Lead: ${escXml(f.lead)}</text>`;y+=20}
   if(f.channel){svg+=`<text x="${pad}" y="${y}" font-family="Inter,sans-serif" font-size="11" fill="#3498db">&#10038; Channel: ${escXml(f.channel)}</text>`;y+=20}
   svg+=`<text x="${pad}" y="${y+5}" font-family="Inter,sans-serif" font-size="10" fill="#888">Found by </text><text x="${pad+55}" y="${y+5}" font-family="Inter,sans-serif" font-weight="700" font-size="10" fill="#fff">${escXml(f.foundBy)}</text>`;
-  svg+=`<text x="${w/2}" y="${h-12}" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" fill="#555">YouTube&apos;s Recycle Bin &#183; @KVNAUST &#183; falcontechnix.com/KVN_AUST</text>`;
+  svg+=`<text x="${w/2}" y="${h-12}" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" fill="#555">YouTube&apos;s Recycle Bin &#183; @KVNAUST &#183; kvnaust.falcontechnix.com</text>`;
   svg+=`</svg>`;
   downloadFile('kvnaust-find-'+f.datePosted.replace(/\//g,'-')+'.svg',svg,'image/svg+xml');
   showToast('Find exported as SVG!');
@@ -3763,7 +3763,7 @@ function copyFindForDiscord(f){
     `Found by **${f.foundBy}**`,
     f.url?`🔗 ${f.url}`:'',
     '',
-    `*[YouTube's Recycle Bin](<https://falcontechnix.com/KVN_AUST/>) — @KVNAUST*`
+    `*[YouTube's Recycle Bin](<https://kvnaust.falcontechnix.com/>) — @KVNAUST*`
   ].filter(Boolean);
   navigator.clipboard.writeText(lines.join('\n')).then(()=>showToast('Copied for Discord!')).catch(()=>showToast('Copy failed','err'));
 }
@@ -4573,7 +4573,7 @@ function shareToDiscord(){
     `❤️ I Just Liked It: ${stars(m.liked)}`,
   );
   if(link)lines.push('',`🔗 ${link}`);
-  lines.push('',`*Found with [YouTube's Recycle Bin](<https://falcontechnix.com/KVN_AUST/>) — @KVNAUST*`);
+  lines.push('',`*Found with [YouTube's Recycle Bin](<https://kvnaust.falcontechnix.com/>) — @KVNAUST*`);
   const text=lines.join('\n');
   navigator.clipboard.writeText(text).then(()=>showToast('Copied for Discord! Paste in any channel.')).catch(()=>showToast('Copy failed','err'));
 }
@@ -4724,7 +4724,7 @@ window.addEventListener('hashchange',handleHash);
   "build": "2026-04-27T12:00:00",
   "changelog": "Achievements, timeline zoom/pan, video gallery, service worker, starfield bg, mobile responsive, cinematic transitions",
   "repo": "https://github.com/sworrl/KVN_AUST",
-  "live": "https://falcontechnix.com/KVN_AUST/kvnaust-recyclebin.html"
+  "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
 </script>
 </body>

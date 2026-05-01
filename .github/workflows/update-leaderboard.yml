@@ -22,7 +22,7 @@ jobs:
         run: |
           if curl -sS --fail --retry 5 --retry-delay 10 --retry-all-errors --max-time 30 \
                -H "X-KVN-Sync-Token: $KVN_SYNC_TOKEN" \
-               "https://www.falcontechnix.com/KVN_AUST/finds.php?limit=25&order=asc" \
+               "https://kvnaust.falcontechnix.com/finds.php?limit=25&order=asc" \
                -o /tmp/finds.json \
              && python3 -c "import json,sys; json.load(open('/tmp/finds.json'))"; then
             echo "ok=true" >> "$GITHUB_OUTPUT"
@@ -102,7 +102,7 @@ jobs:
                   lines.append(f'| {i+1} | {emoji} {rarity} | {link} | {views} | `{lead}` | {found_by} |')
 
           lines.append('')
-          lines.append(f'*Live leaderboard at [falcontechnix.com/KVN_AUST/#records](https://falcontechnix.com/KVN_AUST/#records) · [API endpoint](https://www.falcontechnix.com/KVN_AUST/finds.php)*')
+          lines.append(f'*Live leaderboard at [kvnaust.falcontechnix.com/#records](https://kvnaust.falcontechnix.com/#records) · [API endpoint](https://kvnaust.falcontechnix.com/finds.php)*')
 
           leaderboard = '\n'.join(lines)
 

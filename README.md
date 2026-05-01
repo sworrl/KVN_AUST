@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  <a href="https://falcontechnix.com/KVN_AUST/"><img src="https://img.shields.io/badge/%F0%9F%8E%AE_PLAY_NOW-falcontechnix.com%2FKVN__AUST-e74c3c?style=for-the-badge&labelColor=1a1a2e" alt="Play Sonder — for KVN AUST's YouTube Recycle Bin"></a>
+  <a href="https://kvnaust.falcontechnix.com/"><img src="https://img.shields.io/badge/%F0%9F%8E%AE_PLAY_NOW-kvnaust.falcontechnix.com-e74c3c?style=for-the-badge&labelColor=1a1a2e" alt="Play Sonder — for KVN AUST's YouTube Recycle Bin"></a>
 </p>
 
 > ***sonder***, *n.* the realization that each random passerby is living a life as vivid and complex as your own — populated with their own ambitions, friends, routines, worries and inherited craziness — an epic story that continues invisibly around you like an anthill sprawling deep underground, with elaborate passageways to thousands of other lives that you'll never know existed, in which you might appear only once, as an extra sipping coffee in the background, as a blur of traffic passing on the highway, as a lighted window at dusk.
@@ -175,7 +175,7 @@ The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`)
 
 **We actively encourage you to run it locally.** The whole tool is one HTML file. Drop it on a thumb drive, host it on your own server, embed it in a side project — go nuts. You don't need us, and we don't want you to feel like you do.
 
-**The only reason to play on [falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/) is if you want the community layer:** cloud save across devices, leaderboards, player profiles, multiplayer co-watching, discovery pages, daily challenges, season events. We pay for that hosting out of our own pocket because we think it's fun.
+**The only reason to play on [kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/) is if you want the community layer:** cloud save across devices, leaderboards, player profiles, multiplayer co-watching, discovery pages, daily challenges, season events. We pay for that hosting out of our own pocket because we think it's fun.
 
 **No ads. No paywalls. No tracking pixels. No "premium" tier. No "donate to unlock." No monetization. Not now, not ever.** If we ever change our minds, the offline copy in this repo will keep working forever — that's what GPL-3.0 protects. Pick whichever side suits you.
 
@@ -185,7 +185,7 @@ The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`)
 
 ### Online (Recommended)
 
-> **[Play YouTube's Recycle Bin at falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/)** — always up to date, cloud save, community leaderboard, and more.
+> **[Play YouTube's Recycle Bin at kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/)** — always up to date, cloud save, community leaderboard, and more.
 
 The hosted version (wrapper v1.12.0) wraps the same HTML from this repo with exclusive features:
 
@@ -194,19 +194,19 @@ The hosted version (wrapper v1.12.0) wraps the same HTML from this repo with exc
 | Full game (spinner, bingo, achievements, gallery, Deep Dive) | Yes | Yes |
 | Format sync, Share Card / Discord copy | Yes | Yes |
 | **Cloud Save** — game history, bingo state, settings synced across devices | Yes | No |
-| **Player Profiles** — XP, levels, 28 badges, streaks, [shareable SVG cards](https://falcontechnix.com/KVN_AUST/profile_card.php?u=root) | Yes | No |
+| **Player Profiles** — XP, levels, 28 badges, streaks, [shareable SVG cards](https://kvnaust.falcontechnix.com/profile_card.php?u=root) | Yes | No |
 | **Seasons** — 90-day competitive windows with season leaderboards | Yes | No |
 | **Multiplayer & Co-Watching** — SSE rooms + synchronized video playback on discovery pages | Yes | No |
 | **Daily Challenges** — format-of-the-day with streak tracking and leaderboard | Yes | No |
 | **Find Verification** — server validates videos exist and view count is plausible | Yes | No |
-| **Discovery Pages** — every find gets a [permanent shareable URL](https://falcontechnix.com/KVN_AUST/discoveries/) with OG card | Yes | No |
+| **Discovery Pages** — every find gets a [permanent shareable URL](https://kvnaust.falcontechnix.com/discoveries/) with OG card | Yes | No |
 | **Web Push** — notifications for record-broken, season events, verified finds | Yes | No |
 | **Pattern Recommendations** — "users who found X also found Y" co-occurrence analysis | Yes | No |
 | **Personal Webhooks** — Discord/Slack notifications on new finds and streaks | Yes | No |
-| **Atom Feeds** — [community feed](https://falcontechnix.com/KVN_AUST/feed.xml) + per-user feeds | Yes | No |
-| **JS SDK** — [`sdk.js`](https://falcontechnix.com/KVN_AUST/sdk.js) for third-party integrations | Yes | No |
+| **Atom Feeds** — [community feed](https://kvnaust.falcontechnix.com/feed.xml) + per-user feeds | Yes | No |
+| **JS SDK** — [`sdk.js`](https://kvnaust.falcontechnix.com/sdk.js) for third-party integrations | Yes | No |
 | **Embed Widget** — iframe-ready latest-finds widget for any site | Yes | No |
-| **[OpenAPI Spec](https://falcontechnix.com/KVN_AUST/openapi.json)** — full API documentation | Yes | No |
+| **[OpenAPI Spec](https://kvnaust.falcontechnix.com/openapi.json)** — full API documentation | Yes | No |
 
 ### Offline / Standalone
 
@@ -220,21 +220,21 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 
 | Endpoint | What |
 |:---------|:-----|
-| [`/finds.php`](https://falcontechnix.com/KVN_AUST/finds.php) | Leaderboard JSON — filter by `?category=`, `?source=`, `?found_by=`, `?season=current`, `?order=`, `?limit=` |
-| [`/finds.php?heatmap=1`](https://falcontechnix.com/KVN_AUST/finds.php?heatmap=1) | Category × decade heatmap matrix |
-| [`/finds.php?heatmap=date`](https://falcontechnix.com/KVN_AUST/finds.php?heatmap=date) | Year × month matrix by upload date |
+| [`/finds.php`](https://kvnaust.falcontechnix.com/finds.php) | Leaderboard JSON — filter by `?category=`, `?source=`, `?found_by=`, `?season=current`, `?order=`, `?limit=` |
+| [`/finds.php?heatmap=1`](https://kvnaust.falcontechnix.com/finds.php?heatmap=1) | Category × decade heatmap matrix |
+| [`/finds.php?heatmap=date`](https://kvnaust.falcontechnix.com/finds.php?heatmap=date) | Year × month matrix by upload date |
 | `/discoveries/<video_id>` | Permanent shareable page with OG card and co-watch |
-| [`/profile.php?u=<name>`](https://falcontechnix.com/KVN_AUST/profile.php?u=root) | Player profile: level, XP, 28 badges, rank, streaks |
-| [`/profile.php?u=A&vs=B`](https://falcontechnix.com/KVN_AUST/profile.php?u=root&vs=root) | Side-by-side player comparison |
-| [`/profile_card.php?u=<name>`](https://falcontechnix.com/KVN_AUST/profile_card.php?u=root) | 1200×630 SVG share card |
-| [`/badges.php?u=<name>`](https://falcontechnix.com/KVN_AUST/badges.php?catalog=1) | Player badges + full badge catalog |
-| [`/clusters.php?reco=<name>`](https://falcontechnix.com/KVN_AUST/clusters.php?reco=root) | Pattern recommendations: leads to try next |
-| [`/daily.php`](https://falcontechnix.com/KVN_AUST/daily.php) | Daily challenge + streak leaderboard |
-| [`/random.php`](https://falcontechnix.com/KVN_AUST/random.php) | Random discovery redirect (or `?json=1`) |
-| [`/feed.xml`](https://falcontechnix.com/KVN_AUST/feed.xml) | Community Atom feed |
+| [`/profile.php?u=<name>`](https://kvnaust.falcontechnix.com/profile.php?u=root) | Player profile: level, XP, 28 badges, rank, streaks |
+| [`/profile.php?u=A&vs=B`](https://kvnaust.falcontechnix.com/profile.php?u=root&vs=root) | Side-by-side player comparison |
+| [`/profile_card.php?u=<name>`](https://kvnaust.falcontechnix.com/profile_card.php?u=root) | 1200×630 SVG share card |
+| [`/badges.php?u=<name>`](https://kvnaust.falcontechnix.com/badges.php?catalog=1) | Player badges + full badge catalog |
+| [`/clusters.php?reco=<name>`](https://kvnaust.falcontechnix.com/clusters.php?reco=root) | Pattern recommendations: leads to try next |
+| [`/daily.php`](https://kvnaust.falcontechnix.com/daily.php) | Daily challenge + streak leaderboard |
+| [`/random.php`](https://kvnaust.falcontechnix.com/random.php) | Random discovery redirect (or `?json=1`) |
+| [`/feed.xml`](https://kvnaust.falcontechnix.com/feed.xml) | Community Atom feed |
 | `/feed.php?u=<name>` | Per-user Atom feed |
-| [`/status.php`](https://falcontechnix.com/KVN_AUST/status.php) | Live status: counts, online users, active season |
-| [`/openapi.json`](https://falcontechnix.com/KVN_AUST/openapi.json) | OpenAPI 3.0 spec |
+| [`/status.php`](https://kvnaust.falcontechnix.com/status.php) | Live status: counts, online users, active season |
+| [`/openapi.json`](https://kvnaust.falcontechnix.com/openapi.json) | OpenAPI 3.0 spec |
 
 - **Rate limit**: 3 requests per 60 seconds per IP (ETag conditional GET is free)
 - **Verified finds**: server validates videos exist and view count is ≤500 views
@@ -246,18 +246,18 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 
 | Link | Opens |
 |:-----|:------|
-| [falcontechnix.com/KVN_AUST/#records](https://falcontechnix.com/KVN_AUST/#records) | Records Timeline & Community Leaderboard |
-| [falcontechnix.com/KVN_AUST/#stats](https://falcontechnix.com/KVN_AUST/#stats) | Stats Dashboard |
-| [falcontechnix.com/KVN_AUST/#credits](https://falcontechnix.com/KVN_AUST/#credits) | Credits & Contributors |
-| [falcontechnix.com/KVN_AUST/#shortcuts](https://falcontechnix.com/KVN_AUST/#shortcuts) | Keyboard Shortcuts |
+| [kvnaust.falcontechnix.com/#records](https://kvnaust.falcontechnix.com/#records) | Records Timeline & Community Leaderboard |
+| [kvnaust.falcontechnix.com/#stats](https://kvnaust.falcontechnix.com/#stats) | Stats Dashboard |
+| [kvnaust.falcontechnix.com/#credits](https://kvnaust.falcontechnix.com/#credits) | Credits & Contributors |
+| [kvnaust.falcontechnix.com/#shortcuts](https://kvnaust.falcontechnix.com/#shortcuts) | Keyboard Shortcuts |
 
 ### Community Leaderboard
 
-> This table auto-updates every 3 hours from the [Finds API](https://www.falcontechnix.com/KVN_AUST/finds.php) via GitHub Actions. Do not edit manually — changes will be overwritten.
+> This table auto-updates every 3 hours from the [Finds API](https://kvnaust.falcontechnix.com/finds.php) via GitHub Actions. Do not edit manually — changes will be overwritten.
 >
 > The sync workflow authenticates with the host using an `X-KVN-Sync-Token` header. The token is stored as the `KVN_SYNC_TOKEN` repo secret; if it's ever rotated, update the secret in **Settings → Secrets and variables → Actions** — the next scheduled run picks it up.
 >
-> **Get on the leaderboard:** [Play the hosted version](https://falcontechnix.com/KVN_AUST/) and create an account. Submit a validated zero-view video during gameplay or directly via the [Records timeline](https://falcontechnix.com/KVN_AUST/#records) — you don't need to play a full game to submit a find. See also: [Discord Integration Guide](DISCORD_INTEGRATION.md)
+> **Get on the leaderboard:** [Play the hosted version](https://kvnaust.falcontechnix.com/) and create an account. Submit a validated zero-view video during gameplay or directly via the [Records timeline](https://kvnaust.falcontechnix.com/#records) — you don't need to play a full game to submit a find. See also: [Discord Integration Guide](DISCORD_INTEGRATION.md)
 
 <!-- LEADERBOARD-START -->
 **21 community finds** — oldest: 2005-09-05 · newest: 2025-12-10
@@ -293,7 +293,7 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 | 19 | 🔵 COMMON | [2018-06-24](https://youtube.com/watch?v=2Sp8_zmPy-U) | 1370 | `IMG XXXX` | fivezies |
 | 20 | 🔵 COMMON | [2025-12-10](https://youtube.com/watch?v=aT7FJT7I7Jw) | 201 | `Sprint PictureMail` | Ross from wii music |
 
-*Live leaderboard at [falcontechnix.com/KVN_AUST/#records](https://falcontechnix.com/KVN_AUST/#records) · [API endpoint](https://www.falcontechnix.com/KVN_AUST/finds.php)*
+*Live leaderboard at [kvnaust.falcontechnix.com/#records](https://kvnaust.falcontechnix.com/#records) · [API endpoint](https://kvnaust.falcontechnix.com/finds.php)*
 <!-- LEADERBOARD-END -->
 
 ---
@@ -337,5 +337,5 @@ The community-maintained database of every known default filename keyphrase that
 ---
 
 <p align="center">
-  <sub>GPL-3.0 | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Play Now</a> | <a href="FORMAT-MAP.md">Format Map</a> | <a href="SOLVED_MYSTERIES.md">Solved Mysteries</a> | <a href="DISCORD_INTEGRATION.md">Discord</a> | <a href="CHANGELOG.md">Game Changelog</a> | <a href="WRAPPER_CHANGELOG.md">Wrapper Changelog</a></sub>
+  <sub>GPL-3.0 | <a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://kvnaust.falcontechnix.com/">Play Now</a> | <a href="FORMAT-MAP.md">Format Map</a> | <a href="SOLVED_MYSTERIES.md">Solved Mysteries</a> | <a href="DISCORD_INTEGRATION.md">Discord</a> | <a href="CHANGELOG.md">Game Changelog</a> | <a href="WRAPPER_CHANGELOG.md">Wrapper Changelog</a></sub>
 </p>

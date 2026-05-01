@@ -8,22 +8,22 @@
 
 <p align="center">
   <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-KVN_AUST-red?style=flat-square&logo=youtube" alt="YouTube"></a>
-  <a href="https://falcontechnix.com/KVN_AUST/#records"><img src="https://img.shields.io/badge/LEADERBOARD-Live_Records-ffd700?style=flat-square" alt="Leaderboard"></a>
-  <a href="https://falcontechnix.com/KVN_AUST/"><img src="https://img.shields.io/badge/PLAY_NOW-falcontechnix.com-e74c3c?style=flat-square" alt="Play"></a>
+  <a href="https://kvnaust.falcontechnix.com/#records"><img src="https://img.shields.io/badge/LEADERBOARD-Live_Records-ffd700?style=flat-square" alt="Leaderboard"></a>
+  <a href="https://kvnaust.falcontechnix.com/"><img src="https://img.shields.io/badge/PLAY_NOW-kvnaust.falcontechnix.com-e74c3c?style=flat-square" alt="Play"></a>
 </p>
 
 ---
 
-Everything a Discord bot or server owner needs to pull the live zero-view finds leaderboard from the [Finds API](https://www.falcontechnix.com/KVN_AUST/finds.php) and post it into their channel.
+Everything a Discord bot or server owner needs to pull the live zero-view finds leaderboard from the [Finds API](https://kvnaust.falcontechnix.com/finds.php) and post it into their channel.
 
-**Read-only.** The public API only supports GET. All writes go through the [hosted game tool](https://falcontechnix.com/KVN_AUST/) or the admin ingest pipeline. Discord bots can pull, display, track, and react to new finds — but cannot alter or delete them.
+**Read-only.** The public API only supports GET. All writes go through the [hosted game tool](https://kvnaust.falcontechnix.com/) or the admin ingest pipeline. Discord bots can pull, display, track, and react to new finds — but cannot alter or delete them.
 
 ---
 
 ## API at a Glance
 
 ```
-GET https://www.falcontechnix.com/KVN_AUST/finds.php
+GET https://kvnaust.falcontechnix.com/finds.php
 ```
 
 - Public, no auth required
@@ -132,7 +132,7 @@ const https = require('https');
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const LEADERBOARD_CHANNEL_ID = process.env.LEADERBOARD_CHANNEL_ID;
-const FINDS_API = 'https://www.falcontechnix.com/KVN_AUST/finds.php';
+const FINDS_API = 'https://kvnaust.falcontechnix.com/finds.php';
 const POLL_INTERVAL_MS = 90_000; // 90s — safe under 3/60s limit
 
 let lastSeenIngest = null;
@@ -227,7 +227,7 @@ DISCORD_TOKEN=xxx LEADERBOARD_CHANNEL_ID=xxx node bot.js
 ```python
 import os, asyncio, aiohttp, discord
 
-FINDS_API = 'https://www.falcontechnix.com/KVN_AUST/finds.php'
+FINDS_API = 'https://kvnaust.falcontechnix.com/finds.php'
 TOKEN = os.environ['DISCORD_TOKEN']
 CHANNEL_ID = int(os.environ['LEADERBOARD_CHANNEL_ID'])
 
@@ -292,7 +292,7 @@ Post the current top 5 to a channel via an incoming webhook — no bot needed, j
 ```bash
 #!/usr/bin/env bash
 WEBHOOK="https://discord.com/api/webhooks/XXXXX/YYYYY"
-curl -s "https://www.falcontechnix.com/KVN_AUST/finds.php?order=asc&limit=5" \
+curl -s "https://kvnaust.falcontechnix.com/finds.php?order=asc&limit=5" \
   | jq -c '{
       content: ("**KVN AUST Oldest Finds** (" + (.total|tostring) + " total)"),
       embeds: [.finds[] | {
@@ -348,5 +348,5 @@ Credit finders in your embeds:
 ---
 
 <p align="center">
-  <sub><a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Play Now</a> | <a href="https://falcontechnix.com/KVN_AUST/#records">Live Leaderboard</a> | <a href="FORMAT-MAP.md">Format Map</a></sub>
+  <sub><a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://kvnaust.falcontechnix.com/">Play Now</a> | <a href="https://kvnaust.falcontechnix.com/#records">Live Leaderboard</a> | <a href="FORMAT-MAP.md">Format Map</a></sub>
 </p>

@@ -9,12 +9,12 @@
 <p align="center">
   <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-KVN_AUST-red?style=for-the-badge&logo=youtube" alt="YouTube"></a>
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=for-the-badge&logo=x" alt="X/Twitter"></a>
-  <a href="https://falcontechnix.com/KVN_AUST/"><img src="https://img.shields.io/badge/PLAY_NOW-falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
+  <a href="https://kvnaust.falcontechnix.com/"><img src="https://img.shields.io/badge/PLAY_NOW-kvnaust.falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
 </p>
 
 ---
 
-The hosted version at [falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN_AUST/) wraps the open-source game HTML from this repo with additional server-side features. This changelog tracks what the wrapper adds on top of the standalone game.
+The hosted version at [kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/) wraps the open-source game HTML from this repo with additional server-side features. This changelog tracks what the wrapper adds on top of the standalone game.
 
 > The wrapper source is not open-source. This changelog documents the **public-facing features and API surface** only.
 
@@ -98,5 +98,5 @@ The hosted version at [falcontechnix.com/KVN_AUST](https://falcontechnix.com/KVN
 ---
 
 <p align="center">
-  <sub><a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://falcontechnix.com/KVN_AUST/">Play Now</a> | <a href="FORMAT-MAP.md">Format Map</a> | <a href="CHANGELOG.md">Game Changelog</a></sub>
+  <sub><a href="https://github.com/sworrl/KVN_AUST">GitHub</a> | <a href="https://kvnaust.falcontechnix.com/">Play Now</a> | <a href="FORMAT-MAP.md">Format Map</a> | <a href="CHANGELOG.md">Game Changelog</a></sub>
 </p>

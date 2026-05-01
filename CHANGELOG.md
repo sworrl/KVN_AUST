@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-KVN_AUST-red?style=for-the-badge&logo=youtube" alt="YouTube"></a>
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=for-the-badge&logo=x" alt="X/Twitter"></a>
-  <a href="https://falcontechnix.com/KVN_AUST/"><img src="https://img.shields.io/badge/PLAY_NOW-falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
+  <a href="https://kvnaust.falcontechnix.com/"><img src="https://img.shields.io/badge/PLAY_NOW-kvnaust.falcontechnix.com-e74c3c?style=for-the-badge" alt="Play Now"></a>
 </p>
 
 ---
@@ -19,8 +19,11 @@
 ### Naming
 - **The tool is now named "Sonder"** — for the John Koenig word ("the realization that each random passerby is living a life as vivid and complex as your own…"). KVN AUST uses the word himself in the preface of his Map: *"This feels like sonder, like the way YouTube used to be."* That callback is the entire pitch — every spin pulls up someone's whole-ass life one click away, entirely unwitnessed.
 - **Sonder = the tool. YouTube's Recycle Bin = KVN AUST's content concept.** The two names are kept distinct on purpose: KVN's series identity stays his, our tool gets its own banner. In-tool branding always pairs them ("Sonder · for KVN AUST's Recycle Bin") so the attribution is unmistakable.
-- Carefully scoped rename: `<title>`, start-screen H1, header bar, all four SEO meta surfaces (description, og, twitter, JSON-LD `name` + new `alternateName`), README h1 + opening prose, GitHub repo description. Filename `kvnaust-recyclebin.html` and repo name `KVN_AUST` deliberately UNCHANGED — renaming either would break the wrapper at falcontechnix.com, every existing bookmark, and every offline-downloaded copy.
+- Carefully scoped rename: `<title>`, start-screen H1, header bar, all four SEO meta surfaces (description, og, twitter, JSON-LD `name` + new `alternateName`), README h1 + opening prose, GitHub repo description. Filename `kvnaust-recyclebin.html` and repo name `KVN_AUST` deliberately UNCHANGED — renaming either would break the hosted wrapper, every existing bookmark, and every offline-downloaded copy.
 - New **Sonder etymology modal** opens when the player clicks the H1 ("Sonder") on the start screen or the header title — shows the full Koenig poetic passage with attribution + KVN's "feels like sonder" callback. Animated rainbow gradient on the headline word. Esc-friendly close.
+
+### Domain
+- **Hosted at `https://kvnaust.falcontechnix.com`** (canonical). The previous URL `https://falcontechnix.com/KVN_AUST/` still works and redirects to the new subdomain. All in-tool links, SEO meta (`canonical`, `og:url`, `twitter:image`, JSON-LD `url`), API constants (`FINDS_API`, `LIVE_URL`), share-card watermarks, Discord copy strings, READMEs, FORMAT-MAP, SOLVED_MYSTERIES, WRAPPER_CHANGELOG, DISCORD_INTEGRATION, and the leaderboard-sync workflow all point at the new subdomain.
 
 ## [6.1.1] - 2026-04-30
 
@@ -490,4 +493,4 @@
 
 ---
 
-<sub>[KVN AUST](https://youtube.com/@KVNAUST) | [Play Now](https://falcontechnix.com/KVN_AUST/) | [GitHub](https://github.com/sworrl/KVN_AUST)</sub>
+<sub>[KVN AUST](https://youtube.com/@KVNAUST) | [Play Now](https://kvnaust.falcontechnix.com/) | [GitHub](https://github.com/sworrl/KVN_AUST)</sub>
