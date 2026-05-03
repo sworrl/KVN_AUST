@@ -14,6 +14,12 @@
 
 ---
 
+## [7.0.6] — 2026-05-03 — Bingo icon, take three
+
+The v7.0.5 bingo SVG used quadratic-curve `Q` paths to draw the letter "B"; in some browsers / size combos the path collapsed and the button fell back to rendering the `aria-label` text ("Setup Bingo"). Replaced with a path-free design: outer ball, inner letter window, centre dot, and four small dimples at NW/NE/SW/SE — pure circles only, no `<path>`, no per-element stroke override. Reads as a bingo ball at every size.
+
+---
+
 ## [7.0.5] — 2026-05-03 — Bingo icon + repo hygiene pass
 
 - **Bingo button finally reads as bingo.** Replaced the 3×3 mini-card SVG (which most testers still read as a generic grid) with a classic **bingo ball** — outer circle, inner letter window, and a stroked **B** in the centre. Universally recognised lottery/bingo iconography at any size.
