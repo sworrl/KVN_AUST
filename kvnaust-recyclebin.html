@@ -213,7 +213,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 .header-title{font-weight:900;font-size:1.15rem;letter-spacing:1px;color:#fff;
   text-shadow:0 0 10px rgba(231,76,60,.6),0 0 20px rgba(231,76,60,.3),0 2px 10px #000,0 0 40px rgba(231,76,60,.15)}
 .header-subtitle{font-size:.7rem;color:#aaa;text-shadow:0 1px 6px #000}
-.header-right{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.header-right{margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:280px;flex-shrink:0}
+@media (max-width:760px){.header-right{max-width:200px}}
 .hdr-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;padding:5px 12px;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;
   box-shadow:0 1px 3px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.04);backdrop-filter:blur(4px)}
 .hdr-btn:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.2);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}.hdr-btn:active{transform:scale(.94)}.hdr-btn.active{background:var(--accent);border-color:var(--accent);box-shadow:0 2px 12px rgba(231,76,60,.3)}
@@ -221,9 +222,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
  * action row so the buttons align as one consistent strip instead of a
  * row of mixed text widths. Tooltips (title=) carry the label.
  */
-.hdr-btn-icon{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;width:32px;height:32px;padding:0;border-radius:6px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;
+.hdr-btn-icon{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;width:30px;height:30px;padding:0;border-radius:6px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;
   box-shadow:0 1px 3px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.04);backdrop-filter:blur(4px)}
-.hdr-btn-icon svg{width:16px;height:16px;display:block;stroke:currentColor}
+.hdr-btn-icon svg{width:15px;height:15px;display:block;stroke:currentColor;fill:none}
 .hdr-btn-icon:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.2);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
 .hdr-btn-icon:active{transform:scale(.92)}
 .hdr-btn-icon.active{background:var(--accent);border-color:var(--accent);box-shadow:0 2px 12px rgba(231,76,60,.3)}
@@ -833,7 +834,8 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <span class="hdr-count-pill" id="historyCountPill"></span>
     </button>
     <button class="hdr-btn-icon" id="bingoToggle" onclick="handleBingoBtn()" title="Setup Bingo Card" aria-label="Setup Bingo Card">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+      <!-- 3×3 mini bingo card with the centre cell daubed (filled circle) — reads as "card with marked space" at any size -->
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/></svg>
     </button>
     <button class="hdr-btn-icon" onclick="showRecords()" title="Zero-View Records Leaderboard" aria-label="Records" style="color:#e74c3c">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
@@ -4758,7 +4760,7 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.0.1",
+  "version": "7.0.2",
   "build": "2026-05-03T14:28:12",
   "changelog": "\ud83e\uddab The single biggest backend change in the project's history.",
   "repo": "https://github.com/sworrl/KVN_AUST",

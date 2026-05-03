@@ -14,6 +14,12 @@
 
 ---
 
+## [7.0.2] — 2026-05-03 — Header polish
+
+- **Icon row stacks instead of pushing the title.** `.header-right` now caps at `max-width:280px` (200px on mobile) — when the 9 icons + sound picker exceed that, they wrap to a second row underneath instead of squeezing the **Sonder** title off-screen.
+- **Bingo button gets a real bingo icon.** Was a generic 5×5 grid that read as "spreadsheet". Now a 3×3 card outline with the centre cell visibly daubed (filled circle stroke-removed) — reads as *"a bingo card, with one marked space"* at any size, matching what the panel actually does.
+- **Slightly slimmer icons.** 32×32 → 30×30 with 5px gap (was 6px). Saves ~12% horizontal space, fits more on the first row before wrapping.
+
 ## [7.0.1] — 2026-05-03 — **Stabilization pass after the Go rewrite**
 
 Catches every loose end the Go cutover surfaced in the first 24 hours of production traffic.
