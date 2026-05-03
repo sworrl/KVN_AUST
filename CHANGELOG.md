@@ -14,6 +14,14 @@
 
 ---
 
+## [7.0.5] — 2026-05-03 — Bingo icon + repo hygiene pass
+
+- **Bingo button finally reads as bingo.** Replaced the 3×3 mini-card SVG (which most testers still read as a generic grid) with a classic **bingo ball** — outer circle, inner letter window, and a stroked **B** in the centre. Universally recognised lottery/bingo iconography at any size.
+- **CHANGELOG scrubbed.** Removed server-internal references that had crept into earlier 7.0.x entries (filesystem paths, the explicit table list, systemd hardening directive names, the install path of the binary). Entries now describe the symptoms and resolutions in product terms, which is what readers of a public changelog actually need. The proprietary wrapper layer should not be discoverable from this repo's text artefacts.
+- **Wrapper modal — license line gets a colour-cycle pulse.** The "© Justin / Falcon Technix — All Rights Reserved" line in the wrapper-changelog modal now flows through a soft rainbow gradient with a slow brightness breath. Honours `prefers-reduced-motion`. *(Wrapper-only visual change; no GPL HTML touched beyond the version bump.)*
+
+---
+
 ## [7.0.4] — 2026-05-03 — Changelog modal: actually serve the markdown
 
 The v7.0.3 fix made the parser robust enough to handle the file — but the file was never reaching the parser. Caddy's `handle_path /KVN_AUST/CHANGELOG.md` directive strips the **entire matched prefix** (not just the leading `/KVN_AUST` portion as I'd assumed), which left an empty path. `file_server` then served the directory index — the **938-byte placeholder** `index.html` — with `Content-Type: text/markdown` because the header was already set. Result: the in-app modal received the placeholder HTML, treated it as markdown, the parser found 0 entries (no `## [version]` lines in HTML), and fell through to the `<pre>` raw dump.
@@ -44,7 +52,7 @@ Catches every loose end the Go cutover surfaced in the first 24 hours of product
 
 ### 🆘 Recovered
 
-- **Records leaderboard reseeded.** The cutover left `public_finds` empty (cron `backup_db.sh` was pointing at the wiped pre-rewrite path so no on-disk backup existed). All 21 finds from the most recent README leaderboard snapshot in git history (`b7acb25`) re-INSERT'd with `INSERT OR IGNORE` so re-running is idempotent. Recovered fields: `video_id`, `video_url`, `date_posted`, `views_when_found`, `lead`, `found_by`, `rarity`. Lost fields backfill on next `cron_scrape_channel` run. Marked `source='github_reseed'` so they're distinguishable from organic submissions.
+- **Records leaderboard reseeded.** The cutover left the public-finds list empty because the on-disk backup script had been pointing at a stale path. All 21 finds from the most recent README leaderboard snapshot in git history (`b7acb25`) were idempotently re-imported. Missing per-find fields will backfill on the next scheduled channel scrape. Reseeded entries are tagged so they remain distinguishable from organic submissions.
 
 ### 🐛 Bug fixes
 
@@ -57,7 +65,7 @@ Catches every loose end the Go cutover surfaced in the first 24 hours of product
 
 ### 🛡️ Operational
 
-- **Backup cron path corrected.** Was pointing at `/var/www/html/falcontechnix/KVN_AUST/backup_db.sh` (wiped during Go cutover); now points at `/home/reaver/vite_projects/falcontechnix/KVN_AUST/backup_db.sh`. Created the missing `/var/data/kvn_aust/backups/` directory so the next 4 AM run produces the first real on-disk SQLite snapshot.
+- **Backup cron path corrected.** Was pointing at a legacy location wiped during the Go cutover; now points at the current backup script location. Created the missing backups directory so the next scheduled run produces the first real on-disk SQLite snapshot.
 - **`WRAPPER_VERSION` bumped to 7.0.0** to match the Go binary's release line. Was stale at `1.12.0` from the pre-rewrite era.
 
 ### 🤖 Auto-bump on release tag
@@ -73,7 +81,7 @@ Catches every loose end the Go cutover surfaced in the first 24 hours of product
 
 ## [7.0.0] — 2026-05-03 — **The Go Rewrite**
 
-> **The single biggest backend change in the project's history.** The hosted community wrapper at `kvnaust.falcontechnix.com` is now a single statically-linked Go binary (`falcontechnix-backend`, ~23 MB) replacing **28 PHP files** that previously powered every dynamic endpoint behind the GPL game tool. Same product, same URLs, same data — completely different engine underneath.
+> **The single biggest backend change in the project's history.** The hosted community wrapper at `kvnaust.falcontechnix.com` is now a single statically-linked Go binary (~23 MB) replacing the previous PHP layer that powered every dynamic endpoint behind the GPL game tool. Same product, same URLs, same data — completely different engine underneath.
 
 ### 🦫 Why we did this
 
@@ -87,12 +95,12 @@ The PHP wrapper served us well from v3 → v6 — fast to iterate, easy to deplo
 
 ### ⚡ What Go gave us
 
-- **Single static binary.** `/usr/local/bin/falcontechnix-backend`, 23 MB, no runtime dependencies, no interpreter, no opcache, no autoloader. Deploys are `systemctl restart falcontechnix-backend`. Rolls back in <2 seconds.
+- **Single static binary.** ~23 MB, no runtime dependencies, no interpreter, no opcache, no autoloader. Deploys are a single service restart. Rolls back in <2 seconds.
 - **Steady-state latency dropped ~10×.** Median p50 for `finds.php` (now an in-binary handler) went from **18ms → 1.6ms**. Cache-warm SQLite queries serve in <1ms because the connection lives for the binary's lifetime instead of being reopened per request.
 - **True concurrency.** Goroutines + `context.Context` cancellation. SSE endpoints now hold one goroutine (a few KB of stack) instead of one PHP-FPM worker (12-32 MB resident). The same hardware handles ~30× more concurrent SSE clients.
 - **Compile-time guarantees.** `go vet`, `staticcheck`, and `go build` catch nil derefs, unused variables, wrong types, dead code, and mismatched interfaces *before* the binary even gets uploaded. We removed an entire class of "production-only" bugs.
 - **Pure-Go SQLite (`modernc.org/sqlite`).** No CGO. The binary compiles with `CGO_ENABLED=0` and runs on any Linux x86_64 with no shared libraries. SQLite WAL mode, prepared statements, and schema migrations all live in code we own.
-- **Systemd hardening at the binary level.** Strict-mode sandbox: `ProtectSystem=strict`, `ProtectHome=yes`, `NoNewPrivileges=yes`, `RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6`, `RestrictNamespaces=yes`, `LockPersonality=yes`, `SystemCallFilter=@system-service`, `SystemCallFilter=~@privileged @resources`, `PrivateTmp=yes`. The blast radius of a hypothetical RCE is now a tiny non-root user with no `/home`, no `/tmp` sharing, a frozen syscall set, and explicit `ReadWritePaths` to two directories.
+- **Strict OS-level sandbox at the binary level.** The service runs unprivileged with a tightly restricted syscall set, no home access, isolated temp space, locked-down namespaces and address families, and a small explicit allowlist of writable directories. The blast radius of a hypothetical RCE is dramatically smaller than the previous PHP-FPM surface.
 - **One language for everything.** Auth, rate-limit, sqlite, SSE, hCaptcha verification, WebAuthn, ratelimit, video-frame extraction, the Invidious/oEmbed/scrape waterfall — all in `internal/*` Go packages we own. No `composer require`, no transitive dep tree.
 - **Observable by default.** Structured `slog.JSON` logging on every request (`{method, path, status, ip, dur_ms}`) flows straight into journald with zero config. No more grep-fu through interleaved Apache + PHP error logs.
 - **Safer migrations.** The Go version reads the same SQLite file the PHP version wrote. We did the cutover live with no schema migration, no data loss, no downtime — both versions could run side-by-side reading the same DB during testing.
@@ -100,12 +108,12 @@ The PHP wrapper served us well from v3 → v6 — fast to iterate, easy to deplo
 ### 📦 What stayed the same (deliberately)
 
 - **Every URL, every endpoint name, every response shape.** `*.php` paths still resolve (Caddy proxies them to Go's dispatcher which matches on path verbatim). Existing bookmarks, Discord embeds, `gh release` cards, and third-party scripts all keep working with zero changes.
-- **The same SQLite database** at `/var/data/kvn_aust/kvn_saves.sqlite`. Same 14 tables (`users`, `saves`, `public_finds`, `daily_completions`, `daily_streaks`, `seasons`, `mp_events`, `mp_presence`, `auth_nonces`, `login_history`, `blocked_ips`, `security_events`, `push_subscriptions`, `sqlite_sequence`).
+- **The same SQLite database file**, untouched by the rewrite — same schema, same rows, same indexes. The Go binary opens it read-write the same way the PHP layer did; no migration step was needed for the cutover.
 - **The GPL game tool** (this repo's `kvnaust-recyclebin.html`) is *unchanged* by the rewrite. The wrapper just serves it differently.
 
 ### 🔒 Wrapper licensing reminder
 
-The Go backend (`falcontechnix-backend`) is **proprietary**, owned by FalconTechnix. The GPL game tool in this repo and the FORMAT-MAP are unchanged GPL-3.0. The split is the same as it has always been:
+The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTechnix. The GPL game tool in this repo and the FORMAT-MAP are unchanged GPL-3.0. The split is the same as it has always been:
 - 🌐 **Public repo** = the game tool you can download and run anywhere.
 - 🔒 **Private wrapper** = the community layer you can opt into by playing on `kvnaust.falcontechnix.com`.
 
