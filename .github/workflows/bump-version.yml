@@ -22,32 +22,47 @@ jobs:
 
       - name: Parse tag and bump embedded version
         id: bump
+        # Pass the release body via env (NOT inline ${{ ... }} substitution)
+        # so backticks / quotes / shell metacharacters in the markdown body
+        # can't break out of the script. This is the GHA-recommended safe
+        # pattern for untrusted user-supplied input.
+        env:
+          RELEASE_TAG:  ${{ github.event.release.tag_name }}
+          RELEASE_BODY: ${{ github.event.release.body }}
         run: |
           # Strip leading 'v' (e.g. v7.0.1 → 7.0.1) and reject anything
           # that doesn't look like a SemVer triple. Refuse pre-release tags
           # like v7.0.1-rc1 — those shouldn't bump the production app
           # version that the wrapper compares against.
-          TAG="${{ github.event.release.tag_name }}"
-          VER="${TAG#v}"
+          VER="${RELEASE_TAG#v}"
           if ! [[ "$VER" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Tag '$TAG' doesn't look like a release SemVer triple — skipping bump."
+            echo "Tag '$RELEASE_TAG' doesn't look like a release SemVer triple — skipping bump."
             echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
           BUILD="$(date -u '+%Y-%m-%dT%H:%M:%S')"
-          NOTES_RAW='${{ github.event.release.body }}'
-          # Take the first non-empty line of the release notes as a one-line
-          # changelog summary, stripped of markdown noise. Capped at 280 chars.
-          SUMMARY=$(printf '%s\n' "$NOTES_RAW" \
-            | sed -E 's/^#+\s*//; s/\*\*//g; s/\[([^]]+)\]\([^)]+\)/\1/g; s/`//g' \
-            | awk 'NF { print; exit }' \
-            | cut -c1-280)
-          if [ -z "$SUMMARY" ]; then SUMMARY="Release $VER"; fi
 
-          python3 - "$VER" "$BUILD" "$SUMMARY" <<'PYEOF'
-          import json, re, sys
-          ver, build, summary = sys.argv[1], sys.argv[2], sys.argv[3]
+          # All parsing happens in Python so we never feed the release body
+          # back through a shell. Python reads body from $RELEASE_BODY env.
+          python3 - "$VER" "$BUILD" <<'PYEOF'
+          import json, os, re, sys
+          ver, build = sys.argv[1], sys.argv[2]
+          notes = os.environ.get('RELEASE_BODY', '') or ''
+          # Pull the first non-empty line of the release body as a one-line
+          # changelog summary, stripped of markdown noise. Cap at 280 chars.
+          summary = ''
+          for line in notes.splitlines():
+              cleaned = re.sub(r'^#+\s*', '', line)
+              cleaned = re.sub(r'\*\*', '', cleaned)
+              cleaned = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', cleaned)
+              cleaned = cleaned.replace('`', '').strip()
+              if cleaned:
+                  summary = cleaned[:280]
+                  break
+          if not summary:
+              summary = f'Release {ver}'
+
           path = 'kvnaust-recyclebin.html'
           with open(path) as f: html = f.read()
           m = re.search(
