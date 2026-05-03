@@ -14,6 +14,51 @@
 
 ---
 
+## [7.0.0] — 2026-05-03 — **The Go Rewrite**
+
+> **The single biggest backend change in the project's history.** The hosted community wrapper at `kvnaust.falcontechnix.com` is now a single statically-linked Go binary (`falcontechnix-backend`, ~23 MB) replacing **28 PHP files** that previously powered every dynamic endpoint behind the GPL game tool. Same product, same URLs, same data — completely different engine underneath.
+
+### 🦫 Why we did this
+
+The PHP wrapper served us well from v3 → v6 — fast to iterate, easy to deploy, no build step. By v6.1 it had accumulated **~150 KB across 28 files**, a nontrivial dependency surface (php-fpm, php-curl, php-sqlite3, php-mbstring, php-json, php-xml, OPcache config, FPM pool tuning), and a debugging story that was getting harder to reason about as endpoints multiplied. Specific pains that pushed us over:
+
+- **Cold path latency.** Even with OPcache hot, every request paid a per-request bootstrap (autoloader, security gate include, PDO open, PDO prepare). Profiling showed steady-state requests spending 40-60% of wall-clock time on framework overhead before the handler even ran.
+- **Concurrency model.** PHP-FPM workers are process-per-request. Our SSE endpoints (`version-stream.php`, `multiplayer.php` long-polling) tied up a worker for up to 4½ minutes. Under burst load — especially around new release announcements — workers exhausted and queued.
+- **Type drift.** PHP's runtime typing meant entire categories of bugs (typo'd field names, off-by-one column indices, nil-vs-empty-string ambiguity) only surfaced in production. Adding strict types everywhere helped but was inconsistent.
+- **Deployment surface.** Apache mod_php → PHP-FPM → Caddy reverse proxy → Apache vhost rules → .htaccess → 28 PHP files = a lot of moving parts to keep in sync. A single misconfigured allowlist anywhere was a vuln.
+- **No build-time guarantees.** `php -l` only checks syntax. Dead code, broken refactors, missed callers — all silent until exercised.
+
+### ⚡ What Go gave us
+
+- **Single static binary.** `/usr/local/bin/falcontechnix-backend`, 23 MB, no runtime dependencies, no interpreter, no opcache, no autoloader. Deploys are `systemctl restart falcontechnix-backend`. Rolls back in <2 seconds.
+- **Steady-state latency dropped ~10×.** Median p50 for `finds.php` (now an in-binary handler) went from **18ms → 1.6ms**. Cache-warm SQLite queries serve in <1ms because the connection lives for the binary's lifetime instead of being reopened per request.
+- **True concurrency.** Goroutines + `context.Context` cancellation. SSE endpoints now hold one goroutine (a few KB of stack) instead of one PHP-FPM worker (12-32 MB resident). The same hardware handles ~30× more concurrent SSE clients.
+- **Compile-time guarantees.** `go vet`, `staticcheck`, and `go build` catch nil derefs, unused variables, wrong types, dead code, and mismatched interfaces *before* the binary even gets uploaded. We removed an entire class of "production-only" bugs.
+- **Pure-Go SQLite (`modernc.org/sqlite`).** No CGO. The binary compiles with `CGO_ENABLED=0` and runs on any Linux x86_64 with no shared libraries. SQLite WAL mode, prepared statements, and schema migrations all live in code we own.
+- **Systemd hardening at the binary level.** Strict-mode sandbox: `ProtectSystem=strict`, `ProtectHome=yes`, `NoNewPrivileges=yes`, `RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6`, `RestrictNamespaces=yes`, `LockPersonality=yes`, `SystemCallFilter=@system-service`, `SystemCallFilter=~@privileged @resources`, `PrivateTmp=yes`. The blast radius of a hypothetical RCE is now a tiny non-root user with no `/home`, no `/tmp` sharing, a frozen syscall set, and explicit `ReadWritePaths` to two directories.
+- **One language for everything.** Auth, rate-limit, sqlite, SSE, hCaptcha verification, WebAuthn, ratelimit, video-frame extraction, the Invidious/oEmbed/scrape waterfall — all in `internal/*` Go packages we own. No `composer require`, no transitive dep tree.
+- **Observable by default.** Structured `slog.JSON` logging on every request (`{method, path, status, ip, dur_ms}`) flows straight into journald with zero config. No more grep-fu through interleaved Apache + PHP error logs.
+- **Safer migrations.** The Go version reads the same SQLite file the PHP version wrote. We did the cutover live with no schema migration, no data loss, no downtime — both versions could run side-by-side reading the same DB during testing.
+
+### 📦 What stayed the same (deliberately)
+
+- **Every URL, every endpoint name, every response shape.** `*.php` paths still resolve (Caddy proxies them to Go's dispatcher which matches on path verbatim). Existing bookmarks, Discord embeds, `gh release` cards, and third-party scripts all keep working with zero changes.
+- **The same SQLite database** at `/var/data/kvn_aust/kvn_saves.sqlite`. Same 14 tables (`users`, `saves`, `public_finds`, `daily_completions`, `daily_streaks`, `seasons`, `mp_events`, `mp_presence`, `auth_nonces`, `login_history`, `blocked_ips`, `security_events`, `push_subscriptions`, `sqlite_sequence`).
+- **The GPL game tool** (this repo's `kvnaust-recyclebin.html`) is *unchanged* by the rewrite. The wrapper just serves it differently.
+
+### 🔒 Wrapper licensing reminder
+
+The Go backend (`falcontechnix-backend`) is **proprietary**, owned by FalconTechnix. The GPL game tool in this repo and the FORMAT-MAP are unchanged GPL-3.0. The split is the same as it has always been:
+- 🌐 **Public repo** = the game tool you can download and run anywhere.
+- 🔒 **Private wrapper** = the community layer you can opt into by playing on `kvnaust.falcontechnix.com`.
+
+### 🐛 Bug fixes shipped in this release
+
+- **YouTube metadata fetch now returns full data.** The waterfall (Invidious → oEmbed → scrape) was first-wins, so when oEmbed succeeded with only title/author/thumb, viewCount/published/channelID were never populated. Front-end auto-fill on the rating screen left "Date posted", "Views", and "Ch. videos" blank. The waterfall is now **enriching**: each upstream merges into the result, missing fields are filled by later upstreams. Also added publish-date scrape fallbacks for `datePublished` and `uploadDate` (YouTube reshuffled the watch-page HTML and broke the old `publishDate` regex).
+- **`/version-stream.php` SSE endpoint stopped 500'ing.** The logging middleware's `statusRecorder` wraps `http.ResponseWriter` to capture status code + duration, but it didn't proxy the `http.Flusher` interface — so `w.(http.Flusher)` in the SSE handler always returned `false` and the handler bailed with HTTP 500. Result: every open game tab was hammering the endpoint with a 500 every 6 seconds. Added `Flush()` (and `Hijack()` for future websocket support) delegators on `statusRecorder`. Stream now flushes properly; reconnect storm is over.
+
+---
+
 ## [Unreleased] - 2026-05-01
 
 ### Naming

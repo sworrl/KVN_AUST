@@ -23,7 +23,8 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-58ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v6.0.0-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.0.0-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md#700--2026-05-03--the-go-rewrite"><img src="https://img.shields.io/badge/Backend-Go_(rewritten_from_PHP)-00ADD8?style=flat-square&logo=go" alt="Go backend"></a>
 </p>
 
 <p align="center">
@@ -207,6 +208,7 @@ The hosted version (wrapper v1.12.0) wraps the same HTML from this repo with exc
 | **JS SDK** — [`sdk.js`](https://kvnaust.falcontechnix.com/sdk.js) for third-party integrations | Yes | No |
 | **Embed Widget** — iframe-ready latest-finds widget for any site | Yes | No |
 | **[OpenAPI Spec](https://kvnaust.falcontechnix.com/openapi.json)** — full API documentation | Yes | No |
+| **[🦫 Go backend](CHANGELOG.md#700--2026-05-03--the-go-rewrite)** (v7.0.0) — single static binary replaces 28 PHP files. p50 latency ~10× lower, hardened systemd sandbox, structured JSON logs. Same URLs, same DB, same response shapes. Wrapper source is proprietary; **none of this affects the standalone download** — that's still GPL-3.0 HTML. | Yes | No |
 
 ### Offline / Standalone
 
