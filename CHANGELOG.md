@@ -14,6 +14,16 @@
 
 ---
 
+## [7.0.4] — 2026-05-03 — Changelog modal: actually serve the markdown
+
+The v7.0.3 fix made the parser robust enough to handle the file — but the file was never reaching the parser. Caddy's `handle_path /KVN_AUST/CHANGELOG.md` directive strips the **entire matched prefix** (not just the leading `/KVN_AUST` portion as I'd assumed), which left an empty path. `file_server` then served the directory index — the **938-byte placeholder** `index.html` — with `Content-Type: text/markdown` because the header was already set. Result: the in-app modal received the placeholder HTML, treated it as markdown, the parser found 0 entries (no `## [version]` lines in HTML), and fell through to the `<pre>` raw dump.
+
+Switched to `handle` + `rewrite *  /CHANGELOG.md` (and the same for WRAPPER-CHANGELOG.md) so the request gets internally rerouted to the actual file in the doc root before `file_server` looks it up. All 4 URL variants (`/CHANGELOG.md`, `/KVN_AUST/CHANGELOG.md`, `/WRAPPER-CHANGELOG.md`, `/KVN_AUST/WRAPPER-CHANGELOG.md`) now serve their real bytes (43755 and 8587 on disk, both match served sizes exactly).
+
+*(Caddy-only fix. shim.js parser improvements from v7.0.3 already shipped — they were correct, the upstream just wasn't feeding them real data.)*
+
+---
+
 ## [7.0.3] — 2026-05-03 — Changelog modal renders properly
 
 - **In-app version modals were dumping raw markdown.** The `parseChangelog` regex required a literal ASCII hyphen between `## [version]` and the date, but our CHANGELOG entries use ` — ` (em-dash), and Markdown editors silently auto-correct that on save. Result: parser found 0 entries → fallback dumped the raw `.md` text into a `<pre>` block in both the source-changelog modal and the wrapper-changelog modal. Now matches `-`, `–` (en-dash), and `—` (em-dash). Captures any "— Title" suffix as the entry title.
