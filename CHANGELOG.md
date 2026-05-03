@@ -14,6 +14,14 @@
 
 ---
 
+## [7.0.3] — 2026-05-03 — Changelog modal renders properly
+
+- **In-app version modals were dumping raw markdown.** The `parseChangelog` regex required a literal ASCII hyphen between `## [version]` and the date, but our CHANGELOG entries use ` — ` (em-dash), and Markdown editors silently auto-correct that on save. Result: parser found 0 entries → fallback dumped the raw `.md` text into a `<pre>` block in both the source-changelog modal and the wrapper-changelog modal. Now matches `-`, `–` (en-dash), and `—` (em-dash). Captures any "— Title" suffix as the entry title.
+- **`renderMarkdown` rewrite** — was minimum-viable, missing links, blockquotes, fenced code, tables, italic, em-dash horizontal rules, and the dedented "block element inside `<p>`" cleanup. Now handles all of those, plus pulls fenced ` ```code``` ` blocks out before other regex transforms so their content survives intact. Tables render as a real styled `<table>` (collapsed borders, monospace cells), blockquotes get a left-bar treatment, links open in new tabs.
+- *(Wrapper-only change — `shim.js` deployed direct to the server. No GPL HTML in this fix beyond the version bump.)*
+
+---
+
 ## [7.0.2] — 2026-05-03 — Header polish
 
 - **Icon row stacks instead of pushing the title.** `.header-right` now caps at `max-width:280px` (200px on mobile) — when the 9 icons + sound picker exceed that, they wrap to a second row underneath instead of squeezing the **Sonder** title off-screen.
