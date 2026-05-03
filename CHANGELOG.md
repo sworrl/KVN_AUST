@@ -14,6 +14,39 @@
 
 ---
 
+## [7.0.1] — 2026-05-03 — **Stabilization pass after the Go rewrite**
+
+Catches every loose end the Go cutover surfaced in the first 24 hours of production traffic.
+
+### 🆘 Recovered
+
+- **Records leaderboard reseeded.** The cutover left `public_finds` empty (cron `backup_db.sh` was pointing at the wiped pre-rewrite path so no on-disk backup existed). All 21 finds from the most recent README leaderboard snapshot in git history (`b7acb25`) re-INSERT'd with `INSERT OR IGNORE` so re-running is idempotent. Recovered fields: `video_id`, `video_url`, `date_posted`, `views_when_found`, `lead`, `found_by`, `rarity`. Lost fields backfill on next `cron_scrape_channel` run. Marked `source='github_reseed'` so they're distinguishable from organic submissions.
+
+### 🐛 Bug fixes
+
+- **Login was broken** (network error). The Go router only matched bare `/sync.php` for cloud-save; the front-end posts to `/KVN_AUST/sync.php` (legacy bookmark prefix). Added the prefixed path variants. Login + cloud save work again.
+- **Channel-videos count** returned 502. The previous fix only enriched single-video metadata; the channel handler still relied on Invidious-only and 502'd when all instances were dead. Added `tryScrapeChannel()` that hits `/channel/<id>/about` and pulls `videoCountText`. Verified live: channels return `videoCount` correctly via scrape.
+- **In-app changelog modals** ("Couldn't load CHANGELOG.md / WRAPPER-CHANGELOG.md") were 403'd by Caddy's `block_sensitive` (which globs all `.md`). Added explicit `handle_path` blocks BEFORE `block_sensitive` for both files at `/CHANGELOG.md`, `/WRAPPER-CHANGELOG.md`, `/KVN_AUST/CHANGELOG.md`, `/KVN_AUST/WRAPPER-CHANGELOG.md` — all 4 URL variants the shim might fetch. All HTTP 200 now.
+- **Embedded `app-version-data` JSON block** wasn't bumped when v7.0.0 was cut, so the version pill kept showing 6.0.0. Bumped to 7.0.0 + added a workflow (below) so it never desyncs from a release tag again.
+- **`statusRecorder` middleware** in the Go backend masked `http.Flusher` (and now `http.Hijacker`) — caused `/version-stream.php` SSE to return HTTP 500 every 6 seconds for every open game tab. Fixed by delegating both interfaces to the wrapped writer.
+- **YT metadata `published` timestamp** was being missed because YouTube reshuffled the watch-page HTML. Added `datePublished` and `uploadDate` scrape fallbacks alongside the existing `publishDate` regex. Date-posted field now auto-fills on the rating screen.
+
+### 🛡️ Operational
+
+- **Backup cron path corrected.** Was pointing at `/var/www/html/falcontechnix/KVN_AUST/backup_db.sh` (wiped during Go cutover); now points at `/home/reaver/vite_projects/falcontechnix/KVN_AUST/backup_db.sh`. Created the missing `/var/data/kvn_aust/backups/` directory so the next 4 AM run produces the first real on-disk SQLite snapshot.
+- **`WRAPPER_VERSION` bumped to 7.0.0** to match the Go binary's release line. Was stale at `1.12.0` from the pre-rewrite era.
+
+### 🤖 Auto-bump on release tag
+
+- New workflow [`bump-version.yml`](.github/workflows/bump-version.yml) fires on `release: published`, parses the SemVer tag, updates the embedded `app-version-data` block in `kvnaust-recyclebin.html`, and commits back. Stops the v7.0.0-style mistake where the tag and the embedded block can drift. Pre-release tags (`v7.0.1-rc1`) are skipped so the production app version only follows real releases.
+- This release is the workflow's first dogfood run — when v7.0.1 publishes, the auto-bump should land a follow-up commit "Auto-bump app-version-data to 7.0.1" within ~30 seconds.
+
+### 🤝 Wrapper
+
+- Removed the maintainer's last name from the wrapper's version modal copyright notice. The version modal and copyright footer now read "Justin / Falcon Technix" instead of the full name. *(Wrapper is proprietary — change is server-side only, mentioned here for completeness.)*
+
+---
+
 ## [7.0.0] — 2026-05-03 — **The Go Rewrite**
 
 > **The single biggest backend change in the project's history.** The hosted community wrapper at `kvnaust.falcontechnix.com` is now a single statically-linked Go binary (`falcontechnix-backend`, ~23 MB) replacing **28 PHP files** that previously powered every dynamic endpoint behind the GPL game tool. Same product, same URLs, same data — completely different engine underneath.

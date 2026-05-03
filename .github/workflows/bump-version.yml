@@ -1,0 +1,91 @@
+name: Bump app-version-data on release
+
+on:
+  release:
+    types: [published]
+
+# This workflow needs to push a commit back to main, so contents:write
+# is required. The default GITHUB_TOKEN doesn't trigger downstream
+# workflows on push (which is what we want — no infinite tag loop).
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Parse tag and bump embedded version
+        id: bump
+        run: |
+          # Strip leading 'v' (e.g. v7.0.1 → 7.0.1) and reject anything
+          # that doesn't look like a SemVer triple. Refuse pre-release tags
+          # like v7.0.1-rc1 — those shouldn't bump the production app
+          # version that the wrapper compares against.
+          TAG="${{ github.event.release.tag_name }}"
+          VER="${TAG#v}"
+          if ! [[ "$VER" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Tag '$TAG' doesn't look like a release SemVer triple — skipping bump."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          BUILD="$(date -u '+%Y-%m-%dT%H:%M:%S')"
+          NOTES_RAW='${{ github.event.release.body }}'
+          # Take the first non-empty line of the release notes as a one-line
+          # changelog summary, stripped of markdown noise. Capped at 280 chars.
+          SUMMARY=$(printf '%s\n' "$NOTES_RAW" \
+            | sed -E 's/^#+\s*//; s/\*\*//g; s/\[([^]]+)\]\([^)]+\)/\1/g; s/`//g' \
+            | awk 'NF { print; exit }' \
+            | cut -c1-280)
+          if [ -z "$SUMMARY" ]; then SUMMARY="Release $VER"; fi
+
+          python3 - "$VER" "$BUILD" "$SUMMARY" <<'PYEOF'
+          import json, re, sys
+          ver, build, summary = sys.argv[1], sys.argv[2], sys.argv[3]
+          path = 'kvnaust-recyclebin.html'
+          with open(path) as f: html = f.read()
+          m = re.search(
+              r'(<script type="application/json" id="app-version-data">\s*)({[^<]*?})(\s*</script>)',
+              html, re.DOTALL,
+          )
+          if not m:
+              print('FAIL: app-version-data block not found', file=sys.stderr)
+              sys.exit(1)
+          data = json.loads(m.group(2))
+          if data.get('version') == ver:
+              print(f'No-op: embedded version already {ver}')
+              sys.exit(0)
+          old = data.get('version', '?')
+          data['version']   = ver
+          data['build']     = build
+          data['changelog'] = summary
+          new_block = m.group(1) + json.dumps(data, indent=2) + m.group(3)
+          with open(path, 'w') as f: f.write(html[:m.start()] + new_block + html[m.end():])
+          print(f'BUMPED: {old} -> {ver}')
+          PYEOF
+
+          echo "ver=$VER" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push
+        if: steps.bump.outputs.skip != 'true' && steps.bump.outputs.ver != ''
+        run: |
+          if git diff --quiet kvnaust-recyclebin.html; then
+            echo "No change to commit (embedded version already at target)."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add kvnaust-recyclebin.html
+          git commit -m "Auto-bump app-version-data to ${{ steps.bump.outputs.ver }}
+
+          Triggered by GitHub Release publish. Keeps the embedded version
+          block in lockstep with the published tag so the in-app version
+          pill + the wrapper's version-stream comparison see the same
+          number you cut a tag for."
+          git push origin main
