@@ -843,7 +843,8 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
         <div style="font-size:.6rem;color:#566;text-align:center;opacity:.7;margin-top:2px">Spinner theme rotates daily — Deep Dive toggle is in the wheel</div>
       </div>
       <div style="margin-top:10px;font-size:.68rem;color:#333">Formats synced from <a href="https://github.com/sworrl/KVN_AUST/blob/main/FORMAT-MAP.md" target="_blank" style="color:#2ecc71">FORMAT-MAP.md</a> on GitHub</div>
-      <div class="free-glow" id="hostedDownloadCallout" style="display:none"><b>Heads up — this is the hosted version.</b> The whole tool is GPL-3.0. <a href="https://github.com/sworrl/KVN_AUST/releases/latest" target="_blank">Grab the latest release</a> to run it locally — the bundle ships with everything you need (HTML + bingo categories). The hosted version exists only for the community side (cloud save, leaderboards, multiplayer). Either way: <b>no ads, no paywalls, no tracking, no monetization, ever.</b></div>
+<!-- Hosted-only download callout intentionally omitted — injected by the wrapper at kvnaust.falcontechnix.com. The .free-glow CSS below stays so the wrapper-injected markup picks up the styling. -->
+
     </div>
   </div>
 
@@ -4690,13 +4691,6 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 // Restore saved sound preference
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadGameSetup();loadWheelTheme();
-// Hosted-only: show the "grab the release" callout. Hidden when running standalone (file://, localhost,
-// or any non-falcontechnix host) since "download and run locally" is moot if you're already running locally.
-try{
-  if(/(^|\.)falcontechnix\.com$/i.test(location.hostname)){
-    const cal=document.getElementById('hostedDownloadCallout');if(cal)cal.style.display='';
-  }
-}catch{}
 loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();refreshKvnVideoDot();
 // Re-check NEW status periodically (every 10 min) so the "JUST DROPPED" badge ages out without a reload
 setInterval(refreshKvnVideoDot,10*60*1000);
