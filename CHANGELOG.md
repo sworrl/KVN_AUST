@@ -14,6 +14,22 @@
 
 ---
 
+## [7.0.8] — 2026-05-06 — Share buttons unclipped + 3D button pass
+
+### 🐛 Fixed
+- **"Watch on YouTube" / "Share SVG" / "Discord" buttons in the find-detail modal were clipped** to "Wa" / "Sh" / "Di". Inline `style="flex:0"` on the buttons combined with the `.vt-btn` class's `min-width:0` expanded to `flex:0 1 0%` (don't grow, *do* shrink, basis 0%) — flexbox happily collapsed each button to fit only the first character that didn't overflow. Inline style is now `flex:0 0 auto;min-width:auto`, so they render their full label.
+
+### ✨ 3D button pass
+Every interactive button in the UI got the same lifted-and-pressable treatment — the kind that responds when you touch it.
+- **`.vt-btn`** (share/save/skip/end/etc. — the wide pills) — top inner highlight, bottom inner shadow, hard offset shadow underneath (the "lift"), soft ambient bloom, glossy top-half overlay. Hover lifts it 1px and brightens it. Active presses it down 2px and dulls it.
+- **`.hdr-btn-icon`** (the small icon row in the page header) — same pattern at compact scale. Active state (e.g. open Format Browser) gets a colour-tinted hard shadow.
+- **`.wheel-mode-btns button`** (game-mode chips next to the wheel) — depth + lift + press, with the active variant getting an accent-coloured deep shadow.
+- **`.wheel-count-wrap button`** (count adjusters) — same depth pattern, accent-coloured.
+
+Press-and-release feels physical now instead of a 2D opacity flicker. No layout changes — sizes/spacing identical.
+
+---
+
 ## [7.0.7] — 2026-05-06 — Records: "Added Invalid Date" fixed
 
 The find detail modal showed `Added Invalid Date` because the API returns `discovered_at` as a string of Unix-seconds (e.g. `"1777816805"`), and `new Date("1777816805")` is `Invalid Date` (JS only auto-detects ISO-ish strings, not numeric epoch strings). Patched both render sites (records list row + find detail modal) to coerce the value: parse to Number, treat values < `1e11` as seconds and `*1000`, fall back to passing the original string for ISO inputs, and skip rendering if the result is still NaN. Existing reseeded entries with epoch-seconds discovered_at now render correctly.

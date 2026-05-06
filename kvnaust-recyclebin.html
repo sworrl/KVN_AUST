@@ -222,12 +222,34 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
  * action row so the buttons align as one consistent strip instead of a
  * row of mixed text widths. Tooltips (title=) carry the label.
  */
-.hdr-btn-icon{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;width:30px;height:30px;padding:0;border-radius:6px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;
-  box-shadow:0 1px 3px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.04);backdrop-filter:blur(4px)}
+.hdr-btn-icon{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.14);color:#fff;width:30px;height:30px;padding:0;border-radius:7px;cursor:pointer;
+  transition:transform .12s ease-out,box-shadow .15s ease-out,filter .15s,background .15s;
+  display:inline-flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 2px rgba(0,0,0,.25),
+    0 2px 0 rgba(0,0,0,.5),
+    0 4px 8px rgba(0,0,0,.4);
+  backdrop-filter:blur(4px)}
 .hdr-btn-icon svg{width:15px;height:15px;display:block;stroke:currentColor;fill:none}
-.hdr-btn-icon:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.2);box-shadow:0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
-.hdr-btn-icon:active{transform:scale(.92)}
-.hdr-btn-icon.active{background:var(--accent);border-color:var(--accent);box-shadow:0 2px 12px rgba(231,76,60,.3)}
+.hdr-btn-icon:hover{background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));border-color:rgba(255,255,255,.24);transform:translateY(-1px);filter:brightness(1.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 2px rgba(0,0,0,.22),
+    0 3px 0 rgba(0,0,0,.5),
+    0 6px 12px rgba(0,0,0,.5)}
+.hdr-btn-icon:active{transform:translateY(1px);filter:brightness(.92);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    inset 0 1px 3px rgba(0,0,0,.4),
+    0 1px 0 rgba(0,0,0,.45),
+    0 1px 3px rgba(0,0,0,.3)}
+.hdr-btn-icon.active{background:linear-gradient(180deg,#ff6b5e,var(--accent));border-color:rgba(231,76,60,.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -1px 2px rgba(0,0,0,.22),
+    0 2px 0 rgba(120,30,30,.6),
+    0 4px 12px rgba(231,76,60,.45)}
 /* Formats button is wider so its status dot + count fit beside the icon */
 .hdr-btn-icon.is-formats{width:auto;padding:0 8px;gap:4px}
 .hdr-fmt-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#888;box-shadow:0 0 4px transparent;flex-shrink:0;transition:background .2s,box-shadow .2s}
@@ -326,15 +348,52 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
 .wheel-count-wrap label{font-size:.75rem;color:var(--muted)}
 .wheel-count-wrap input{width:52px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.1);color:#fff;padding:3px 6px;border-radius:4px;text-align:center;font-weight:700;font-size:.85rem;transition:border-color .15s}
 .wheel-count-wrap input:focus{outline:none;border-color:rgba(231,76,60,.4)}
-.wheel-count-wrap button{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;padding:3px 10px;border-radius:4px;cursor:pointer;font-weight:700;font-size:.75rem;transition:opacity .15s;box-shadow:0 2px 8px rgba(231,76,60,.25)}
-.wheel-count-wrap button:hover{opacity:.85}
-.wheel-mode-btns{display:flex;gap:3px}
-.wheel-mode-btns button{background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);color:#888;
-  padding:4px 10px;border-radius:4px;cursor:pointer;font-size:.72rem;font-weight:600;transition:all .2s;
-  box-shadow:0 1px 4px rgba(0,0,0,.3)}
-.wheel-mode-btns button:hover{color:#ccc;border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.08)}
-.wheel-mode-btns button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:rgba(231,76,60,.5);color:#fff;
-  box-shadow:0 2px 10px rgba(231,76,60,.3),inset 0 1px 0 rgba(255,255,255,.12)}
+.wheel-count-wrap button{background:linear-gradient(180deg,var(--accent),var(--accent2));border:none;color:#fff;padding:3px 10px;border-radius:5px;cursor:pointer;font-weight:700;font-size:.75rem;
+  transition:transform .12s ease-out,box-shadow .15s ease-out,filter .15s;text-shadow:0 1px 1px rgba(0,0,0,.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -1px 2px rgba(0,0,0,.2),
+    0 2px 0 rgba(120,30,30,.55),
+    0 4px 8px rgba(231,76,60,.35)}
+.wheel-count-wrap button:hover{transform:translateY(-1px);filter:brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.32),
+    inset 0 -1px 2px rgba(0,0,0,.2),
+    0 3px 0 rgba(120,30,30,.55),
+    0 6px 12px rgba(231,76,60,.45)}
+.wheel-count-wrap button:active{transform:translateY(1px);filter:brightness(.94);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14),
+    inset 0 1px 3px rgba(0,0,0,.35),
+    0 1px 0 rgba(120,30,30,.5),
+    0 1px 4px rgba(231,76,60,.25)}
+.wheel-mode-btns{display:flex;gap:4px}
+.wheel-mode-btns button{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.10);color:#888;
+  padding:4px 10px;border-radius:5px;cursor:pointer;font-size:.72rem;font-weight:600;
+  transition:transform .12s ease-out,box-shadow .15s ease-out,color .15s,background .15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.10),
+    inset 0 -1px 2px rgba(0,0,0,.2),
+    0 2px 0 rgba(0,0,0,.45),
+    0 3px 6px rgba(0,0,0,.35)}
+.wheel-mode-btns button:hover{color:#ccc;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04));border-color:rgba(255,255,255,.18);transform:translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -1px 2px rgba(0,0,0,.2),
+    0 3px 0 rgba(0,0,0,.45),
+    0 5px 10px rgba(0,0,0,.45)}
+.wheel-mode-btns button:active{transform:translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    inset 0 1px 3px rgba(0,0,0,.35),
+    0 1px 0 rgba(0,0,0,.4),
+    0 1px 3px rgba(0,0,0,.3)}
+.wheel-mode-btns button.active{background:linear-gradient(180deg,var(--accent),var(--accent2));border-color:rgba(231,76,60,.6);color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -1px 2px rgba(0,0,0,.22),
+    0 2px 0 rgba(120,30,30,.6),
+    0 4px 12px rgba(231,76,60,.42)}
 .wheel-container{position:relative;width:min(68vh,68vw,520px);height:min(68vh,68vw,520px)}
 canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 0 20px rgba(0,0,0,.5))}
 .wheel-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);z-index:10;animation:pointerIdle 2s ease-in-out infinite;transition:top .3s cubic-bezier(.4,0,.2,1)}
@@ -404,11 +463,29 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
   box-shadow:inset 0 1px 3px rgba(0,0,0,.3)}
 .vt-input:focus{border-color:var(--accent);box-shadow:inset 0 1px 3px rgba(0,0,0,.3),0 0 10px rgba(231,76,60,.12)}
 .vt-input::placeholder{color:#3a3a50}
-.vt-btn{border:none;color:#fff;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;font-size:.78rem;transition:all .2s;white-space:nowrap;flex:1;min-width:0;text-align:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.3);position:relative;overflow:hidden}
-.vt-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.08) 0%,transparent 60%);pointer-events:none;border-radius:10px}
-.vt-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.4)}
-.vt-btn:active{transform:scale(.97);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.vt-btn{border:none;color:#fff;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;font-size:.78rem;
+  transition:transform .12s ease-out,box-shadow .15s ease-out,filter .15s;white-space:nowrap;flex:1;min-width:0;text-align:center;
+  position:relative;overflow:hidden;text-shadow:0 1px 1px rgba(0,0,0,.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.32),
+    inset 0 -2px 4px rgba(0,0,0,.22),
+    0 3px 0 rgba(0,0,0,.55),
+    0 6px 14px rgba(0,0,0,.4)}
+.vt-btn::before{content:'';position:absolute;left:0;right:0;top:0;height:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.04) 70%,transparent 100%);
+  pointer-events:none;border-radius:10px 10px 0 0}
+.vt-btn:hover{transform:translateY(-1px);filter:brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.36),
+    inset 0 -2px 4px rgba(0,0,0,.22),
+    0 4px 0 rgba(0,0,0,.55),
+    0 8px 18px rgba(0,0,0,.5)}
+.vt-btn:active{transform:translateY(2px);filter:brightness(.94);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 2px 4px rgba(0,0,0,.35),
+    0 1px 0 rgba(0,0,0,.5),
+    0 2px 6px rgba(0,0,0,.35)}
 /* Bespoke button colors */
 .vt-btn.copy-btn{background:linear-gradient(135deg,#37474f,#263238)}
 .vt-btn.yt-btn{background:linear-gradient(135deg,#e74c3c,#c0392b)}
@@ -3754,9 +3831,9 @@ function showRecordModal(f,type){
   html+=`</div></div>`;
   // Buttons
   html+=`<div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">`;
-  if(url)html+=`<button class="vt-btn yt-btn" style="flex:0;padding:8px 16px;font-size:.72rem" onclick="window.open('${esc(url)}','_blank','noopener')">Watch on YouTube</button>`;
-  html+=`<button class="vt-btn share-svg" style="flex:0;padding:8px 14px;font-size:.72rem" onclick="exportFindSVG(${JSON.stringify({datePosted,views:views+'',lead,rarity,foundBy,url,title,channel}).replace(/"/g,'&quot;')})">Share SVG</button>`;
-  html+=`<button class="vt-btn share-discord" style="flex:0;padding:8px 14px;font-size:.72rem" onclick="copyFindForDiscord(${JSON.stringify({datePosted,views:views+'',lead,rarity,foundBy,url,title,channel}).replace(/"/g,'&quot;')})">Discord</button>`;
+  if(url)html+=`<button class="vt-btn yt-btn" style="flex:0 0 auto;min-width:auto;padding:8px 16px;font-size:.72rem" onclick="window.open('${esc(url)}','_blank','noopener')">Watch on YouTube</button>`;
+  html+=`<button class="vt-btn share-svg" style="flex:0 0 auto;min-width:auto;padding:8px 14px;font-size:.72rem" onclick="exportFindSVG(${JSON.stringify({datePosted,views:views+'',lead,rarity,foundBy,url,title,channel}).replace(/"/g,'&quot;')})">Share SVG</button>`;
+  html+=`<button class="vt-btn share-discord" style="flex:0 0 auto;min-width:auto;padding:8px 14px;font-size:.72rem" onclick="copyFindForDiscord(${JSON.stringify({datePosted,views:views+'',lead,rarity,foundBy,url,title,channel}).replace(/"/g,'&quot;')})">Discord</button>`;
   html+=`<button class="nav-btn" style="font-size:.72rem;padding:6px 14px" onclick="this.closest('.rec-find-detail').remove()">Close</button>`;
   html+=`</div></div>`;
 
@@ -4757,8 +4834,8 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.0.7",
-  "build": "2026-05-06T21:54:17",
+  "version": "7.0.8",
+  "build": "2026-05-06T22:13:53",
   "changelog": "\ud83e\uddab The single biggest backend change in the project's history.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
