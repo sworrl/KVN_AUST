@@ -14,6 +14,12 @@
 
 ---
 
+## [7.0.7] — 2026-05-06 — Records: "Added Invalid Date" fixed
+
+The find detail modal showed `Added Invalid Date` because the API returns `discovered_at` as a string of Unix-seconds (e.g. `"1777816805"`), and `new Date("1777816805")` is `Invalid Date` (JS only auto-detects ISO-ish strings, not numeric epoch strings). Patched both render sites (records list row + find detail modal) to coerce the value: parse to Number, treat values < `1e11` as seconds and `*1000`, fall back to passing the original string for ISO inputs, and skip rendering if the result is still NaN. Existing reseeded entries with epoch-seconds discovered_at now render correctly.
+
+---
+
 ## [7.0.6] — 2026-05-03 — Bingo icon, take three
 
 The v7.0.5 bingo SVG used quadratic-curve `Q` paths to draw the letter "B"; in some browsers / size combos the path collapsed and the button fell back to rendering the `aria-label` text ("Setup Bingo"). Replaced with a path-free design: outer ball, inner letter window, centre dot, and four small dimples at NW/NE/SW/SE — pure circles only, no `<path>`, no per-element stroke override. Reads as a bingo ball at every size.

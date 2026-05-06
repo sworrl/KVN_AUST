@@ -3693,7 +3693,7 @@ async function fetchCommunityRecords(){
       const color=rc[f.rarity]||getRecordColor(new Date(f.date_posted));
       const medal=i===0?'&#x1F947; ':i===1?'&#x1F948; ':i===2?'&#x1F949; ':'';
       const dateStr=new Date(f.date_posted).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-      const addedStr=f.discovered_at?new Date(f.discovered_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})+' ':'';
+      const addedStr=f.discovered_at?(()=>{const n=Number(f.discovered_at);const d=isFinite(n)?new Date(n<1e11?n*1000:n):new Date(f.discovered_at);return isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '})():'';
       return`<div class="rec-entry" style="cursor:pointer" onclick="showFindDetail(${i})"><span style="min-width:20px;font-size:.8rem">${medal}</span><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views" title="Views when found">${f.views_when_found??'?'} views</span><span style="color:${color};font-size:.6rem;font-weight:700;min-width:55px">${esc(f.rarity||'')}</span><span style="color:#fff;font-size:.68rem;font-weight:700;min-width:70px;text-shadow:0 0 6px ${color}">${esc(f.found_by||'?')}</span><span style="color:#444;font-size:.55rem">${addedStr}</span></div>`;
     }).join('')+`<div style="text-align:center;font-size:.6rem;color:#333;margin-top:6px">${data.total} finds &#183; oldest: ${data.oldest_post_date} &#183; newest: ${data.newest_post_date}</div>`;
     // Redraw timeline with community data
@@ -3750,7 +3750,7 @@ function showRecordModal(f,type){
   html+=`<span style="color:#888">Found by</span> <strong style="color:#fff;font-size:.85rem;text-shadow:0 0 8px ${color}">${esc(foundBy)}</strong>`;
   if(srcSym)html+=` <span style="color:#555;font-size:.65rem">[${srcSym}]</span>`;
   if(server)html+=` <span style="color:#444;font-size:.62rem">in ${esc(server)}</span>`;
-  if(addedAt)html+=`<div style="color:#333;font-size:.58rem;margin-top:2px">Added ${new Date(addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>`;
+  if(addedAt){const _n=Number(addedAt);const _d=isFinite(_n)?new Date(_n<1e11?_n*1000:_n):new Date(addedAt);if(!isNaN(_d))html+=`<div style="color:#333;font-size:.58rem;margin-top:2px">Added ${_d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>`;}
   html+=`</div></div>`;
   // Buttons
   html+=`<div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">`;
@@ -4757,8 +4757,8 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.0.6",
-  "build": "2026-05-03T19:52:32",
+  "version": "7.0.7",
+  "build": "2026-05-06T21:54:17",
   "changelog": "\ud83e\uddab The single biggest backend change in the project's history.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
