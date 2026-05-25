@@ -910,7 +910,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
       <span class="hdr-count-pill" id="historyCountPill"></span>
     </button>
-    <button class="hdr-btn-icon" id="bingoToggle" onclick="handleBingoBtn()" title="Setup Bingo" aria-label="Setup Bingo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="6.2" cy="8.5" r=".7" fill="currentColor" stroke="none"/><circle cx="17.8" cy="8.5" r=".7" fill="currentColor" stroke="none"/><circle cx="6.2" cy="15.5" r=".7" fill="currentColor" stroke="none"/><circle cx="17.8" cy="15.5" r=".7" fill="currentColor" stroke="none"/></svg></button>
+    <button class="hdr-btn-icon is-formats" id="bingoToggle" onclick="handleBingoBtn()" title="Setup Bingo" aria-label="Setup Bingo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="6.2" cy="8.5" r=".7" fill="currentColor" stroke="none"/><circle cx="17.8" cy="8.5" r=".7" fill="currentColor" stroke="none"/><circle cx="6.2" cy="15.5" r=".7" fill="currentColor" stroke="none"/><circle cx="17.8" cy="15.5" r=".7" fill="currentColor" stroke="none"/></svg><span class="lbl" style="font-size:.72rem;font-weight:700;letter-spacing:.02em;white-space:nowrap">Bingo</span></button>
     <button class="hdr-btn-icon" onclick="showRecords()" title="Zero-View Records Leaderboard" aria-label="Records" style="color:#e74c3c">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
     </button>
@@ -1980,9 +1980,21 @@ function updateNavArrows(){
 }
 
 function updateBingoBtn(){
+  // Preserve the SVG icon — only relabel the inner .lbl span and the
+  // title/aria-label. Previously this clobbered the whole button via
+  // textContent which destroyed the icon and forced the long label
+  // to wrap inside a 30x30 hdr-btn-icon, producing the cramped
+  // two-line "Setup / Bingo" the tester flagged 2026-05-25.
   const btn=document.getElementById('bingoToggle');
-  if(gameActive){btn.textContent='Bingo';btn.style.display=''}
-  else{btn.textContent='Setup Bingo';btn.style.display=''}
+  if(!btn)return;
+  const lbl=btn.querySelector('.lbl');
+  const active=!!gameActive;
+  const text=active?'Bingo':'Setup Bingo';
+  if(lbl)lbl.textContent=text;
+  btn.title=text;
+  btn.setAttribute('aria-label',text);
+  btn.classList.toggle('active',active);
+  btn.style.display='';
 }
 
 function handleBingoBtn(){
@@ -2188,8 +2200,15 @@ function closeBingoFlash(){
 // ═══════════════════════════════════
 //  DOC FETCH
 // ═══════════════════════════════════
-const DOC_CACHE_KEY='kvn_fmt_v6'; // v6: no hardcodes, improved parser handles hex/time/small-range
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v6';
+// v7 bump (2026-05-25): tester reported "118 formats" on the
+// wrapper when the live FORMAT-MAP.md actually parses to 266+.
+// Diagnosis was stale localStorage cache carrying a snapshot from
+// an older buggy parse. Bumping the cache key forces every
+// browser worldwide to drop its cached parse on next page load
+// and refetch from GitHub. Same trick anytime the parser logic
+// or FORMAT-MAP.md schema changes shape — bump the version.
+const DOC_CACHE_KEY='kvn_fmt_v7';
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v7';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -4834,8 +4853,8 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.0.8",
-  "build": "2026-05-06T22:13:53",
+  "version": "7.0.9",
+  "build": "2026-05-25T22:30:00",
   "changelog": "\ud83e\uddab The single biggest backend change in the project's history.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"

@@ -14,6 +14,15 @@
 
 ---
 
+## [7.0.9] — 2026-05-25 — Setup Bingo button fix + format cache bust
+
+### 🐛 Fixed
+- **"Setup Bingo" header button rendered as cramped two-line text** inside the 30×30 `.hdr-btn-icon` container, with the SVG bingo-card icon missing. Root cause: `updateBingoBtn()` called `btn.textContent = 'Setup Bingo'` on every state change, which destroyed the inline SVG and replaced the entire button body with raw text that then wrapped to two lines because the icon-button class is sized for a single glyph. Fix: button now carries the existing `is-formats` widen-class (auto-width + 8px padding + 4px icon→text gap, the same pattern the formats counter uses) and an explicit `<span class="lbl">` for the label. `updateBingoBtn()` only swaps the inner `.lbl` text (`"Setup Bingo"` ⇄ `"Bingo"`) plus the `title` / `aria-label` / `.active` class — never the SVG. Idle and active states now render as **icon + label** on one line and the active state lights up via the existing `.active` red gradient instead of a label rewrite.
+
+- **Format counter pill showed only 118 formats** when the live `FORMAT-MAP.md` actually parses to 266. Root cause: stale `localStorage` cache under the `kvn_fmt_v6` key holding a snapshot from an older buggy parser; the in-app guard `cacheSize >= 100 && !isCacheStale()` happily skipped the network refresh, so existing users never saw the corrected parse. Fix: cache key bumped to `kvn_fmt_v7` (and the matching timestamp key to `kvn_fmt_ts_v7`), invalidating every cached snapshot worldwide on next page load. Subsequent fetches now re-parse `FORMAT-MAP.md` from GitHub fresh — and any future parser-shape changes are a one-line key bump away from the same guaranteed cache-flush.
+
+---
+
 ## [7.0.8] — 2026-05-06 — Share buttons unclipped + 3D button pass
 
 ### 🐛 Fixed
