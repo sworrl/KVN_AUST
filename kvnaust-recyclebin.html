@@ -3767,7 +3767,7 @@ function showRecords(){
   document.getElementById('recordsOverlay').classList.add('open');
   renderRecords();
   updateRecordHolder();
-  // Always default to list view — show community list immediately
+  // Ensure list view is active by default
   if(recViewMode!=='list'){
     recViewMode='list';
     document.getElementById('recGraphicWrap').style.display='none';
@@ -3783,18 +3783,12 @@ function showRecords(){
     if(fZR)fZR.style.display='none';
     if(btn)btn.innerHTML='&#9641; Timeline';
   }
-  // Auto-show community tab
-  showRecordTab('community');
   if(!communityFetchedOnce){
-    // Show loading state in list immediately
-    const lw=document.getElementById('recListWrap');
-    if(lw&&!communityFinds.length)lw.innerHTML='<div style="text-align:center;color:#555;font-size:.78rem;padding:32px">Loading community finds&#8230;</div>';
     fetchCommunityRecords();
   } else {
     renderFullListView(communityFinds);
     renderRecentStrip(communityFinds);
   }
-  // Draw timeline in background so it's ready if user toggles
   setTimeout(()=>{drawRecordsTimeline();initTimelineInteraction()},400);
 }
 function closeRecords(){document.getElementById('recordsOverlay').classList.remove('open')}
@@ -3832,7 +3826,11 @@ async function fetchCommunityRecords(){
     // Redraw timeline with community data
     drawRecordsTimeline();updateRecordHolder();
   }catch(e){
-    if(!communityFetchedOnce)list.innerHTML=`<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Could not load community finds.<br><a href="https://kvnaust.falcontechnix.com/" style="color:#5b7fc7">Play on falcontechnix.com</a> for the full leaderboard.</div>`;
+    if(!communityFetchedOnce){
+      list.innerHTML=`<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Could not load community finds.<br><a href="https://kvnaust.falcontechnix.com/" style="color:#5b7fc7">Play on falcontechnix.com</a> for the full leaderboard.</div>`;
+      const lw=document.getElementById('recListWrap');
+      if(lw)lw.innerHTML=`<div style="text-align:center;color:#555;font-size:.78rem;padding:32px">Could not load community finds.<br><a href="https://kvnaust.falcontechnix.com/" style="color:#5b7fc7">Play on falcontechnix.com</a> for the full leaderboard.</div>`;
+    }
   }
 }
 
@@ -4969,8 +4967,8 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.0.12",
-  "build": "2026-06-02T09:00:00",
+  "version": "7.0.13",
+  "build": "2026-06-02T10:00:00",
   "changelog": "\ud83e\uddab The single biggest backend change in the project's history.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
