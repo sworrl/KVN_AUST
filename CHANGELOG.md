@@ -14,6 +14,17 @@
 
 ---
 
+## [7.0.12] — 2026-06-02 — Leaderboard: list is now the default view with full verbose cards
+
+### ✨ Changed / Fixed
+- **Community list is now the default view** — the records modal opens directly to the full verbose list instead of hiding it behind a toggle. The list loads community data immediately on open (no tab-click required). "⬜ Timeline" button toggles to the canvas graphic; "☰ List" toggles back.
+- **Verbose card layout** — each list entry now shows: thumbnail (linked to YouTube), full date (weekday + month + year), rarity badge, zero-views badge if applicable, views when found, search lead, channel name + video count, subscriber count, date added to leaderboard, source/server, video title, and finder name. Watch / SVG / Discord / ★ Both buttons on every card.
+- **"Submit a Find" renamed** to "🏆 Community Leaderboard" on the start screen — the old label implied it was submission-only when it actually opens the full leaderboard.
+- **Modal title** changed to "Community Leaderboard" with subtitle clarifying it shows all community finds.
+- **Timeline controls** (All Finds / Zero Views / Reset Zoom / scroll hint) are hidden by default and only appear when the Timeline view is active.
+
+---
+
 ## [7.0.11] — 2026-06-02 — Records: share buttons on strip, list rows, and record holder
 
 ### ✨ Added

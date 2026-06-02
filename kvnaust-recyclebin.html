@@ -953,7 +953,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <h1 title="Click for the Koenig passage that named this tool" onclick="showSonderModal()" style="cursor:help">Sonder</h1>
       <div class="tagline" style="font-style:italic">for <a href="https://www.youtube.com/@KVNAUST" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dotted currentColor">KVN AUST</a>'s YouTube Recycle Bin</div>
       <button class="start-btn" onclick="startGame()">NEW GAME</button>
-      <button class="start-btn" onclick="showRecords()" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000;font-size:.8rem;padding:8px 24px;margin-top:8px">Submit a Find</button>
+      <button class="start-btn" onclick="showRecords()" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000;font-size:.8rem;padding:8px 24px;margin-top:8px">&#x1F3C6; Community Leaderboard</button>
       <button class="start-btn" id="kvnVideosBtn" onclick="toggleKvnVideos()" style="background:linear-gradient(135deg,#c4302b,#8b1a1a);color:#fff;font-size:.8rem;padding:8px 24px;margin-top:8px;position:relative">KVN's Recycle Bin Videos<span id="kvnVideosNewDot" style="display:none;position:absolute;top:-4px;right:-4px;background:#fff;color:#c0392b;font-size:.55rem;font-weight:900;letter-spacing:.04em;padding:2px 6px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.4)">NEW</span></button>
       <div class="game-setup" id="gameSetup" style="margin-top:14px;padding:10px 14px;border:1px solid #2a2a3e;border-radius:8px;background:rgba(20,20,32,.55);max-width:380px;display:flex;flex-direction:column;gap:8px;font-size:.7rem;color:#aab">
         <div style="font-weight:700;letter-spacing:.04em;color:#ccd;text-align:center;font-size:.66rem;text-transform:uppercase;opacity:.7">Game Setup</div>
@@ -1243,8 +1243,8 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 <!-- RECORDS TIMELINE MODAL -->
 <div class="records-overlay" id="recordsOverlay" onclick="if(event.target===this)closeRecords()">
   <div class="records-modal">
-    <h3>Oldest Zero-View Record</h3>
-    <div class="rec-sub">Track the oldest zero-view videos you discover in the Recycle Bin</div>
+    <h3>Community Leaderboard</h3>
+    <div class="rec-sub">All community finds — oldest zero-view videos discovered in the Recycle Bin</div>
     <div class="rec-rarity-legend">
       <span class="r-gold">YouTube Launch (2005)</span>
       <span class="r-red">SUPER RARE (2006)</span>
@@ -1255,14 +1255,14 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
     <div id="recordHolder" style="text-align:center;font-size:.72rem;color:#888;margin-bottom:8px"></div>
     <div id="recRecentStrip" class="rec-recent-strip" style="display:none"></div>
     <div style="display:flex;justify-content:center;gap:6px;margin-bottom:6px;flex-wrap:wrap;align-items:center">
-      <button class="s-btn" style="font-size:.62rem;padding:3px 10px" id="filterAllBtn" onclick="setTimelineFilter('all')">All Finds</button>
-      <button class="s-btn" style="font-size:.62rem;padding:3px 10px" id="filterZeroBtn" onclick="setTimelineFilter('zero')">Zero Views Only</button>
-      <button class="s-btn" style="font-size:.62rem;padding:3px 10px" id="recZoomResetBtn" onclick="resetTimelineZoom()">Reset Zoom</button>
-      <button class="s-btn" style="font-size:.62rem;padding:3px 10px" id="recViewToggleBtn" onclick="toggleRecView()">&#9776; List</button>
-      <span id="recViewHint" style="font-size:.55rem;color:#444">scroll to zoom &#183; drag to pan</span>
+      <button class="s-btn" style="font-size:.62rem;padding:3px 10px;display:none" id="filterAllBtn" onclick="setTimelineFilter('all')">All Finds</button>
+      <button class="s-btn" style="font-size:.62rem;padding:3px 10px;display:none" id="filterZeroBtn" onclick="setTimelineFilter('zero')">Zero Views Only</button>
+      <button class="s-btn" style="font-size:.62rem;padding:3px 10px;display:none" id="recZoomResetBtn" onclick="resetTimelineZoom()">Reset Zoom</button>
+      <button class="s-btn" style="font-size:.62rem;padding:3px 10px" id="recViewToggleBtn" onclick="toggleRecView()">&#9641; Timeline</button>
+      <span id="recViewHint" style="font-size:.55rem;color:#444;display:none">scroll to zoom &#183; drag to pan</span>
     </div>
-    <div id="recGraphicWrap"><div class="rec-timeline"><canvas id="recordsCanvas" onclick="handleTimelineClick(event)" onmousemove="handleTimelineHover(event)" onmouseleave="document.getElementById('timelineTooltip').style.display='none'" style="cursor:pointer"></canvas><div id="timelineTooltip" style="display:none;position:absolute;background:#111;border:1px solid #333;border-radius:8px;padding:8px 10px;font-size:.65rem;color:#ccc;pointer-events:none;z-index:10;max-width:220px;box-shadow:0 4px 16px rgba(0,0,0,.6)"></div></div></div>
-    <div id="recListWrap" style="display:none;max-height:min(55vh,480px);overflow-y:auto;margin-bottom:16px;border:1px solid #1a1a2a;border-radius:10px;padding:8px;background:#030306"></div>
+    <div id="recGraphicWrap" style="display:none"><div class="rec-timeline"><canvas id="recordsCanvas" onclick="handleTimelineClick(event)" onmousemove="handleTimelineHover(event)" onmouseleave="document.getElementById('timelineTooltip').style.display='none'" style="cursor:pointer"></canvas><div id="timelineTooltip" style="display:none;position:absolute;background:#111;border:1px solid #333;border-radius:8px;padding:8px 10px;font-size:.65rem;color:#ccc;pointer-events:none;z-index:10;max-width:220px;box-shadow:0 4px 16px rgba(0,0,0,.6)"></div></div></div>
+    <div id="recListWrap" style="max-height:min(60vh,560px);overflow-y:auto;margin-bottom:16px;border:1px solid #1a1a2a;border-radius:10px;padding:8px;background:#030306"><div style="text-align:center;color:#555;font-size:.78rem;padding:32px">Loading community finds&#8230;</div></div>
     <div class="rec-form">
       <input type="url" id="recUrl" placeholder="Paste YouTube link..." style="flex:1;min-width:200px" oninput="onRecordLinkChange(this.value)">
       <span id="recFetchStatus" style="font-size:.55rem;color:var(--muted)"></span>
@@ -3767,9 +3767,35 @@ function showRecords(){
   document.getElementById('recordsOverlay').classList.add('open');
   renderRecords();
   updateRecordHolder();
-  if(!communityFetchedOnce)fetchCommunityRecords();
-  // Delay canvas draw until modal transition completes (scale .9→1)
-  setTimeout(()=>{drawRecordsTimeline();initTimelineInteraction()},350);
+  // Always default to list view — show community list immediately
+  if(recViewMode!=='list'){
+    recViewMode='list';
+    document.getElementById('recGraphicWrap').style.display='none';
+    document.getElementById('recListWrap').style.display='';
+    const hint=document.getElementById('recViewHint');
+    const fA=document.getElementById('filterAllBtn');
+    const fZ=document.getElementById('filterZeroBtn');
+    const fZR=document.getElementById('recZoomResetBtn');
+    const btn=document.getElementById('recViewToggleBtn');
+    if(hint)hint.style.display='none';
+    if(fA)fA.style.display='none';
+    if(fZ)fZ.style.display='none';
+    if(fZR)fZR.style.display='none';
+    if(btn)btn.innerHTML='&#9641; Timeline';
+  }
+  // Auto-show community tab
+  showRecordTab('community');
+  if(!communityFetchedOnce){
+    // Show loading state in list immediately
+    const lw=document.getElementById('recListWrap');
+    if(lw&&!communityFinds.length)lw.innerHTML='<div style="text-align:center;color:#555;font-size:.78rem;padding:32px">Loading community finds&#8230;</div>';
+    fetchCommunityRecords();
+  } else {
+    renderFullListView(communityFinds);
+    renderRecentStrip(communityFinds);
+  }
+  // Draw timeline in background so it's ready if user toggles
+  setTimeout(()=>{drawRecordsTimeline();initTimelineInteraction()},400);
 }
 function closeRecords(){document.getElementById('recordsOverlay').classList.remove('open')}
 
@@ -4077,18 +4103,18 @@ function toggleRecView(){
   const fAll=document.getElementById('filterAllBtn');
   const fZero=document.getElementById('filterZeroBtn');
   const fZoom=document.getElementById('recZoomResetBtn');
-  if(recViewMode==='timeline'){
-    recViewMode='list';
-    gw.style.display='none';lw.style.display='';
-    hint.style.display='none';fAll.style.display='none';fZero.style.display='none';fZoom.style.display='none';
-    btn.innerHTML='&#9641; Timeline';
-    renderFullListView(communityFinds);
-  }else{
+  if(recViewMode==='list'){
     recViewMode='timeline';
     gw.style.display='';lw.style.display='none';
     hint.style.display='';fAll.style.display='';fZero.style.display='';fZoom.style.display='';
     btn.innerHTML='&#9776; List';
     setTimeout(()=>{drawRecordsTimeline();initTimelineInteraction()},50);
+  }else{
+    recViewMode='list';
+    gw.style.display='none';lw.style.display='';
+    hint.style.display='none';fAll.style.display='none';fZero.style.display='none';fZoom.style.display='none';
+    btn.innerHTML='&#9641; Timeline';
+    renderFullListView(communityFinds);
   }
 }
 
@@ -4113,18 +4139,28 @@ function renderRecentStrip(finds){
 function renderFullListView(finds){
   const wrap=document.getElementById('recListWrap');if(!wrap)return;
   const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
-  if(!finds||!finds.length){wrap.innerHTML='<div style="text-align:center;color:#555;font-size:.7rem;padding:16px">No community finds loaded.</div>';return}
+  if(!finds||!finds.length){wrap.innerHTML='<div style="text-align:center;color:#555;font-size:.78rem;padding:32px">No community finds loaded.</div>';return}
   const medals=['🥇','🥈','🥉'];
   const rows=finds.map((f,i)=>{
     const color=rc[f.rarity]||'#888';
-    const rank=i<3?medals[i]:`<span style="color:#444;font-size:.62rem">#${i+1}</span>`;
-    const dateStr=new Date(f.date_posted).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
-    const lead=f.lead?`<code style="font-size:.58rem;color:#888;background:#0d0d18;padding:1px 5px;border-radius:3px;display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px">${esc(f.lead)}</code>`:'';
-    const ch=f.channel_name?`<span style="font-size:.55rem;color:#444;display:block">${esc(f.channel_name)}</span>`:'';
-    const shareBtns=`<div style="display:flex;gap:3px;flex-shrink:0" onclick="event.stopPropagation()"><button class="vt-btn share-svg" style="padding:3px 7px;font-size:.55rem;min-width:auto;flex:0 0 auto;line-height:1.2" title="Export SVG" onclick="shareFindSVG(${i})">SVG</button><button class="vt-btn share-discord" style="padding:3px 7px;font-size:.55rem;min-width:auto;flex:0 0 auto;line-height:1.2" title="Copy Discord" onclick="shareFindDiscord(${i})">D</button><button class="vt-btn" style="padding:3px 7px;font-size:.55rem;min-width:auto;flex:0 0 auto;line-height:1.2;background:linear-gradient(135deg,#5b4fc7,#3d2fa8)" title="Both" onclick="shareFindBoth(${i})">&#x2605;</button></div>`;
-    return`<div class="rec-card-item" style="--c:${color}" onclick="showFindDetail(${i})"><span style="font-size:.75rem;min-width:24px;text-align:center;flex-shrink:0">${rank}</span><div style="flex-shrink:0;min-width:100px"><div style="font-size:.8rem;font-weight:900;color:${color}">${esc(dateStr)}</div><div style="font-size:.55rem;color:#555">${esc(f.rarity||'')}</div></div><div style="flex-shrink:0;text-align:center;min-width:42px"><div style="font-size:.72rem;color:#ccc;font-weight:700">${f.views_when_found??'?'}</div><div style="font-size:.5rem;color:#444">views</div></div><div style="flex:1;min-width:0;overflow:hidden">${lead}${ch}</div><div style="font-size:.7rem;font-weight:700;color:#fff;text-shadow:0 0 6px ${color};flex-shrink:0;white-space:nowrap;margin-right:4px">${esc(f.found_by||'?')}</div>${shareBtns}</div>`;
+    const rank=i<3?medals[i]:`<span style="color:#555;font-size:.7rem">#${i+1}</span>`;
+    const dateStr=new Date(f.date_posted).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    const _n=Number(f.discovered_at);const _d=isFinite(_n)?new Date(_n<1e11?_n*1000:_n):new Date(f.discovered_at);
+    const addedStr=!isNaN(_d)?_d.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}):'';
+    const url=f.video_url||'';const vid=url?getVideoId(url):'';
+    const thumb=vid?`https://i.ytimg.com/vi/${vid}/mqdefault.jpg`:'';
+    const zeroView=f.views_when_found===0?`<span style="font-size:.58rem;background:#ffd700;color:#000;font-weight:900;padding:1px 7px;border-radius:8px;margin-left:4px">&#11088; ZERO VIEWS</span>`:'';
+    const fields=[
+      f.lead?`<div><span style="color:#555">Lead:</span> <code style="background:#0d0d18;padding:1px 5px;border-radius:3px;color:#aaa;font-size:.68rem">${esc(f.lead)}</code></div>`:'',
+      f.channel_name?`<div><span style="color:#555">Channel:</span> <span style="color:#bbb">${esc(f.channel_name)}</span>${f.channel_videos?` <span style="color:#444">(${f.channel_videos} vid${f.channel_videos!==1?'s':''})</span>`:''}</div>`:'',
+      f.channel_subs?`<div><span style="color:#555">Subscribers:</span> <span style="color:#bbb">${Number(f.channel_subs).toLocaleString()}</span></div>`:'',
+      addedStr?`<div><span style="color:#555">Added to leaderboard:</span> <span style="color:#bbb">${addedStr}</span></div>`:'',
+      f.source?`<div><span style="color:#555">Source:</span> <span style="color:#666">${esc(f.source)}${f.server?' / '+esc(f.server):''}</span></div>`:'',
+      f.note?`<div><span style="color:#555">Note:</span> <span style="color:#888;font-style:italic">${esc(f.note)}</span></div>`:'',
+    ].filter(Boolean).join('');
+    return`<div style="padding:14px 16px;margin-bottom:10px;background:#08080f;border:1px solid #16162a;border-left:4px solid ${color};border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.02)"><div style="display:flex;gap:12px">${thumb?`<a href="${url?esc(url):'#'}" target="_blank" rel="noopener" style="flex-shrink:0;display:block"><img src="${esc(thumb)}" style="width:112px;height:63px;border-radius:5px;object-fit:cover;border:1px solid #222;display:block" loading="lazy"></a>`:''}<div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px"><span style="font-size:.85rem">${rank}</span><span style="font-size:.62rem;font-weight:900;color:${color};padding:2px 9px;border:1px solid ${color};border-radius:10px;letter-spacing:.03em">${esc(f.rarity||'')}</span>${zeroView}</div><div style="font-size:.95rem;font-weight:900;color:${color};margin-bottom:2px">${esc(dateStr)}</div>${f.video_title?`<div style="font-size:.72rem;color:#aaa;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${esc(f.video_title)}">${esc(f.video_title)}</div>`:''}<div style="font-size:.7rem;line-height:1.9;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0 12px;margin-bottom:8px"><div><span style="color:#555">Views when found:</span> <strong style="color:${f.views_when_found===0?'#ffd700':'#ddd'}">${f.views_when_found??'?'}</strong></div>${fields}</div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font-size:.82rem;font-weight:900"><span style="color:#666">Found by </span><span style="color:#fff;text-shadow:0 0 10px ${color}">${esc(f.found_by||'?')}</span></div><div style="display:flex;gap:4px;margin-left:auto;flex-wrap:wrap" onclick="event.stopPropagation()">${url?`<button class="vt-btn yt-btn" style="padding:4px 10px;font-size:.62rem;min-width:auto;flex:0 0 auto" onclick="window.open('${esc(url)}','_blank','noopener')">&#9654; Watch</button>`:''}<button class="vt-btn share-svg" style="padding:4px 10px;font-size:.62rem;min-width:auto;flex:0 0 auto" onclick="shareFindSVG(${i})" title="Export SVG card">SVG</button><button class="vt-btn share-discord" style="padding:4px 10px;font-size:.62rem;min-width:auto;flex:0 0 auto" onclick="shareFindDiscord(${i})" title="Copy Discord format">Discord</button><button class="vt-btn" style="padding:4px 10px;font-size:.62rem;min-width:auto;flex:0 0 auto;background:linear-gradient(135deg,#5b4fc7,#3d2fa8)" onclick="shareFindBoth(${i})" title="Export SVG + copy Discord">&#9733; Both</button></div></div></div></div></div>`;
   });
-  wrap.innerHTML=rows.join('');
+  wrap.innerHTML=rows.join('')+`<div style="text-align:center;font-size:.6rem;color:#333;padding:8px">${finds.length} finds total</div>`;
 }
 
 function setTimelineFilter(f){
@@ -4933,8 +4969,8 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.0.11",
-  "build": "2026-06-02T08:10:00",
+  "version": "7.0.12",
+  "build": "2026-06-02T09:00:00",
   "changelog": "\ud83e\uddab The single biggest backend change in the project's history.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
