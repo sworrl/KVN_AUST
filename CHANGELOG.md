@@ -14,6 +14,15 @@
 
 ---
 
+## [7.0.11] — 2026-06-02 — Records: share buttons on strip, list rows, and record holder
+
+### ✨ Added
+- **Inline share buttons on every list-view row** — each row in the ☰ List view has three mini-buttons: `SVG` (exports a shareable card), `D` (copies Discord-formatted text), `★` (does both). Buttons stop propagation so the find-detail modal doesn't open unless you click the row itself.
+- **Share buttons on the recently-added strip cards** — each "🆕 New" strip card now shows the same SVG / D / ★ trio beneath the date/finder line.
+- **Share buttons next to the Record Holder line** — in the timeline/graphic view, the record holder summary bar (🏆 Record Holder: …) now shows SVG / D / ★ inline, targeting the current top-ranked community find. Appears only when community data is loaded.
+
+---
+
 ## [7.0.10] — 2026-06-02 — Records: recently-added strip + list/timeline toggle
 
 ### ✨ Added

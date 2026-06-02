@@ -3912,6 +3912,15 @@ function copyFindForDiscord(f){
   navigator.clipboard.writeText(lines.join('\n')).then(()=>showToast('Copied for Discord!')).catch(()=>showToast('Copy failed','err'));
 }
 
+// Index-based share helpers — used by inline buttons in list/graphic view
+function _findShareData(f){
+  const url=f.video_url||f.url||'';
+  return{datePosted:f.date_posted||f.date||'',views:(f.views_when_found??f.views??'?')+'',lead:f.lead||'',rarity:f.rarity||'',foundBy:f.found_by||(f.added_by||'?'),url,title:f.video_title||'',channel:f.channel_name||''};
+}
+function shareFindSVG(idx){const f=communityFinds[idx];if(f)exportFindSVG(_findShareData(f));}
+function shareFindDiscord(idx){const f=communityFinds[idx];if(f)copyFindForDiscord(_findShareData(f));}
+function shareFindBoth(idx){shareFindSVG(idx);shareFindDiscord(idx);}
+
 let recFetchTimer=null;
 function onRecordLinkChange(val){
   clearTimeout(recFetchTimer);
@@ -4095,7 +4104,7 @@ function renderRecentStrip(finds){
     const _n=Number(f.discovered_at);const _d=isFinite(_n)?new Date(_n<1e11?_n*1000:_n):new Date(f.discovered_at);
     const addedStr=!isNaN(_d)?_d.toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
     const fi=finds.indexOf(f);
-    return`<div class="rec-recent-card" style="--c:${color};border-color:#1a1a2a" onclick="showFindDetail(${fi})"><div style="font-size:.52rem;color:#444;margin-bottom:1px">${addedStr}</div><div style="font-size:.7rem;font-weight:900;color:${color}">${esc(dateStr)}</div><div style="font-size:.58rem;color:#777;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72px">${esc(f.found_by||'?')}</div></div>`;
+    return`<div class="rec-recent-card" style="--c:${color};border-color:#1a1a2a"><div style="cursor:pointer" onclick="showFindDetail(${fi})"><div style="font-size:.52rem;color:#444;margin-bottom:1px">${addedStr}</div><div style="font-size:.7rem;font-weight:900;color:${color}">${esc(dateStr)}</div><div style="font-size:.58rem;color:#777;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72px">${esc(f.found_by||'?')}</div></div><div style="display:flex;gap:2px;margin-top:4px;justify-content:center"><button class="vt-btn share-svg" style="padding:2px 5px;font-size:.5rem;min-width:auto;line-height:1" onclick="shareFindSVG(${fi})" title="SVG">SVG</button><button class="vt-btn share-discord" style="padding:2px 5px;font-size:.5rem;min-width:auto;line-height:1" onclick="shareFindDiscord(${fi})" title="Discord">D</button><button class="vt-btn" style="padding:2px 5px;font-size:.5rem;min-width:auto;line-height:1;background:linear-gradient(135deg,#5b4fc7,#3d2fa8)" onclick="shareFindBoth(${fi})" title="Both">&#x2605;</button></div></div>`;
   }).join('');
   strip.innerHTML=`<div style="font-size:.5rem;color:#444;flex-shrink:0;padding-top:6px;padding-right:8px;white-space:nowrap;letter-spacing:.05em">&#10024; NEW</div><div class="rec-recent-cards">${cards}</div>`;
   strip.style.display='flex';
@@ -4112,7 +4121,8 @@ function renderFullListView(finds){
     const dateStr=new Date(f.date_posted).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
     const lead=f.lead?`<code style="font-size:.58rem;color:#888;background:#0d0d18;padding:1px 5px;border-radius:3px;display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px">${esc(f.lead)}</code>`:'';
     const ch=f.channel_name?`<span style="font-size:.55rem;color:#444;display:block">${esc(f.channel_name)}</span>`:'';
-    return`<div class="rec-card-item" style="--c:${color}" onclick="showFindDetail(${i})"><span style="font-size:.75rem;min-width:24px;text-align:center;flex-shrink:0">${rank}</span><div style="flex-shrink:0;min-width:100px"><div style="font-size:.8rem;font-weight:900;color:${color}">${esc(dateStr)}</div><div style="font-size:.55rem;color:#555">${esc(f.rarity||'')}</div></div><div style="flex-shrink:0;text-align:center;min-width:42px"><div style="font-size:.72rem;color:#ccc;font-weight:700">${f.views_when_found??'?'}</div><div style="font-size:.5rem;color:#444">views</div></div><div style="flex:1;min-width:0;overflow:hidden">${lead}${ch}</div><div style="font-size:.7rem;font-weight:700;color:#fff;text-shadow:0 0 6px ${color};flex-shrink:0;white-space:nowrap">${esc(f.found_by||'?')}</div></div>`;
+    const shareBtns=`<div style="display:flex;gap:3px;flex-shrink:0" onclick="event.stopPropagation()"><button class="vt-btn share-svg" style="padding:3px 7px;font-size:.55rem;min-width:auto;flex:0 0 auto;line-height:1.2" title="Export SVG" onclick="shareFindSVG(${i})">SVG</button><button class="vt-btn share-discord" style="padding:3px 7px;font-size:.55rem;min-width:auto;flex:0 0 auto;line-height:1.2" title="Copy Discord" onclick="shareFindDiscord(${i})">D</button><button class="vt-btn" style="padding:3px 7px;font-size:.55rem;min-width:auto;flex:0 0 auto;line-height:1.2;background:linear-gradient(135deg,#5b4fc7,#3d2fa8)" title="Both" onclick="shareFindBoth(${i})">&#x2605;</button></div>`;
+    return`<div class="rec-card-item" style="--c:${color}" onclick="showFindDetail(${i})"><span style="font-size:.75rem;min-width:24px;text-align:center;flex-shrink:0">${rank}</span><div style="flex-shrink:0;min-width:100px"><div style="font-size:.8rem;font-weight:900;color:${color}">${esc(dateStr)}</div><div style="font-size:.55rem;color:#555">${esc(f.rarity||'')}</div></div><div style="flex-shrink:0;text-align:center;min-width:42px"><div style="font-size:.72rem;color:#ccc;font-weight:700">${f.views_when_found??'?'}</div><div style="font-size:.5rem;color:#444">views</div></div><div style="flex:1;min-width:0;overflow:hidden">${lead}${ch}</div><div style="font-size:.7rem;font-weight:700;color:#fff;text-shadow:0 0 6px ${color};flex-shrink:0;white-space:nowrap;margin-right:4px">${esc(f.found_by||'?')}</div>${shareBtns}</div>`;
   });
   wrap.innerHTML=rows.join('');
 }
@@ -4180,18 +4190,19 @@ function updateRecordHolder(){
     const chVids=-(f.channel_videos||9999); // fewer channel vids = higher
     return age*1000+views*10+chVids; // age weighted heaviest
   }
-  let best=null,bestScore=-Infinity;
+  let best=null,bestScore=-Infinity,bestCommunityIdx=-1;
   // Check community finds
-  communityFinds.forEach(f=>{const s=scoreFind(f);if(s>bestScore){bestScore=s;best={date_posted:f.date_posted,found_by:f.found_by,rarity:f.rarity,views_when_found:f.views_when_found,channel_videos:f.channel_videos}}});
+  communityFinds.forEach((f,i)=>{const s=scoreFind(f);if(s>bestScore){bestScore=s;bestCommunityIdx=i;best={date_posted:f.date_posted,found_by:f.found_by,rarity:f.rarity,views_when_found:f.views_when_found,channel_videos:f.channel_videos,video_url:f.video_url,video_title:f.video_title,lead:f.lead,channel_name:f.channel_name}}});
   // Check local records
-  getRecords().forEach(r=>{const s=scoreFind(r);if(s>bestScore){bestScore=s;best={date_posted:r.date,found_by:'You',rarity:getRarityLabel(new Date(r.date).getFullYear()),views_when_found:r.views}}});
+  getRecords().forEach(r=>{const s=scoreFind(r);if(s>bestScore){bestScore=s;bestCommunityIdx=-1;best={date_posted:r.date,found_by:'You',rarity:getRarityLabel(new Date(r.date).getFullYear()),views_when_found:r.views,video_url:r.url,video_title:'',lead:r.lead||'',channel_name:''}}});
   if(!best){el.innerHTML='';return}
   const rc={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
   const color=rc[best.rarity]||'#888';
   const dateStr=new Date(best.date_posted).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   const viewsTxt=best.views_when_found!==undefined?best.views_when_found+' views':'? views';
   const chTxt=best.channel_videos?best.channel_videos+' ch vids':'';
-  el.innerHTML=`&#x1F3C6; <strong style="color:${color}">Record Holder:</strong> <span style="color:#fff">${dateStr}</span> <span style="color:${color}">(${best.rarity})</span> &#183; ${viewsTxt}${chTxt?' &#183; '+chTxt:''} &#183; <strong style="color:#aaa">${esc(best.found_by||'?')}</strong>`;
+  const shareRow=bestCommunityIdx>=0?`<span onclick="event.stopPropagation()" style="display:inline-flex;gap:4px;vertical-align:middle;margin-left:8px"><button class="vt-btn share-svg" style="padding:2px 7px;font-size:.55rem;min-width:auto;line-height:1.2" onclick="shareFindSVG(${bestCommunityIdx})" title="Export SVG">SVG</button><button class="vt-btn share-discord" style="padding:2px 7px;font-size:.55rem;min-width:auto;line-height:1.2" onclick="shareFindDiscord(${bestCommunityIdx})" title="Copy Discord">D</button><button class="vt-btn" style="padding:2px 7px;font-size:.55rem;min-width:auto;line-height:1.2;background:linear-gradient(135deg,#5b4fc7,#3d2fa8)" onclick="shareFindBoth(${bestCommunityIdx})" title="Export both">&#x2605;</button></span>`:'';
+  el.innerHTML=`&#x1F3C6; <strong style="color:${color}">Record Holder:</strong> <span style="color:#fff">${dateStr}</span> <span style="color:${color}">(${best.rarity})</span> &#183; ${viewsTxt}${chTxt?' &#183; '+chTxt:''} &#183; <strong style="color:#aaa">${esc(best.found_by||'?')}</strong>${shareRow}`;
 }
 
 // Timeline zoom/pan state
@@ -4922,8 +4933,8 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.0.10",
-  "build": "2026-06-02T07:45:00",
+  "version": "7.0.11",
+  "build": "2026-06-02T08:10:00",
   "changelog": "\ud83e\uddab The single biggest backend change in the project's history.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
