@@ -14,6 +14,14 @@
 
 ---
 
+## [7.0.10] — 2026-06-02 — Records: recently-added strip + list/timeline toggle
+
+### ✨ Added
+- **"🆕 New" strip above the timeline** — when community finds load, the 10 most recently submitted entries (sorted by `discovered_at` desc) appear as a compact horizontal strip of clickable cards above the timeline graphic. Each card shows the added date, posted date, and finder name in the entry's rarity colour. Clicking opens the full find-detail modal.
+- **List ↔ Timeline toggle button** — a "☰ List" button in the records controls row swaps the canvas timeline for a full card-list view of all community finds. Each row shows rank/medal, date (in rarity colour), view count, search lead, channel name, and finder. Clicking any row opens the detail modal. Toggle back with "⬜ Timeline". The All Finds / Zero Views / Reset Zoom buttons hide automatically while in list mode and restore on toggle back.
+
+---
+
 ## [7.0.9] — 2026-05-25 — Setup Bingo button fix + format cache bust
 
 ### 🐛 Fixed
