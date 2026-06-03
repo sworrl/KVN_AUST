@@ -23,7 +23,7 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-58ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.0.0-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.7.7-1a1a2e?style=flat-square" alt="Changelog"></a>
   <a href="CHANGELOG.md#700--2026-05-03--the-go-rewrite"><img src="https://img.shields.io/badge/Backend-Go_(rewritten_from_PHP)-00ADD8?style=flat-square&logo=go" alt="Go backend"></a>
 </p>
 
@@ -43,6 +43,104 @@ YouTube hosts over **20 billion videos**. An estimated **6 billion** have fewer 
 KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of forgotten content. **Sonder** generates random search strings from those default filename patterns to help you discover zero-view YouTube videos yourself.
 
 > **[The Complete Recycle Bin Format Map](FORMAT-MAP.md)** — Every known default filename keyphrase, range, source device, and contributor credit. Community-maintained.
+
+---
+
+## Sonder vs. NBVS — Two Tools, One Mission
+
+> KVN AUST's community built two search tools that approach the same graveyard from different angles. They're complementary — and Sonder now ships with NBVS's engine built in as an optional Power Mode.
+
+<table>
+<tr>
+<th align="left" width="38%"></th>
+<th align="center" width="31%">
+  🎮 Sonder<br>
+  <sub><a href="https://kvnaust.falcontechnix.com/">kvnaust.falcontechnix.com</a></sub>
+</th>
+<th align="center" width="31%">
+  🔍 NBVS<br>
+  <sub><a href="https://kvnaust.github.io/YouTube-NonBiasedVideoSearcher/">GitHub Pages</a></sub>
+</th>
+</tr>
+<tr>
+<td><strong>YouTube API key required</strong></td>
+<td align="center">❌ Never</td>
+<td align="center">✅ Required</td>
+</tr>
+<tr>
+<td><strong>Rate limits</strong></td>
+<td align="center">None — opens YouTube directly</td>
+<td align="center">~200 searches/day per Gmail</td>
+</tr>
+<tr>
+<td><strong>Algorithm bias</strong></td>
+<td align="center">Bypassed — raw filename search, no watch-history influence</td>
+<td align="center">Still uses YouTube's search index</td>
+</tr>
+<tr>
+<td><strong>In-page results with view counts</strong></td>
+<td align="center">⚡ <strong>Power Mode</strong> (optional API key)</td>
+<td align="center">✅ Always</td>
+</tr>
+<tr>
+<td><strong>Sort by views low → high</strong></td>
+<td align="center">⚡ Power Mode</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td><strong>Filter Shorts</strong></td>
+<td align="center">⚡ Power Mode</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td><strong>267-format spinner</strong></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><strong>Deep Dive mode</strong> (Before:2010 + theme)</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><strong>Community leaderboard</strong></td>
+<td align="center">✅ Live API</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><strong>Personal records + rating</strong></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><strong>Recycle Bin Bingo</strong></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><strong>Cloud save / profiles</strong></td>
+<td align="center">✅ Hosted</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><strong>Works fully offline</strong></td>
+<td align="center">✅ PWA, single HTML file</td>
+<td align="center">❌ API required</td>
+</tr>
+<tr>
+<td><strong>Google Dorks</strong> (before:, after:, "")</td>
+<td align="center">✅ Baked into format engine</td>
+<td align="center">✅</td>
+</tr>
+</table>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/No_API_Key-Never_Required-2ecc71?style=flat-square&labelColor=1a1a2e" alt="No API key required">
+  <img src="https://img.shields.io/badge/Algorithm-Bypassed-e74c3c?style=flat-square&labelColor=1a1a2e" alt="Algorithm bypassed">
+  <img src="https://img.shields.io/badge/Power_Mode-NBVS_Engine_Built_In-f39c12?style=flat-square&labelColor=1a1a2e" alt="NBVS Power Mode built in">
+</p>
+
+> **Power Mode** is an optional in-page search engine adapted from [NBVS](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher) and built directly into Sonder. Add a free YouTube Data API key in Settings to unlock real view counts, sort by fewest views (the gem-hunting mode), filter Shorts, and load 50 results at a time — right inside the game. No key? Everything works exactly as before: the spinner generates your format, you open it in YouTube. No setup, no limits, no expiry.
 
 ---
 
@@ -188,7 +286,7 @@ The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`)
 
 > **[Play YouTube's Recycle Bin at kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/)** — always up to date, cloud save, community leaderboard, and more.
 
-The hosted version (wrapper v1.12.0) wraps the same HTML from this repo with exclusive features:
+The hosted version (wrapper v7.7.7) wraps the same HTML from this repo with exclusive features:
 
 | Feature | Hosted | Standalone |
 |:--------|:------:|:----------:|

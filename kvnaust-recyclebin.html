@@ -855,6 +855,29 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .settings-modal .s-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .settings-modal .s-divider{border:none;border-top:1px solid #2a2a45;margin:16px 0;box-shadow:0 1px 0 rgba(255,255,255,.02)}
 .settings-modal .s-note{font-size:.65rem;color:#555;margin-top:4px}
+/* ── Power Search overlay ───────────────────────────────────────────────── */
+.ps-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(5px);z-index:600;align-items:center;justify-content:center}
+.ps-overlay.open{display:flex}
+.ps-panel{background:var(--card);border:1px solid #3a3a55;border-radius:12px;width:min(780px,96vw);max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.ps-header{padding:12px 16px;border-bottom:1px solid #2a2a45;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;background:#08080f}
+.ps-controls{padding:10px 16px;border-bottom:1px solid #1a1a2e;background:#0d0d1a;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ps-query{font-size:.68rem;color:#444;font-family:'Space Mono',monospace;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ps-results-wrap{overflow-y:auto;flex:1;padding:10px 16px}
+.ps-result{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #111122}
+.ps-result:last-child{border-bottom:none}
+.ps-thumb{width:120px;flex-shrink:0;border-radius:5px;overflow:hidden;position:relative;align-self:flex-start}
+.ps-thumb img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.ps-dur{position:absolute;bottom:3px;right:3px;background:rgba(0,0,0,.85);color:#fff;font-size:.58rem;padding:1px 4px;border-radius:2px;font-family:'Space Mono',monospace}
+.ps-meta{flex:1;min-width:0}
+.ps-title{font-size:.8rem;font-weight:700;color:#7e9cd8;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-decoration:none;display:block}
+.ps-title:hover{color:#a0b4e8}
+.ps-channel{font-size:.66rem;color:#555;margin-top:1px}
+.ps-views{font-size:.7rem;font-weight:700;margin-top:3px}
+.ps-date{font-size:.63rem;color:#444;margin-top:2px}
+.ps-desc{font-size:.63rem;color:#444;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ps-empty{text-align:center;color:#444;font-size:.8rem;padding:40px 20px}
+.ps-error{color:#e74c3c;font-size:.73rem;padding:12px;background:#1a0808;border:1px solid #3a1a1a;border-radius:6px;margin:10px}
+.ps-loading{text-align:center;color:#444;padding:36px;font-size:.78rem}
 
 /* ── ANIMATIONS ── */
 @keyframes floatIn{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
@@ -1010,6 +1033,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <div class="vt-row">
         <button class="vt-btn copy-btn" onclick="copyResult()">Copy</button>
         <button class="vt-btn yt-btn" onclick="searchYouTube()">Open in YouTube</button>
+        <button class="vt-btn" id="psBtn" onclick="openPowerSearch()" style="background:linear-gradient(135deg,#1a1a2e,#2a1a3e);border:1px solid #5b3fa8;opacity:.4" title="Add a YouTube Data API key in Settings to enable Power Search">⚡ Power Search</button>
         <button class="vt-btn rerand-btn" onclick="reRandomize()">Re-Randomize</button>
       </div>
       <div class="vt-label" style="margin-top:6px">Found a video? Paste the link &amp; rate it:</div>
@@ -1306,6 +1330,42 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
   </div>
 </div>
 
+<!-- POWER SEARCH OVERLAY — engine adapted from NBVS (github.com/kvnaust/YouTube-NonBiasedVideoSearcher) -->
+<div class="ps-overlay" id="psOverlay" onclick="if(event.target===this)closePowerSearch()">
+  <div class="ps-panel">
+    <div class="ps-header">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-weight:900;font-size:.95rem">⚡ Power Search</span>
+        <span style="font-size:.6rem;color:#555">powered by <a href="https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher" target="_blank" style="color:#4fc3f7">NBVS</a></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="ps-query" id="psQueryDisplay"></div>
+        <button class="vt-btn" onclick="closePowerSearch()" style="min-width:auto;padding:4px 10px;font-size:.7rem">✕</button>
+      </div>
+    </div>
+    <div class="ps-controls">
+      <label style="font-size:.72rem;color:#aaa;cursor:pointer;display:flex;align-items:center;gap:5px">
+        <input type="checkbox" id="psFilterShorts" style="accent-color:var(--accent)"> Filter Shorts
+      </label>
+      <label style="font-size:.72rem;color:#aaa;cursor:pointer;display:flex;align-items:center;gap:5px">
+        <input type="checkbox" id="psExactTitle" style="accent-color:var(--accent)"> Exact title
+      </label>
+      <div style="position:relative;margin-left:auto" id="psSortWrap">
+        <button class="s-btn" id="psSortBtn" onclick="togglePsSortMenu()" style="font-size:.7rem;display:flex;align-items:center;gap:4px;white-space:nowrap">
+          Sort: <span id="psSortLabel">Views Low→High</span> <span id="psSortArrow">▼</span>
+        </button>
+        <div id="psSortMenu" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1a1a2e;border:1px solid #3a3a55;border-radius:6px;min-width:210px;z-index:200;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.6)"></div>
+      </div>
+      <button class="vt-btn" onclick="psSearch(false)" id="psSearchBtn" style="background:var(--accent);min-width:auto;padding:5px 16px;font-size:.73rem">Search</button>
+    </div>
+    <div class="ps-results-wrap" id="psResultsWrap"></div>
+    <div id="psLoadMoreWrap" style="display:none;padding:10px 16px;text-align:center;border-top:1px solid #1a1a2e">
+      <button class="s-btn primary" onclick="psSearch(true)" id="psLoadMoreBtn" style="padding:6px 24px">Load 50 More</button>
+      <div id="psLoadedCount" style="font-size:.62rem;color:#444;margin-top:4px"></div>
+    </div>
+  </div>
+</div>
+
 <!-- SETTINGS MODAL -->
 <div class="settings-overlay" id="settingsOverlay" onclick="if(event.target===this)toggleSettings()">
   <div class="settings-modal">
@@ -1362,6 +1422,19 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
         Allow repeat formats on the spinner
       </label>
       <div class="s-note">When off (default), the spinner avoids formats already used this game. Red dots mark used formats.</div>
+    </div>
+
+    <hr class="s-divider">
+
+    <div class="s-group">
+      <div class="s-label" style="display:flex;align-items:center;gap:6px">⚡ Power Search <span style="font-size:.58rem;color:#9b59b6;border:1px solid #9b59b6;border-radius:3px;padding:1px 5px;font-weight:700">NBVS ENGINE</span></div>
+      <div class="s-note" style="margin-bottom:8px">Optional in-page search with real view counts, sort by fewest views, filter Shorts, and load more results. Powered by <a href="https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher" target="_blank" style="color:#7e9cd8">NBVS</a>. Add a free YouTube Data API v3 key to unlock — <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent)">get one here</a> (~200 searches/day per Gmail).</div>
+      <div class="s-row">
+        <input class="s-input" id="sApiKey" type="password" placeholder="YouTube Data API v3 key (optional)">
+        <button class="s-btn primary" onclick="savePsApiKey()">Save</button>
+        <button class="s-btn" id="sClearApiKey" onclick="clearPsApiKey()" style="display:none">Clear</button>
+      </div>
+      <div class="s-note" id="sApiKeyStatus" style="margin-top:6px"></div>
     </div>
 
     <hr class="s-divider">
@@ -2855,6 +2928,266 @@ function generateNumber(){
 function randDate(minY,maxY){const lo=minY||2006,hi=maxY||2026;const y=lo+Math.floor(Math.random()*(hi-lo+1)),m=1+Math.floor(Math.random()*12),d=1+Math.floor(Math.random()*28);return`${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}`}
 function randMonthDate(){const ms=['January','February','March','April','May','June','July','August','September','October','November','December'];return`${ms[Math.floor(Math.random()*12)]} ${String(1+Math.floor(Math.random()*28)).padStart(2,'0')}, ${2007+Math.floor(Math.random()*7)}`}
 function randHex(n){const len=n||4;let s='';for(let i=0;i<len;i++)s+='0123456789ABCDEF'[Math.floor(Math.random()*16)];return s}
+
+// ─── Power Search — engine adapted from NBVS ─────────────────────────────────
+// https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher (GPL-3.0)
+const PS_SORT_OPTIONS=[
+  {value:'viewCount',   label:'Views Low → High ⭐'},
+  {value:'date',        label:'Upload Date — Newest'},
+  {value:'dateOldest',  label:'Upload Date — Oldest'},
+  {value:'viewCountDesc',label:'Views High → Low'},
+  {value:'durationAsc', label:'Duration — Shortest'},
+  {value:'durationDesc',label:'Duration — Longest'},
+  {value:'relevance',   label:'Relevance'},
+];
+let psApiKey='',psSortBy='viewCount',psNextPageToken=null,psCurrentQuery='';
+let psResults_=[],psViewCounts_={},psDurations_={},psShortsMap_={};
+let psSortMenuOpen_=false;
+
+function psInit(){
+  psApiKey=localStorage.getItem('ps_api_key')||'';
+  const inp=document.getElementById('sApiKey');
+  if(inp&&psApiKey)inp.value=psApiKey;
+  updatePsApiKeyStatus();
+  buildPsSortMenu();
+  document.addEventListener('click',e=>{
+    if(psSortMenuOpen_&&!document.getElementById('psSortWrap')?.contains(e.target))togglePsSortMenu(false);
+  });
+}
+function savePsApiKey(){
+  const k=(document.getElementById('sApiKey')?.value||'').trim();
+  localStorage.setItem('ps_api_key',k);
+  psApiKey=k;
+  updatePsApiKeyStatus();
+  showToast(k?'⚡ Power Search active!':'API key cleared');
+}
+function clearPsApiKey(){
+  const inp=document.getElementById('sApiKey');
+  if(inp)inp.value='';
+  localStorage.removeItem('ps_api_key');
+  psApiKey='';
+  updatePsApiKeyStatus();
+  showToast('API key cleared');
+}
+function updatePsApiKeyStatus(){
+  const status=document.getElementById('sApiKeyStatus');
+  const clearBtn=document.getElementById('sClearApiKey');
+  const psBtn=document.getElementById('psBtn');
+  if(psApiKey){
+    if(status){status.textContent='⚡ Active — key stored in your browser only, never sent to our servers.';status.style.color='#2ecc71';}
+    if(clearBtn)clearBtn.style.display='';
+    if(psBtn){psBtn.style.opacity='1';psBtn.title='⚡ Power Search — real view counts, sort by fewest views';}
+  }else{
+    if(status){status.textContent='No key — Power Search disabled. Add one above.';status.style.color='#555';}
+    if(clearBtn)clearBtn.style.display='none';
+    if(psBtn){psBtn.style.opacity='0.4';psBtn.title='Add a YouTube Data API key in Settings to enable Power Search';}
+  }
+}
+function buildPsSortMenu(){
+  const menu=document.getElementById('psSortMenu');
+  if(!menu)return;
+  menu.innerHTML=PS_SORT_OPTIONS.map(o=>
+    `<button onclick="setPsSort('${o.value}')" style="width:100%;text-align:left;padding:8px 12px;font-size:.72rem;color:${o.value===psSortBy?'var(--accent)':'#aaa'};background:none;border:none;cursor:pointer;display:block" onmouseover="this.style.background='#1e1e3a'" onmouseout="this.style.background='none'">${o.value===psSortBy?'✓ ':''}${o.label}</button>`
+  ).join('');
+}
+function setPsSort(val){
+  psSortBy=val;
+  const opt=PS_SORT_OPTIONS.find(o=>o.value===val);
+  const lbl=document.getElementById('psSortLabel');
+  if(lbl)lbl.textContent=opt?opt.label:val;
+  togglePsSortMenu(false);
+  buildPsSortMenu();
+}
+function togglePsSortMenu(force){
+  psSortMenuOpen_=force!==undefined?force:!psSortMenuOpen_;
+  const menu=document.getElementById('psSortMenu');
+  const arrow=document.getElementById('psSortArrow');
+  if(menu)menu.style.display=psSortMenuOpen_?'block':'none';
+  if(arrow)arrow.textContent=psSortMenuOpen_?'▲':'▼';
+}
+function openPowerSearch(){
+  if(!psApiKey){showToast('Add a YouTube API key in Settings first','warn');toggleSettings();return;}
+  const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:finalString;
+  psCurrentQuery=q;
+  const qd=document.getElementById('psQueryDisplay');
+  if(qd)qd.textContent=q;
+  document.getElementById('psOverlay').classList.add('open');
+  psResults_=[];psNextPageToken=null;psViewCounts_={};psDurations_={};psShortsMap_={};
+  psSearch(false);
+}
+function closePowerSearch(){document.getElementById('psOverlay').classList.remove('open');}
+function psExtractTitle(q){return q.replace(/\b(before|after|site|intitle|inurl|filetype|related|cache|allintitle|allinurl|allintext|AROUND\(\d+\)):\S+/gi,'').replace(/^["']|["']$/g,'').trim();}
+function psParseDuration(iso){
+  if(!iso)return'';
+  const m=iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if(!m)return'';
+  const h=parseInt(m[1]||0),mn=parseInt(m[2]||0),s=parseInt(m[3]||0);
+  if(h>0)return`${h}:${String(mn).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  return`${mn}:${String(s).padStart(2,'0')}`;
+}
+function psDurToSec(str){
+  if(!str)return 0;
+  const p=str.split(':').map(Number);
+  if(p.length===3)return p[0]*3600+p[1]*60+p[2];
+  if(p.length===2)return p[0]*60+p[1];
+  return 0;
+}
+function psFormatViews(n){
+  if(n===0)return'0 views';
+  if(n<1000)return`${n} view${n===1?'':'s'}`;
+  if(n<1e6)return`${(n/1000).toFixed(1)}K views`;
+  return`${(n/1e6).toFixed(1)}M views`;
+}
+function psFormatDate(ds){
+  const d=new Date(ds),now=new Date(),diff=Math.floor((now-d)/86400000);
+  if(diff<1)return'today';if(diff<7)return`${diff}d ago`;
+  if(diff<30)return`${Math.floor(diff/7)}w ago`;
+  if(diff<365)return`${Math.floor(diff/30)}mo ago`;
+  return`${Math.floor(diff/365)}y · ${d.toISOString().split('T')[0]}`;
+}
+async function psGetViewCounts(videos){
+  const ids=videos.map(v=>v.id.videoId).filter(Boolean);
+  const vcMap={},durMap={};
+  for(let i=0;i<ids.length;i+=50){
+    const batch=ids.slice(i,i+50).join(',');
+    try{
+      const r=await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${batch}&key=${psApiKey}`);
+      if(r.ok){const d=await r.json();d.items.forEach(v=>{vcMap[v.id]=parseInt(v.statistics.viewCount||0);durMap[v.id]=psParseDuration(v.contentDetails?.duration);});}
+    }catch(e){}
+  }
+  Object.assign(psDurations_,durMap);
+  return{vcMap,durMap};
+}
+function psSortVideos(videos,vcMap,durMap){
+  if(psSortBy==='relevance')return[...videos];
+  return[...videos].sort((a,b)=>{
+    if(psSortBy==='date')return new Date(b.snippet.publishedAt)-new Date(a.snippet.publishedAt);
+    if(psSortBy==='dateOldest')return new Date(a.snippet.publishedAt)-new Date(b.snippet.publishedAt);
+    if(psSortBy==='viewCountDesc'){const d=(vcMap[b.id.videoId]||0)-(vcMap[a.id.videoId]||0);return d||new Date(a.snippet.publishedAt)-new Date(b.snippet.publishedAt);}
+    if(psSortBy==='durationAsc')return psDurToSec(durMap[a.id.videoId])-psDurToSec(durMap[b.id.videoId]);
+    if(psSortBy==='durationDesc')return psDurToSec(durMap[b.id.videoId])-psDurToSec(durMap[a.id.videoId]);
+    const d=(vcMap[a.id.videoId]||0)-(vcMap[b.id.videoId]||0);
+    return d||new Date(a.snippet.publishedAt)-new Date(b.snippet.publishedAt);
+  });
+}
+async function psCheckOrientations(videos){
+  const entries=await Promise.all(videos.map(v=>new Promise(resolve=>{
+    const id=v.id.videoId,t=v.snippet.title||'',desc=v.snippet.description||'';
+    if(t.includes('#')||desc.includes('#'))return resolve([id,true]);
+    const img=new Image();
+    img.onload=()=>resolve([id,img.naturalHeight>img.naturalWidth]);
+    img.onerror=()=>resolve([id,null]);
+    img.src=`https://i.ytimg.com/vi/${id}/oardefault.jpg`;
+  })));
+  const map=Object.fromEntries(entries);
+  Object.assign(psShortsMap_,map);
+  return map;
+}
+function psApplyFilters(items,durMap,oriMap){
+  const filterShorts=document.getElementById('psFilterShorts')?.checked;
+  if(!filterShorts)return items;
+  return items.filter(item=>{
+    const id=item.id.videoId,ori=oriMap[id];
+    if(ori===true)return false;if(ori===false)return true;
+    const secs=psDurToSec(durMap[id]);
+    return!(secs>0&&secs<=60);
+  });
+}
+async function psFetchPage(url,query){
+  const r=await fetch(url);
+  if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API request failed');}
+  const data=await r.json();
+  let items=data.items||[];
+  const filterShorts=document.getElementById('psFilterShorts')?.checked;
+  const exactTitle=document.getElementById('psExactTitle')?.checked;
+  if(filterShorts)items=items.filter(i=>!(i.snippet.title||'').includes('#')&&!(i.snippet.description||'').includes('#'));
+  if(exactTitle){const t=psExtractTitle(query).toLowerCase();items=items.filter(i=>i.snippet.title.trim().toLowerCase()===t);}
+  return{items,nextPageToken:data.nextPageToken||null};
+}
+async function psSearch(isLoadMore=false){
+  if(!psApiKey){showToast('No API key','warn');return;}
+  const btn=document.getElementById('psSearchBtn');
+  const resultsEl=document.getElementById('psResultsWrap');
+  const loadMoreWrap=document.getElementById('psLoadMoreWrap');
+  if(!isLoadMore){
+    psResults_=[];psNextPageToken=null;psViewCounts_={};psDurations_={};psShortsMap_={};
+    resultsEl.innerHTML='<div class="ps-loading">Searching…</div>';
+    loadMoreWrap.style.display='none';
+  }else{
+    const lmb=document.getElementById('psLoadMoreBtn');
+    if(lmb)lmb.textContent='Loading…';
+  }
+  if(btn)btn.disabled=true;
+  try{
+    const query=psCurrentQuery;
+    const apiOrder=psSortBy==='viewCountDesc'?'viewCount':psSortBy==='relevance'?'relevance':'date';
+    const baseUrl=`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=50&order=${apiOrder}&key=${psApiKey}`;
+    let newItems=[],newNextToken=null;
+    if(psSortBy==='dateOldest'&&!isLoadMore){
+      let pageToken=null,pages=0;
+      do{
+        const url=pageToken?`${baseUrl}&pageToken=${pageToken}`:baseUrl;
+        const{items,nextPageToken:npt}=await psFetchPage(url,query);
+        newItems=[...newItems,...items];pageToken=npt;pages++;
+      }while(pageToken&&pages<4);
+      newNextToken=pageToken;
+    }else{
+      const url=isLoadMore&&psNextPageToken?`${baseUrl}&pageToken=${psNextPageToken}`:baseUrl;
+      const{items,nextPageToken:npt}=await psFetchPage(url,query);
+      newItems=items;newNextToken=npt;
+    }
+    const{vcMap,durMap}=await psGetViewCounts(newItems);
+    const oriMap=await psCheckOrientations(newItems);
+    const filtered=psApplyFilters(newItems,durMap,oriMap);
+    Object.assign(psViewCounts_,vcMap);
+    psResults_=isLoadMore?psSortVideos([...psResults_,...filtered],psViewCounts_,psDurations_):psSortVideos(filtered,vcMap,durMap);
+    psNextPageToken=newNextToken;
+    psRenderResults();
+  }catch(err){
+    const msg=err.message.toLowerCase();
+    resultsEl.innerHTML=`<div class="ps-error">${msg.includes('quota')||msg.includes('exceeded')?'API quota exceeded — daily limit resets at midnight PST. Swap in another key to continue.':err.message}</div>`;
+  }finally{
+    if(btn)btn.disabled=false;
+    const lmb=document.getElementById('psLoadMoreBtn');
+    if(lmb)lmb.textContent='Load 50 More';
+  }
+}
+function psGetVideoUrl(id){
+  const ori=psShortsMap_[id];
+  if(ori===true)return`https://www.youtube.com/shorts/${id}`;
+  if(ori===false)return`https://www.youtube.com/watch?v=${id}`;
+  const secs=psDurToSec(psDurations_[id]);
+  return(secs>0&&secs<=60)?`https://www.youtube.com/shorts/${id}`:`https://www.youtube.com/watch?v=${id}`;
+}
+function psRenderResults(){
+  const el=document.getElementById('psResultsWrap');
+  const lmw=document.getElementById('psLoadMoreWrap');
+  if(!psResults_.length){el.innerHTML=`<div class="ps-empty">No results for “${psCurrentQuery}”</div>`;lmw.style.display='none';return;}
+  el.innerHTML=psResults_.map(v=>{
+    const id=v.id.videoId,url=psGetVideoUrl(id);
+    const thumb=v.snippet.thumbnails?.medium?.url||`https://i.ytimg.com/vi/${id}/mqdefault.jpg`;
+    const views=psViewCounts_[id]!==undefined?psViewCounts_[id]:null;
+    const dur=psDurations_[id];
+    const viewColor=views===0?'#ffd700':views!==null&&views<50?'#e74c3c':views!==null&&views<500?'#e67e22':'#666';
+    const zeroTag=views===0?' <span style="color:#ffd700;font-size:.62rem;border:1px solid #ffd70055;border-radius:3px;padding:0 4px">⭐ ZERO VIEWS</span>':'';
+    return`<div class="ps-result">
+      <a href="${url}" target="_blank" rel="noopener" class="ps-thumb"><img src="${thumb}" alt="" loading="lazy">${dur?`<span class="ps-dur">${dur}</span>`:''}</a>
+      <div class="ps-meta">
+        <a href="${url}" target="_blank" rel="noopener" class="ps-title">${v.snippet.title||''}</a>
+        <div class="ps-channel">${v.snippet.channelTitle||''}</div>
+        <div class="ps-views" style="color:${viewColor}">${views!==null?psFormatViews(views):'—'}${zeroTag}</div>
+        <div class="ps-date">${psFormatDate(v.snippet.publishedAt)}</div>
+        <div class="ps-desc">${v.snippet.description||''}</div>
+      </div>
+    </div>`;
+  }).join('');
+  if(psNextPageToken&&psResults_.length<2000){
+    lmw.style.display='block';
+    const lc=document.getElementById('psLoadedCount');
+    if(lc)lc.textContent=`${psResults_.length} results loaded`;
+  }else{lmw.style.display='none';}
+}
+// ─── End Power Search ─────────────────────────────────────────────────────────
 
 function ytSearchUrl(q){return'https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'&sp=CAI%253D'}
 function showResult(){
@@ -5117,7 +5450,7 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 // Restore saved sound preference
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadGameSetup();loadWheelTheme();
-loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();refreshKvnVideoDot();
+loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();refreshKvnVideoDot();psInit();
 // Re-check NEW status periodically (every 10 min) so the "JUST DROPPED" badge ages out without a reload
 setInterval(refreshKvnVideoDot,10*60*1000);
 checkForUpdates();checkHoliday();
@@ -5147,9 +5480,9 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.0.15",
-  "build": "2026-06-02T12:00:00",
-  "changelog": "\ud83e\uddab The single biggest backend change in the project's history.",
+  "version": "7.7.7",
+  "build": "2026-06-03T12:00:00",
+  "changelog": "⚡ Power Search (NBVS engine) built in — optional YouTube API key unlocks in-page results, sort by fewest views, filter Shorts.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
