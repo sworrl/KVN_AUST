@@ -302,12 +302,11 @@ input,select,textarea{-webkit-appearance:none;appearance:none}
   .fp-cats{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;
     -webkit-overflow-scrolling:touch;scrollbar-width:none}
   .fp-cats::-webkit-scrollbar{display:none}
-  .theme-pills{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
-    scrollbar-width:none;padding-bottom:2px}
-  .theme-pills::-webkit-scrollbar{display:none}
+  .theme-grid{grid-template-columns:repeat(3,1fr)}
 
   /* 11. Minimum touch targets */
-  .fp-cat,.theme-pill{min-height:34px;padding:5px 11px}
+  .fp-cat{min-height:34px;padding:5px 11px}
+  .ts{padding:8px 3px 6px}
   .hdr-btn{min-height:34px}
   .vt-star{font-size:1.6rem;padding:2px 4px;cursor:pointer}
 
@@ -975,11 +974,13 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .settings-modal .s-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .settings-modal .s-divider{border:none;border-top:1px solid #2a2a45;margin:16px 0;box-shadow:0 1px 0 rgba(255,255,255,.02)}
 .settings-modal .s-note{font-size:.65rem;color:#555;margin-top:4px}
-/* ── App theme picker ────────────────────────────────────────────────────── */
-.theme-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.theme-pill{background:var(--card2);border:1px solid #3a3a55;color:#aaa;padding:4px 10px;border-radius:20px;font-size:.68rem;font-weight:600;cursor:pointer;transition:all .15s}
-.theme-pill:hover{border-color:#666;color:#ddd}
-.theme-pill.active{border-color:var(--accent);color:var(--accent);background:rgba(var(--accent-rgb,231,76,60),.1)}
+/* ── App theme picker (swatch grid) ─────────────────────────────────────── */
+.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:8px}
+.ts{border:2px solid rgba(255,255,255,.08);border-radius:8px;padding:9px 4px 7px;cursor:pointer;transition:border-color .18s,transform .12s,box-shadow .18s;text-align:center}
+.ts:hover{border-color:rgba(255,255,255,.3);transform:scale(1.05)}
+.ts.active{border-color:#fff!important;box-shadow:0 0 10px rgba(255,255,255,.25),0 4px 14px rgba(0,0,0,.6)}
+.ts-name{font-size:.5rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.95),0 0 8px rgba(0,0,0,.8);margin-bottom:6px;line-height:1.3}
+.ts-bar{height:3px;border-radius:2px;width:74%;margin:0 auto;opacity:.88}
 /* ── Format category filter pills ───────────────────────────────────────── */
 .fp-cats{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
 .fp-cat{background:var(--card2);border:1px solid #2a2a45;color:#888;padding:3px 9px;border-radius:12px;font-size:.63rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
@@ -1512,7 +1513,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 
     <div class="s-group">
       <div class="s-label">App Theme</div>
-      <div class="theme-pills" id="themePills"></div>
+      <div class="theme-grid" id="themeGrid"></div>
     </div>
 
     <hr class="s-divider">
@@ -2044,39 +2045,137 @@ const SCREENS=['start-screen','wheel-screen','format-screen','number-screen','re
 const WHEEL_COLORS=['#b8860b','#2e8b57','#daa520','#1565c0','#c62828','#6a1b9a','#00838f','#ef6c00','#2e7d32','#ad1457','#4527a0','#00695c','#d84315','#1b5e20','#6d4c41','#37474f','#ff6f00','#283593','#004d40','#bf360c','#4e342e','#0d47a1','#827717','#880e4f','#33691e','#e65100','#1a237e','#3e2723','#006064','#f57f17','#311b92','#01579b'];
 
 // ═══════════════════════════════════
-//  APP THEMES (full skin presets)
+//  APP THEMES — 22 full skin presets
+//  bg/accent props used for swatch preview tiles.
+//  vars applied to :root on select.
 // ═══════════════════════════════════
 const APP_THEMES=[
-  {key:'default',label:'Default',deepDive:false,vars:{}},
-  {key:'deep-dive',label:'Deep Dive',deepDive:true,vars:{}},
-  {key:'terminal',label:'Terminal',deepDive:false,vars:{
+  // ── NBVS Import (their dark mode palette) ───────────────
+  {key:'nbvs',label:'NBVS',deepDive:false,bg:'#1a1a1a',accent:'#60a5fa',vars:{
+    '--accent':'#60a5fa','--accent2':'#93c5fd',
+    '--bg':'#1a1a1a','--card':'#2a2a2a','--card2':'#363636',
+    '--text':'#f3f4f6','--muted':'#9ca3af',
+    '--g1':'#60a5fa','--g2':'#818cf8','--g3':'#a78bfa','--g4':'#c084fc','--g5':'#e879f9',
+    '--daub':'rgba(96,165,250,.55)'}},
+  // ── Core ────────────────────────────────────────────────
+  {key:'default',label:'Default',deepDive:false,bg:'#0d0d14',accent:'#e74c3c',vars:{}},
+  {key:'deep-dive',label:'Deep Dive',deepDive:true,bg:'#020608',accent:'#00bcd4',vars:{}},
+  // ── v7.8.0 originals ───────────────────────────────────
+  {key:'terminal',label:'Terminal',deepDive:false,bg:'#030a03',accent:'#00e441',vars:{
     '--accent':'#00e441','--accent2':'#39ff14',
     '--bg':'#030a03','--card':'#091409','--card2':'#0e1e0e',
     '--text':'#c0ffc0','--muted':'#3a6a3a',
     '--g1':'#00e441','--g2':'#00cc38','--g3':'#00aa2e','--g4':'#008824','--g5':'#00661a',
-    '--daub':'rgba(0,228,65,.45)'
-  }},
-  {key:'vhs',label:'VHS',deepDive:false,vars:{
+    '--daub':'rgba(0,228,65,.45)'}},
+  {key:'vhs',label:'VHS',deepDive:false,bg:'#09000f',accent:'#ff0090',vars:{
     '--accent':'#ff0090','--accent2':'#ff44cc',
     '--bg':'#09000f','--card':'#130019','--card2':'#1a0023',
     '--text':'#ffe0ff','--muted':'#884488',
     '--g1':'#ff0090','--g2':'#cc00ff','--g3':'#7700ff','--g4':'#ff44cc','--g5':'#ff88ff',
-    '--daub':'rgba(255,0,144,.45)'
-  }},
-  {key:'amber',label:'Amber',deepDive:false,vars:{
+    '--daub':'rgba(255,0,144,.45)'}},
+  {key:'amber',label:'Amber',deepDive:false,bg:'#0d0800',accent:'#f5a623',vars:{
     '--accent':'#f5a623','--accent2':'#ffcc55',
     '--bg':'#0d0800','--card':'#1a1000','--card2':'#231600',
     '--text':'#fff5cc','--muted':'#7a6020',
     '--g1':'#f5a623','--g2':'#e8880e','--g3':'#d96c00','--g4':'#c55200','--g5':'#b03c00',
-    '--daub':'rgba(245,166,35,.45)'
-  }},
-  {key:'void',label:'Void',deepDive:false,vars:{
+    '--daub':'rgba(245,166,35,.45)'}},
+  {key:'void',label:'Void',deepDive:false,bg:'#000000',accent:'#eeeeee',vars:{
     '--accent':'#eeeeee','--accent2':'#aaaaaa',
     '--bg':'#000000','--card':'#080808','--card2':'#111111',
     '--text':'#eeeeee','--muted':'#555555',
     '--g1':'#eeeeee','--g2':'#bbbbbb','--g3':'#888888','--g4':'#666666','--g5':'#444444',
-    '--daub':'rgba(255,255,255,.35)'
-  }}
+    '--daub':'rgba(255,255,255,.35)'}},
+  // ── New expansions ──────────────────────────────────────
+  {key:'synthwave',label:'Synthwave',deepDive:false,bg:'#0a0718',accent:'#ff2d87',vars:{
+    '--accent':'#ff2d87','--accent2':'#ff6cb0',
+    '--bg':'#0a0718','--card':'#120b2a','--card2':'#1a1040',
+    '--text':'#f0e6ff','--muted':'#7a5fa0',
+    '--g1':'#ff2d87','--g2':'#b44fff','--g3':'#00e5ff','--g4':'#ff6a00','--g5':'#ffe100',
+    '--daub':'rgba(255,45,135,.5)'}},
+  {key:'bloodmoon',label:'Blood Moon',deepDive:false,bg:'#050005',accent:'#cc0000',vars:{
+    '--accent':'#cc0000','--accent2':'#ff3333',
+    '--bg':'#050005','--card':'#0f0208','--card2':'#180410',
+    '--text':'#ffe0e0','--muted':'#8a3a3a',
+    '--g1':'#cc0000','--g2':'#aa0000','--g3':'#880000','--g4':'#660000','--g5':'#cc2200',
+    '--daub':'rgba(204,0,0,.5)'}},
+  {key:'arctic',label:'Arctic',deepDive:false,bg:'#020b14',accent:'#48cae4',vars:{
+    '--accent':'#48cae4','--accent2':'#90e0ef',
+    '--bg':'#020b14','--card':'#062030','--card2':'#0a2e40',
+    '--text':'#e8f4f8','--muted':'#4a7a8a',
+    '--g1':'#48cae4','--g2':'#00b4d8','--g3':'#0096c7','--g4':'#0077b6','--g5':'#ade8f4',
+    '--daub':'rgba(72,202,228,.5)'}},
+  {key:'forest',label:'Forest',deepDive:false,bg:'#030a06',accent:'#2d936c',vars:{
+    '--accent':'#2d936c','--accent2':'#52b788',
+    '--bg':'#030a06','--card':'#091510','--card2':'#0f1f16',
+    '--text':'#d8f3dc','--muted':'#3a6b4a',
+    '--g1':'#52b788','--g2':'#40916c','--g3':'#2d6a4f','--g4':'#1b4332','--g5':'#74c69d',
+    '--daub':'rgba(45,147,108,.5)'}},
+  {key:'sakura',label:'Sakura',deepDive:false,bg:'#080310',accent:'#ff6b9d',vars:{
+    '--accent':'#ff6b9d','--accent2':'#ffadc5',
+    '--bg':'#080310','--card':'#120820','--card2':'#1c0e2e',
+    '--text':'#ffe4f0','--muted':'#8a5070',
+    '--g1':'#ff6b9d','--g2':'#ff9ec4','--g3':'#c77dff','--g4':'#e0aaff','--g5':'#ffb3c6',
+    '--daub':'rgba(255,107,157,.5)'}},
+  {key:'neon-tokyo',label:'Neon Tokyo',deepDive:false,bg:'#020202',accent:'#ff0055',vars:{
+    '--accent':'#ff0055','--accent2':'#ff4488',
+    '--bg':'#020202','--card':'#0a0a10','--card2':'#10101a',
+    '--text':'#ffffff','--muted':'#556688',
+    '--g1':'#ff0055','--g2':'#00f5ff','--g3':'#ffe600','--g4':'#ff00aa','--g5':'#7b00ff',
+    '--daub':'rgba(255,0,85,.5)'}},
+  {key:'rust',label:'Rust',deepDive:false,bg:'#0a0602',accent:'#d4531a',vars:{
+    '--accent':'#d4531a','--accent2':'#f07030',
+    '--bg':'#0a0602','--card':'#170c04','--card2':'#201008',
+    '--text':'#f5ddc8','--muted':'#7a5030',
+    '--g1':'#d4531a','--g2':'#c44b10','--g3':'#aa3d08','--g4':'#8a3006','--g5':'#f07030',
+    '--daub':'rgba(212,83,26,.5)'}},
+  {key:'galaxy',label:'Galaxy',deepDive:false,bg:'#030006',accent:'#9d4edd',vars:{
+    '--accent':'#9d4edd','--accent2':'#c77dff',
+    '--bg':'#030006','--card':'#0a0520','--card2':'#140a30',
+    '--text':'#e8e0ff','--muted':'#5a4a8a',
+    '--g1':'#9d4edd','--g2':'#7b2d8b','--g3':'#5c0d72','--g4':'#c77dff','--g5':'#e0aaff',
+    '--daub':'rgba(157,78,221,.5)'}},
+  {key:'cyberpunk',label:'Cyberpunk',deepDive:false,bg:'#040408',accent:'#f9e900',vars:{
+    '--accent':'#f9e900','--accent2':'#ffe333',
+    '--bg':'#040408','--card':'#0c0c14','--card2':'#14141e',
+    '--text':'#f0f0f0','--muted':'#666688',
+    '--g1':'#f9e900','--g2':'#ff6600','--g3':'#ff0099','--g4':'#00ffcc','--g5':'#6600ff',
+    '--daub':'rgba(249,233,0,.5)'}},
+  {key:'matrix',label:'Matrix',deepDive:false,bg:'#000000',accent:'#00ff00',vars:{
+    '--accent':'#00ff00','--accent2':'#66ff66',
+    '--bg':'#000000','--card':'#001800','--card2':'#002200',
+    '--text':'#c8ffc8','--muted':'#336633',
+    '--g1':'#00ff00','--g2':'#00dd00','--g3':'#00bb00','--g4':'#009900','--g5':'#33ff33',
+    '--daub':'rgba(0,255,0,.45)'}},
+  {key:'sunset',label:'Sunset',deepDive:false,bg:'#080210',accent:'#ff6b35',vars:{
+    '--accent':'#ff6b35','--accent2':'#ff9f1c',
+    '--bg':'#080210','--card':'#140520','--card2':'#1e0830',
+    '--text':'#fff0e0','--muted':'#8a5544',
+    '--g1':'#ff6b35','--g2':'#ff9f1c','--g3':'#e91e8c','--g4':'#9b59b6','--g5':'#ff6b35',
+    '--daub':'rgba(255,107,53,.5)'}},
+  {key:'bubblegum',label:'Bubblegum',deepDive:false,bg:'#0a0518',accent:'#ff77cc',vars:{
+    '--accent':'#ff77cc','--accent2':'#ff99dd',
+    '--bg':'#0a0518','--card':'#14073a','--card2':'#1c0a4a',
+    '--text':'#ffe8f8','--muted':'#8855aa',
+    '--g1':'#ff77cc','--g2':'#dd77ff','--g3':'#77aaff','--g4':'#77ffdd','--g5':'#ffcc77',
+    '--daub':'rgba(255,119,204,.5)'}},
+  {key:'ocean',label:'Ocean',deepDive:false,bg:'#000d1a',accent:'#0496c7',vars:{
+    '--accent':'#0496c7','--accent2':'#48cae4',
+    '--bg':'#000d1a','--card':'#001a2e','--card2':'#002540',
+    '--text':'#c8e8f8','--muted':'#2a5a7a',
+    '--g1':'#0496c7','--g2':'#006994','--g3':'#00496e','--g4':'#00c9a7','--g5':'#48cae4',
+    '--daub':'rgba(4,150,199,.55)'}},
+  {key:'lava',label:'Lava',deepDive:false,bg:'#080000',accent:'#ff5500',vars:{
+    '--accent':'#ff5500','--accent2':'#ff8800',
+    '--bg':'#080000','--card':'#140500','--card2':'#1e0800',
+    '--text':'#ffe8cc','--muted':'#7a3a1a',
+    '--g1':'#ff5500','--g2':'#ff3300','--g3':'#dd1100','--g4':'#ff8800','--g5':'#ffbb00',
+    '--daub':'rgba(255,85,0,.5)'}},
+  {key:'vapor',label:'Vaporwave',deepDive:false,bg:'#0d0020',accent:'#ff71ce',vars:{
+    '--accent':'#ff71ce','--accent2':'#b967ff',
+    '--bg':'#0d0020','--card':'#1a0040','--card2':'#24005a',
+    '--text':'#fffde7','--muted':'#906070',
+    '--g1':'#ff71ce','--g2':'#01cdfe','--g3':'#05ffa1','--g4':'#b967ff','--g5':'#fffb96',
+    '--daub':'rgba(255,113,206,.5)'}}
 ];
 
 let activeThemeKey='default';
@@ -2084,24 +2183,21 @@ let activeThemeKey='default';
 function applyAppTheme(key){
   const theme=APP_THEMES.find(t=>t.key===key)||APP_THEMES[0];
   activeThemeKey=theme.key;
-  // Clear any previously injected vars
   const root=document.documentElement;
   APP_THEMES.forEach(t=>Object.keys(t.vars).forEach(v=>root.style.removeProperty(v)));
-  // Apply new vars
   Object.entries(theme.vars).forEach(([v,val])=>root.style.setProperty(v,val));
-  // Deep Dive body class
   document.body.classList.toggle('deep-dive',!!theme.deepDive);
-  // Persist
   localStorage.setItem('app_theme',key);
-  // Update pill active states
-  document.querySelectorAll('.theme-pill').forEach(p=>p.classList.toggle('active',p.dataset.key===key));
+  document.querySelectorAll('.ts').forEach(p=>p.classList.toggle('active',p.dataset.key===key));
 }
 
-function buildThemePills(){
-  const wrap=document.getElementById('themePills');
+function buildThemeGrid(){
+  const wrap=document.getElementById('themeGrid');
   if(!wrap)return;
-  wrap.innerHTML=APP_THEMES.map(t=>`<button class="theme-pill${t.key===activeThemeKey?' active':''}" data-key="${t.key}" onclick="applyAppTheme('${t.key}')">${t.label}</button>`).join('');
+  wrap.innerHTML=APP_THEMES.map(t=>`<button class="ts${t.key===activeThemeKey?' active':''}" style="background:${t.bg}" data-key="${t.key}" onclick="applyAppTheme('${t.key}')"><div class="ts-name">${t.label}</div><div class="ts-bar" style="background:${t.accent}"></div></button>`).join('');
 }
+// legacy alias
+const buildThemePills=buildThemeGrid;
 
 // 30 distinct spinner themes — the user picks via setup. "Carnival" is the original WHEEL_COLORS.
 const WHEEL_THEMES={
@@ -5716,9 +5812,9 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.8.1",
-  "build": "2026-06-03T20:00:00",
-  "changelog": "📱 Mobile overhaul: kill backdrop-filter flicker, fix screen transitions, bottom-sheet panels, iOS input fix, 2-col action buttons, canvas pointer-events.",
+  "version": "7.9.0",
+  "build": "2026-06-03T21:00:00",
+  "changelog": "🎨 22 app themes: NBVS Dark imported, + Synthwave/Blood Moon/Arctic/Forest/Sakura/Neon Tokyo/Rust/Galaxy/Cyberpunk/Matrix/Sunset/Bubblegum/Ocean/Lava/Vaporwave. Color swatch grid picker.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
