@@ -855,6 +855,16 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .settings-modal .s-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .settings-modal .s-divider{border:none;border-top:1px solid #2a2a45;margin:16px 0;box-shadow:0 1px 0 rgba(255,255,255,.02)}
 .settings-modal .s-note{font-size:.65rem;color:#555;margin-top:4px}
+/* ── App theme picker ────────────────────────────────────────────────────── */
+.theme-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.theme-pill{background:var(--card2);border:1px solid #3a3a55;color:#aaa;padding:4px 10px;border-radius:20px;font-size:.68rem;font-weight:600;cursor:pointer;transition:all .15s}
+.theme-pill:hover{border-color:#666;color:#ddd}
+.theme-pill.active{border-color:var(--accent);color:var(--accent);background:rgba(var(--accent-rgb,231,76,60),.1)}
+/* ── Format category filter pills ───────────────────────────────────────── */
+.fp-cats{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.fp-cat{background:var(--card2);border:1px solid #2a2a45;color:#888;padding:3px 9px;border-radius:12px;font-size:.63rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.fp-cat:hover{border-color:#555;color:#ccc}
+.fp-cat.active{border-color:var(--accent);color:var(--accent);background:rgba(231,76,60,.08)}
 /* ── Power Search overlay ───────────────────────────────────────────────── */
 .ps-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(5px);z-index:600;align-items:center;justify-content:center}
 .ps-overlay.open{display:flex}
@@ -1133,6 +1143,15 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 <!-- PANELS -->
 <section class="format-panel" id="formatPanel" aria-label="Format Browser"><button class="fp-close" onclick="toggleFormatPanel()">&times;</button><h2 style="font-size:.9rem;margin-bottom:8px;color:#aaa">Format Browser</h2>
   <input class="fp-search" id="fpSearch" type="text" placeholder="Search formats..." oninput="filterFormats(this.value)">
+  <div class="fp-cats" id="fpCats">
+    <button class="fp-cat active" data-cat="all" onclick="fpSetCat(this)">All</button>
+    <button class="fp-cat" data-cat="numbered" onclick="fpSetCat(this)">Numbered</button>
+    <button class="fp-cat" data-cat="keyphrase" onclick="fpSetCat(this)">Keyphrases</button>
+    <button class="fp-cat" data-cat="extension" onclick="fpSetCat(this)">Extensions</button>
+    <button class="fp-cat" data-cat="date" onclick="fpSetCat(this)">Date-Based</button>
+    <button class="fp-cat" data-cat="ancient" onclick="fpSetCat(this)">Ancient YT</button>
+    <button class="fp-cat" data-cat="special" onclick="fpSetCat(this)">Special</button>
+  </div>
   <div class="fp-count" id="fpCount"></div>
   <div class="fp-actions"><button onclick="fpSelectAll()">All</button><button onclick="fpSelectNone()">None</button><button onclick="fpSelectRandom()">Random 20</button><button onclick="fpBingoPicks()" style="background:#e74c3c;color:#fff">KVN Picks</button></div><div id="formatList"></div></section>
 <section class="history-panel" id="historyPanel" aria-label="Game History"><button class="hp-close" onclick="toggleHistory()">&times;</button><h2 style="font-size:.9rem;margin-bottom:8px;color:#aaa">Game History</h2><div id="historyList"></div></section>
@@ -1370,6 +1389,13 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 <div class="settings-overlay" id="settingsOverlay" onclick="if(event.target===this)toggleSettings()">
   <div class="settings-modal">
     <h3>Settings</h3>
+
+    <div class="s-group">
+      <div class="s-label">App Theme</div>
+      <div class="theme-pills" id="themePills"></div>
+    </div>
+
+    <hr class="s-divider">
 
     <div class="s-group">
       <div class="s-label">YouTube Channel (auto-fetch images)</div>
@@ -1897,6 +1923,66 @@ let errorLog=[]; // {type:'warn'|'error', msg:string, ts:Date}
 const SCREENS=['start-screen','wheel-screen','format-screen','number-screen','result-screen'];
 const WHEEL_COLORS=['#b8860b','#2e8b57','#daa520','#1565c0','#c62828','#6a1b9a','#00838f','#ef6c00','#2e7d32','#ad1457','#4527a0','#00695c','#d84315','#1b5e20','#6d4c41','#37474f','#ff6f00','#283593','#004d40','#bf360c','#4e342e','#0d47a1','#827717','#880e4f','#33691e','#e65100','#1a237e','#3e2723','#006064','#f57f17','#311b92','#01579b'];
 
+// ═══════════════════════════════════
+//  APP THEMES (full skin presets)
+// ═══════════════════════════════════
+const APP_THEMES=[
+  {key:'default',label:'Default',deepDive:false,vars:{}},
+  {key:'deep-dive',label:'Deep Dive',deepDive:true,vars:{}},
+  {key:'terminal',label:'Terminal',deepDive:false,vars:{
+    '--accent':'#00e441','--accent2':'#39ff14',
+    '--bg':'#030a03','--card':'#091409','--card2':'#0e1e0e',
+    '--text':'#c0ffc0','--muted':'#3a6a3a',
+    '--g1':'#00e441','--g2':'#00cc38','--g3':'#00aa2e','--g4':'#008824','--g5':'#00661a',
+    '--daub':'rgba(0,228,65,.45)'
+  }},
+  {key:'vhs',label:'VHS',deepDive:false,vars:{
+    '--accent':'#ff0090','--accent2':'#ff44cc',
+    '--bg':'#09000f','--card':'#130019','--card2':'#1a0023',
+    '--text':'#ffe0ff','--muted':'#884488',
+    '--g1':'#ff0090','--g2':'#cc00ff','--g3':'#7700ff','--g4':'#ff44cc','--g5':'#ff88ff',
+    '--daub':'rgba(255,0,144,.45)'
+  }},
+  {key:'amber',label:'Amber',deepDive:false,vars:{
+    '--accent':'#f5a623','--accent2':'#ffcc55',
+    '--bg':'#0d0800','--card':'#1a1000','--card2':'#231600',
+    '--text':'#fff5cc','--muted':'#7a6020',
+    '--g1':'#f5a623','--g2':'#e8880e','--g3':'#d96c00','--g4':'#c55200','--g5':'#b03c00',
+    '--daub':'rgba(245,166,35,.45)'
+  }},
+  {key:'void',label:'Void',deepDive:false,vars:{
+    '--accent':'#eeeeee','--accent2':'#aaaaaa',
+    '--bg':'#000000','--card':'#080808','--card2':'#111111',
+    '--text':'#eeeeee','--muted':'#555555',
+    '--g1':'#eeeeee','--g2':'#bbbbbb','--g3':'#888888','--g4':'#666666','--g5':'#444444',
+    '--daub':'rgba(255,255,255,.35)'
+  }}
+];
+
+let activeThemeKey='default';
+
+function applyAppTheme(key){
+  const theme=APP_THEMES.find(t=>t.key===key)||APP_THEMES[0];
+  activeThemeKey=theme.key;
+  // Clear any previously injected vars
+  const root=document.documentElement;
+  APP_THEMES.forEach(t=>Object.keys(t.vars).forEach(v=>root.style.removeProperty(v)));
+  // Apply new vars
+  Object.entries(theme.vars).forEach(([v,val])=>root.style.setProperty(v,val));
+  // Deep Dive body class
+  document.body.classList.toggle('deep-dive',!!theme.deepDive);
+  // Persist
+  localStorage.setItem('app_theme',key);
+  // Update pill active states
+  document.querySelectorAll('.theme-pill').forEach(p=>p.classList.toggle('active',p.dataset.key===key));
+}
+
+function buildThemePills(){
+  const wrap=document.getElementById('themePills');
+  if(!wrap)return;
+  wrap.innerHTML=APP_THEMES.map(t=>`<button class="theme-pill${t.key===activeThemeKey?' active':''}" data-key="${t.key}" onclick="applyAppTheme('${t.key}')">${t.label}</button>`).join('');
+}
+
 // 30 distinct spinner themes — the user picks via setup. "Carnival" is the original WHEEL_COLORS.
 const WHEEL_THEMES={
   Carnival:WHEEL_COLORS,
@@ -2311,8 +2397,8 @@ function closeBingoFlash(){
 // browser worldwide to drop its cached parse on next page load
 // and refetch from GitHub. Same trick anytime the parser logic
 // or FORMAT-MAP.md schema changes shape — bump the version.
-const DOC_CACHE_KEY='kvn_fmt_v7';
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v7';
+const DOC_CACHE_KEY='kvn_fmt_v8';
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v8';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -2352,8 +2438,21 @@ async function fetchDocFormats(){
       const existing=new Set(ALL_FORMATS.map(f=>f.label));
       const fetched=[];
       let newCount=0;
+      let curSection='numbered';
       // Parse markdown table rows
       for(const line of md.split('\n')){
+        // Track section headings to categorize formats
+        const secM=line.match(/^##\s+(.+)/);
+        if(secM){
+          const h=secM[1].toLowerCase();
+          if(h.includes('ancient')||h.includes('old yt')||h.includes('early'))curSection='ancient';
+          else if(h.includes('date'))curSection='date';
+          else if(h.includes('ext'))curSection='extension';
+          else if(h.includes('key')||h.includes('phrase'))curSection='keyphrase';
+          else if(h.includes('special')||h.includes('hex'))curSection='special';
+          else curSection='numbered';
+          continue;
+        }
         // Numbered formats: | `KEYPHRASEXXXX` | 0000-9999 | ...
         // Also matches digit-start like `4XXX`, `0XXXX.MTS`, `100 XXXX`
         const m=line.match(/\|\s*`((?:[^`X]|X(?!X))*)(X{2,5})([^`]*?)`\s*\|\s*(\d+)-(\d+)/);
@@ -2367,7 +2466,7 @@ async function fetchDocFormats(){
           const tpl=hasSpace?m[1].trimEnd()+' {V}'+suffix:m[1]+'{V}'+suffix;
           const lo=parseInt(m[4]),hi=parseInt(m[5]);
           if(lo<=hi){
-            const fmt={label:lbl,tpl:tpl,min:lo,max:hi,pad:m[2].length};
+            const fmt={label:lbl,tpl:tpl,min:lo,max:hi,pad:m[2].length,sec:curSection==='numbered'?'numbered':curSection};
             fetched.push(fmt);
             if(!existing.has(lbl)){ALL_FORMATS.push(fmt);existing.add(lbl);newCount++}
           }
@@ -2382,7 +2481,7 @@ async function fetchDocFormats(){
           const lbl=hm[1]+hm[2]+suffix;
           const hasSpace=hm[1].endsWith(' ');
           const tpl=hasSpace?hm[1].trimEnd()+' {V}'+suffix:hm[1]+'{V}'+suffix;
-          const fmt={label:lbl,tpl:tpl,sp:'hexN',pad:hm[2].length};
+          const fmt={label:lbl,tpl:tpl,sp:'hexN',pad:hm[2].length,sec:'special'};
           fetched.push(fmt);
           if(!existing.has(lbl)){ALL_FORMATS.push(fmt);existing.add(lbl);newCount++}
           continue;
@@ -2391,8 +2490,8 @@ async function fetchDocFormats(){
         const tm=line.match(/\|\s*`"?HHMMSS"?`\s*\|\s*(\d+)-(\d+)/);
         if(tm){
           if(!existing.has('"HHMMSS"')){
-            ALL_FORMATS.push({label:'"HHMMSS"',tpl:'"{V}"',sp:'time',min:0,max:235959,pad:6});
-            fetched.push({label:'"HHMMSS"',tpl:'"{V}"',sp:'time',min:0,max:235959,pad:6});
+            ALL_FORMATS.push({label:'"HHMMSS"',tpl:'"{V}"',sp:'time',min:0,max:235959,pad:6,sec:'special'});
+            fetched.push({label:'"HHMMSS"',tpl:'"{V}"',sp:'time',min:0,max:235959,pad:6,sec:'special'});
             existing.add('"HHMMSS"');newCount++;
           }
           continue;
@@ -2405,8 +2504,8 @@ async function fetchDocFormats(){
             // Parse the variable part from XX pattern
             const xm=lbl.match(/(X+)/);const pad=xm?xm[1].length:2;
             const prefix=lbl.replace(/X+/,'{V}');
-            ALL_FORMATS.push({label:lbl,tpl:prefix,min:lo,max:hi,pad:pad});
-            fetched.push({label:lbl,tpl:prefix,min:lo,max:hi,pad:pad});
+            ALL_FORMATS.push({label:lbl,tpl:prefix,min:lo,max:hi,pad:pad,sec:'ancient'});
+            fetched.push({label:lbl,tpl:prefix,min:lo,max:hi,pad:pad,sec:'ancient'});
             existing.add(lbl);newCount++;
           }
           continue;
@@ -2421,7 +2520,7 @@ async function fetchDocFormats(){
           const maxY=maxM?parseInt(maxM[1]):new Date().getFullYear();
           if(!existing.has(lbl)){
             const tpl=lbl.replace('YYYYMMDD','{V}').replace('YYYY MM DD','{V}').replace('YYYY MM','{V}').replace('YYYY-MM-DD','{V}').replace('YYYY','{V}');
-            const fmt={label:lbl,tpl:tpl,sp:'date',minY:minY,maxY:maxY};
+            const fmt={label:lbl,tpl:tpl,sp:'date',minY:minY,maxY:maxY,sec:'date'};
             ALL_FORMATS.push(fmt);fetched.push(fmt);
             existing.add(lbl);newCount++;
           }else{
@@ -2438,8 +2537,10 @@ async function fetchDocFormats(){
         // Better to skip than to ship a broken search.
         if(sm&&!sm[1].match(/X{2,}|YYYY|format/i)){
           const lbl=sm[1];
+          // Distinguish extensions (start with . or are uppercase alpha like .MP4) from keyphrases
+          const isExt=curSection==='extension'||(curSection!=='keyphrase'&&/^\.[A-Z0-9]+$/.test(lbl));
           if(!existing.has(lbl)){
-            const fmt={label:lbl,tpl:lbl,sp:'static'};
+            const fmt={label:lbl,tpl:lbl,sp:'static',sec:isExt?'extension':'keyphrase'};
             ALL_FORMATS.push(fmt);fetched.push(fmt);
             existing.add(lbl);newCount++;
           }
@@ -3912,12 +4013,14 @@ function refreshKvnVideoDot(){
   const anyNew=KVN_RECYCLE_BIN_VIDEOS.some(v=>isKvnVideoNew(v.published));
   dot.style.display=anyNew?'':'none';
 }
+let activeFpCat='all';
 function buildFormatPanel(){
   const list=document.getElementById('formatList');list.innerHTML='';
   formats.forEach((f,i)=>{
     const d=document.createElement('div');d.className='fp-item';d.dataset.label=f.label.toLowerCase();
+    d.dataset.sec=f.sec||'numbered';
     let type='numbered',typeLabel='';
-    if(f.sp==='static'){type='static';typeLabel='static'}
+    if(f.sp==='static'){type='static';typeLabel=f.sec==='extension'?'ext':'phrase'}
     else if(f.sp==='date'){type='date';typeLabel='date'}
     else if(f.sp==='hex4'||f.sp==='hexN'||f.sp==='monthdate'){type='special';typeLabel=f.sp}
     else{typeLabel=`${String(f.min||0).padStart(f.pad||4,'0')}-${String(f.max||9999).padStart(f.pad||4,'0')}`}
@@ -3925,12 +4028,23 @@ function buildFormatPanel(){
     d.innerHTML=`<input type="checkbox" ${selectedFormats.has(i)?'checked':''} onchange="toggleFormat(${i},this.checked)"><span>${esc(f.label)}</span>${rangeHtml}`;
     list.appendChild(d);
   });
-  updateFpCount();
+  applyFpFilter();
+}
+function fpSetCat(btn){
+  activeFpCat=btn.dataset.cat;
+  document.querySelectorAll('.fp-cat').forEach(b=>b.classList.toggle('active',b===btn));
+  applyFpFilter();
 }
 function filterFormats(q){
+  applyFpFilter();
+}
+function applyFpFilter(){
+  const q=(document.getElementById('fpSearch')||{}).value||'';
   const lq=q.toLowerCase();
   document.querySelectorAll('#formatList .fp-item').forEach(d=>{
-    d.classList.toggle('hidden',lq&&!d.dataset.label.includes(lq));
+    const matchText=!lq||d.dataset.label.includes(lq);
+    const matchCat=activeFpCat==='all'||d.dataset.sec===activeFpCat;
+    d.classList.toggle('hidden',!matchText||!matchCat);
   });
   updateFpCount();
 }
@@ -5021,7 +5135,7 @@ function saveSettings(){
 function toggleSettings(){
   const o=document.getElementById('settingsOverlay');
   o.classList.toggle('open');
-  if(o.classList.contains('open'))populateSettingsForm();
+  if(o.classList.contains('open')){populateSettingsForm();buildThemePills()}
 }
 
 function populateSettingsForm(){
@@ -5450,7 +5564,9 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 // Restore saved sound preference
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadGameSetup();loadWheelTheme();
-loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();refreshKvnVideoDot();psInit();
+// Load saved app theme before anything renders
+(()=>{const t=localStorage.getItem('app_theme');if(t&&t!=='default')applyAppTheme(t)})();
+loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();refreshKvnVideoDot();psInit();buildThemePills();
 // Re-check NEW status periodically (every 10 min) so the "JUST DROPPED" badge ages out without a reload
 setInterval(refreshKvnVideoDot,10*60*1000);
 checkForUpdates();checkHoliday();
@@ -5480,9 +5596,9 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.7.7",
-  "build": "2026-06-03T12:00:00",
-  "changelog": "⚡ Power Search (NBVS engine) built in — optional YouTube API key unlocks in-page results, sort by fewest views, filter Shorts.",
+  "version": "7.8.0",
+  "build": "2026-06-03T18:00:00",
+  "changelog": "🎨 App themes (Default/Deep Dive/Terminal/VHS/Amber/Void) + format category filter pills (Numbered/Keyphrases/Extensions/Date-Based/Ancient YT/Special).",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
