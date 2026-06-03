@@ -23,7 +23,7 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-58ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.7.7-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.8.1-1a1a2e?style=flat-square" alt="Changelog"></a>
   <a href="CHANGELOG.md#700--2026-05-03--the-go-rewrite"><img src="https://img.shields.io/badge/Backend-Go_(rewritten_from_PHP)-00ADD8?style=flat-square&logo=go" alt="Go backend"></a>
 </p>
 
@@ -227,6 +227,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 - Works offline via service worker (full PWA)
 - Runs on Windows, Mac, Linux, Chromebook, mobile — any browser
 - 267 formats parsed from FORMAT-MAP.md (KVN Map 4.0), zero hardcoded
+- **Format category filter** — browse by type: Numbered · Keyphrases · Extensions · Date-Based · Ancient YT · Special; stacks with live text search
 - Embedded Web Audio (tick, retro, casino, nautical Deep Dive presets)
 - 15 achievements with badge modal, toast + sound on unlock
 
@@ -247,7 +248,8 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 - Progressive daub stamps that glow near BINGO
 - 50 unique SVG stamp designs, customizable colors
 - **Pre-game setup**: configurable Lose-a-Space slot count (0–10), Free Space toggle
-- **30 auto-rotating spinner themes** (rotate daily or every 2 saved games) — Deep Dive is the only manual theme
+- **30 auto-rotating spinner themes** (rotate daily or every 2 saved games)
+- **6 full app themes** (Default · Deep Dive · Terminal · VHS · Amber · Void) — skin every color in the UI, persists across sessions
 - **Bottom bar auto-hides** during gameplay, returns at game end (unless you've X'd it manually)
 - Export completed cards as SVG
 
@@ -286,7 +288,7 @@ The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`)
 
 > **[Play YouTube's Recycle Bin at kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/)** — always up to date, cloud save, community leaderboard, and more.
 
-The hosted version (wrapper v7.7.7) wraps the same HTML from this repo with exclusive features:
+The hosted version (wrapper v7.7.7) wraps the same HTML (v7.8.1) from this repo with exclusive features:
 
 | Feature | Hosted | Standalone |
 |:--------|:------:|:----------:|
