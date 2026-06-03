@@ -1495,9 +1495,16 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <div style="display:flex;align-items:center;gap:10px">
         <span style="font-weight:900;font-size:.95rem">⚡ Power Search</span>
         <span style="font-size:.6rem;color:#555">powered by <a href="https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher" target="_blank" style="color:#4fc3f7">NBVS</a></span>
+        <span id="psCloudBadge" style="display:none;font-size:.55rem;color:#27ae60;border:1px solid #27ae60;border-radius:3px;padding:1px 5px;font-weight:700">☁ CLOUD</span>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <div class="ps-query" id="psQueryDisplay"></div>
+        <div id="psQuotaWrap" style="display:none;font-size:.6rem;color:#666;white-space:nowrap">
+          <span id="psQuotaText"></span>
+          <div style="width:70px;height:3px;background:#1a1a2e;border-radius:2px;margin-top:2px;overflow:hidden">
+            <div id="psQuotaBar" style="height:100%;background:var(--accent);border-radius:2px;transition:width .3s"></div>
+          </div>
+        </div>
         <button class="vt-btn" onclick="closePowerSearch()" style="min-width:auto;padding:4px 10px;font-size:.7rem">✕</button>
       </div>
     </div>
@@ -1593,13 +1600,23 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 
     <div class="s-group">
       <div class="s-label" style="display:flex;align-items:center;gap:6px">⚡ Power Search <span style="font-size:.58rem;color:#9b59b6;border:1px solid #9b59b6;border-radius:3px;padding:1px 5px;font-weight:700">NBVS ENGINE</span></div>
-      <div class="s-note" style="margin-bottom:8px">Optional in-page search with real view counts, sort by fewest views, filter Shorts, and load more results. Powered by <a href="https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher" target="_blank" style="color:#7e9cd8">NBVS</a>. Add a free YouTube Data API v3 key to unlock — <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent)">get one here</a> (~200 searches/day per Gmail).</div>
-      <div class="s-row">
-        <input class="s-input" id="sApiKey" type="password" placeholder="YouTube Data API v3 key (optional)">
-        <button class="s-btn primary" onclick="savePsApiKey()">Save</button>
-        <button class="s-btn" id="sClearApiKey" onclick="clearPsApiKey()" style="display:none">Clear</button>
+      <div class="s-note" style="margin-bottom:8px">Optional in-page search with real view counts, sort by fewest views, filter Shorts, and load more results. Powered by <a href="https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher" target="_blank" style="color:#7e9cd8">NBVS</a>. Add a free YouTube Data API v3 key to unlock — <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent)">get one here</a> (~200 searches/day per Gmail). Logged-in users can store their key securely in the cloud.</div>
+      <div id="sApiKeyCloud" style="display:none;background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.25);border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:.7rem;color:#27ae60">
+        ☁ Key stored securely on the KVN server. <span id="sApiKeyCloudUsed"></span>
+        <div style="margin-top:6px;display:flex;gap:6px;align-items:center">
+          <input class="s-input" id="sApiKeyCloudInput" type="password" placeholder="Replace with a different key…" style="font-size:.68rem">
+          <button class="s-btn primary" onclick="savePsApiKey()" style="font-size:.65rem;padding:4px 10px">Update</button>
+          <button class="s-btn" onclick="clearPsApiKey()" style="font-size:.65rem;padding:4px 8px">Clear</button>
+        </div>
       </div>
-      <div class="s-note" id="sApiKeyStatus" style="margin-top:6px"></div>
+      <div id="sApiKeyLocal">
+        <div class="s-row">
+          <input class="s-input" id="sApiKey" type="password" placeholder="YouTube Data API v3 key (optional)">
+          <button class="s-btn primary" onclick="savePsApiKey()">Save</button>
+          <button class="s-btn" id="sClearApiKey" onclick="clearPsApiKey()" style="display:none">Clear</button>
+        </div>
+        <div class="s-note" id="sApiKeyStatus" style="margin-top:6px"></div>
+      </div>
     </div>
 
     <hr class="s-divider">
@@ -3289,34 +3306,79 @@ function psInit(){
     if(psSortMenuOpen_&&!document.getElementById('psSortWrap')?.contains(e.target))togglePsSortMenu(false);
   });
 }
+function psHasKey(){
+  return !!(window.__KVN_YT_PROXY__?.isAvailable())||!!psApiKey;
+}
 function savePsApiKey(){
-  const k=(document.getElementById('sApiKey')?.value||'').trim();
-  localStorage.setItem('ps_api_key',k);
-  psApiKey=k;
+  const proxy=window.__KVN_YT_PROXY__;
+  // When logged in, save to cloud via localStorage → shim sync
+  const inp=document.getElementById(proxy?.isAvailable()?'sApiKeyCloudInput':'sApiKey');
+  const k=(inp?.value||'').trim();
+  if(!k){showToast('Enter a key first','warn');return;}
+  localStorage.setItem('kvn_yt_api_key',k);
+  if(!proxy?.isAvailable()){
+    // Also store under legacy ps_api_key for local-only mode
+    localStorage.setItem('ps_api_key',k);
+    psApiKey=k;
+  }
   updatePsApiKeyStatus();
-  showToast(k?'⚡ Power Search active!':'API key cleared');
+  showToast(proxy?.isAvailable()?'☁ Key saved to cloud — syncing…':'⚡ Power Search active!');
 }
 function clearPsApiKey(){
+  const proxy=window.__KVN_YT_PROXY__;
   const inp=document.getElementById('sApiKey');
+  const cinp=document.getElementById('sApiKeyCloudInput');
   if(inp)inp.value='';
+  if(cinp)cinp.value='';
   localStorage.removeItem('ps_api_key');
+  localStorage.removeItem('kvn_yt_api_key');
   psApiKey='';
   updatePsApiKeyStatus();
   showToast('API key cleared');
 }
 function updatePsApiKeyStatus(){
+  const proxy=window.__KVN_YT_PROXY__;
+  const useCloud=proxy?.isAvailable();
+  const cloudWrap=document.getElementById('sApiKeyCloud');
+  const localWrap=document.getElementById('sApiKeyLocal');
   const status=document.getElementById('sApiKeyStatus');
   const clearBtn=document.getElementById('sClearApiKey');
   const psBtn=document.getElementById('psBtn');
-  if(psApiKey){
-    if(status){status.textContent='⚡ Active — key stored in your browser only, never sent to our servers.';status.style.color='#2ecc71';}
-    if(clearBtn)clearBtn.style.display='';
-    if(psBtn){psBtn.style.opacity='1';psBtn.title='⚡ Power Search — real view counts, sort by fewest views';}
+  if(useCloud){
+    if(cloudWrap)cloudWrap.style.display='';
+    if(localWrap)localWrap.style.display='none';
+    if(psBtn){psBtn.style.opacity='1';psBtn.title='⚡ Power Search — via KVN Cloud (10,000 units/day)';}
   }else{
-    if(status){status.textContent='No key — Power Search disabled. Add one above.';status.style.color='#555';}
-    if(clearBtn)clearBtn.style.display='none';
-    if(psBtn){psBtn.style.opacity='0.4';psBtn.title='Add a YouTube Data API key in Settings to enable Power Search';}
+    if(cloudWrap)cloudWrap.style.display='none';
+    if(localWrap)localWrap.style.display='';
+    if(psApiKey){
+      if(status){status.textContent='⚡ Active — key stored in your browser only.';status.style.color='#2ecc71';}
+      if(clearBtn)clearBtn.style.display='';
+      if(psBtn){psBtn.style.opacity='1';psBtn.title='⚡ Power Search — real view counts, sort by fewest views';}
+    }else{
+      if(status){status.textContent='No key — Power Search disabled. Add one above.';status.style.color='#555';}
+      if(clearBtn)clearBtn.style.display='none';
+      if(psBtn){psBtn.style.opacity='0.4';psBtn.title='Add a YouTube Data API key in Settings to enable Power Search';}
+    }
   }
+}
+function psUpdateQuota(quota){
+  if(!quota)return;
+  const wrap=document.getElementById('psQuotaWrap');
+  const text=document.getElementById('psQuotaText');
+  const bar=document.getElementById('psQuotaBar');
+  const badge=document.getElementById('psCloudBadge');
+  if(wrap)wrap.style.display='';
+  if(badge)badge.style.display='';
+  if(text)text.textContent=`${quota.used.toLocaleString()}/${(quota.limit/1000).toFixed(0)}K units · resets ${quota.resets_in}`;
+  if(bar){
+    const pct=Math.min(100,quota.pct||0);
+    bar.style.width=pct+'%';
+    bar.style.background=pct>85?'#e74c3c':pct>60?'#f39c12':'var(--accent)';
+  }
+  // Update cloud key status area if settings is open
+  const cloudUsed=document.getElementById('sApiKeyCloudUsed');
+  if(cloudUsed)cloudUsed.textContent=`${quota.used.toLocaleString()} / ${quota.limit.toLocaleString()} units used today · resets in ${quota.resets_in}`;
 }
 function buildPsSortMenu(){
   const menu=document.getElementById('psSortMenu');
@@ -3341,7 +3403,7 @@ function togglePsSortMenu(force){
   if(arrow)arrow.textContent=psSortMenuOpen_?'▲':'▼';
 }
 function openPowerSearch(){
-  if(!psApiKey){showToast('Add a YouTube API key in Settings first','warn');toggleSettings();return;}
+  if(!psHasKey()){showToast('Add a YouTube API key in Settings first','warn');toggleSettings();return;}
   const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:finalString;
   psCurrentQuery=q;
   const qd=document.getElementById('psQueryDisplay');
@@ -3383,11 +3445,20 @@ function psFormatDate(ds){
 async function psGetViewCounts(videos){
   const ids=videos.map(v=>v.id.videoId).filter(Boolean);
   const vcMap={},durMap={};
+  const proxy=window.__KVN_YT_PROXY__;
+  const useProxy=proxy?.isAvailable();
   for(let i=0;i<ids.length;i+=50){
     const batch=ids.slice(i,i+50).join(',');
     try{
-      const r=await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${batch}&key=${psApiKey}`);
-      if(r.ok){const d=await r.json();d.items.forEach(v=>{vcMap[v.id]=parseInt(v.statistics.viewCount||0);durMap[v.id]=psParseDuration(v.contentDetails?.duration);});}
+      let r,d;
+      if(useProxy){
+        r=await fetch(`${proxy.url}?action=videos&part=statistics,contentDetails&id=${encodeURIComponent(batch)}`,{headers:{'X-KVN-Token':proxy.getToken()}});
+        if(r.ok){const env=await r.json();if(env.ok){d=env.data;if(env.quota)psUpdateQuota(env.quota);}else{throw new Error(env.detail||env.error||'proxy error');}}
+      }else{
+        r=await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${batch}&key=${psApiKey}`);
+        if(r.ok)d=await r.json();
+      }
+      if(d&&d.items)d.items.forEach(v=>{vcMap[v.id]=parseInt(v.statistics?.viewCount||0);durMap[v.id]=psParseDuration(v.contentDetails?.duration);});
     }catch(e){}
   }
   Object.assign(psDurations_,durMap);
@@ -3428,10 +3499,15 @@ function psApplyFilters(items,durMap,oriMap){
     return!(secs>0&&secs<=60);
   });
 }
-async function psFetchPage(url,query){
-  const r=await fetch(url);
-  if(!r.ok){const e=await r.json();throw new Error(e.error?.message||'API request failed');}
-  const data=await r.json();
+async function psFetchPage(url,query,proxyHeaders){
+  const r=proxyHeaders?await fetch(url,{headers:proxyHeaders}):await fetch(url);
+  if(!r.ok){const e=await r.json();throw new Error(e.detail||e.error?.message||e.error||'API request failed');}
+  const env=await r.json();
+  // Unwrap proxy envelope if present
+  const data=env.ok&&env.data?env.data:env;
+  if(env.quota)psUpdateQuota(env.quota);
+  // Pass through YouTube errors
+  if(data.error)throw new Error(data.error.message||JSON.stringify(data.error));
   let items=data.items||[];
   const filterShorts=document.getElementById('psFilterShorts')?.checked;
   const exactTitle=document.getElementById('psExactTitle')?.checked;
@@ -3440,7 +3516,9 @@ async function psFetchPage(url,query){
   return{items,nextPageToken:data.nextPageToken||null};
 }
 async function psSearch(isLoadMore=false){
-  if(!psApiKey){showToast('No API key','warn');return;}
+  if(!psHasKey()){showToast('No API key','warn');return;}
+  const proxy=window.__KVN_YT_PROXY__;
+  const useProxy=proxy?.isAvailable();
   const btn=document.getElementById('psSearchBtn');
   const resultsEl=document.getElementById('psResultsWrap');
   const loadMoreWrap=document.getElementById('psLoadMoreWrap');
@@ -3456,19 +3534,25 @@ async function psSearch(isLoadMore=false){
   try{
     const query=psCurrentQuery;
     const apiOrder=psSortBy==='viewCountDesc'?'viewCount':psSortBy==='relevance'?'relevance':'date';
-    const baseUrl=`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=50&order=${apiOrder}&key=${psApiKey}`;
+    let baseUrl,proxyHeaders=null;
+    if(useProxy){
+      baseUrl=`${proxy.url}?action=search&part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=50&order=${apiOrder}`;
+      proxyHeaders={'X-KVN-Token':proxy.getToken()};
+    }else{
+      baseUrl=`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=50&order=${apiOrder}&key=${psApiKey}`;
+    }
     let newItems=[],newNextToken=null;
     if(psSortBy==='dateOldest'&&!isLoadMore){
       let pageToken=null,pages=0;
       do{
         const url=pageToken?`${baseUrl}&pageToken=${pageToken}`:baseUrl;
-        const{items,nextPageToken:npt}=await psFetchPage(url,query);
+        const{items,nextPageToken:npt}=await psFetchPage(url,query,proxyHeaders);
         newItems=[...newItems,...items];pageToken=npt;pages++;
       }while(pageToken&&pages<4);
       newNextToken=pageToken;
     }else{
       const url=isLoadMore&&psNextPageToken?`${baseUrl}&pageToken=${psNextPageToken}`:baseUrl;
-      const{items,nextPageToken:npt}=await psFetchPage(url,query);
+      const{items,nextPageToken:npt}=await psFetchPage(url,query,proxyHeaders);
       newItems=items;newNextToken=npt;
     }
     const{vcMap,durMap}=await psGetViewCounts(newItems);
@@ -5844,7 +5928,7 @@ window.addEventListener('hashchange',handleHash);
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
 {
-  "version": "7.9.1",
+  "version": "7.10.0",
   "build": "2026-06-03T22:00:00",
   "changelog": "⚡ Power Search: auto-sort lowest views, gold shimmer fanfare on 0-view finds, sepia→amber fanfare on pre-2008 vintage videos. 22 app themes w/ swatch grid.",
   "repo": "https://github.com/sworrl/KVN_AUST",
