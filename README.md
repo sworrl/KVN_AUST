@@ -23,7 +23,7 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-58ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.15.0-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.15.3-1a1a2e?style=flat-square" alt="Changelog"></a>
   <a href="CHANGELOG.md#700--2026-05-03--the-go-rewrite"><img src="https://img.shields.io/badge/Backend-Go_(rewritten_from_PHP)-00ADD8?style=flat-square&logo=go" alt="Go backend"></a>
 </p>
 
@@ -324,10 +324,12 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 | 1 | **Recycle Bin Bingo** | Randomized 5x5 bingo card with 101 video categories from KVN AUST's series. Slide-puzzle reveal animation. 50 unique SVG daub stamps per game. **Free Space** can be disabled in setup for a 25-category card. |
 | 2 | **Format Spinner** | 3D-textured wheel loaded with 267 filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md) (KVN Map 4.0). No-repeat spins with red dots marking used formats. **Lose-a-Space** penalty segment count is configurable in setup (0–10). Theme auto-rotates daily or every 2 saved games — 30 distinct palettes (Carnival, Pastels, Primaries, Mono, Sunset, Ocean, Forest, Neon, Vaporwave, Cyberpunk, …). Deep Dive mode is the only manually-toggled theme. |
 | 3 | **Rainbow Number Generator** | Character-by-character rainbow shuffle animation generates the random search number for your format. |
-| 4 | **Search YouTube & Rate** | Copy the search string, open directly in YouTube, or re-randomize. Rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." Log date posted, views, and channel size. Share via SVG card or copy for Discord. |
-| 5 | **Game Summary & Export** | End-of-session recap with video thumbnails, per-metric breakdowns, and averages. Export bingo cards and summaries as SVG. |
-| 6 | **Oldest Zero-View Record** | Track the oldest zero-view videos you discover on a canvas timeline with rarity zones — from YouTube's launch in 2005 to present day. |
-| 7 | **KVN's Video Gallery** | Curated list of every KVN AUST Recycle Bin / 0-View / mapping / Bingo video. Thumbnails, titles, publish dates, click-to-watch. New releases get a pulsing red **NEW** badge for the first 24 hours after publish. |
+| 4 | **Search & Rate** | Copy the search string, open in YouTube, or re-randomize. **Hosted:** top 5 inline results load automatically — sorted by 0-view first, then pre-2008 oldest, then all others oldest-first — showing author (blue), views (amber), date + age (sage), per-card star ratings, and Watch / Save / Record buttons. A "Top 5 of N found" header with a **View All →** button opens the full scrollable results modal. Manually rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." Share via SVG card or copy for Discord. |
+| 5 | **Found It Popup** | When a video is logged, the **Found It** overlay fires with a thumbnail, rarity tier (LEGENDARY · SUPER RARE · RARE · COMMON), view count, and four action buttons: **Watch**, **Discord** (copies a formatted find message with rarity emoji + link), **Copy Link**, and **Close**. Confetti fires on LEGENDARY or zero-view finds. |
+| 6 | **Mid-Game Resume** | Refreshing mid-session no longer loses progress. A modal detects the interrupted game and shows rounds saved, last format, last search string, with **Resume** and **New Game** options. State is stored in `sessionStorage` (tab-local, expires after 24 hours). |
+| 7 | **Game Summary & Export** | End-of-session recap with video thumbnails, per-metric breakdowns, and averages. Export bingo cards and summaries as SVG. |
+| 8 | **Oldest Zero-View Record** | Track the oldest zero-view videos you discover on a canvas timeline with rarity zones — from YouTube's launch in 2005 to present day. |
+| 9 | **KVN's Video Gallery** | Curated list of every KVN AUST Recycle Bin / 0-View / mapping / Bingo video. Thumbnails, titles, publish dates, click-to-watch. New releases get a pulsing red **NEW** badge for the first 24 hours after publish. |
 
 ---
 
@@ -369,8 +371,8 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 </p>
 
 <p align="center">
-  <img src="screenshots/08-result-screen.png" width="720" alt="KVN AUST Recycle Bin - Search Rate Save">
-  <br><sub>Search, Rate & Save — auto-fetch video stats, share to Discord</sub>
+  <img src="screenshots/08-result-screen.png" width="720" alt="KVN AUST Recycle Bin - Result Screen with Inline Video Cards">
+  <br><sub>Result Screen — Top 5 inline results sorted by 0-view → oldest, with Watch / Save / Record and "View All N →"</sub>
 </p>
 
 <p align="center">
@@ -386,6 +388,21 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 <p align="center">
   <img src="screenshots/11-find-detail.png" width="720" alt="KVN AUST Recycle Bin - Find Detail Modal">
   <br><sub>Find Detail — click any dot for video info, channel stats, attribution</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/12-inline-results-desktop.png" width="720" alt="KVN AUST Recycle Bin - Desktop Inline Results Wide Layout">
+  <br><sub>Desktop Result Screen — result cards expand to fill full width at ≥ 1100px (up to 5 cards in one row at 1920px)</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/13-found-it.png" width="720" alt="KVN AUST Recycle Bin - Found It Popup with Share Buttons">
+  <br><sub>Found It — rarity reveal with Watch, Discord, Copy Link, and Close buttons</sub>
+</p>
+
+<p align="center">
+  <img src="screenshots/14-resume-modal.png" width="720" alt="KVN AUST Recycle Bin - Mid-Game Resume Modal">
+  <br><sub>Mid-Game Resume — refresh recovery modal showing session stats, Resume and New Game options</sub>
 </p>
 
 ---
@@ -411,6 +428,9 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 - Password-backed cloud save for game history
 - Community finds leaderboard with live API
 - Auto-updates within 5 minutes of a push
+- **Inline Top Results** — top 5 search results per round, sorted 0-view → pre-2008 → oldest; colored meta; Watch/Save/Record per card; "View All N" full modal
+- **Mid-game resume** — sessionStorage checkpoint survives page refresh; resume modal shows session stats
+- **Found It popup** — Watch, Discord, Copy Link, Close; confetti on LEGENDARY/zero-view
 
 </td></tr>
 <tr><td>
@@ -467,6 +487,9 @@ The hosted version (wrapper v7.7.7) wraps the same HTML (v7.8.1) from this repo 
 |:--------|:------:|:----------:|
 | Full game (spinner, bingo, achievements, gallery, Deep Dive) | Yes | Yes |
 | Format sync, Share Card / Discord copy | Yes | Yes |
+| **Inline Search Results** — top 5 sorted cards (0-view → pre-2008 → oldest) with Watch/Save/Record; "View All N" modal; full-width on desktop (≥1100px, up to 1500px, smooth CSS transition) | Yes | No |
+| **Mid-Game Resume** — refresh recovery modal with session stats, Resume / New Game options | Yes | No |
+| **Found It Popup** — rarity + title + Watch / Discord / Copy Link / Close buttons; confetti on LEGENDARY | Yes | No |
 | **Cloud Save** — game history, bingo state, settings synced across devices | Yes | No |
 | **Player Profiles** — XP, levels, 28 badges, streaks, [shareable SVG cards](https://kvnaust.falcontechnix.com/profile_card.php?u=root) | Yes | No |
 | **Seasons** — 90-day competitive windows with season leaderboards | Yes | No |
