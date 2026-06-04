@@ -188,6 +188,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif}
   .main{top:110px}.bingo-overlay,.format-panel,.history-panel,.bingo-setup{top:110px}
   .wheel-container{width:min(85vw,85vh)!important;height:min(85vw,85vh)!important}
   .spin-btn{width:90px!important;height:90px!important}
+  .spin-label{width:76px!important;height:76px!important}.sdi{font-size:1.9rem!important}
   .result-pill{padding:18px 28px;font-size:clamp(1.2rem,4vw,2rem)}
   .video-tracker{width:95vw!important}
   .vt-row{gap:4px}.vt-btn{font-size:.7rem;padding:8px 10px}
@@ -325,6 +326,7 @@ input,select,textarea{-webkit-appearance:none;appearance:none}
   .rolling-number{font-size:clamp(2.4rem,8vw,3.5rem)!important}
   .wheel-container{width:min(90vw,90vh)!important;height:min(90vw,90vh)!important}
   .spin-btn{width:88px!important;height:88px!important}
+  .spin-label{width:74px!important;height:74px!important}.sdi{font-size:1.8rem!important}
   .result-sub{font-size:.72rem;margin-top:6px}
   .vt-label{font-size:.68rem}
   .ps-controls{flex-wrap:wrap;gap:6px}
@@ -528,13 +530,13 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 /* CW deflects LEFT (incoming segment from left pushes tip left), CCW deflects RIGHT */
 @keyframes pointerTick{0%{transform:translateX(-50%) rotate(0deg) translateY(0)}28%{transform:translateX(-50%) rotate(-15deg) translateY(2px)}62%{transform:translateX(-50%) rotate(4deg) translateY(0)}100%{transform:translateX(-50%) rotate(0deg) translateY(0)}}
 @keyframes pointerTickCCW{0%{transform:translateX(-50%) rotate(0deg) translateY(0)}28%{transform:translateX(-50%) rotate(15deg) translateY(2px)}62%{transform:translateX(-50%) rotate(-4deg) translateY(0)}100%{transform:translateX(-50%) rotate(0deg) translateY(0)}}
-/* Spin direction indicators (inline inside .spin-label) */
-.sdi{font-size:.85rem;line-height:1;opacity:.12;transition:opacity .3s,filter .3s;
+/* Spin direction indicators (large, fill button interior on each side) */
+.sdi{font-size:2.4rem;line-height:1;flex-shrink:0;opacity:.07;transition:opacity .3s,filter .3s;
   background:linear-gradient(90deg,hsl(var(--sd-h1,280),80%,70%),hsl(var(--sd-h2,40),80%,70%));
   background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .sdi.active{opacity:1;background:linear-gradient(90deg,hsl(var(--sd-h1,280),85%,74%),hsl(var(--sd-h2,40),85%,74%),hsl(var(--sd-h3,160),85%,74%),hsl(var(--sd-h1,280),85%,74%));
   background-size:300% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  animation:freeGlowFlow 3s linear infinite;filter:drop-shadow(0 0 6px hsla(var(--sd-h2,40),85%,65%,.8))}
+  animation:freeGlowFlow 3s linear infinite;filter:drop-shadow(0 0 8px hsla(var(--sd-h2,40),85%,65%,.9))}
 /* Lucky Lefty overlay */
 #luckyLefty{position:fixed;inset:0;z-index:900;display:none;align-items:center;justify-content:center;
   background:radial-gradient(ellipse at 50% 40%,rgba(28,5,55,.97),rgba(0,0,8,.98));
@@ -560,8 +562,10 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 .spin-btn.spinning img{animation:spinFace .3s ease}
 @keyframes spinFace{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(.7)}100%{transform:rotate(360deg) scale(1)}}
 .spin-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:12;
-  display:flex;align-items:center;gap:5px;pointer-events:none;text-transform:uppercase}
-.spin-text{font-weight:900;font-size:1rem;letter-spacing:1.5px;
+  width:110px;height:110px;display:flex;align-items:center;justify-content:space-between;
+  pointer-events:none;text-transform:uppercase}
+.spin-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-weight:900;font-size:1rem;letter-spacing:1.5px;white-space:nowrap;
   background:linear-gradient(90deg,hsl(var(--sd-h1,280),88%,80%),hsl(var(--sd-h2,40),88%,80%),hsl(var(--sd-h3,160),88%,80%),hsl(var(--sd-h1,280),88%,80%));
   background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
   animation:freeGlowFlow 2.5s linear infinite;
@@ -6347,7 +6351,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.15.8","build":"2026-06-04T22:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.15.9","build":"2026-06-04T23:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
