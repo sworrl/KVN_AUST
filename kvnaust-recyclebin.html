@@ -887,10 +887,21 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .sr-badge.saved{background:rgba(76,175,80,.2);color:#4caf50}
 .sr-loading{color:var(--muted);font-size:.85rem;padding:30px;text-align:center}
 .sr-empty{color:#555;font-size:.8rem;padding:30px;text-align:center}
-.sr-bummer{text-align:center;padding:36px 20px;display:flex;flex-direction:column;align-items:center;gap:12px}
-.sr-bummer-nine{font-size:3.5rem;font-weight:900;letter-spacing:-.03em;color:#e74c3c;line-height:1;font-variant-numeric:tabular-nums}
-.sr-bummer-none{font-size:.7rem;color:#333;letter-spacing:.1em;text-transform:uppercase;margin-top:-4px}
-.sr-bummer-sub{font-size:.72rem;color:#444;max-width:280px;line-height:1.5}
+.sr-bummer{text-align:center;padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;background:var(--card);border:1px solid #2a2a40;border-radius:10px}
+.sr-bummer-nine{font-size:3rem;font-weight:900;letter-spacing:-.03em;color:#e74c3c;line-height:1;font-variant-numeric:tabular-nums}
+.sr-bummer-none{font-size:.65rem;color:#333;letter-spacing:.1em;text-transform:uppercase;margin-top:-4px}
+.sr-bummer-sub{font-size:.68rem;color:#444;max-width:260px;line-height:1.5}
+/* inline result cards (top 5, embedded in result screen) */
+.sr-inline-header{font-size:.6rem;font-weight:900;letter-spacing:.1em;color:#444;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.sr-inline-card{background:var(--card);border:1px solid #2a2a40;border-radius:8px;padding:8px;display:flex;gap:8px;margin-bottom:6px;position:relative;transition:border-color .2s}
+.sr-inline-card:hover{border-color:#3a3a55}
+.sr-inline-card.clicked{border-left:3px solid var(--accent)}
+.sr-inline-thumb{width:100px;height:56px;border-radius:5px;object-fit:cover;background:#111;flex-shrink:0}
+.sr-inline-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.sr-inline-title{font-size:.72rem;font-weight:700;color:#eee;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+.sr-inline-meta{font-size:.6rem;color:#555}
+.sr-inline-actions{display:flex;gap:5px;margin-top:auto;flex-wrap:wrap;align-items:center}
+.sr-inline-stars{display:flex;gap:1px;flex-wrap:wrap;margin-top:2px}
 
 /* ── BINGO SETUP PANEL ── */
 .bingo-setup{position:fixed;top:220px;right:0;bottom:0;width:340px;background:linear-gradient(180deg,var(--card),#111120);border-left:1px solid #2a2a40;z-index:460;
@@ -1235,6 +1246,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
         <button class="vt-btn copy-btn" onclick="copyResult()">Copy</button>
         <button class="vt-btn rerand-btn" onclick="reRandomize()">Re-Randomize</button>
       </div>
+      <div id="srInline" style="margin-top:10px"></div>
       <div id="vtManualEntry" style="display:none">
         <div class="vt-label" style="margin-top:6px">Found a video? Paste the link &amp; rate it:</div>
         <div class="vt-row"><input class="vt-input" id="vtLink" type="text" placeholder="https://youtube.com/watch?v=..." oninput="onVideoLinkChange(this.value)"><span id="vtFetchStatus" style="font-size:.55rem;color:var(--muted);margin-left:4px"></span></div>
@@ -3586,19 +3598,17 @@ let currentSearchVideos=[]; // {videoId,title,author,viewCount,thumbnail,clicked
 let searchResultsOpen=false;
 
 async function browseResults(){
-  const panel=document.getElementById('searchResults');
-  const list=document.getElementById('srList');
-  document.getElementById('srTitle').textContent=`Top results: ${finalString}`;
-  list.innerHTML='<div class="sr-loading">Searching...</div>';
-  panel.classList.add('open');searchResultsOpen=true;
+  const box=document.getElementById('srInline');
+  if(!box)return;
+  box.innerHTML='<div class="sr-loading" style="padding:16px 0;font-size:.75rem">Searching...</div>';
 
   const results=await searchInvidious(finalString);
   if(!results||!results.length){
-    list.innerHTML=`<div class="sr-bummer">
+    box.innerHTML=`<div class="sr-bummer">
       <div class="sr-bummer-nine">9</div>
       <div class="sr-bummer-none">ine Found</div>
       <div class="sr-bummer-sub">That's zero. Invidious came up empty — the recycle bin recycles again.</div>
-      <button class="vt-btn yt-btn" style="margin-top:4px" onclick="searchYouTube()">Open in YouTube ↗</button>
+      <button class="vt-btn yt-btn" style="margin-top:4px;font-size:.7rem" onclick="searchYouTube()">Open in YouTube ↗</button>
     </div>`;
     _showManualEntry();
     return;
@@ -3607,11 +3617,40 @@ async function browseResults(){
   currentSearchVideos=results.slice(0,5).map(v=>({
     videoId:v.videoId,title:v.title,author:v.author||v.authorId||'Unknown',
     viewCount:v.viewCount||0,lengthSeconds:v.lengthSeconds||0,
+    published:v.published||0, // unix seconds from Invidious
     thumbnail:v.videoThumbnails?v.videoThumbnails.find(t=>t.quality==='medium')?.url||v.videoThumbnails[0]?.url:'',
     clicked:false,rating:{entertainment:0,weirdness:0,gem:0,liked:0}
   }));
 
-  renderSearchResults();
+  renderInlineResults();
+}
+
+function renderInlineResults(){
+  const box=document.getElementById('srInline');
+  if(!box)return;
+  box.innerHTML=`<div class="sr-inline-header"><span>Top Results</span><span style="color:#333;font-size:.58rem">${currentSearchVideos.length} shown</span></div>`
+    +currentSearchVideos.map((v,i)=>{
+      const views=v.viewCount<1000?v.viewCount:(v.viewCount/1000).toFixed(1)+'K';
+      const dur=v.lengthSeconds?`${Math.floor(v.lengthSeconds/60)}:${String(v.lengthSeconds%60).padStart(2,'0')}`:'';
+      const stars=(['entertainment','weirdness','gem','liked']).map(m=>
+        `<span style="font-size:.5rem;color:${METRIC_COLORS[m]}">${[1,2,3,4,5].map(s=>
+          `<span class="vt-star${v.rating[m]>=s?' lit':''}" style="font-size:.75rem" onclick="rateSearchVideo(${i},'${m}',${s})">&#9733;</span>`
+        ).join('')}</span>`
+      ).join('');
+      return`<div class="sr-inline-card${v.clicked?' clicked':''}" id="sri-${i}">
+        <img class="sr-inline-thumb" src="${v.thumbnail||''}" alt="" onerror="this.src='https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg'" loading="lazy">
+        <div class="sr-inline-body">
+          <div class="sr-inline-title">${esc(v.title)}</div>
+          <div class="sr-inline-meta">${esc(v.author)}${dur?' · '+dur:''} · ${views} views</div>
+          <div class="sr-inline-stars">${stars}</div>
+          <div class="sr-inline-actions">
+            <button class="vt-btn" style="background:var(--accent);font-size:.6rem;padding:3px 10px" onclick="watchVideoInline(${i})">Watch</button>
+            <button class="vt-btn" style="background:var(--card2);font-size:.6rem;padding:3px 10px" onclick="saveVideoFromSearch(${i})">Save</button>
+            <button class="vt-btn add-records" style="font-size:.6rem;padding:3px 10px" onclick="saveAndRecordFromSearch(${i})">Record</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
 }
 
 async function searchInvidious(query){
@@ -3663,18 +3702,27 @@ function watchVideo(idx){
   window.open('https://www.youtube.com/watch?v='+v.videoId,'_blank');
   renderSearchResults();
 }
+function watchVideoInline(idx){
+  const v=currentSearchVideos[idx];if(!v)return;
+  v.clicked=true;
+  window.open('https://www.youtube.com/watch?v='+v.videoId,'_blank');
+  renderInlineResults();
+}
 
 function rateSearchVideo(idx,metric,value){
   const v=currentSearchVideos[idx];if(!v)return;
   v.rating[metric]=value;
-  renderSearchResults();
+  // re-render whichever is active
+  if(searchResultsOpen)renderSearchResults();else renderInlineResults();
 }
 
-function saveVideoFromSearch(idx){
-  const v=currentSearchVideos[idx];if(!v)return;
-  // Fill in the main tracker with this video's data
+function _fillTrackerFromSearchVideo(v){
   document.getElementById('vtLink').value='https://www.youtube.com/watch?v='+v.videoId;
-  // Copy ratings if set
+  if(v.published){
+    const d=new Date(v.published*1000);
+    document.getElementById('vtDatePosted').value=`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+  }
+  if(v.viewCount!==undefined)document.getElementById('vtViews').value=v.viewCount;
   if(avgMetric(v.rating)>0){
     currentMetrics={...v.rating};
     document.querySelectorAll('.vt-stars[data-metric]').forEach(el=>{
@@ -3682,8 +3730,20 @@ function saveVideoFromSearch(idx){
       el.querySelectorAll('.vt-star').forEach(s=>s.classList.toggle('lit',+s.dataset.v<=currentMetrics[m]));
     });
   }
-  closeSearchResults();
-  showToast('Video loaded: '+v.title.substring(0,40));
+}
+
+function saveVideoFromSearch(idx){
+  const v=currentSearchVideos[idx];if(!v)return;
+  _fillTrackerFromSearchVideo(v);
+  _showManualEntry();
+  showToast('Video loaded — fill in details & save');
+}
+
+function saveAndRecordFromSearch(idx){
+  const v=currentSearchVideos[idx];if(!v)return;
+  _fillTrackerFromSearchVideo(v);
+  _showManualEntry();
+  addCurrentToRecords();
 }
 
 function closeSearchResults(){
@@ -5961,6 +6021,8 @@ function renderLfTicker(finds){
 // ── LEADERBOARD HERO ──
 function renderLbHero(finds){
   const hero=document.getElementById('lbHero');
+  if(hero)hero.classList.remove('show');
+  return; // hero removed — squashed thumbnail, redundant with record holder header
   if(!hero||!finds||!finds.length){if(hero)hero.classList.remove('show');return;}
   const sorted=[...finds].sort((a,b)=>{
     const az=a.views_when_found===0,bz=b.views_when_found===0;
@@ -5998,7 +6060,7 @@ checkForUpdates();checkHoliday();
 // Fetch community finds in background, poll every 60s
 setTimeout(fetchCommunityRecords,2000);
 setInterval(fetchCommunityRecords,60000);
-setTimeout(initLiveFeed,3500);
+// initLiveFeed disabled — ticker overlapped footer
 // Hash routing: #records, #stats, #shortcuts, #credits
 function handleHash(){
   const h=location.hash.toLowerCase().replace('#','');
