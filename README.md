@@ -59,18 +59,18 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 </th>
 <th align="center" width="31%">
   🔍 NBVS<br>
-  <sub><a href="https://kvnaust.github.io/YouTube-NonBiasedVideoSearcher/">GitHub Pages</a></sub>
+  <sub><a href="https://nbvs.falcontechnix.com/">nbvs.falcontechnix.com</a> · <a href="https://kvnaust.github.io/YouTube-NonBiasedVideoSearcher/">GitHub Pages</a></sub>
 </th>
 </tr>
 <tr>
 <td><strong>YouTube API key required</strong></td>
 <td align="center">❌ Never</td>
-<td align="center">✅ Required</td>
+<td align="center">❌ Optional at FT Mirror — ✅ Required on GitHub Pages</td>
 </tr>
 <tr>
 <td><strong>Rate limits</strong></td>
 <td align="center">None — opens YouTube directly</td>
-<td align="center">~200 searches/day per Gmail</td>
+<td align="center">None at FT Mirror (server proxy) · ~200/day per Gmail on GitHub Pages</td>
 </tr>
 <tr>
 <td><strong>Algorithm bias</strong></td>
@@ -147,50 +147,174 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 ## NBVS @ Falcon Technix — Hardened Community Mirror
 
-> **[nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/)** — A secured, community-friendly hosted deployment of [YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher), operated by [Falcon Technix](https://falcontechnix.com) as a free community service.
+> **NBVS (YouTube Non-Biased Video Searcher)** is created and owned by **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)).  
+> Source repo: **[kvnaust/YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher)** · License: MIT  
+> This section documents the *Falcon Technix community mirror* only — KVN AUST's tool, hosted and hardened by us.
 
-The GitHub Pages build of NBVS works fine for its intended purpose, but loading React, Babel, and Tailwind from third-party CDNs without integrity checks is a real risk for daily visitors — a CDN compromise would silently inject arbitrary code into every user's browser with no warning. The FT mirror eliminates that attack surface and layers in a few community quality-of-life additions.
+> **[nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/)** — A secured, community-enriched hosted deployment of [YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher), operated by [Falcon Technix](https://falcontechnix.com) as a free community service.
+
+The GitHub Pages build works fine for its intended purpose. For a public daily-driver, loading React, Babel, and Tailwind from third-party CDNs without integrity checks is a real supply-chain risk — a CDN compromise silently injects arbitrary code into every user's browser. The FT mirror eliminates that attack surface entirely, removes the API key requirement, and layers in community tooling — while automatically staying in sync with KVN's upstream.
 
 ### What's Different
 
-| | GitHub Pages NBVS | FT Mirror (nbvs.falcontechnix.com) |
+| | GitHub Pages NBVS | FT Mirror — nbvs.falcontechnix.com |
 |:--|:--:|:--:|
-| **YouTube API key required** | ✅ Required | ❌ Optional — FT Mode works without one |
-| **CDN scripts (React, Babel, Tailwind)** | Loaded from `unpkg.com` / `cdn.tailwindcss.com` | Fully replaced — self-hosted on FT server |
-| **Subresource Integrity (SRI)** | None | Not applicable — CDNs eliminated entirely |
-| **Babel runtime transpiler** | Runs in-browser on every page load | Eliminated — JSX pre-compiled at sync time via esbuild |
-| **Content Security Policy** | None | Live — `default-src 'self'`, no external script origins |
-| **Server-side YouTube proxy** | ❌ | ✅ FT Mode — all API calls proxy through FT server |
-| **Format Finder panel** | ❌ | ✅ Full FORMAT-MAP.md picker, injected into search bar |
-| **Themes** | Default dark only | 11 themes — Classic Dark/Light, Aurora, Ember, Prism + 6 FT originals |
-| **Source sync** | Manual push by KVN | Auto-synced from `main` within ~1 hour of any upstream push |
+| **YouTube API key** | ✅ Required | ❌ Optional — FT Proxy works without one |
+| **Rate limits** | ~200 searches/day per Gmail account | None — server-side proxy, no quota exposure |
+| **CDN scripts** (React 18, Babel, Tailwind) | Loaded from `unpkg.com` / `cdn.tailwindcss.com` | Fully self-hosted — CDNs eliminated |
+| **Subresource Integrity** | None | Not needed — CDNs are gone entirely |
+| **Babel transpiler** | Runs in-browser on every page load | Eliminated — JSX pre-compiled at sync time via esbuild |
+| **Content Security Policy** | None | Enforced — `default-src 'self'`, no external script origins |
+| **Country / region filter** | ❌ | ✅ 16-country dropdown, wired to Invidious `region=` and YouTube `gl=` |
+| **Themes** | Default dark only | 11 themes — VHS Red · Deep Dive · Phosphor · Matrix · Midnight · Ghost · Classic Dark · Classic Light · Aurora · Ember · Prism |
+| **Format Finder panel** | ❌ | ✅ All 267 FORMAT-MAP.md formats, category filter, variable input, inject to search bar |
+| **Auto-sync from upstream** | Manual push | ✅ systemd timer — deploys within ~1 hour of any upstream commit |
+| **Security headers** | None | ✅ HSTS · X-Frame-Options · X-Content-Type-Options · Referrer-Policy · Permissions-Policy |
+| **Favicon + branding** | ❌ | ✅ KVN AUST / FT favicon, branded tape bar + footer |
 
-### FT Mode — No API Key Required
+### FT Proxy — No API Key Required
 
-Visitors without a YouTube Data API key can use **FT Mode**: all YouTube search and video metadata calls are transparently proxied through the Falcon Technix server. No quota is exposed on the visitor's side, no API key is required, and it works out of the box for anyone who lands on the page.
+**FT Mode** intercepts YouTube API calls client-side (fetch interceptor in `nbvs-community.js`) and reroutes them through the Falcon Technix Go backend. The response shapes are identical to YouTube Data API v3 — NBVS's React app never knows the calls were rerouted.
 
-Visitors with their own API key can keep using it. When a personal key is active, calls go directly to YouTube's API — the FT proxy is not in the path and the key never reaches FT's servers.
+```
+Browser (NBVS React app)              FT Server — Go backend                 Sources
+  │                                        │                                    │
+  │  GET /api/kvn/yt-search?q=…            │                                    │
+  ├───────────────────────────────────────►│  searchViaInvidious()              │
+  │                                        ├───────────────────────────────────►│ Invidious #N (shuffled)
+  │                                        │  ↳ fail → try next instance        │
+  │                                        ├───────────────────────────────────►│ scrapeYouTubeSearch()
+  │                                        │  ↳ CAPTCHA detected → 503          │
+  │◄───────────────────────────────────────┤  youtube#searchListResponse        │
+  │                                        │                                    │
+  │  GET /api/kvn/yt-stats?id=id1,id2,…   │                                    │
+  ├───────────────────────────────────────►│  ytmeta.Fetch() waterfall          │
+  │                                        ├───────────────────────────────────►│ Invidious → oEmbed → scrape
+  │◄───────────────────────────────────────┤  youtube#videoListResponse         │
+```
 
-### Format Finder Panel
+**Visitors with their own API key** can switch to "My API Key" mode. Calls go directly to `googleapis.com` — the FT proxy is not in the path and the key never reaches our servers.
 
-The FT mirror adds a **Format Finder** panel directly below the NBVS search bar, reading from the same [FORMAT-MAP.md](FORMAT-MAP.md) that powers Sonder's spinner. Filter by category (Numbered / Date / Extension / Keyphrase / Ancient / Special), search by keyword, fill in variable fields (number range, hex, date) with a 🎲 randomize button, preview the output, and inject it directly into the NBVS search bar with one click.
+### Invidious Instance Rotation
 
-All 267 formats from KVN's map, inside both tools, from the same source file.
+The proxy routes through a live, shuffled pool of healthy Invidious instances:
 
-### Licensing
+| Layer | Detail |
+|:------|:-------|
+| **Cold-start fallback pool** | 12 hardcoded known-good HTTPS instances |
+| **Live refresh** | Every 90 min from `api.invidious.io/instances.json` — filtered to HTTPS + API-enabled + ≥75% uptime, capped at 15 instances |
+| **Per-request shuffle** | Fisher-Yates shuffle on every request — load spreads across the pool rather than concentrating on one instance |
+| **Fallback chain** | Invidious → YouTube direct scrape (`ytInitialData` JSON extraction) → CAPTCHA detection |
 
-The NBVS source (`index.html`) is [MIT licensed](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher/blob/main/LICENSE) by its author. The FT wrapper — sync pipeline, Go patcher, esbuild JSX compilation, CSP configuration, FT Mode proxy, community theming, and Format Finder — is **proprietary software owned by Falcon Technix**. The wrapper source is not distributed or licensed.
+On CAPTCHA detection the proxy returns `upstream_captcha` and the UI shows a toast.
 
-**[nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/) is free to use** — no registration, no account, no tracking, no conditions. Falcon Technix covers hosting costs and operates the service as a community contribution to KVN AUST's audience.
+### Country / Region Filter
+
+A 16-country dropdown in the FT launch panel restricts YouTube results geographically. Selection persists in `localStorage` and is appended to every proxied search:
+
+| Param | Used for |
+|:------|:---------|
+| `&region=CC` | Invidious search endpoint |
+| `&gl=CC` | YouTube direct scrape (`/results?search_query=…`) |
+
+| | | | |
+|:--|:--|:--|:--|
+| 🌍 Global (default) | 🇦🇺 Australia | 🇺🇸 United States | 🇬🇧 United Kingdom |
+| 🇨🇦 Canada | 🇳🇿 New Zealand | 🇩🇪 Germany | 🇫🇷 France |
+| 🇳🇱 Netherlands | 🇯🇵 Japan | 🇰🇷 South Korea | 🇮🇳 India |
+| 🇧🇷 Brazil | 🇲🇽 Mexico | 🇸🇬 Singapore | 🇿🇦 South Africa |
+
+### Auto-Sync Pipeline
+
+```
+api.github.com — latest commit SHA
+  │  (no-op if SHA matches stored /var/lib/nbvs/last_sha)
+  ▼
+raw.githubusercontent.com/kvnaust/YouTube-NonBiasedVideoSearcher/main/index.html
+  │
+  ▼
+/opt/nbvs-patch  (Go binary, built with esbuild — no Node.js, no Python)
+  ├─ Compile <script type="text/babel"> JSX  →  ES2017 inline <script>
+  ├─ Remove Babel standalone loader
+  ├─ Tailwind Play CDN  →  /lib/tailwind.css  (pre-built, self-hosted)
+  ├─ React / ReactDOM unpkg  →  /lib/react.min.js, /lib/react-dom.min.js
+  ├─ Override <title>
+  ├─ Inject FT <meta> block (description, keywords, Open Graph, Twitter Card)
+  ├─ Inject JSON-LD  (WebApplication + WebSite + BreadcrumbList schema)
+  ├─ Inject <noscript> HTML fallback (full feature description, rarity tiers)
+  ├─ Inject <link rel="icon"> — self-hosted FT/KVN favicons
+  └─ Wire <script src="/nbvs-community.js" defer> before </body>
+  │
+  ▼
+/var/www/html/nbvs/index.html
+FORMAT-MAP.md  ←  synced from KVN_AUST webroot (same-origin, no CORS or GitHub rate limits)
+```
+
+Runs on a systemd timer (`nbvs-sync.timer`). SHA stored at `/var/lib/nbvs/last_sha` — syncs only on upstream changes, or on `--force`.
+
+### Content Security Policy
+
+```
+default-src    'self'
+script-src     'self' 'unsafe-inline'
+               https://static.cloudflareinsights.com
+style-src      'self' 'unsafe-inline'
+img-src        'self' data:
+               https://i.ytimg.com  https://*.ytimg.com        ← YouTube video thumbnails
+               https://yt3.ggpht.com  https://*.ggpht.com      ← YouTube channel avatars
+               https://lh3.googleusercontent.com               ← Google profile images
+               https://kvnaust.falcontechnix.com               ← self-hosted FT favicons
+connect-src    'self' https://www.googleapis.com
+frame-src      'none'
+object-src     'none'
+upgrade-insecure-requests
+```
+
+`unsafe-inline` on `script-src` is unavoidable: the esbuild-compiled JSX block is an inline `<script>`. A nonce-injection pipeline would eliminate it — not implemented.
+
+### Community Layer (`nbvs-community.js`)
+
+Injected before `</body>` on every sync. Domain-locked to `nbvs.falcontechnix.com` — proprietary Falcon Technix IP.
+
+| Feature | Detail |
+|:--------|:-------|
+| **FT Mode fetch interceptor** | Rewrites `googleapis.com/youtube/v3/search` → `/api/kvn/yt-search` and `/youtube/v3/videos` → `/api/kvn/yt-stats`; handles errors, CAPTCHA toasts, and empty-response fallback |
+| **Source picker** | FT Proxy / My API Key toggle — persisted in `localStorage` |
+| **Country selector** | 16-region `<select>`, wired to `&regionCode=` on every proxied search |
+| **Sort presets** | Oldest First · Fewest Views · Shortest · Most Views · Newest — click fires the search immediately |
+| **11 themes** | VHS Red · Deep Dive · Phosphor (amber CRT) · Matrix · Midnight (synthwave) · Ghost · Classic Dark · Classic Light · Aurora · Ember · Prism — applied as CSS custom properties on `<html>`, persisted in `localStorage` |
+| **Format Finder panel** | Parses FORMAT-MAP.md client-side: 267 formats, category filter (Numbered/Date/Extension/Keyphrase/Ancient/Special), live search, variable number/date/hex input with 🎲 randomize, query preview, one-click inject into NBVS search bar, Google Dork ↗ link |
+| **Dark mode hijack** | Intercepts NBVS's built-in dark/light toggle → opens FT theme drawer instead |
+| **Sonder integration** | Cloud ☁ button in tape bar — sign-in prompt (with localStorage dismiss) for unauthenticated users |
+| **KVN AUST tape bar** | Branded header with live clock, theme picker, cloud/Sonder link, bar hide toggle |
+| **FT footer** | KVN AUST · Sonder · FT Wrapper links |
+| **Bar hide/show** | ▲ collapses both bars; `KVN ▼` tab re-expands; state persisted |
+
+### Licensing & Wrapper Notice
+
+**NBVS** (`index.html`) is created by [KVN AUST](https://www.youtube.com/@KVNAUST) and [MIT licensed](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher/blob/main/LICENSE). All credit for the tool's concept, design, and functionality belongs to him.
+
+**Falcon Technix operates two wrappers** — neither is included in this repo and neither is open source:
+
+| Wrapper | Deployed at | What it is |
+|:--------|:------------|:-----------|
+| **Sonder Wrapper** | [kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/) | Service worker, shim layer, cloud save backend, community API, multiplayer, leaderboard — everything that makes the hosted version more than the standalone HTML |
+| **NBVS Wrapper** | [nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/) | `nbvs-patch` Go patcher, `nbvs-community.js` community layer, FT Proxy backend, sync pipeline, Caddy CSP config |
+
+Both are **proprietary software, exclusively licensed to and operated by Falcon Technix**. They are not published, not distributed, and not available under any open-source license. You will not find their source in this repo or anywhere public.
+
+The standalone `kvnaust-recyclebin.html` in this repo (GPL-3.0) and KVN AUST's `index.html` (MIT) are entirely unaffected — those remain freely downloadable and self-hostable as always.
+
+**[nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/) is free to use.** No registration, no account, no tracking, no conditions. Falcon Technix covers all hosting costs as a community contribution.
 
 ### Upstream Security — Open PR
 
-Falcon Technix submitted a pull request to the upstream NBVS repository to add Subresource Integrity (SRI) hashes for all three CDN-loaded scripts. If merged, visitors to the GitHub Pages version would get cryptographic pinning on React 18.3.1, ReactDOM 18.3.1, and Babel standalone 7.29.7 — a CDN compromise would be blocked by the browser rather than silently executing.
+Falcon Technix submitted a pull request to the upstream NBVS repo to add Subresource Integrity (SRI) hashes for all three CDN-loaded scripts. If merged, GitHub Pages visitors get cryptographic pinning on React 18.3.1, ReactDOM 18.3.1, and Babel 7.29.7 — a CDN compromise would be blocked by the browser rather than silently executing.
 
 > 🔐 **[kvnaust/YouTube-NonBiasedVideoSearcher — PR #1: Add SRI hashes for CDN scripts](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher/pull/1)**  
 > Status: **Open** — submitted 2026-06-04
 
-The FT mirror does not use CDNs at all (they are replaced wholesale at sync time), so this PR specifically protects users of the original GitHub-hosted tool. We're happy to help shepherd it through review.
+The FT mirror does not use CDNs at all (replaced at sync time) so this PR specifically protects users of the original GitHub-hosted tool.
 ---
 
 ## What It Does
