@@ -887,6 +887,10 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .sr-badge.saved{background:rgba(76,175,80,.2);color:#4caf50}
 .sr-loading{color:var(--muted);font-size:.85rem;padding:30px;text-align:center}
 .sr-empty{color:#555;font-size:.8rem;padding:30px;text-align:center}
+.sr-bummer{text-align:center;padding:36px 20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.sr-bummer-nine{font-size:3.5rem;font-weight:900;letter-spacing:-.03em;color:#e74c3c;line-height:1;font-variant-numeric:tabular-nums}
+.sr-bummer-none{font-size:.7rem;color:#333;letter-spacing:.1em;text-transform:uppercase;margin-top:-4px}
+.sr-bummer-sub{font-size:.72rem;color:#444;max-width:280px;line-height:1.5}
 
 /* ── BINGO SETUP PANEL ── */
 .bingo-setup{position:fixed;top:220px;right:0;bottom:0;width:340px;background:linear-gradient(180deg,var(--card),#111120);border-left:1px solid #2a2a40;z-index:460;
@@ -1227,40 +1231,42 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
     <div class="result-sub">Search YouTube for:</div>
     <div class="result-pill" id="resultPill" onclick="copyResult()"></div>
     <div class="video-tracker">
-      <div class="vt-row" id="vtBtnRow">
+      <div class="vt-row" id="vtBtnRow" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         <button class="vt-btn copy-btn" onclick="copyResult()">Copy</button>
-        <button class="vt-btn yt-btn" onclick="searchYouTube()">Open in YouTube</button>
-        <button class="vt-btn" id="psBtn" onclick="openPowerSearch()" style="background:linear-gradient(135deg,#1a1a2e,#2a1a3e);border:1px solid #5b3fa8;opacity:.4" title="Add a YouTube Data API key in Settings to enable Power Search">⚡ Power Search</button>
         <button class="vt-btn rerand-btn" onclick="reRandomize()">Re-Randomize</button>
       </div>
-      <div class="vt-label" style="margin-top:6px">Found a video? Paste the link &amp; rate it:</div>
-      <div class="vt-row"><input class="vt-input" id="vtLink" type="text" placeholder="https://youtube.com/watch?v=..." oninput="onVideoLinkChange(this.value)"><span id="vtFetchStatus" style="font-size:.55rem;color:var(--muted);margin-left:4px"></span></div>
-      <div class="vt-row" style="gap:4px">
-        <input class="vt-input" id="vtDatePosted" type="text" placeholder="Date posted (e.g. 30/10/2006)" style="flex:1">
-        <input class="vt-input" id="vtViews" type="text" placeholder="Views (e.g. 0)" style="width:70px">
-        <input class="vt-input" id="vtChannelVids" type="text" placeholder="Ch. videos (e.g. 1)" style="width:90px">
+      <div id="vtManualEntry" style="display:none">
+        <div class="vt-label" style="margin-top:6px">Found a video? Paste the link &amp; rate it:</div>
+        <div class="vt-row"><input class="vt-input" id="vtLink" type="text" placeholder="https://youtube.com/watch?v=..." oninput="onVideoLinkChange(this.value)"><span id="vtFetchStatus" style="font-size:.55rem;color:var(--muted);margin-left:4px"></span></div>
+        <div class="vt-row" style="gap:4px">
+          <input class="vt-input" id="vtDatePosted" type="text" placeholder="Date posted (e.g. 30/10/2006)" style="flex:1">
+          <input class="vt-input" id="vtViews" type="text" placeholder="Views (e.g. 0)" style="width:70px">
+          <input class="vt-input" id="vtChannelVids" type="text" placeholder="Ch. videos (e.g. 1)" style="width:90px">
+        </div>
       </div>
-      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
-        <div style="text-align:center"><div class="vt-label">Entertainment</div><div class="vt-stars" data-metric="entertainment">
-          <span class="vt-star" data-v="1" onclick="setMetric('entertainment',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('entertainment',2)">&#9733;</span>
-          <span class="vt-star" data-v="3" onclick="setMetric('entertainment',3)">&#9733;</span><span class="vt-star" data-v="4" onclick="setMetric('entertainment',4)">&#9733;</span>
-          <span class="vt-star" data-v="5" onclick="setMetric('entertainment',5)">&#9733;</span>
-        </div></div>
-        <div style="text-align:center"><div class="vt-label">Weirdness</div><div class="vt-stars" data-metric="weirdness">
-          <span class="vt-star" data-v="1" onclick="setMetric('weirdness',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('weirdness',2)">&#9733;</span>
-          <span class="vt-star" data-v="3" onclick="setMetric('weirdness',3)">&#9733;</span><span class="vt-star" data-v="4" onclick="setMetric('weirdness',4)">&#9733;</span>
-          <span class="vt-star" data-v="5" onclick="setMetric('weirdness',5)">&#9733;</span>
-        </div></div>
-        <div style="text-align:center"><div class="vt-label">Gem Factor</div><div class="vt-stars" data-metric="gem">
-          <span class="vt-star" data-v="1" onclick="setMetric('gem',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('gem',2)">&#9733;</span>
-          <span class="vt-star" data-v="3" onclick="setMetric('gem',3)">&#9733;</span><span class="vt-star" data-v="4" onclick="setMetric('gem',4)">&#9733;</span>
-          <span class="vt-star" data-v="5" onclick="setMetric('gem',5)">&#9733;</span>
-        </div></div>
-        <div style="text-align:center"><div class="vt-label">I Just Liked It</div><div class="vt-stars" data-metric="liked">
-          <span class="vt-star" data-v="1" onclick="setMetric('liked',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('liked',2)">&#9733;</span>
-          <span class="vt-star" data-v="3" onclick="setMetric('liked',3)">&#9733;</span><span class="vt-star" data-v="4" onclick="setMetric('liked',4)">&#9733;</span>
-          <span class="vt-star" data-v="5" onclick="setMetric('liked',5)">&#9733;</span>
-        </div></div>
+      <div id="vtRatingSection" style="display:none">
+        <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+          <div style="text-align:center"><div class="vt-label">Entertainment</div><div class="vt-stars" data-metric="entertainment">
+            <span class="vt-star" data-v="1" onclick="setMetric('entertainment',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('entertainment',2)">&#9733;</span>
+            <span class="vt-star" data-v="3" onclick="setMetric('entertainment',3)">&#9733;</span><span class="vt-star" data-v="4" onclick="setMetric('entertainment',4)">&#9733;</span>
+            <span class="vt-star" data-v="5" onclick="setMetric('entertainment',5)">&#9733;</span>
+          </div></div>
+          <div style="text-align:center"><div class="vt-label">Weirdness</div><div class="vt-stars" data-metric="weirdness">
+            <span class="vt-star" data-v="1" onclick="setMetric('weirdness',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('weirdness',2)">&#9733;</span>
+            <span class="vt-star" data-v="3" onclick="setMetric('weirdness',3)">&#9733;</span><span class="vt-star" data-v="4" onclick="setMetric('weirdness',4)">&#9733;</span>
+            <span class="vt-star" data-v="5" onclick="setMetric('weirdness',5)">&#9733;</span>
+          </div></div>
+          <div style="text-align:center"><div class="vt-label">Gem Factor</div><div class="vt-stars" data-metric="gem">
+            <span class="vt-star" data-v="1" onclick="setMetric('gem',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('gem',2)">&#9733;</span>
+            <span class="vt-star" data-v="3" onclick="setMetric('gem',3)">&#9733;</span><span class="vt-star" data-v="4" onclick="setMetric('gem',4)">&#9733;</span>
+            <span class="vt-star" data-v="5" onclick="setMetric('gem',5)">&#9733;</span>
+          </div></div>
+          <div style="text-align:center"><div class="vt-label">I Just Liked It</div><div class="vt-stars" data-metric="liked">
+            <span class="vt-star" data-v="1" onclick="setMetric('liked',1)">&#9733;</span><span class="vt-star" data-v="2" onclick="setMetric('liked',2)">&#9733;</span>
+            <span class="vt-star" data-v="3" onclick="setMetric('liked',3)">&#9733;</span><span class="vt-star" data-v="4" onclick="setMetric('liked',4)">&#9733;</span>
+            <span class="vt-star" data-v="5" onclick="setMetric('liked',5)">&#9733;</span>
+          </div></div>
+        </div>
       </div>
       <div class="vt-row">
         <button class="vt-btn save" onclick="saveVideo()">Save &amp; Next Round</button>
@@ -3560,6 +3566,13 @@ function showResult(){
   finalString=chosenFormat.sp==='static'?chosenFormat.tpl:chosenFormat.tpl.replace('{V}',chosenNumber);
   document.getElementById('resultPill').textContent=finalString;
   resetTracker();
+  setTimeout(browseResults,200);
+}
+function _showManualEntry(){
+  const me=document.getElementById('vtManualEntry');
+  const rs=document.getElementById('vtRatingSection');
+  if(me)me.style.display='';
+  if(rs)rs.style.display='';
 }
 function copyResult(){const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:finalString;navigator.clipboard.writeText(q).then(()=>showToast('Copied!')).catch(()=>{})}
 function searchYouTube(){const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:finalString;window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'&sp=CAI%253D','_blank')}
@@ -3575,17 +3588,23 @@ let searchResultsOpen=false;
 async function browseResults(){
   const panel=document.getElementById('searchResults');
   const list=document.getElementById('srList');
-  document.getElementById('srTitle').textContent=`Results for: ${finalString}`;
-  list.innerHTML='<div class="sr-loading">Searching YouTube...</div>';
+  document.getElementById('srTitle').textContent=`Top results: ${finalString}`;
+  list.innerHTML='<div class="sr-loading">Searching...</div>';
   panel.classList.add('open');searchResultsOpen=true;
 
   const results=await searchInvidious(finalString);
   if(!results||!results.length){
-    list.innerHTML='<div class="sr-empty">No results found. <button class="vt-btn" style="background:var(--accent);font-size:.7rem;margin-left:8px" onclick="searchYouTube()">Try YouTube directly</button></div>';
+    list.innerHTML=`<div class="sr-bummer">
+      <div class="sr-bummer-nine">9</div>
+      <div class="sr-bummer-none">ine Found</div>
+      <div class="sr-bummer-sub">That's zero. Invidious came up empty — the recycle bin recycles again.</div>
+      <button class="vt-btn yt-btn" style="margin-top:4px" onclick="searchYouTube()">Open in YouTube ↗</button>
+    </div>`;
+    _showManualEntry();
     return;
   }
 
-  currentSearchVideos=results.map(v=>({
+  currentSearchVideos=results.slice(0,5).map(v=>({
     videoId:v.videoId,title:v.title,author:v.author||v.authorId||'Unknown',
     viewCount:v.viewCount||0,lengthSeconds:v.lengthSeconds||0,
     thumbnail:v.videoThumbnails?v.videoThumbnails.find(t=>t.quality==='medium')?.url||v.videoThumbnails[0]?.url:'',
@@ -3670,6 +3689,7 @@ function saveVideoFromSearch(idx){
 function closeSearchResults(){
   document.getElementById('searchResults').classList.remove('open');
   searchResultsOpen=false;
+  _showManualEntry();
 }
 
 // ═══════════════════════════════════
@@ -3685,6 +3705,10 @@ function setMetric(metric,v){
 function resetTracker(){
   currentMetrics={entertainment:0,weirdness:0,gem:0,liked:0};
   document.querySelectorAll('.vt-star').forEach(s=>s.classList.remove('lit'));
+  const me=document.getElementById('vtManualEntry');
+  const rs=document.getElementById('vtRatingSection');
+  if(me)me.style.display='none';
+  if(rs)rs.style.display='none';
 }
 
 function avgMetric(m){const vals=Object.values(m).filter(v=>v>0);return vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length):0}
