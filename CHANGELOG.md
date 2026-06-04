@@ -14,6 +14,46 @@
 
 ---
 
+## [7.14.0] — 2026-06-03 — Spotify ducking: music auto-ducks when a video opens
+
+### ✨ Added
+- **Automatic audio ducking** — when the player opens a YouTube video in a new tab, Spotify volume is automatically pulled down to 20% so you can hear the video without killing the music. Volume restores full the moment you switch back to the Sonder tab.
+- **Duck toggle button** (`🔊`) in the Spotify player handle bar. Green = ducking active (default). Click to turn it off and let music play at full volume through videos. State resets to on each session.
+- **Spotify Embed API** — the player now loads via Spotify's official `iframe-api/v1`, giving a proper `setVolume()` controller for duck/unduck. Falls back to a standard embed iframe until the API script resolves, then upgrades transparently.
+
+---
+
+## [7.13.0] — 2026-06-03 — Spotify floating player
+
+### ✨ Added
+- **Floating Spotify player** — a draggable `♫` panel anchored to the bottom-right. Drag the handle to park it anywhere on screen. Minimize (`−`) collapses it to a header-only strip without closing; `✕` closes fully. State persists across pages within the session.
+- **Works without a Spotify account** — the embedded Spotify player lets guests play 30-second previews without logging in. Full playback for Spotify Free/Premium users who are already signed in to Spotify.
+- **URL input** — paste any Spotify track, playlist, album, or artist link and hit Play. The player auto-resizes: 152 px for tracks/episodes, 380 px for playlists and albums.
+- **Saved last URL** — the last link you played is saved to `localStorage` and restores automatically when you re-open the player. On the hosted version (Sonder account), the URL is synced to the server so it restores across devices.
+
+---
+
+## [7.12.0] — 2026-06-03 — Deep-theming engine + floating theme picker
+
+### ✨ Changed / Added
+- **Themes now skin the whole UI** — all 22 themes (including the 20 non-default palettes) now override `--surface`, `--border`, and `--screen-inner` in addition to the existing accent/card/bg/text vars. Every screen background, panel header, and card border reflects the active theme instead of staying at the default dark-slate base. Theme impact is now immediately obvious at a glance — flipping to Neon, Vaporwave, or Carnival transforms the entire tool, not just the spinner ring.
+- **Spinner ring is theme-aware** — the spin button border and glow now use `var(--accent)` instead of a hardcoded grey, so the spinner pulses in the active theme colour.
+- **Floating theme picker** (`🎨` header button) — a pop-out panel in the top-right shows the full theme grid without leaving the current screen. The active theme name is shown in the header. Closing the picker returns focus to whatever you were doing.
+- **Dice roll** (`🎲 Roll` button in the picker) — picks a random theme, applies it with a brief scale-bounce animation on the dice button. Lets you cycle through palettes without committing.
+
+---
+
+## [7.11.0] — 2026-06-03 — FOUND IT, Bank It, live ticker, Hunt Mode, leaderboard hero
+
+### ✨ Added
+- **FOUND IT overlay** — when you log a zero-view video (or any video) via "Bank It", a full-screen rarity reveal fires: thumbnail, rarity badge (LEGENDARY · SUPER RARE · VERY RARE · RARE · COMMON) coloured by upload year, particle burst for LEGENDARY and zero-view finds. Dismiss it to continue.
+- **Bank It button** — on the result/rating screen, a new "🏦 Bank It" button adds the current video to your Records immediately without navigating away. Triggers the FOUND IT animation inline.
+- **Live find ticker** — a slim fixed bar at the bottom of every screen shows the latest community finds as they roll in from the leaderboard API. Click any pill to open the full leaderboard entry. Hides automatically on narrow screens during gameplay.
+- **Hunt Mode** — tap `🎯` in the header to lock into a focused hunting session: a corner panel tracks your current-session spin count, finds banked, and a personal best counter. No navigating away required; the panel floats over the game and can be minimized or closed.
+- **Leaderboard hero card** — the top-ranked community find is featured as a large hero card above the leaderboard list: full thumbnail, rarity glow, date, finder, and a direct Watch link.
+
+---
+
 ## [7.0.12] — 2026-06-02 — Leaderboard: list is now the default view with full verbose cards
 
 ### ✨ Changed / Fixed

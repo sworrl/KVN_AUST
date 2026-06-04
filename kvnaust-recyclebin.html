@@ -122,6 +122,8 @@ body.deep-dive .credit-footer{background:linear-gradient(0deg,rgba(2,6,8,.95) 0%
 .anchor-wipe .anchor-bg::after{content:'';position:absolute;inset:0;
   background:radial-gradient(ellipse at 50% 60%,rgba(0,188,212,.08),transparent 70%),
   repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(0,188,212,.02) 40px,rgba(0,188,212,.02) 80px);pointer-events:none}
+@keyframes rainbowShift{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}
+@keyframes ngPulse{0%,100%{box-shadow:0 0 18px rgba(231,76,60,.45),0 4px 24px rgba(231,76,60,.25);transform:scale(1)}50%{box-shadow:0 0 42px rgba(231,76,60,.85),0 8px 48px rgba(231,76,60,.45),0 0 80px rgba(255,120,80,.2);transform:scale(1.035)}}
 @keyframes waterShift{0%{background-position:0 0}100%{background-position:200px 100px}}
 /* Water surface line at top */
 .anchor-wipe .water-surface{position:absolute;top:0;left:0;right:0;height:4px;z-index:3;
@@ -429,6 +431,7 @@ input,select,textarea{-webkit-appearance:none;appearance:none}
 .start-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.12) 0%,transparent 50%);pointer-events:none;border-radius:12px}
 .start-btn::after{content:'';position:absolute;inset:0;border-radius:12px;box-shadow:inset 0 -2px 6px rgba(0,0,0,.3);pointer-events:none}
 .start-btn:hover{transform:scale(1.05);box-shadow:0 6px 35px rgba(231,76,60,.5),0 0 50px rgba(231,76,60,.15)}.start-btn:active{transform:scale(.97);box-shadow:0 2px 15px rgba(231,76,60,.25)}
+.ng-pulse{animation:ngPulse 2s ease-in-out infinite}.ng-pulse:hover{animation:none}
 
 /* ── BINGO FLASH (start-of-round w/ per-cell animation) ── */
 .bingo-flash{position:fixed;inset:0;z-index:550;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -1079,6 +1082,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 .sp-handle-btns{display:flex;gap:2px;flex-shrink:0}
 .sp-hbtn{background:none;border:none;color:#555;cursor:pointer;font-size:.68rem;width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;transition:color .15s,background .15s;line-height:1}
 .sp-hbtn:hover{color:#ccc;background:rgba(255,255,255,.1)}
+.sp-hbtn.duck-on{color:#1db954}.sp-hbtn.duck-off{color:#555;opacity:.45}
 .sp-body{padding:10px 10px 8px}
 .sp-url-row{display:flex;gap:5px;margin-bottom:8px}
 .sp-url-input{flex:1;min-width:0;background:var(--card2);border:1px solid var(--border);color:#eee;padding:6px 9px;border-radius:7px;font-size:.63rem;font-family:'Inter',sans-serif;transition:border-color .2s}
@@ -1090,6 +1094,10 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 .sp-hint{font-size:.58rem;color:#444;text-align:center;padding:18px 10px;line-height:1.7}
 .sp-hint a{color:#1db954;text-decoration:none}
 .sp-saved-tag{font-size:.52rem;color:#1db954;text-align:center;margin-top:4px;min-height:.8em}
+.sp-presets{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
+.sp-preset-btn{flex:1;min-width:0;background:rgba(29,185,84,.12);border:1px solid rgba(29,185,84,.25);color:#1db954;border-radius:6px;padding:5px 6px;font-size:.58rem;font-weight:700;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .15s,border-color .15s}
+.sp-preset-btn:hover{background:rgba(29,185,84,.25);border-color:rgba(29,185,84,.5)}
+.sp-preset-btn.active{background:rgba(29,185,84,.3);border-color:#1db954}
 
 /* ── THEME PICKER PANEL ── */
 #themePicker{display:none;position:fixed;top:58px;right:10px;z-index:900;width:296px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 48px rgba(0,0,0,.75);padding:14px;animation:fadeUp .2s ease}
@@ -1224,8 +1232,8 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <img class="big-avatar" id="bigAvatarImg" alt="KVN AUST">
       <h1 title="Click for the Koenig passage that named this tool" onclick="showSonderModal()" style="cursor:help">Sonder</h1>
       <div class="tagline" style="font-style:italic">for <a href="https://www.youtube.com/@KVNAUST" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dotted currentColor">KVN AUST</a>'s YouTube Recycle Bin</div>
-      <button class="start-btn" onclick="startGame()">NEW GAME</button>
-      <button class="start-btn" onclick="showRecords()" style="background:linear-gradient(135deg,#ffd700,#e6ac00);color:#000;font-size:.8rem;padding:8px 24px;margin-top:8px">&#x1F3C6; Community Leaderboard</button>
+      <button class="start-btn ng-pulse" onclick="startGame()">&#x25B6; NEW GAME</button>
+      <button class="start-btn" id="lbRainbowBtn" onclick="showRecords()" style="background:linear-gradient(135deg,#e74c3c,#f39c12);animation:rainbowShift 2s linear infinite;color:#fff;font-size:.8rem;padding:8px 24px;margin-top:8px;text-shadow:0 1px 3px rgba(0,0,0,.5)">&#x1F3C6; Community Leaderboard</button>
       <button class="start-btn" id="kvnVideosBtn" onclick="toggleKvnVideos()" style="background:linear-gradient(135deg,#c4302b,#8b1a1a);color:#fff;font-size:.8rem;padding:8px 24px;margin-top:8px;position:relative">KVN's Recycle Bin Videos<span id="kvnVideosNewDot" style="display:none;position:absolute;top:-4px;right:-4px;background:#fff;color:#c0392b;font-size:.55rem;font-weight:900;letter-spacing:.04em;padding:2px 6px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,.4)">NEW</span></button>
       <div class="game-setup" id="gameSetup" style="margin-top:14px;padding:10px 14px;border:1px solid #2a2a3e;border-radius:8px;background:rgba(20,20,32,.55);max-width:380px;display:flex;flex-direction:column;gap:8px;font-size:.7rem;color:#aab">
         <div style="font-weight:700;letter-spacing:.04em;color:#ccd;text-align:center;font-size:.66rem;text-transform:uppercase;opacity:.7">Game Setup</div>
@@ -1337,7 +1345,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
         <button class="nav-btn" onclick="event.stopPropagation();exportBingoSVG()">Export Bingo Card (SVG)</button>
         <button class="nav-btn" onclick="event.stopPropagation();exportSummaryText()">Export Game Summary (SVG)</button>
         <button class="nav-btn" onclick="event.stopPropagation();newSession()">Back to Home</button>
-        <button class="nav-btn primary" onclick="event.stopPropagation();newSession();setTimeout(startGame,400)">New Game</button>
+        <button class="nav-btn primary ng-pulse" onclick="event.stopPropagation();newSession();setTimeout(startGame,400)">&#x25B6; New Game</button>
       </div></div>
   </div>
 </div>
@@ -1806,9 +1814,9 @@ async function checkForUpdates(){
 const IMG_URLS={
   banner:'https://yt3.googleusercontent.com/LiJo5TjebDsCHINkNKnctYZISlIyWVCSB1tFtRdB1_NNmKueqGaWogc0hHu1z4zsD93eEkyxFA=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj',
   avatar:'https://yt3.googleusercontent.com/ytc/AIdro_lgUZyOAlroBVjTTS0ERdTxzQ8m_JwBKaUleQYtZAJjtA=s200-c-k-c0x00ffffff-no-rj',
-  footer:'https://yt3.googleusercontent.com/hEt0minH0EjZs9wZ0iKmLCQuysFbVotELjSc29mwJk60dnnhBzFjD-odqNAnut631n7FEIw7R9A=s120-c-k-c0x00ffffff-no-rj'
+  footer:'https://yt3.ggpht.com/WWWdvQUKTtkyXrgYUfWVnpf40HPJQCnxLUbCB5FE64uww53DEnhEVc6ENchULE-ioRCqXVqqAX_ahA=w128-h128-p-rw-nd-v1-df'
 };
-const DB_NAME='kvn_img_cache',DB_VER=1;
+const DB_NAME='kvn_img_cache',DB_VER=5;
 function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,DB_VER);r.onupgradeneeded=e=>e.target.result.createObjectStore('images');r.onsuccess=e=>res(e.target.result);r.onerror=rej})}
 async function getCachedImage(key,url){
   try{
@@ -2801,8 +2809,8 @@ function closeBingoFlash(){
 // browser worldwide to drop its cached parse on next page load
 // and refetch from GitHub. Same trick anytime the parser logic
 // or FORMAT-MAP.md schema changes shape — bump the version.
-const DOC_CACHE_KEY='kvn_fmt_v8';
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v8';
+const DOC_CACHE_KEY='kvn_fmt_v11';
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v9';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -6088,9 +6096,103 @@ loadGameSetup();loadWheelTheme();
   document.addEventListener('touchend',()=>{dragging=false;});
 })();
 
+// ── Spotify Embed API + ducking ──
+let _spController=null,_spIFrameAPI=null,_spApiLoading=false,_spDuckEnabled=true;
+let _spPending=null; // {p, wrap, height} waiting for API
+
+window.onSpotifyIframeApiReady=function(IFrameAPI){
+  _spIFrameAPI=IFrameAPI;
+  if(_spPending){const {p,wrap,height}=_spPending;_spPending=null;_spMakeController(p,wrap,height);}
+};
+
+function _loadSpApi(){
+  if(_spApiLoading||_spIFrameAPI)return;
+  _spApiLoading=true;
+  const s=document.createElement('script');
+  s.src='https://open.spotify.com/embed/iframe-api/v1';
+  s.async=true;
+  document.head.appendChild(s);
+}
+
+function _spMakeController(p,wrap,height){
+  if(_spController){try{_spController.destroy();}catch(e){}_spController=null;}
+  wrap.innerHTML='';
+  const el=document.createElement('div');
+  wrap.appendChild(el);
+  _spIFrameAPI.createController(el,{uri:`spotify:${p.type}:${p.id}`,height,width:'100%'},function(ctrl){
+    _spController=ctrl;
+  });
+}
+
+function spDuck(){if(_spDuckEnabled&&_spController)_spController.setVolume(0.2);}
+function spUnduck(){if(_spController)_spController.setVolume(1);}
+
+function toggleSpDuck(){
+  _spDuckEnabled=!_spDuckEnabled;
+  const btn=document.getElementById('spDuckBtn');
+  if(btn){btn.classList.toggle('duck-on',_spDuckEnabled);btn.classList.toggle('duck-off',!_spDuckEnabled);}
+  if(!_spDuckEnabled)spUnduck();
+}
+
+// Duck when a YouTube URL is opened in a new tab; restore when user returns
+(function(){
+  const _origOpen=window.open.bind(window);
+  window.open=function(url,...args){
+    if(url&&/youtube\.com|youtu\.be/.test(String(url)))spDuck();
+    return _origOpen(url,...args);
+  };
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')spUnduck();});
+})();
+
 function parseSpotifyUrl(url){
   const m=url.match(/(?:open\.spotify\.com\/|spotify:)(track|playlist|album|artist|episode|show)[/:]([A-Za-z0-9]+)/);
   return m?{type:m[1],id:m[2]}:null;
+}
+
+const SP_PRESETS=[
+  {type:'album',  id:'6hfkz60YEIg1UQFdCQmti3', label:'Season 13'},
+  {type:'playlist',id:'37i9dQZF1E4k8vrhSk12X8', label:'KVN Radio'},
+];
+const SP_DEFAULT_URL='https://open.spotify.com/album/6hfkz60YEIg1UQFdCQmti3';
+
+function _spActivePreset(url){
+  document.querySelectorAll('.sp-preset-btn').forEach(b=>b.classList.remove('active'));
+  if(!url)return;
+  SP_PRESETS.forEach((p,i)=>{
+    if(url.includes(p.id)){
+      const btns=document.querySelectorAll('.sp-preset-btn');
+      if(btns[i])btns[i].classList.add('active');
+    }
+  });
+  const custom=localStorage.getItem('sp_preset3');
+  if(custom&&url===custom){const b=document.getElementById('spPreset3Btn');if(b)b.classList.add('active');}
+}
+
+function loadSpPreset(type,id){
+  const url=`https://open.spotify.com/${type}/${id}`;
+  document.getElementById('spUrlInput').value=url;
+  _renderSpEmbed(url,false);
+  _spActivePreset(url);
+}
+
+function loadSpPreset3(){
+  const url=localStorage.getItem('sp_preset3');
+  if(!url)return;
+  document.getElementById('spUrlInput').value=url;
+  _renderSpEmbed(url,false);
+  _spActivePreset(url);
+}
+
+function setSpPreset3(url){
+  if(!url)return;
+  localStorage.setItem('sp_preset3',url);
+  const btn=document.getElementById('spPreset3Btn');
+  if(btn)btn.style.display='';
+}
+
+function _initSpPreset3(){
+  const url=localStorage.getItem('sp_preset3');
+  if(url){const btn=document.getElementById('spPreset3Btn');if(btn)btn.style.display='';}
 }
 
 function openSpotify(){
@@ -6098,12 +6200,13 @@ function openSpotify(){
   if(!el)return;
   el.classList.add('open');
   el.classList.remove('sp-mini');
-  // Auto-load saved URL if embed not yet rendered
-  const saved=localStorage.getItem('sp_last_url');
-  if(saved&&!document.querySelector('#spEmbed iframe')){
-    document.getElementById('spUrlInput').value=saved;
-    _renderSpEmbed(saved,false);
-  }
+  _initSpPreset3();
+  const hasEmbed=document.querySelector('#spEmbed iframe, #spEmbed div > iframe');
+  if(hasEmbed)return;
+  const saved=localStorage.getItem('sp_last_url')||SP_DEFAULT_URL;
+  document.getElementById('spUrlInput').value=saved;
+  _renderSpEmbed(saved,false);
+  _spActivePreset(saved);
 }
 function closeSpotify(){
   const el=document.getElementById('spotifyPlayer');
@@ -6121,12 +6224,18 @@ function _renderSpEmbed(url,saveToServer){
   if(!wrap)return;
   if(!p){wrap.innerHTML='<div class="sp-hint">Couldn\'t read that link. Copy it directly from Spotify.</div>';return;}
   const height=(p.type==='track'||p.type==='episode')?152:380;
-  wrap.innerHTML=`<iframe src="https://open.spotify.com/embed/${p.type}/${p.id}?utm_source=generator&theme=0" width="100%" height="${height}" allow="autoplay;clipboard-write;encrypted-media;fullscreen;picture-in-picture" loading="lazy"></iframe>`;
   localStorage.setItem('sp_last_url',url);
   if(tag)tag.textContent='';
   if(saveToServer){
-    // shim.js auto-syncs sp_last_url via SYNCED_KEYS on next flush — just touch localStorage
     if(tag){tag.textContent='✓ Saved to your account';setTimeout(()=>{if(tag)tag.textContent=''},3000);}
+  }
+  if(_spIFrameAPI){
+    _spMakeController(p,wrap,height);
+  } else {
+    // Fallback iframe while API loads; API takes over if pending embed is still waiting
+    wrap.innerHTML=`<iframe src="https://open.spotify.com/embed/${p.type}/${p.id}?utm_source=generator&theme=0" width="100%" height="${height}" allow="autoplay;clipboard-write;encrypted-media;fullscreen;picture-in-picture" loading="lazy"></iframe>`;
+    _spPending={p,wrap,height};
+    _loadSpApi();
   }
 }
 
@@ -6134,6 +6243,7 @@ function loadSpotifyEmbed(){
   const url=(document.getElementById('spUrlInput').value||'').trim();
   if(!url){showToast('Paste a Spotify link first','warn');return;}
   _renderSpEmbed(url,true);
+  _spActivePreset(url);
 }
 // ══════════ END SPOTIFY ══════════
 
@@ -6371,6 +6481,7 @@ window.addEventListener('hashchange',handleHash);
       <span class="sp-handle-title">Sonder Music</span>
     </div>
     <div class="sp-handle-btns">
+      <button class="sp-hbtn duck-on" id="spDuckBtn" onclick="event.stopPropagation();toggleSpDuck()" title="Duck audio when a video opens (click to toggle)">&#x1F50A;</button>
       <button class="sp-hbtn" onclick="event.stopPropagation();toggleSpotifyMini()" title="Minimize">&#x2212;</button>
       <button class="sp-hbtn" onclick="event.stopPropagation();closeSpotify()" title="Close">&#x2715;</button>
     </div>
@@ -6379,6 +6490,11 @@ window.addEventListener('hashchange',handleHash);
     <div class="sp-url-row">
       <input class="sp-url-input" id="spUrlInput" type="text" placeholder="Paste Spotify track / playlist / album link…" onkeydown="if(event.key==='Enter')loadSpotifyEmbed()">
       <button class="sp-play-btn" onclick="loadSpotifyEmbed()">&#9654; Play</button>
+    </div>
+    <div class="sp-presets" id="spPresets">
+      <button class="sp-preset-btn" onclick="loadSpPreset('album','6hfkz60YEIg1UQFdCQmti3')" title="KVN AUST — Season Thirteen">&#x1F3B5; Season 13</button>
+      <button class="sp-preset-btn" onclick="loadSpPreset('playlist','37i9dQZF1E4k8vrhSk12X8')" title="KVN AUST Radio">&#x1F4FB; KVN Radio</button>
+      <button class="sp-preset-btn sp-preset-custom" id="spPreset3Btn" onclick="loadSpPreset3()" title="Your saved playlist" style="display:none">&#x2605; My List</button>
     </div>
     <div id="spEmbed"><div class="sp-hint">Paste any Spotify link above and hit Play.<br>Works with tracks, playlists, albums &amp; artists.<br><a href="https://open.spotify.com" target="_blank" rel="noopener">Browse Spotify &#x2192;</a></div></div>
     <div class="sp-saved-tag" id="spSavedTag"></div>
@@ -6430,7 +6546,7 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.13.0",
+  "version": "7.14.0",
   "build": "2026-06-04T01:00:00",
   "changelog": "Draggable Spotify floating player (♫ header button) — paste any track/playlist/album link, auto-saves last URL server-side for logged-in users.",
   "repo": "https://github.com/sworrl/KVN_AUST",
