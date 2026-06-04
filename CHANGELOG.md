@@ -14,6 +14,14 @@
 
 ---
 
+## [7.15.3] — 2026-06-04 — Found It share buttons, result screen full-width expansion
+
+### ✨ Added
+- **Found It overlay share buttons** — Watch, Discord, Copy Link, and Close now all appear in the popup. Discord copies a formatted message (rarity emoji, title, views, YT link, site credit). Copy Link copies the `youtu.be` URL.
+- **Result screen desktop expansion** — at viewports ≥ 1100px the result screen tracker expands to `min(94vw, 1500px)`. At 1920px that gives ~1500px, fitting all 5 inline cards in a single row with no scroll. Transitions smoothly with `width: 0.35s ease` — snaps back to the compact layout when the window narrows below 1100px.
+
+---
+
 ## [7.15.2] — 2026-06-04 — Inline results: sort fix, wrapper gate, View All modal
 
 ### 🐛 Fixed

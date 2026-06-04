@@ -581,8 +581,9 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
   background:url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='80' r='1.2' fill='%23e74c3c' opacity='.3'/%3E%3Ccircle cx='230' cy='45' r='1' fill='%233498db' opacity='.3'/%3E%3Ccircle cx='150' cy='250' r='.8' fill='%232ecc71' opacity='.3'/%3E%3C/svg%3E");
   background-size:300px 300px;animation:bgDrift 90s linear infinite reverse}
 @keyframes bgDrift{0%{background-position:0 0}100%{background-position:60px 60px}}
-.video-tracker{margin-top:16px;animation:fadeUp .5s .2s ease both;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(92vw,500px);padding-bottom:60px}
+.video-tracker{margin-top:16px;animation:fadeUp .5s .2s ease both;display:flex;flex-direction:column;align-items:center;gap:10px;width:min(92vw,500px);padding-bottom:60px;transition:width .35s ease}
 #result-screen .video-tracker{width:min(92vw,740px)!important}
+@media(min-width:1100px){#result-screen .video-tracker{width:min(94vw,1500px)!important}}
 .vt-row{display:flex;gap:8px;width:100%;align-items:stretch;flex-wrap:wrap;justify-content:center}
 .vt-input{flex:1;min-width:200px;background:var(--card2);border:1px solid var(--border);color:#fff;padding:10px 14px;border-radius:10px;font-size:.82rem;font-family:'Inter',sans-serif;transition:border-color .2s,box-shadow .2s;
   box-shadow:inset 0 1px 3px rgba(0,0,0,.3)}
@@ -893,7 +894,8 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .sr-bummer-none{font-size:.65rem;color:#333;letter-spacing:.1em;text-transform:uppercase;margin-top:-4px}
 .sr-bummer-sub{font-size:.68rem;color:#444;max-width:260px;line-height:1.5}
 /* inline result cards (top 5, embedded in result screen) */
-#srInline{max-height:min(calc(100vh - 500px),500px);overflow-y:auto;overflow-x:hidden}
+#srInline{max-height:min(calc(100vh - 500px),500px);overflow-y:auto;overflow-x:hidden;transition:max-height .35s ease}
+@media(min-width:1100px){#srInline{max-height:min(calc(100vh - 440px),700px)}}
 .sr-inline-header{font-size:.65rem;font-weight:900;letter-spacing:.1em;color:#555;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .sr-inline-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
 .sr-inline-card{background:var(--card);border:1.5px solid #2a2a40;border-radius:12px;padding:10px;display:flex;gap:10px;margin-bottom:0;position:relative;transition:border-color .2s,background .2s,box-shadow .2s}
@@ -6052,9 +6054,11 @@ function rarityFromDate(iso){
 
 // ── FOUND IT ──
 let _foundItParticles=[];
+let _foundItData={};
 function showFoundIt(videoId,title,views,isoDate){
   const rarity=rarityFromDate(isoDate);
   const color=RARITY_COLORS[rarity]||'#ffd700';
+  _foundItData={videoId,title,views,isoDate,rarity};
   const ov=document.getElementById('foundOv');
   if(!ov)return;
   const thumb=document.getElementById('foundThumb');
@@ -6077,6 +6081,26 @@ function closeFoundIt(){
   if(ov)ov.classList.remove('open');
   document.body.style.overflow='';
   clearParticles();
+}
+function shareFoundItDiscord(){
+  const {rarity,title,views,videoId,isoDate}=_foundItData;
+  const rc={'LEGENDARY':'🏆','SUPER RARE':'🔴','VERY RARE':'🟠','RARE':'🟢','COMMON':'🔵'};
+  const emoji=rc[rarity]||'';
+  const lines=[
+    `## ${emoji} ${rarity} — Recycle Bin Find`,
+    title?`**${title}**`:'',
+    '',
+    isoDate?`✮ **Date posted:** ${isoDate}`:'',
+    views!==undefined?`✮ **Views when found:** ${(views||0).toLocaleString()}`:'',
+    '',
+    `🔗 https://youtu.be/${videoId}`,
+    '',
+    `*[YouTube's Recycle Bin](<https://kvnaust.falcontechnix.com/>) — @KVNAUST*`
+  ].filter(Boolean);
+  navigator.clipboard.writeText(lines.join('\n')).then(()=>showToast('Copied for Discord!')).catch(()=>showToast('Copy failed','err'));
+}
+function copyFoundItLink(){
+  navigator.clipboard.writeText(`https://youtu.be/${_foundItData.videoId||''}`).then(()=>showToast('Link copied!')).catch(()=>showToast('Copy failed','err'));
 }
 function spawnParticles(color){
   clearParticles();
@@ -6181,7 +6205,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.15.2","build":"2026-06-04T15:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.15.3","build":"2026-06-04T16:30:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
@@ -6192,6 +6216,8 @@ window.addEventListener('hashchange',handleHash);
     <div class="found-sub" id="foundVSub"></div>
     <div class="found-btns">
       <button class="vt-btn yt-btn" id="foundWatchBtn" onclick="event.stopPropagation();window.open(this.dataset.url,'_blank','noopener')">&#9654; Watch</button>
+      <button class="vt-btn share-discord" onclick="event.stopPropagation();shareFoundItDiscord()">Discord</button>
+      <button class="vt-btn" style="background:var(--card2)" onclick="event.stopPropagation();copyFoundItLink()">Copy Link</button>
       <button class="vt-btn" onclick="closeFoundIt()">Close</button>
     </div>
   </div>
@@ -6201,9 +6227,9 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.15.2",
-  "build": "2026-06-04T15:00:00",
-  "changelog": "Inline results: wrapper-only gate, sort-all-20 fix, top 5 of N + View All modal.",
+  "version": "7.15.3",
+  "build": "2026-06-04T16:30:00",
+  "changelog": "Found It popup: Discord + Copy Link share buttons. Result screen: fills full width on desktop.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
