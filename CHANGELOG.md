@@ -14,6 +14,13 @@
 
 ---
 
+## [7.15.1] — 2026-06-04 — Inline cards: wider 2-col layout, compact stars
+
+### 🐛 Fixed
+- **Inline search cards** — cards were too tall on desktop, preventing all 5 from fitting in the viewport. Now use a 2-column grid at up to 740px wide, with a compact 2×2 star grid, reduced padding, and 1-line title clamp. All 5 cards with action buttons fit comfortably on a standard desktop screen.
+
+---
+
 ## [7.15.0] — 2026-06-04 — Mid-game resume, login contrast fix, inline card highlights
 
 ### ✨ Added
