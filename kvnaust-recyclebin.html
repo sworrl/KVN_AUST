@@ -893,7 +893,8 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .sr-bummer-none{font-size:.65rem;color:#333;letter-spacing:.1em;text-transform:uppercase;margin-top:-4px}
 .sr-bummer-sub{font-size:.68rem;color:#444;max-width:260px;line-height:1.5}
 /* inline result cards (top 5, embedded in result screen) */
-.sr-inline-header{font-size:.65rem;font-weight:900;letter-spacing:.1em;color:#444;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+#srInline{max-height:min(calc(100vh - 500px),500px);overflow-y:auto;overflow-x:hidden}
+.sr-inline-header{font-size:.65rem;font-weight:900;letter-spacing:.1em;color:#555;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .sr-inline-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
 .sr-inline-card{background:var(--card);border:1.5px solid #2a2a40;border-radius:12px;padding:10px;display:flex;gap:10px;margin-bottom:0;position:relative;transition:border-color .2s,background .2s,box-shadow .2s}
 .sr-inline-card:hover{border-color:#4a4a66}
@@ -901,8 +902,8 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .sr-inline-thumb{width:110px;height:auto;min-height:62px;align-self:stretch;border-radius:6px;object-fit:cover;background:#111;flex-shrink:0}
 .sr-inline-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
 .sr-inline-title{font-size:.95rem;font-weight:700;color:#eee;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
-.sr-inline-meta{font-size:.75rem;color:#666}
-.sr-inline-date{font-size:.68rem;color:#556;line-height:1.4}
+.sr-inline-meta{font-size:.75rem;color:#888}
+.sr-inline-date{font-size:.68rem;color:#6a8a9a;line-height:1.4}
 .sr-inline-actions{display:flex;gap:6px;margin-top:auto;flex-wrap:wrap;align-items:center}
 .sr-inline-stars{display:grid;grid-template-columns:1fr 1fr;gap:2px 6px;margin-top:3px}
 .sr-inline-stars .vt-star{padding:2px 3px;min-height:26px}
@@ -3667,6 +3668,8 @@ let searchResultsOpen=false;
 async function browseResults(){
   const box=document.getElementById('srInline');
   if(!box)return;
+  // Inline video list requires the wrapper YT proxy — not available in FOSS
+  if(!window.__KVN_WRAPPER_LOADED__){box.innerHTML='';return;}
   box.innerHTML='<div class="sr-loading" style="padding:16px 0;font-size:.75rem">Searching...</div>';
 
   const results=await searchInvidious(finalString);
@@ -3681,14 +3684,14 @@ async function browseResults(){
     return;
   }
 
-  currentSearchVideos=results.slice(0,5).map(v=>({
+  // Map ALL results, sort ALL, then slice for inline display
+  currentSearchVideos=results.map(v=>({
     videoId:v.videoId,title:v.title,author:v.author||v.authorId||'Unknown',
     viewCount:v.viewCount||0,lengthSeconds:v.lengthSeconds||0,
-    published:v.published||0, // unix seconds from Invidious
+    published:v.published||0,
     thumbnail:v.videoThumbnails?v.videoThumbnails.find(t=>t.quality==='medium')?.url||v.videoThumbnails[0]?.url:'',
     clicked:false,rating:{entertainment:0,weirdness:0,gem:0,liked:0}
   }));
-  // Sort: 0-view first, then pre-2008 oldest-first, then all others oldest-first
   currentSearchVideos.sort((a,b)=>{
     const tier=v=>{
       if(v.viewCount===0)return 0;
@@ -3700,7 +3703,6 @@ async function browseResults(){
     if(a.published>0&&b.published>0)return a.published-b.published;
     return a.published>0?-1:b.published>0?1:a.viewCount-b.viewCount;
   });
-
   renderInlineResults();
 }
 
@@ -3709,9 +3711,16 @@ function renderInlineResults(){
   if(!box)return;
   const CARD_HUES=[340,30,190,270,80];
   const MN={entertainment:'Ent',weirdness:'Weird',gem:'Gem',liked:'Liked'};
-  box.innerHTML=`<div class="sr-inline-header"><span>Top Results</span><span style="color:#333;font-size:.58rem">${currentSearchVideos.length} shown</span></div><div class="sr-inline-grid">`
-    +currentSearchVideos.map((v,i)=>{
-      const views=v.viewCount<1000?v.viewCount:(v.viewCount/1000).toFixed(1)+'K';
+  const TOP_N=5;
+  const displayed=currentSearchVideos.slice(0,TOP_N);
+  const total=currentSearchVideos.length;
+  const countLabel=`Top ${displayed.length}${total>TOP_N?' of '+total+' found':' shown'}`;
+  const viewAllBtn=total>TOP_N
+    ?`<button onclick="openAllResultsModal()" style="font-size:.6rem;color:var(--accent);background:none;border:1px solid var(--accent);border-radius:4px;padding:2px 8px;cursor:pointer;font-weight:700;white-space:nowrap">View All ${total} →</button>`
+    :'';
+  box.innerHTML=`<div class="sr-inline-header"><span>${countLabel}</span>${viewAllBtn}</div><div class="sr-inline-grid">`
+    +displayed.map((v,i)=>{
+      const views=v.viewCount<1000?String(v.viewCount):(v.viewCount/1000).toFixed(1)+'K';
       const dur=v.lengthSeconds?`${Math.floor(v.lengthSeconds/60)}:${String(v.lengthSeconds%60).padStart(2,'0')}`:'';
       const pubDate=v.published>0?new Date(v.published*1000):null;
       const dateStr=pubDate?pubDate.toLocaleDateString('en-US',{month:'short',year:'numeric'}):'';
@@ -3738,13 +3747,14 @@ function renderInlineResults(){
       const notableBadge=notable
         ?`<div class="sr-special-stat" style="color:hsl(${hue},80%,65%)">${isZeroViews?'0':String(year)}<span style="color:hsl(${hue},55%,55%)">${isZeroViews?'VIEWS':'YEAR'}</span></div>`
         :'';
+      const metaHtml=`<span style="color:#7ec0e8">${esc(v.author)}</span>${dur?` <span style="color:#555">·</span> <span style="color:#778">${dur}</span>`:''} <span style="color:#555">·</span> <span style="color:#c9934a">${views} views</span>`;
       return`<div class="sr-inline-card${v.clicked?' clicked':''}" id="sri-${i}" ${cardStyle}>
         <img class="sr-inline-thumb" src="${v.thumbnail||''}" alt="" onerror="this.src='https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg'" loading="lazy">
         <div class="sr-inline-body">
           ${notableBadge}
           <div class="sr-inline-title">${esc(v.title)}</div>
-          <div class="sr-inline-meta">${esc(v.author)}${dur?' · '+dur:''} · ${views} views</div>
-          ${dateStr?`<div class="sr-inline-date">${dateStr}${ageStr?' · <span style="color:#667">'+ageStr+'</span>':''}</div>`:''}
+          <div class="sr-inline-meta">${metaHtml}</div>
+          ${dateStr?`<div class="sr-inline-date">${dateStr} <span style="color:#6a8a7a">· ${ageStr}</span></div>`:''}
           <div class="sr-inline-stars">${stars}</div>
           <div class="sr-inline-actions">
             <button class="vt-btn" style="background:var(--accent);flex:1" onclick="watchVideoInline(${i})">Watch</button>
@@ -3853,6 +3863,12 @@ function closeSearchResults(){
   document.getElementById('searchResults').classList.remove('open');
   searchResultsOpen=false;
   _showManualEntry();
+}
+function openAllResultsModal(){
+  document.getElementById('srTitle').textContent='All Results — '+finalString;
+  renderSearchResults();
+  document.getElementById('searchResults').classList.add('open');
+  searchResultsOpen=true;
 }
 
 // ═══════════════════════════════════
@@ -6165,7 +6181,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.15.1","build":"2026-06-04T12:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.15.2","build":"2026-06-04T15:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
@@ -6185,9 +6201,9 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.15.1",
-  "build": "2026-06-04T12:00:00",
-  "changelog": "Inline cards: wider 2-col grid, compact 2x2 stars, all 5 visible on desktop.",
+  "version": "7.15.2",
+  "build": "2026-06-04T15:00:00",
+  "changelog": "Inline results: wrapper-only gate, sort-all-20 fix, top 5 of N + View All modal.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }

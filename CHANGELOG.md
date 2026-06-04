@@ -14,6 +14,19 @@
 
 ---
 
+## [7.15.2] — 2026-06-04 — Inline results: sort fix, wrapper gate, View All modal
+
+### 🐛 Fixed
+- **Sort bug** — was sorting only the first 5 Invidious results instead of all 20. Now maps all returned results, sorts all of them (0-view → pre-2008 → oldest), then slices top 5 for the inline display.
+- **FOSS gate** — inline video list is a wrapper-only feature (requires YT proxy). FOSS build now returns an empty `#srInline` rather than trying to render results.
+
+### ✨ Added
+- **"Top 5 of N found" header** — inline section now shows total result count and a "View All N →" button when more than 5 results were returned.
+- **View All modal** — clicking "View All →" opens the existing full scrollable results panel with all sorted results.
+- **Colored meta text** — author in light blue, views in amber, date/age in sage green for legibility.
+
+---
+
 ## [7.15.1] — 2026-06-04 — Inline cards: wider 2-col layout, compact stars
 
 ### 🐛 Fixed
