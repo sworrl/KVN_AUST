@@ -1764,7 +1764,7 @@ const IMG_URLS={
   avatar:'https://yt3.googleusercontent.com/ytc/AIdro_lgUZyOAlroBVjTTS0ERdTxzQ8m_JwBKaUleQYtZAJjtA=s200-c-k-c0x00ffffff-no-rj',
   footer:'https://yt3.ggpht.com/WWWdvQUKTtkyXrgYUfWVnpf40HPJQCnxLUbCB5FE64uww53DEnhEVc6ENchULE-ioRCqXVqqAX_ahA=w128-h128-p-rw-nd-v1-df'
 };
-const DB_NAME='kvn_img_cache',DB_VER=9;
+const DB_NAME='kvn_img_cache',DB_VER=10;
 function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,DB_VER);r.onupgradeneeded=e=>e.target.result.createObjectStore('images');r.onsuccess=e=>res(e.target.result);r.onerror=rej})}
 async function getCachedImage(key,url){
   try{
@@ -2347,6 +2347,7 @@ function showScreen(id){
   const idx=SCREENS.indexOf(id);
   if(idx>maxReachedIdx)maxReachedIdx=idx;
   updateNavArrows();updateBingoBtn();
+  saveGameState();
 }
 
 function updateNavArrows(){
@@ -2439,6 +2440,7 @@ function startGame(){
 
 function saveGameToHistory(){
   if(!sessionRounds.length)return;
+  clearGameState();
   const games=getAllGames();games.unshift({id:currentGameId,date:new Date().toISOString(),rounds:sessionRounds});
   if(games.length>50)games.length=50;saveAllGames(games);
   // Theme rotation counter: ≥2 saved games triggers a new theme on next startGame
@@ -2447,7 +2449,78 @@ function saveGameToHistory(){
 
 function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel();resetPointer()}
 function resetPointer(){const ptr=document.getElementById('wheelPointer');if(ptr){ptr.classList.remove('locked');ptr.style.animation='';ptr.style.top='';ptr.style.setProperty('--pointer-glow','transparent');ptr.style.setProperty('--pointer-inner','#444');void ptr.offsetHeight;ptr.style.animation='pointerIdle 2s ease-in-out infinite'}const pf=document.getElementById('ptrFill');if(pf)pf.setAttribute('stroke','#888')}
-function newSession(){sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showFooter();showScreen('start-screen')}
+function newSession(){clearGameState();sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showFooter();showScreen('start-screen')}
+
+const GAME_STATE_KEY='kvn_mid_game';
+function saveGameState(){
+  if(!gameActive)return;
+  try{
+    sessionStorage.setItem(GAME_STATE_KEY,JSON.stringify({
+      gameId:currentGameId,screen:currentScreen,
+      chosenFormat:chosenFormat,chosenNumber:chosenNumber,finalString:finalString,
+      sessionRounds:sessionRounds,usedFormatLabels:[...usedFormats],savedAt:Date.now()
+    }));
+  }catch{}
+}
+function clearGameState(){try{sessionStorage.removeItem(GAME_STATE_KEY)}catch{}}
+function checkResumeGame(){
+  let saved;
+  try{saved=JSON.parse(sessionStorage.getItem(GAME_STATE_KEY)||'null')}catch{}
+  if(!saved||Date.now()-saved.savedAt>86400000){clearGameState();return}
+  const rounds=saved.sessionRounds?.length||0;
+  const fmtLabel=saved.chosenFormat?.label||'';
+  const srch=saved.finalString||'';
+  if(!rounds&&!fmtLabel){clearGameState();return}
+  const modal=document.createElement('div');
+  modal.id='kvn-resume-modal';
+  Object.assign(modal.style,{
+    position:'fixed',inset:'0',background:'rgba(0,0,0,.82)',backdropFilter:'blur(6px)',
+    zIndex:'999998',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Inter,sans-serif'
+  });
+  modal.innerHTML=`
+  <div style="background:#161625;border:1px solid #2a2a40;border-radius:16px;padding:24px;width:310px;max-width:90vw;
+      box-shadow:0 20px 60px rgba(0,0,0,.7);color:#eee">
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="font-size:24px;margin-bottom:4px">&#9889;</div>
+      <h2 style="margin:0;font-size:16px;font-weight:700">Unfinished Game</h2>
+      <p style="margin:5px 0 0;font-size:11px;color:#777">Page reloaded mid-game. Pick up where you left off?</p>
+    </div>
+    <div style="background:#0d0d14;border:1px solid #1e1e30;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;justify-content:space-between"><span style="color:#666">Rounds saved</span><span style="font-weight:700">${rounds}</span></div>
+      ${fmtLabel?`<div style="display:flex;justify-content:space-between;gap:8px">
+        <span style="color:#666;flex-shrink:0">Last format</span>
+        <span style="color:#4fc3f7;font-weight:600;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(fmtLabel)}</span>
+      </div>`:''}
+      ${srch?`<div style="display:flex;justify-content:space-between;gap:8px">
+        <span style="color:#666;flex-shrink:0">Last search</span>
+        <span style="color:#2ecc71;font-weight:600;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(srch)}</span>
+      </div>`:''}
+    </div>
+    <button id="kvn-resume-btn" style="width:100%;padding:11px;background:linear-gradient(135deg,#27ae60,#2ecc71);
+        border:none;border-radius:8px;color:#fff;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:8px">
+      &#9889; Resume Game
+    </button>
+    <button id="kvn-newgame-btn" style="width:100%;padding:11px;background:transparent;
+        border:1px solid #2a2a40;border-radius:8px;color:#888;font-weight:600;font-size:13px;cursor:pointer">
+      &#9658; New Game
+    </button>
+  </div>`;
+  document.body.appendChild(modal);
+  document.getElementById('kvn-resume-btn').onclick=()=>{
+    currentGameId=saved.gameId;
+    sessionRounds=saved.sessionRounds||[];
+    usedFormats=new Set(saved.usedFormatLabels||[]);
+    gameActive=true;hasSpunOnce=true;
+    document.getElementById('wheelTop').style.display='none';
+    if(!loadBingoState())pickBingoCategories();
+    buildBingoFromPicked();pickGameStamps();updateBingoBtn();
+    clearGameState();modal.remove();
+    startNextRound();
+  };
+  document.getElementById('kvn-newgame-btn').onclick=()=>{
+    clearGameState();modal.remove();startGame();
+  };
+}
 
 // ═══════════════════════════════════
 //  BINGO FLASH (per-cell, ~5s, free space click)
@@ -2586,8 +2659,8 @@ function closeBingoFlash(){
 // browser worldwide to drop its cached parse on next page load
 // and refetch from GitHub. Same trick anytime the parser logic
 // or FORMAT-MAP.md schema changes shape — bump the version.
-const DOC_CACHE_KEY='kvn_fmt_v15';
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v13';
+const DOC_CACHE_KEY='kvn_fmt_v16';
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v14';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -3568,6 +3641,7 @@ function showResult(){
   document.getElementById('resultPill').textContent=finalString;
   resetTracker();
   setTimeout(browseResults,200);
+  saveGameState();
 }
 function _showManualEntry(){
   const me=document.getElementById('vtManualEntry');
@@ -3617,6 +3691,7 @@ async function browseResults(){
 function renderInlineResults(){
   const box=document.getElementById('srInline');
   if(!box)return;
+  const CARD_HUES=[340,30,190,270,80]; // pink, orange, teal, purple, lime — one per slot
   box.innerHTML=`<div class="sr-inline-header"><span>Top Results</span><span style="color:#333;font-size:.58rem">${currentSearchVideos.length} shown</span></div>`
     +currentSearchVideos.map((v,i)=>{
       const views=v.viewCount<1000?v.viewCount:(v.viewCount/1000).toFixed(1)+'K';
@@ -3626,9 +3701,21 @@ function renderInlineResults(){
           `<span class="vt-star${v.rating[m]>=s?' lit':''}" style="font-size:.75rem" onclick="rateSearchVideo(${i},'${m}',${s})">&#9733;</span>`
         ).join('')}</span>`
       ).join('');
-      return`<div class="sr-inline-card${v.clicked?' clicked':''}" id="sri-${i}">
+      const hue=CARD_HUES[i%CARD_HUES.length];
+      const isZeroViews=v.viewCount===0;
+      const year=v.published>0?new Date(v.published*1000).getFullYear():null;
+      const isPre2008=year!==null&&year<2008;
+      const notable=isZeroViews||isPre2008;
+      const cardStyle=notable
+        ?`style="background:linear-gradient(135deg,hsl(${hue},35%,13%) 0%,hsl(${hue},22%,9%) 100%);border-color:hsl(${hue},60%,38%);box-shadow:0 0 18px hsla(${hue},70%,50%,.2)"`
+        :'';
+      const notableBadge=notable
+        ?`<div class="sr-special-stat" style="color:hsl(${hue},80%,65%)">${isZeroViews?'0':String(year)}<span style="color:hsl(${hue},55%,55%)">${isZeroViews?'VIEWS':'YEAR'}</span></div>`
+        :'';
+      return`<div class="sr-inline-card${v.clicked?' clicked':''}" id="sri-${i}" ${cardStyle}>
         <img class="sr-inline-thumb" src="${v.thumbnail||''}" alt="" onerror="this.src='https://img.youtube.com/vi/${v.videoId}/mqdefault.jpg'" loading="lazy">
         <div class="sr-inline-body">
+          ${notableBadge}
           <div class="sr-inline-title">${esc(v.title)}</div>
           <div class="sr-inline-meta">${esc(v.author)}${dur?' · '+dur:''} · ${views} views</div>
           <div class="sr-inline-stars">${stars}</div>
@@ -5906,7 +5993,7 @@ allowRepeatFormats=localStorage.getItem('kvn_allow_repeats')==='1';
 try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){document.getElementById('daubColor').value=daubSaved.color;document.getElementById('daubOpacity').value=daubSaved.opacity;setDaubColor(daubSaved.color)}}catch{}
 // Restore saved sound preference
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
-loadGameSetup();loadWheelTheme();
+loadGameSetup();loadWheelTheme();checkResumeGame();
 
 // ══════════ FOUND IT / HUNT / LIVE FEED / LEADERBOARD HERO ══════════
 const RARITY_COLORS={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
@@ -6051,7 +6138,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.14.0","build":"2026-06-04T01:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.15.0","build":"2026-06-04T10:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
@@ -6071,9 +6158,9 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.14.0",
-  "build": "2026-06-04T01:00:00",
-  "changelog": "FOSS build — wrapper-only features stripped.",
+  "version": "7.15.0",
+  "build": "2026-06-04T10:00:00",
+  "changelog": "Mid-game resume on refresh, inline card notable highlights, login contrast fix.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }

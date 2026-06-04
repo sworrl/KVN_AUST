@@ -23,7 +23,7 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-58ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.8.1-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.15.0-1a1a2e?style=flat-square" alt="Changelog"></a>
   <a href="CHANGELOG.md#700--2026-05-03--the-go-rewrite"><img src="https://img.shields.io/badge/Backend-Go_(rewritten_from_PHP)-00ADD8?style=flat-square&logo=go" alt="Go backend"></a>
 </p>
 

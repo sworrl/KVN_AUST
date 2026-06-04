@@ -14,6 +14,20 @@
 
 ---
 
+## [7.15.0] — 2026-06-04 — Mid-game resume, login contrast fix, inline card highlights
+
+### ✨ Added
+- **Mid-game resume** — refreshing mid-session no longer loses your progress. A modal detects the interrupted game and shows rounds saved, last format, and last search string, with Resume and New Game options. State expires after 24 hours and is cleared on normal game end.
+
+### 🐛 Fixed
+- **Login form contrast** — browser autofill was overriding input backgrounds with a white fill, making near-white text invisible. Fixed via `-webkit-autofill` box-shadow override; placeholder text also darkened for legibility.
+- **Display name Save button** — was clipped on narrow screens. Now stacks full-width below the input instead of sitting inline.
+
+### ✨ Changed
+- **Inline search cards** — 0-view and pre-2008 videos now render with a unique per-card gradient background and big stat badge (`0 VIEWS` / `YEAR`), each card getting a distinct hue.
+
+---
+
 ## [7.14.0] — 2026-06-03 — Spotify ducking: music auto-ducks when a video opens
 
 ### ✨ Added
