@@ -1774,7 +1774,7 @@ const IMG_URLS={
   avatar:'https://yt3.googleusercontent.com/ytc/AIdro_lgUZyOAlroBVjTTS0ERdTxzQ8m_JwBKaUleQYtZAJjtA=s200-c-k-c0x00ffffff-no-rj',
   footer:'https://yt3.ggpht.com/WWWdvQUKTtkyXrgYUfWVnpf40HPJQCnxLUbCB5FE64uww53DEnhEVc6ENchULE-ioRCqXVqqAX_ahA=w128-h128-p-rw-nd-v1-df'
 };
-const DB_NAME='kvn_img_cache',DB_VER=8;
+const DB_NAME='kvn_img_cache',DB_VER=9;
 function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,DB_VER);r.onupgradeneeded=e=>e.target.result.createObjectStore('images');r.onsuccess=e=>res(e.target.result);r.onerror=rej})}
 async function getCachedImage(key,url){
   try{
@@ -2597,8 +2597,8 @@ function closeBingoFlash(){
 // browser worldwide to drop its cached parse on next page load
 // and refetch from GitHub. Same trick anytime the parser logic
 // or FORMAT-MAP.md schema changes shape — bump the version.
-const DOC_CACHE_KEY='kvn_fmt_v14';
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v12';
+const DOC_CACHE_KEY='kvn_fmt_v15';
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v13';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
