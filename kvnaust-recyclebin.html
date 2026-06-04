@@ -1067,6 +1067,30 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 body.deep-dive ::selection{background:rgba(0,188,212,.3);color:#fff}
 body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 
+/* ── SPOTIFY FLOATING PLAYER ── */
+#spotifyPlayer{display:none;position:fixed;bottom:36px;right:16px;z-index:860;width:322px;background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 48px rgba(0,0,0,.85);overflow:hidden;user-select:none}
+#spotifyPlayer.open{display:block}
+#spotifyPlayer.sp-mini .sp-body{display:none}
+.sp-handle{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface);cursor:grab;border-bottom:1px solid var(--border);gap:8px}
+.sp-handle:active{cursor:grabbing}
+.sp-handle-left{display:flex;align-items:center;gap:7px;min-width:0}
+.sp-logo{flex-shrink:0;opacity:.9}
+.sp-handle-title{font-size:.65rem;font-weight:700;color:#ccc;letter-spacing:.02em;white-space:nowrap}
+.sp-handle-btns{display:flex;gap:2px;flex-shrink:0}
+.sp-hbtn{background:none;border:none;color:#555;cursor:pointer;font-size:.68rem;width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;transition:color .15s,background .15s;line-height:1}
+.sp-hbtn:hover{color:#ccc;background:rgba(255,255,255,.1)}
+.sp-body{padding:10px 10px 8px}
+.sp-url-row{display:flex;gap:5px;margin-bottom:8px}
+.sp-url-input{flex:1;min-width:0;background:var(--card2);border:1px solid var(--border);color:#eee;padding:6px 9px;border-radius:7px;font-size:.63rem;font-family:'Inter',sans-serif;transition:border-color .2s}
+.sp-url-input:focus{outline:none;border-color:#1db954}
+.sp-url-input::placeholder{color:#444}
+.sp-play-btn{background:#1db954;border:none;color:#fff;padding:0 12px;border-radius:7px;font-size:.65rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;flex-shrink:0}
+.sp-play-btn:hover{background:#1ed760}
+#spEmbed iframe{border:none;border-radius:8px;display:block;width:100%}
+.sp-hint{font-size:.58rem;color:#444;text-align:center;padding:18px 10px;line-height:1.7}
+.sp-hint a{color:#1db954;text-decoration:none}
+.sp-saved-tag{font-size:.52rem;color:#1db954;text-align:center;margin-top:4px;min-height:.8em}
+
 /* ── THEME PICKER PANEL ── */
 #themePicker{display:none;position:fixed;top:58px;right:10px;z-index:900;width:296px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 48px rgba(0,0,0,.75);padding:14px;animation:fadeUp .2s ease}
 #themePicker.open{display:block}
@@ -1165,6 +1189,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
     <button class="hdr-btn-icon" onclick="showRecords()" title="Zero-View Records Leaderboard" aria-label="Records" style="color:#e74c3c">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
     </button>
+    <button class="hdr-btn-icon" onclick="openSpotify()" title="Spotify Player" aria-label="Spotify" style="font-size:.8rem;color:#1db954">&#9835;</button>
     <button class="hdr-btn-icon" onclick="openHuntMode()" title="Hunt Mode — get a random rarity target" aria-label="Hunt Mode" style="font-size:.75rem;font-weight:900;letter-spacing:-.02em">🎯</button>
     <button class="hdr-btn-icon" onclick="showStats()" title="Stats Dashboard" aria-label="Stats">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
@@ -6037,6 +6062,81 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 // Restore saved sound preference
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadGameSetup();loadWheelTheme();
+// ══════════ SPOTIFY FLOATING PLAYER ══════════
+(function(){
+  let dragging=false,ox=0,oy=0,ex=0,ey=0;
+  function onDown(cx,cy){
+    const el=document.getElementById('spotifyPlayer');
+    if(!el)return;
+    const r=el.getBoundingClientRect();
+    ex=r.left;ey=r.top;ox=cx;oy=cy;dragging=true;
+    el.style.left=r.left+'px';el.style.top=r.top+'px';
+    el.style.right='auto';el.style.bottom='auto';
+  }
+  function onMove(cx,cy){
+    if(!dragging)return;
+    const el=document.getElementById('spotifyPlayer');if(!el)return;
+    const nx=Math.max(0,Math.min(ex+(cx-ox),window.innerWidth-el.offsetWidth));
+    const ny=Math.max(0,Math.min(ey+(cy-oy),window.innerHeight-el.offsetHeight));
+    el.style.left=nx+'px';el.style.top=ny+'px';
+  }
+  document.addEventListener('mousedown',e=>{const h=document.getElementById('spHandle');if(h&&h.contains(e.target)&&e.target.tagName!=='BUTTON'){e.preventDefault();onDown(e.clientX,e.clientY);}});
+  document.addEventListener('mousemove',e=>{if(dragging)onMove(e.clientX,e.clientY);});
+  document.addEventListener('mouseup',()=>{dragging=false;});
+  document.addEventListener('touchstart',e=>{const h=document.getElementById('spHandle');if(h&&h.contains(e.target)&&e.target.tagName!=='BUTTON'){const t=e.touches[0];onDown(t.clientX,t.clientY);}},{passive:true});
+  document.addEventListener('touchmove',e=>{if(dragging){const t=e.touches[0];onMove(t.clientX,t.clientY);}},{passive:true});
+  document.addEventListener('touchend',()=>{dragging=false;});
+})();
+
+function parseSpotifyUrl(url){
+  const m=url.match(/(?:open\.spotify\.com\/|spotify:)(track|playlist|album|artist|episode|show)[/:]([A-Za-z0-9]+)/);
+  return m?{type:m[1],id:m[2]}:null;
+}
+
+function openSpotify(){
+  const el=document.getElementById('spotifyPlayer');
+  if(!el)return;
+  el.classList.add('open');
+  el.classList.remove('sp-mini');
+  // Auto-load saved URL if embed not yet rendered
+  const saved=localStorage.getItem('sp_last_url');
+  if(saved&&!document.querySelector('#spEmbed iframe')){
+    document.getElementById('spUrlInput').value=saved;
+    _renderSpEmbed(saved,false);
+  }
+}
+function closeSpotify(){
+  const el=document.getElementById('spotifyPlayer');
+  if(el)el.classList.remove('open');
+}
+function toggleSpotifyMini(){
+  const el=document.getElementById('spotifyPlayer');
+  if(el)el.classList.toggle('sp-mini');
+}
+
+function _renderSpEmbed(url,saveToServer){
+  const p=parseSpotifyUrl(url);
+  const wrap=document.getElementById('spEmbed');
+  const tag=document.getElementById('spSavedTag');
+  if(!wrap)return;
+  if(!p){wrap.innerHTML='<div class="sp-hint">Couldn\'t read that link. Copy it directly from Spotify.</div>';return;}
+  const height=(p.type==='track'||p.type==='episode')?152:380;
+  wrap.innerHTML=`<iframe src="https://open.spotify.com/embed/${p.type}/${p.id}?utm_source=generator&theme=0" width="100%" height="${height}" allow="autoplay;clipboard-write;encrypted-media;fullscreen;picture-in-picture" loading="lazy"></iframe>`;
+  localStorage.setItem('sp_last_url',url);
+  if(tag)tag.textContent='';
+  if(saveToServer){
+    // shim.js auto-syncs sp_last_url via SYNCED_KEYS on next flush — just touch localStorage
+    if(tag){tag.textContent='✓ Saved to your account';setTimeout(()=>{if(tag)tag.textContent=''},3000);}
+  }
+}
+
+function loadSpotifyEmbed(){
+  const url=(document.getElementById('spUrlInput').value||'').trim();
+  if(!url){showToast('Paste a Spotify link first','warn');return;}
+  _renderSpEmbed(url,true);
+}
+// ══════════ END SPOTIFY ══════════
+
 // ══════════ FOUND IT / HUNT / LIVE FEED / LEADERBOARD HERO ══════════
 const RARITY_COLORS={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
 function rarityFromDate(iso){
@@ -6263,6 +6363,28 @@ window.addEventListener('hashchange',handleHash);
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
+<!-- ── SPOTIFY FLOATING PLAYER ── -->
+<div id="spotifyPlayer">
+  <div class="sp-handle" id="spHandle">
+    <div class="sp-handle-left">
+      <svg class="sp-logo" width="16" height="16" viewBox="0 0 168 168" fill="#1db954"><path d="M83.996.277C37.747.277.004 37.987.004 84.237c0 46.25 37.743 83.986 83.992 83.986 46.254 0 83.996-37.736 83.996-83.986C167.992 38.0 130.25.277 83.996.277zm38.498 121.02a5.232 5.232 0 0 1-7.203 1.742c-19.716-12.054-44.533-14.777-73.763-8.1a5.233 5.233 0 0 1-6.24-3.924 5.235 5.235 0 0 1 3.926-6.243c32.015-7.312 59.498-4.164 81.703 9.376a5.234 5.234 0 0 1 1.577 7.149zm10.27-22.84c-2.161 3.513-6.75 4.617-10.26 2.457-22.568-13.863-56.955-17.884-83.596-9.79a7.486 7.486 0 0 1-9.35-4.975 7.484 7.484 0 0 1 4.978-9.351c30.474-9.25 68.33-4.773 94.195 11.17 3.512 2.16 4.616 6.75 2.457 10.26l-.424.23zm.882-23.784c-27.06-16.077-71.72-17.556-97.544-9.713a8.98 8.98 0 0 1-11.23-5.966 8.978 8.978 0 0 1 5.965-11.232c29.632-9.015 78.88-7.275 109.975 11.23a8.98 8.98 0 0 1 3.27 12.286 8.977 8.977 0 0 1-10.436 3.395z"/></svg>
+      <span class="sp-handle-title">Sonder Music</span>
+    </div>
+    <div class="sp-handle-btns">
+      <button class="sp-hbtn" onclick="event.stopPropagation();toggleSpotifyMini()" title="Minimize">&#x2212;</button>
+      <button class="sp-hbtn" onclick="event.stopPropagation();closeSpotify()" title="Close">&#x2715;</button>
+    </div>
+  </div>
+  <div class="sp-body" id="spBody">
+    <div class="sp-url-row">
+      <input class="sp-url-input" id="spUrlInput" type="text" placeholder="Paste Spotify track / playlist / album link…" onkeydown="if(event.key==='Enter')loadSpotifyEmbed()">
+      <button class="sp-play-btn" onclick="loadSpotifyEmbed()">&#9654; Play</button>
+    </div>
+    <div id="spEmbed"><div class="sp-hint">Paste any Spotify link above and hit Play.<br>Works with tracks, playlists, albums &amp; artists.<br><a href="https://open.spotify.com" target="_blank" rel="noopener">Browse Spotify &#x2192;</a></div></div>
+    <div class="sp-saved-tag" id="spSavedTag"></div>
+  </div>
+</div>
+
 <!-- ── THEME PICKER PANEL ── -->
 <div id="themePicker">
   <div class="tp-header">
@@ -6308,9 +6430,9 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.12.0",
-  "build": "2026-06-04T00:00:00",
-  "changelog": "Themes now deeply skin the whole UI (screens, panels, spinner, bingo). Floating 🎨 theme picker with 🎲 random roll. All 22 themes updated with surface/border/screen-inner vars.",
+  "version": "7.13.0",
+  "build": "2026-06-04T01:00:00",
+  "changelog": "Draggable Spotify floating player (♫ header button) — paste any track/playlist/album link, auto-saves last URL server-side for logged-in users.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
