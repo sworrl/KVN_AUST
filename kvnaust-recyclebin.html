@@ -525,6 +525,12 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 .wheel-pointer.locked{top:-6px;animation:pointerBite .25s cubic-bezier(.4,0,.2,1) forwards}
 @keyframes pointerIdle{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(3px)}}
 @keyframes pointerBite{0%{transform:translateX(-50%) translateY(-4px) scale(1)}40%{transform:translateX(-50%) translateY(8px) scale(1.1)}70%{transform:translateX(-50%) translateY(2px) scale(1.05)}100%{transform:translateX(-50%) translateY(4px) scale(1.02)}}
+@keyframes pointerTick{0%{transform:translateX(-50%) rotate(0deg) translateY(0)}28%{transform:translateX(-50%) rotate(16deg) translateY(2px)}62%{transform:translateX(-50%) rotate(-5deg) translateY(0)}100%{transform:translateX(-50%) rotate(0deg) translateY(0)}}
+@keyframes pointerTickCCW{0%{transform:translateX(-50%) rotate(0deg) translateY(0)}28%{transform:translateX(-50%) rotate(-16deg) translateY(2px)}62%{transform:translateX(-50%) rotate(5deg) translateY(0)}100%{transform:translateX(-50%) rotate(0deg) translateY(0)}}
+/* Spin direction toggle */
+.spin-dir-wrap{position:absolute;bottom:19%;left:50%;transform:translateX(-50%);z-index:12;display:flex;gap:6px;align-items:center}
+.spin-dir-btn{background:none;border:none;cursor:pointer;font-size:1.65rem;line-height:1;padding:3px 5px;opacity:.28;transition:opacity .2s,filter .2s;filter:drop-shadow(0 1px 3px rgba(0,0,0,.9));-webkit-text-fill-color:transparent;color:transparent;background-clip:text;-webkit-background-clip:text}
+.spin-dir-btn.active{opacity:1;background:linear-gradient(90deg,hsl(var(--sd-h1,280),85%,72%),hsl(var(--sd-h2,40),85%,72%),hsl(var(--sd-h3,160),85%,72%),hsl(var(--sd-h1,280),85%,72%));background-size:300% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:freeGlowFlow 3s linear infinite;filter:drop-shadow(0 0 8px hsla(var(--sd-h2,40),85%,65%,.6)) drop-shadow(0 1px 3px rgba(0,0,0,.9))}
 /* Big spin button with avatar */
 .spin-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:130px;height:130px;border-radius:50%;
   background:var(--bg);cursor:pointer;z-index:11;border:4px solid var(--accent);
@@ -1218,6 +1224,10 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <canvas id="wheelCanvas" width="800" height="800"></canvas>
       <button class="spin-btn" id="spinBtn" onclick="spinWheel()"><img id="spinAvatar" alt="SPIN"></button>
       <div class="spin-label">SPIN</div>
+      <div class="spin-dir-wrap">
+        <button class="spin-dir-btn active" id="spinDirCW" title="Spin clockwise" onclick="setSpinDir(1)">↻</button>
+        <button class="spin-dir-btn" id="spinDirCCW" title="Spin counter-clockwise" onclick="setSpinDir(-1)">↺</button>
+      </div>
     </div>
     <div class="spin-hint">or press Ctrl+Enter</div>
   </div>
@@ -2124,6 +2134,7 @@ let formats=[...ALL_FORMATS],wheelFormats=[],wheelMode='random',selectedFormats=
 let currentScreen='start-screen',chosenFormat=null,chosenNumber=null,finalString='',wheelAngle=0,spinning=false;
 let bingoState=Array(25).fill(false),bingoWinShown=false,currentGameId=null,sessionRounds=[];
 let lastTickSegment=-1;
+let spinDir=1; // 1=CW, -1=CCW
 let bingoPicked=null;
 let gameActive=false;
 let bingoPerLetter=false;
@@ -2426,6 +2437,19 @@ function goPrev(){
 function getAllGames(){try{return JSON.parse(localStorage.getItem('kvn_games')||'[]')}catch{return[]}}
 function saveAllGames(g){localStorage.setItem('kvn_games',JSON.stringify(g))}
 
+function genSpinDirHues(){
+  const h1=Math.floor(Math.random()*360);
+  const h2=(h1+100+Math.floor(Math.random()*80))%360;
+  const h3=(h2+100+Math.floor(Math.random()*80))%360;
+  document.documentElement.style.setProperty('--sd-h1',h1);
+  document.documentElement.style.setProperty('--sd-h2',h2);
+  document.documentElement.style.setProperty('--sd-h3',h3);
+}
+function setSpinDir(dir){
+  spinDir=dir;
+  document.getElementById('spinDirCW').classList.toggle('active',dir===1);
+  document.getElementById('spinDirCCW').classList.toggle('active',dir===-1);
+}
 function startGame(){
   // Close setup panel if open
   if(document.getElementById('bingoSetup').classList.contains('open'))toggleBingoSetup();
@@ -2437,6 +2461,7 @@ function startGame(){
   sessionRounds=[];bingoState=Array(25).fill(false);bingoWinShown=false;
   if(setupFreeSpace)bingoState[12]=true;
   gameActive=true;maxReachedIdx=1;usedFormats=new Set();
+  genSpinDirHues();
   pickGameStamps(); // 25 unique SVG stamps for this game
   // Pick bingo data from BINGO_LIVE (which may have been edited)
   pickBingoCategories();
@@ -2958,13 +2983,16 @@ function spinWheel(){
   // We need: ci*arc + arc/2 + finalAngle ≡ 3*PI/2 (mod 2*PI)
   // So: finalAngle ≡ 3*PI/2 - ci*arc - arc/2 (mod 2*PI)
   const targetRest=((3*Math.PI/2-ci*arc-arc/2)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
-  // How far to spin from current angle to reach targetRest, plus full rotations
-  const distToTarget=((targetRest-wheelAngle)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  // CW: travel forward to targetRest; CCW: travel backward (negative) to reach same rest angle
+  const distCW=((targetRest-wheelAngle)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  const distCCW=((wheelAngle-targetRest)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+  const dist=spinDir===1?distCW:distCCW;
   const fullSpins=(5+Math.random()*4)*2*Math.PI;
-  const target=fullSpins+distToTarget;
+  const target=fullSpins+dist;
+  const dir=spinDir;
   const start=wheelAngle,dur=4200+Math.random()*1800,t0=performance.now();
   (function anim(now){
-    const p=Math.min((now-t0)/dur,1);wheelAngle=start+target*(1-Math.pow(1-p,5));drawWheel();
+    const p=Math.min((now-t0)/dur,1);wheelAngle=start+dir*target*(1-Math.pow(1-p,5));drawWheel();
     // Tick sound on segment change
     const curSeg=Math.floor(((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI)/arc)%n;
     if(curSeg!==lastTickSegment){
@@ -2972,7 +3000,14 @@ function spinWheel(){
       // Pulse pointer with segment color
       const segColor=activeWheelColors[curSeg%activeWheelColors.length];
       const ptr=document.getElementById('wheelPointer');
-      if(ptr){ptr.style.setProperty('--pointer-glow',segColor);ptr.style.setProperty('--pointer-inner',segColor)}
+      if(ptr){
+        ptr.style.setProperty('--pointer-glow',segColor);ptr.style.setProperty('--pointer-inner',segColor);
+        ptr.style.animation='none';
+        void ptr.offsetHeight;
+        const tickMs=Math.max(90,Math.min(180,Math.round((1-p)*200)));
+        const tickAnim=dir===1?'pointerTick':'pointerTickCCW';
+        ptr.style.animation=`${tickAnim} ${tickMs}ms cubic-bezier(.2,1.5,.4,1) forwards`;
+      }
       const ptrFill=document.getElementById('ptrFill');
       if(ptrFill)ptrFill.setAttribute('stroke',segColor);
     }
@@ -6215,7 +6250,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.15.5","build":"2026-06-04T18:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.15.6","build":"2026-06-04T20:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
