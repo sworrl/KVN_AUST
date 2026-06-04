@@ -892,16 +892,18 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .sr-bummer-none{font-size:.65rem;color:#333;letter-spacing:.1em;text-transform:uppercase;margin-top:-4px}
 .sr-bummer-sub{font-size:.68rem;color:#444;max-width:260px;line-height:1.5}
 /* inline result cards (top 5, embedded in result screen) */
-.sr-inline-header{font-size:.6rem;font-weight:900;letter-spacing:.1em;color:#444;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
-.sr-inline-card{background:var(--card);border:1px solid #2a2a40;border-radius:8px;padding:8px;display:flex;gap:8px;margin-bottom:6px;position:relative;transition:border-color .2s}
-.sr-inline-card:hover{border-color:#3a3a55}
-.sr-inline-card.clicked{border-left:3px solid var(--accent)}
-.sr-inline-thumb{width:100px;height:56px;border-radius:5px;object-fit:cover;background:#111;flex-shrink:0}
-.sr-inline-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.sr-inline-title{font-size:.72rem;font-weight:700;color:#eee;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
-.sr-inline-meta{font-size:.6rem;color:#555}
-.sr-inline-actions{display:flex;gap:5px;margin-top:auto;flex-wrap:wrap;align-items:center}
-.sr-inline-stars{display:flex;gap:1px;flex-wrap:wrap;margin-top:2px}
+.sr-inline-header{font-size:.65rem;font-weight:900;letter-spacing:.1em;color:#444;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.sr-inline-card{background:var(--card);border:1.5px solid #2a2a40;border-radius:12px;padding:14px;display:flex;gap:12px;margin-bottom:10px;position:relative;transition:border-color .2s,background .2s,box-shadow .2s}
+.sr-inline-card:hover{border-color:#4a4a66}
+.sr-inline-card.clicked{border-left:4px solid var(--accent)}
+.sr-inline-thumb{width:160px;height:90px;border-radius:8px;object-fit:cover;background:#111;flex-shrink:0}
+.sr-inline-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.sr-inline-title{font-size:.95rem;font-weight:700;color:#eee;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+.sr-inline-meta{font-size:.75rem;color:#666}
+.sr-inline-actions{display:flex;gap:8px;margin-top:auto;flex-wrap:wrap;align-items:center}
+.sr-inline-stars{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+.sr-special-stat{font-size:2.2rem;font-weight:900;line-height:1;letter-spacing:-.03em}
+.sr-special-stat span{font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-left:4px;opacity:.85;vertical-align:middle}
 
 /* ── BINGO SETUP PANEL ── */
 .bingo-setup{position:fixed;top:220px;right:0;bottom:0;width:340px;background:linear-gradient(180deg,var(--card),#111120);border-left:1px solid #2a2a40;z-index:460;
@@ -1102,18 +1104,6 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 @keyframes foundUp{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
 .found-particle{position:fixed;pointer-events:none;border-radius:2px;animation:confettiFall 2.5s ease forwards}
 
-/* ── Live find feed ticker ── */
-#lfBar{position:fixed;bottom:0;left:0;right:0;height:26px;background:rgba(0,0,0,.9);border-top:1px solid #1a1a2a;z-index:800;overflow:hidden;display:none;align-items:center}
-#lfBar.active{display:flex}
-.lf-label{flex-shrink:0;font-size:.52rem;color:#333;padding:0 8px;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
-.lf-track-wrap{flex:1;overflow:hidden;height:100%}
-#lfTrack{display:flex;align-items:center;height:100%;white-space:nowrap;animation:lfScroll 32s linear infinite}
-#lfTrack:hover{animation-play-state:paused}
-.lf-item{display:inline-flex;align-items:center;gap:5px;padding:0 18px;font-size:.62rem}
-.lf-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.lf-item-title{color:#666}
-.lf-item-finder{color:#444}
-@keyframes lfScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 
 /* ── Leaderboard hero ── */
@@ -2439,7 +2429,6 @@ function startGame(){
   sessionRounds=[];bingoState=Array(25).fill(false);bingoWinShown=false;
   if(setupFreeSpace)bingoState[12]=true;
   gameActive=true;maxReachedIdx=1;usedFormats=new Set();
-  autoHideFooter();
   pickGameStamps(); // 25 unique SVG stamps for this game
   // Pick bingo data from BINGO_LIVE (which may have been edited)
   pickBingoCategories();
@@ -5999,24 +5988,6 @@ async function psLogFind(videoId,title,views,publishedAt,query){
 }
 
 // ── LIVE FIND FEED ──
-function initLiveFeed(){
-  if(typeof communityFinds!=='undefined'&&communityFinds.length){renderLfTicker(communityFinds);return;}
-  fetch('https://kvnaust.falcontechnix.com/finds.php?limit=12&order=desc').then(r=>r.json()).then(d=>{if(d&&d.finds)renderLfTicker(d.finds);}).catch(()=>{});
-}
-function renderLfTicker(finds){
-  const bar=document.getElementById('lfBar');
-  const track=document.getElementById('lfTrack');
-  if(!bar||!track)return;
-  const recent=[...finds].filter(f=>f.rarity).sort((a,b)=>Number(b.discovered_at)-Number(a.discovered_at)).slice(0,10);
-  if(!recent.length)return;
-  const items=recent.map(f=>{
-    const color=RARITY_COLORS[f.rarity]||'#888';
-    const label=f.video_title||f.lead||(f.date_posted?new Date(f.date_posted).getFullYear()+'':'')||'?';
-    return`<span class="lf-item"><span class="lf-dot" style="background:${color}"></span><span class="lf-item-title">${esc(label.substring(0,48))}</span><span class="lf-item-finder">&nbsp;· ${esc(f.found_by||'?')}</span></span>`;
-  });
-  track.innerHTML=items.join('')+items.join('');
-  bar.classList.add('active');
-}
 
 // ── LEADERBOARD HERO ──
 function renderLbHero(finds){
@@ -6060,7 +6031,6 @@ checkForUpdates();checkHoliday();
 // Fetch community finds in background, poll every 60s
 setTimeout(fetchCommunityRecords,2000);
 setInterval(fetchCommunityRecords,60000);
-// initLiveFeed disabled — ticker overlapped footer
 // Hash routing: #records, #stats, #shortcuts, #credits
 function handleHash(){
   const h=location.hash.toLowerCase().replace('#','');
@@ -6097,11 +6067,7 @@ window.addEventListener('hashchange',handleHash);
   </div>
 </div>
 
-<!-- ── Live find feed ticker ── -->
-<div id="lfBar">
-  <div class="lf-label">&#9889; Live</div>
-  <div class="lf-track-wrap"><div id="lfTrack"></div></div>
-</div>
+
 
 <script type="application/json" id="app-manifest">
 {
