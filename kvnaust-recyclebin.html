@@ -1070,48 +1070,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 body.deep-dive ::selection{background:rgba(0,188,212,.3);color:#fff}
 body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 
-/* ── SPOTIFY FLOATING PLAYER ── */
-#spotifyPlayer{display:none;position:fixed;bottom:36px;right:16px;z-index:860;width:322px;background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 48px rgba(0,0,0,.85);overflow:hidden;user-select:none}
-#spotifyPlayer.open{display:block}
-#spotifyPlayer.sp-mini .sp-body{display:none}
-.sp-handle{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface);cursor:grab;border-bottom:1px solid var(--border);gap:8px}
-.sp-handle:active{cursor:grabbing}
-.sp-handle-left{display:flex;align-items:center;gap:7px;min-width:0}
-.sp-logo{flex-shrink:0;opacity:.9}
-.sp-handle-title{font-size:.65rem;font-weight:700;color:#ccc;letter-spacing:.02em;white-space:nowrap}
-.sp-handle-btns{display:flex;gap:2px;flex-shrink:0}
-.sp-hbtn{background:none;border:none;color:#555;cursor:pointer;font-size:.68rem;width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;transition:color .15s,background .15s;line-height:1}
-.sp-hbtn:hover{color:#ccc;background:rgba(255,255,255,.1)}
-.sp-hbtn.duck-on{color:#1db954}.sp-hbtn.duck-off{color:#555;opacity:.45}
-.sp-body{padding:10px 10px 8px}
-.sp-url-row{display:flex;gap:5px;margin-bottom:8px}
-.sp-url-input{flex:1;min-width:0;background:var(--card2);border:1px solid var(--border);color:#eee;padding:6px 9px;border-radius:7px;font-size:.63rem;font-family:'Inter',sans-serif;transition:border-color .2s}
-.sp-url-input:focus{outline:none;border-color:#1db954}
-.sp-url-input::placeholder{color:#444}
-.sp-play-btn{background:#1db954;border:none;color:#fff;padding:0 12px;border-radius:7px;font-size:.65rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s;flex-shrink:0}
-.sp-play-btn:hover{background:#1ed760}
-#spEmbed iframe{border:none;border-radius:8px;display:block;width:100%}
-.sp-hint{font-size:.58rem;color:#444;text-align:center;padding:18px 10px;line-height:1.7}
-.sp-hint a{color:#1db954;text-decoration:none}
-.sp-saved-tag{font-size:.52rem;color:#1db954;text-align:center;margin-top:4px;min-height:.8em}
-.sp-presets{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}
-.sp-preset-btn{flex:1;min-width:0;background:rgba(29,185,84,.12);border:1px solid rgba(29,185,84,.25);color:#1db954;border-radius:6px;padding:5px 6px;font-size:.58rem;font-weight:700;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .15s,border-color .15s}
-.sp-preset-btn:hover{background:rgba(29,185,84,.25);border-color:rgba(29,185,84,.5)}
-.sp-preset-btn.active{background:rgba(29,185,84,.3);border-color:#1db954}
 
-/* ── THEME PICKER PANEL ── */
-#themePicker{display:none;position:fixed;top:58px;right:10px;z-index:900;width:296px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 48px rgba(0,0,0,.75);padding:14px;animation:fadeUp .2s ease}
-#themePicker.open{display:block}
-.tp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.tp-title{font-size:.6rem;font-weight:900;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
-.tp-dice{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);padding:3px 8px;cursor:pointer;font-size:.75rem;transition:all .2s;display:flex;align-items:center;gap:4px}
-.tp-dice:hover{border-color:var(--accent);color:var(--accent)}
-.tp-dice.rolling{animation:diceRoll .5s ease}
-.tp-name{font-size:.6rem;color:var(--accent);text-align:center;margin-bottom:8px;font-weight:700;min-height:1em;letter-spacing:.03em}
-#themePickerGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-#themeBtn{position:relative}
-#themeBtn::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:8px;height:3px;border-radius:1px;background:var(--accent);transition:background .3s}
-@keyframes diceRoll{0%{transform:rotate(0) scale(1)}25%{transform:rotate(90deg) scale(1.3)}50%{transform:rotate(180deg) scale(.9)}75%{transform:rotate(270deg) scale(1.2)}100%{transform:rotate(360deg) scale(1)}}
 
 /* ── FOUND IT overlay ── */
 #foundOv{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.93);backdrop-filter:blur(6px);align-items:center;justify-content:center;flex-direction:column}
@@ -1141,22 +1100,6 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 .lf-item-finder{color:#444}
 @keyframes lfScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-/* ── Hunt Mode panel ── */
-#huntOv{display:none;position:fixed;top:62px;right:14px;z-index:850;width:210px;background:#09090e;border:1px solid #1a1a2a;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.75);padding:14px}
-#huntOv.open{display:block}
-.hunt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.hunt-title-lbl{font-size:.58rem;font-weight:900;letter-spacing:.14em;color:#444;text-transform:uppercase}
-.hunt-x{background:none;border:none;color:#333;cursor:pointer;font-size:.9rem;padding:0;line-height:1}
-.hunt-x:hover{color:#888}
-.hunt-target{font-size:.75rem;font-weight:700;margin-bottom:3px}
-.hunt-era{font-size:.6rem;color:#444;margin-bottom:12px}
-.hunt-dots{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
-.hunt-dot{width:10px;height:10px;border-radius:50%;background:#111;border:1px solid #1e1e2e;flex-shrink:0}
-.hunt-dot.hit{background:#2ecc71;border-color:#2ecc71;box-shadow:0 0 5px #2ecc71}
-.hunt-dot.miss{background:#e74c3c;border-color:#e74c3c}
-.hunt-status{font-size:.64rem;color:#444;min-height:1.3em}
-.hunt-new-btn{width:100%;margin-top:10px;padding:5px 0;font-size:.6rem;background:#0d0d18;border:1px solid #1e1e2e;color:#555;border-radius:5px;cursor:pointer}
-.hunt-new-btn:hover{border-color:#333;color:#999}
 
 /* ── Leaderboard hero ── */
 #lbHero{display:none;margin:0 0 12px;border-radius:10px;overflow:hidden;position:relative;background:#040408;border:1px solid #1a1a2a}
@@ -1197,8 +1140,6 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
     <button class="hdr-btn-icon" onclick="showRecords()" title="Zero-View Records Leaderboard" aria-label="Records" style="color:#e74c3c">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
     </button>
-    <button class="hdr-btn-icon" onclick="openSpotify()" title="Spotify Player" aria-label="Spotify" style="font-size:.8rem;color:#1db954">&#9835;</button>
-    <button class="hdr-btn-icon" onclick="openHuntMode()" title="Hunt Mode — get a random rarity target" aria-label="Hunt Mode" style="font-size:.75rem;font-weight:900;letter-spacing:-.02em">🎯</button>
     <button class="hdr-btn-icon" onclick="showStats()" title="Stats Dashboard" aria-label="Stats">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
     </button>
@@ -1214,7 +1155,6 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <span class="hdr-fmt-count" id="hdrFmtCount"></span>
     </button>
     <button class="hdr-btn-icon" onclick="showShortcuts()" title="Keyboard Shortcuts" aria-label="Shortcuts" style="font-weight:900">?</button>
-    <button class="hdr-btn-icon" id="themeBtn" onclick="toggleThemePicker()" title="Change Theme" aria-label="Theme" style="font-size:.8rem">&#127912;</button>
     <button class="hdr-btn-icon" onclick="toggleSettings()" title="Settings" aria-label="Settings">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
@@ -1816,7 +1756,7 @@ const IMG_URLS={
   avatar:'https://yt3.googleusercontent.com/ytc/AIdro_lgUZyOAlroBVjTTS0ERdTxzQ8m_JwBKaUleQYtZAJjtA=s200-c-k-c0x00ffffff-no-rj',
   footer:'https://yt3.ggpht.com/WWWdvQUKTtkyXrgYUfWVnpf40HPJQCnxLUbCB5FE64uww53DEnhEVc6ENchULE-ioRCqXVqqAX_ahA=w128-h128-p-rw-nd-v1-df'
 };
-const DB_NAME='kvn_img_cache',DB_VER=5;
+const DB_NAME='kvn_img_cache',DB_VER=8;
 function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,DB_VER);r.onupgradeneeded=e=>e.target.result.createObjectStore('images');r.onsuccess=e=>res(e.target.result);r.onerror=rej})}
 async function getCachedImage(key,url){
   try{
@@ -2188,158 +2128,10 @@ let errorLog=[]; // {type:'warn'|'error', msg:string, ts:Date}
 const SCREENS=['start-screen','wheel-screen','format-screen','number-screen','result-screen'];
 const WHEEL_COLORS=['#b8860b','#2e8b57','#daa520','#1565c0','#c62828','#6a1b9a','#00838f','#ef6c00','#2e7d32','#ad1457','#4527a0','#00695c','#d84315','#1b5e20','#6d4c41','#37474f','#ff6f00','#283593','#004d40','#bf360c','#4e342e','#0d47a1','#827717','#880e4f','#33691e','#e65100','#1a237e','#3e2723','#006064','#f57f17','#311b92','#01579b'];
 
-// ═══════════════════════════════════
-//  APP THEMES — 22 full skin presets
-//  bg/accent props used for swatch preview tiles.
-//  vars applied to :root on select.
-// ═══════════════════════════════════
+// ── App themes: Default + Deep Dive ──
 const APP_THEMES=[
-  // ── NBVS Import (their dark mode palette) ───────────────
-  {key:'nbvs',label:'NBVS',deepDive:false,bg:'#1a1a1a',accent:'#60a5fa',vars:{
-    '--accent':'#60a5fa','--accent2':'#93c5fd',
-    '--bg':'#1a1a1a','--card':'#2a2a2a','--card2':'#363636',
-    '--text':'#f3f4f6','--muted':'#9ca3af',
-    '--surface':'#121212','--border':'#383838','--screen-inner':'#252535',
-    '--g1':'#60a5fa','--g2':'#818cf8','--g3':'#a78bfa','--g4':'#c084fc','--g5':'#e879f9',
-    '--daub':'rgba(96,165,250,.55)'}},
-  // ── Core ────────────────────────────────────────────────
   {key:'default',label:'Default',deepDive:false,bg:'#0d0d14',accent:'#e74c3c',vars:{}},
-  {key:'deep-dive',label:'Deep Dive',deepDive:true,bg:'#020608',accent:'#00bcd4',vars:{}},
-  // ── v7.8.0 originals ───────────────────────────────────
-  {key:'terminal',label:'Terminal',deepDive:false,bg:'#030a03',accent:'#00e441',vars:{
-    '--accent':'#00e441','--accent2':'#39ff14',
-    '--bg':'#030a03','--card':'#091409','--card2':'#0e1e0e',
-    '--text':'#c0ffc0','--muted':'#3a6a3a',
-    '--surface':'#020802','--border':'#0e280e','--screen-inner':'#081808',
-    '--g1':'#00e441','--g2':'#00cc38','--g3':'#00aa2e','--g4':'#008824','--g5':'#00661a',
-    '--daub':'rgba(0,228,65,.45)'}},
-  {key:'vhs',label:'VHS',deepDive:false,bg:'#09000f',accent:'#ff0090',vars:{
-    '--accent':'#ff0090','--accent2':'#ff44cc',
-    '--bg':'#09000f','--card':'#130019','--card2':'#1a0023',
-    '--text':'#ffe0ff','--muted':'#884488',
-    '--surface':'#060010','--border':'#220038','--screen-inner':'#160020',
-    '--g1':'#ff0090','--g2':'#cc00ff','--g3':'#7700ff','--g4':'#ff44cc','--g5':'#ff88ff',
-    '--daub':'rgba(255,0,144,.45)'}},
-  {key:'amber',label:'Amber',deepDive:false,bg:'#0d0800',accent:'#f5a623',vars:{
-    '--accent':'#f5a623','--accent2':'#ffcc55',
-    '--bg':'#0d0800','--card':'#1a1000','--card2':'#231600',
-    '--text':'#fff5cc','--muted':'#7a6020',
-    '--surface':'#0a0600','--border':'#2c1c00','--screen-inner':'#1c1400',
-    '--g1':'#f5a623','--g2':'#e8880e','--g3':'#d96c00','--g4':'#c55200','--g5':'#b03c00',
-    '--daub':'rgba(245,166,35,.45)'}},
-  {key:'void',label:'Void',deepDive:false,bg:'#000000',accent:'#eeeeee',vars:{
-    '--accent':'#eeeeee','--accent2':'#aaaaaa',
-    '--bg':'#000000','--card':'#080808','--card2':'#111111',
-    '--text':'#eeeeee','--muted':'#555555',
-    '--surface':'#000000','--border':'#1c1c1c','--screen-inner':'#0c0c0c',
-    '--g1':'#eeeeee','--g2':'#bbbbbb','--g3':'#888888','--g4':'#666666','--g5':'#444444',
-    '--daub':'rgba(255,255,255,.35)'}},
-  // ── New expansions ──────────────────────────────────────
-  {key:'synthwave',label:'Synthwave',deepDive:false,bg:'#0a0718',accent:'#ff2d87',vars:{
-    '--accent':'#ff2d87','--accent2':'#ff6cb0',
-    '--bg':'#0a0718','--card':'#120b2a','--card2':'#1a1040',
-    '--text':'#f0e6ff','--muted':'#7a5fa0',
-    '--surface':'#060414','--border':'#26185a','--screen-inner':'#181038',
-    '--g1':'#ff2d87','--g2':'#b44fff','--g3':'#00e5ff','--g4':'#ff6a00','--g5':'#ffe100',
-    '--daub':'rgba(255,45,135,.5)'}},
-  {key:'bloodmoon',label:'Blood Moon',deepDive:false,bg:'#050005',accent:'#cc0000',vars:{
-    '--accent':'#cc0000','--accent2':'#ff3333',
-    '--bg':'#050005','--card':'#0f0208','--card2':'#180410',
-    '--text':'#ffe0e0','--muted':'#8a3a3a',
-    '--surface':'#030003','--border':'#280a28','--screen-inner':'#140418',
-    '--g1':'#cc0000','--g2':'#aa0000','--g3':'#880000','--g4':'#660000','--g5':'#cc2200',
-    '--daub':'rgba(204,0,0,.5)'}},
-  {key:'arctic',label:'Arctic',deepDive:false,bg:'#020b14',accent:'#48cae4',vars:{
-    '--accent':'#48cae4','--accent2':'#90e0ef',
-    '--bg':'#020b14','--card':'#062030','--card2':'#0a2e40',
-    '--text':'#e8f4f8','--muted':'#4a7a8a',
-    '--surface':'#020810','--border':'#0c3050','--screen-inner':'#083050',
-    '--g1':'#48cae4','--g2':'#00b4d8','--g3':'#0096c7','--g4':'#0077b6','--g5':'#ade8f4',
-    '--daub':'rgba(72,202,228,.5)'}},
-  {key:'forest',label:'Forest',deepDive:false,bg:'#030a06',accent:'#2d936c',vars:{
-    '--accent':'#2d936c','--accent2':'#52b788',
-    '--bg':'#030a06','--card':'#091510','--card2':'#0f1f16',
-    '--text':'#d8f3dc','--muted':'#3a6b4a',
-    '--surface':'#020806','--border':'#102a18','--screen-inner':'#0c1e12',
-    '--g1':'#52b788','--g2':'#40916c','--g3':'#2d6a4f','--g4':'#1b4332','--g5':'#74c69d',
-    '--daub':'rgba(45,147,108,.5)'}},
-  {key:'sakura',label:'Sakura',deepDive:false,bg:'#080310',accent:'#ff6b9d',vars:{
-    '--accent':'#ff6b9d','--accent2':'#ffadc5',
-    '--bg':'#080310','--card':'#120820','--card2':'#1c0e2e',
-    '--text':'#ffe4f0','--muted':'#8a5070',
-    '--surface':'#060210','--border':'#240e44','--screen-inner':'#1a0c30',
-    '--g1':'#ff6b9d','--g2':'#ff9ec4','--g3':'#c77dff','--g4':'#e0aaff','--g5':'#ffb3c6',
-    '--daub':'rgba(255,107,157,.5)'}},
-  {key:'neon-tokyo',label:'Neon Tokyo',deepDive:false,bg:'#020202',accent:'#ff0055',vars:{
-    '--accent':'#ff0055','--accent2':'#ff4488',
-    '--bg':'#020202','--card':'#0a0a10','--card2':'#10101a',
-    '--text':'#ffffff','--muted':'#556688',
-    '--surface':'#020204','--border':'#181828','--screen-inner':'#0e0e1c',
-    '--g1':'#ff0055','--g2':'#00f5ff','--g3':'#ffe600','--g4':'#ff00aa','--g5':'#7b00ff',
-    '--daub':'rgba(255,0,85,.5)'}},
-  {key:'rust',label:'Rust',deepDive:false,bg:'#0a0602',accent:'#d4531a',vars:{
-    '--accent':'#d4531a','--accent2':'#f07030',
-    '--bg':'#0a0602','--card':'#170c04','--card2':'#201008',
-    '--text':'#f5ddc8','--muted':'#7a5030',
-    '--surface':'#070400','--border':'#2c1c08','--screen-inner':'#1e1006',
-    '--g1':'#d4531a','--g2':'#c44b10','--g3':'#aa3d08','--g4':'#8a3006','--g5':'#f07030',
-    '--daub':'rgba(212,83,26,.5)'}},
-  {key:'galaxy',label:'Galaxy',deepDive:false,bg:'#030006',accent:'#9d4edd',vars:{
-    '--accent':'#9d4edd','--accent2':'#c77dff',
-    '--bg':'#030006','--card':'#0a0520','--card2':'#140a30',
-    '--text':'#e8e0ff','--muted':'#5a4a8a',
-    '--surface':'#020005','--border':'#1e0a40','--screen-inner':'#120830',
-    '--g1':'#9d4edd','--g2':'#7b2d8b','--g3':'#5c0d72','--g4':'#c77dff','--g5':'#e0aaff',
-    '--daub':'rgba(157,78,221,.5)'}},
-  {key:'cyberpunk',label:'Cyberpunk',deepDive:false,bg:'#040408',accent:'#f9e900',vars:{
-    '--accent':'#f9e900','--accent2':'#ffe333',
-    '--bg':'#040408','--card':'#0c0c14','--card2':'#14141e',
-    '--text':'#f0f0f0','--muted':'#666688',
-    '--surface':'#030306','--border':'#252520','--screen-inner':'#14141e',
-    '--g1':'#f9e900','--g2':'#ff6600','--g3':'#ff0099','--g4':'#00ffcc','--g5':'#6600ff',
-    '--daub':'rgba(249,233,0,.5)'}},
-  {key:'matrix',label:'Matrix',deepDive:false,bg:'#000000',accent:'#00ff00',vars:{
-    '--accent':'#00ff00','--accent2':'#66ff66',
-    '--bg':'#000000','--card':'#001800','--card2':'#002200',
-    '--text':'#c8ffc8','--muted':'#336633',
-    '--surface':'#000000','--border':'#004400','--screen-inner':'#002600',
-    '--g1':'#00ff00','--g2':'#00dd00','--g3':'#00bb00','--g4':'#009900','--g5':'#33ff33',
-    '--daub':'rgba(0,255,0,.45)'}},
-  {key:'sunset',label:'Sunset',deepDive:false,bg:'#080210',accent:'#ff6b35',vars:{
-    '--accent':'#ff6b35','--accent2':'#ff9f1c',
-    '--bg':'#080210','--card':'#140520','--card2':'#1e0830',
-    '--text':'#fff0e0','--muted':'#8a5544',
-    '--surface':'#060110','--border':'#260a40','--screen-inner':'#1c0830',
-    '--g1':'#ff6b35','--g2':'#ff9f1c','--g3':'#e91e8c','--g4':'#9b59b6','--g5':'#ff6b35',
-    '--daub':'rgba(255,107,53,.5)'}},
-  {key:'bubblegum',label:'Bubblegum',deepDive:false,bg:'#0a0518',accent:'#ff77cc',vars:{
-    '--accent':'#ff77cc','--accent2':'#ff99dd',
-    '--bg':'#0a0518','--card':'#14073a','--card2':'#1c0a4a',
-    '--text':'#ffe8f8','--muted':'#8855aa',
-    '--surface':'#070314','--border':'#2c1060','--screen-inner':'#1e0c4a',
-    '--g1':'#ff77cc','--g2':'#dd77ff','--g3':'#77aaff','--g4':'#77ffdd','--g5':'#ffcc77',
-    '--daub':'rgba(255,119,204,.5)'}},
-  {key:'ocean',label:'Ocean',deepDive:false,bg:'#000d1a',accent:'#0496c7',vars:{
-    '--accent':'#0496c7','--accent2':'#48cae4',
-    '--bg':'#000d1a','--card':'#001a2e','--card2':'#002540',
-    '--text':'#c8e8f8','--muted':'#2a5a7a',
-    '--surface':'#000910','--border':'#003050','--screen-inner':'#002240',
-    '--g1':'#0496c7','--g2':'#006994','--g3':'#00496e','--g4':'#00c9a7','--g5':'#48cae4',
-    '--daub':'rgba(4,150,199,.55)'}},
-  {key:'lava',label:'Lava',deepDive:false,bg:'#080000',accent:'#ff5500',vars:{
-    '--accent':'#ff5500','--accent2':'#ff8800',
-    '--bg':'#080000','--card':'#140500','--card2':'#1e0800',
-    '--text':'#ffe8cc','--muted':'#7a3a1a',
-    '--surface':'#060000','--border':'#2c0e00','--screen-inner':'#1e0600',
-    '--g1':'#ff5500','--g2':'#ff3300','--g3':'#dd1100','--g4':'#ff8800','--g5':'#ffbb00',
-    '--daub':'rgba(255,85,0,.5)'}},
-  {key:'vapor',label:'Vaporwave',deepDive:false,bg:'#0d0020',accent:'#ff71ce',vars:{
-    '--accent':'#ff71ce','--accent2':'#b967ff',
-    '--bg':'#0d0020','--card':'#1a0040','--card2':'#24005a',
-    '--text':'#fffde7','--muted':'#906070',
-    '--surface':'#0a0018','--border':'#300858','--screen-inner':'#220050',
-    '--g1':'#ff71ce','--g2':'#01cdfe','--g3':'#05ffa1','--g4':'#b967ff','--g5':'#fffb96',
-    '--daub':'rgba(255,113,206,.5)'}}
+  {key:'deep-dive',label:'Deep Dive',deepDive:true,bg:'#020608',accent:'#00bcd4',vars:{}}
 ];
 
 let activeThemeKey='default';
@@ -2369,28 +2161,6 @@ function _themeSwatchHTML(t,activeKey){
 function buildThemeGrid(){
   const wrap=document.getElementById('themeGrid');
   if(wrap)wrap.innerHTML=APP_THEMES.map(t=>_themeSwatchHTML(t,activeThemeKey)).join('');
-  _buildPickerGrid();
-}
-function _buildPickerGrid(){
-  const wrap=document.getElementById('themePickerGrid');
-  if(!wrap)return;
-  wrap.innerHTML=APP_THEMES.map(t=>_themeSwatchHTML(t,activeThemeKey)).join('');
-  const nameEl=document.getElementById('tpActiveName');
-  const active=APP_THEMES.find(t=>t.key===activeThemeKey)||APP_THEMES[0];
-  if(nameEl)nameEl.textContent=active.label;
-}
-function toggleThemePicker(){
-  const p=document.getElementById('themePicker');
-  if(!p)return;
-  p.classList.toggle('open');
-  if(p.classList.contains('open'))_buildPickerGrid();
-}
-function rollRandomTheme(){
-  const btn=document.getElementById('tpDiceBtn');
-  if(btn){btn.classList.add('rolling');setTimeout(()=>btn.classList.remove('rolling'),520);}
-  const others=APP_THEMES.filter(t=>t.key!==activeThemeKey);
-  const pick=others[Math.floor(Math.random()*others.length)];
-  setTimeout(()=>{applyAppTheme(pick.key);showToast(`Theme: ${pick.label}`);},260);
 }
 // legacy alias
 const buildThemePills=buildThemeGrid;
@@ -2809,8 +2579,8 @@ function closeBingoFlash(){
 // browser worldwide to drop its cached parse on next page load
 // and refetch from GitHub. Same trick anytime the parser logic
 // or FORMAT-MAP.md schema changes shape — bump the version.
-const DOC_CACHE_KEY='kvn_fmt_v11';
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v9';
+const DOC_CACHE_KEY='kvn_fmt_v14';
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v12';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -3283,12 +3053,6 @@ document.addEventListener('click',function(e){
   if(!deepDiveActive)return;
   if(popBubbleAt(e.clientX,e.clientY))e.stopPropagation();
 },{capture:true});
-// Close theme picker on outside click
-document.addEventListener('click',function(e){
-  const p=document.getElementById('themePicker');
-  const b=document.getElementById('themeBtn');
-  if(p&&p.classList.contains('open')&&!p.contains(e.target)&&e.target!==b&&!b.contains(e.target))p.classList.remove('open');
-});
 
 function startBubbles(){
   const c=document.getElementById('bubbleCanvas');
@@ -6070,182 +5834,6 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 // Restore saved sound preference
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadGameSetup();loadWheelTheme();
-// ══════════ SPOTIFY FLOATING PLAYER ══════════
-(function(){
-  let dragging=false,ox=0,oy=0,ex=0,ey=0;
-  function onDown(cx,cy){
-    const el=document.getElementById('spotifyPlayer');
-    if(!el)return;
-    const r=el.getBoundingClientRect();
-    ex=r.left;ey=r.top;ox=cx;oy=cy;dragging=true;
-    el.style.left=r.left+'px';el.style.top=r.top+'px';
-    el.style.right='auto';el.style.bottom='auto';
-  }
-  function onMove(cx,cy){
-    if(!dragging)return;
-    const el=document.getElementById('spotifyPlayer');if(!el)return;
-    const nx=Math.max(0,Math.min(ex+(cx-ox),window.innerWidth-el.offsetWidth));
-    const ny=Math.max(0,Math.min(ey+(cy-oy),window.innerHeight-el.offsetHeight));
-    el.style.left=nx+'px';el.style.top=ny+'px';
-  }
-  document.addEventListener('mousedown',e=>{const h=document.getElementById('spHandle');if(h&&h.contains(e.target)&&e.target.tagName!=='BUTTON'){e.preventDefault();onDown(e.clientX,e.clientY);}});
-  document.addEventListener('mousemove',e=>{if(dragging)onMove(e.clientX,e.clientY);});
-  document.addEventListener('mouseup',()=>{dragging=false;});
-  document.addEventListener('touchstart',e=>{const h=document.getElementById('spHandle');if(h&&h.contains(e.target)&&e.target.tagName!=='BUTTON'){const t=e.touches[0];onDown(t.clientX,t.clientY);}},{passive:true});
-  document.addEventListener('touchmove',e=>{if(dragging){const t=e.touches[0];onMove(t.clientX,t.clientY);}},{passive:true});
-  document.addEventListener('touchend',()=>{dragging=false;});
-})();
-
-// ── Spotify Embed API + ducking ──
-let _spController=null,_spIFrameAPI=null,_spApiLoading=false,_spDuckEnabled=true;
-let _spPending=null; // {p, wrap, height} waiting for API
-
-window.onSpotifyIframeApiReady=function(IFrameAPI){
-  _spIFrameAPI=IFrameAPI;
-  if(_spPending){const {p,wrap,height}=_spPending;_spPending=null;_spMakeController(p,wrap,height);}
-};
-
-function _loadSpApi(){
-  if(_spApiLoading||_spIFrameAPI)return;
-  _spApiLoading=true;
-  const s=document.createElement('script');
-  s.src='https://open.spotify.com/embed/iframe-api/v1';
-  s.async=true;
-  document.head.appendChild(s);
-}
-
-function _spMakeController(p,wrap,height){
-  if(_spController){try{_spController.destroy();}catch(e){}_spController=null;}
-  wrap.innerHTML='';
-  const el=document.createElement('div');
-  wrap.appendChild(el);
-  _spIFrameAPI.createController(el,{uri:`spotify:${p.type}:${p.id}`,height,width:'100%'},function(ctrl){
-    _spController=ctrl;
-  });
-}
-
-function spDuck(){if(_spDuckEnabled&&_spController)_spController.setVolume(0.2);}
-function spUnduck(){if(_spController)_spController.setVolume(1);}
-
-function toggleSpDuck(){
-  _spDuckEnabled=!_spDuckEnabled;
-  const btn=document.getElementById('spDuckBtn');
-  if(btn){btn.classList.toggle('duck-on',_spDuckEnabled);btn.classList.toggle('duck-off',!_spDuckEnabled);}
-  if(!_spDuckEnabled)spUnduck();
-}
-
-// Duck when a YouTube URL is opened in a new tab; restore when user returns
-(function(){
-  const _origOpen=window.open.bind(window);
-  window.open=function(url,...args){
-    if(url&&/youtube\.com|youtu\.be/.test(String(url)))spDuck();
-    return _origOpen(url,...args);
-  };
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')spUnduck();});
-})();
-
-function parseSpotifyUrl(url){
-  const m=url.match(/(?:open\.spotify\.com\/|spotify:)(track|playlist|album|artist|episode|show)[/:]([A-Za-z0-9]+)/);
-  return m?{type:m[1],id:m[2]}:null;
-}
-
-const SP_PRESETS=[
-  {type:'album',  id:'6hfkz60YEIg1UQFdCQmti3', label:'Season 13'},
-  {type:'playlist',id:'37i9dQZF1E4k8vrhSk12X8', label:'KVN Radio'},
-];
-const SP_DEFAULT_URL='https://open.spotify.com/album/6hfkz60YEIg1UQFdCQmti3';
-
-function _spActivePreset(url){
-  document.querySelectorAll('.sp-preset-btn').forEach(b=>b.classList.remove('active'));
-  if(!url)return;
-  SP_PRESETS.forEach((p,i)=>{
-    if(url.includes(p.id)){
-      const btns=document.querySelectorAll('.sp-preset-btn');
-      if(btns[i])btns[i].classList.add('active');
-    }
-  });
-  const custom=localStorage.getItem('sp_preset3');
-  if(custom&&url===custom){const b=document.getElementById('spPreset3Btn');if(b)b.classList.add('active');}
-}
-
-function loadSpPreset(type,id){
-  const url=`https://open.spotify.com/${type}/${id}`;
-  document.getElementById('spUrlInput').value=url;
-  _renderSpEmbed(url,false);
-  _spActivePreset(url);
-}
-
-function loadSpPreset3(){
-  const url=localStorage.getItem('sp_preset3');
-  if(!url)return;
-  document.getElementById('spUrlInput').value=url;
-  _renderSpEmbed(url,false);
-  _spActivePreset(url);
-}
-
-function setSpPreset3(url){
-  if(!url)return;
-  localStorage.setItem('sp_preset3',url);
-  const btn=document.getElementById('spPreset3Btn');
-  if(btn)btn.style.display='';
-}
-
-function _initSpPreset3(){
-  const url=localStorage.getItem('sp_preset3');
-  if(url){const btn=document.getElementById('spPreset3Btn');if(btn)btn.style.display='';}
-}
-
-function openSpotify(){
-  const el=document.getElementById('spotifyPlayer');
-  if(!el)return;
-  el.classList.add('open');
-  el.classList.remove('sp-mini');
-  _initSpPreset3();
-  const hasEmbed=document.querySelector('#spEmbed iframe, #spEmbed div > iframe');
-  if(hasEmbed)return;
-  const saved=localStorage.getItem('sp_last_url')||SP_DEFAULT_URL;
-  document.getElementById('spUrlInput').value=saved;
-  _renderSpEmbed(saved,false);
-  _spActivePreset(saved);
-}
-function closeSpotify(){
-  const el=document.getElementById('spotifyPlayer');
-  if(el)el.classList.remove('open');
-}
-function toggleSpotifyMini(){
-  const el=document.getElementById('spotifyPlayer');
-  if(el)el.classList.toggle('sp-mini');
-}
-
-function _renderSpEmbed(url,saveToServer){
-  const p=parseSpotifyUrl(url);
-  const wrap=document.getElementById('spEmbed');
-  const tag=document.getElementById('spSavedTag');
-  if(!wrap)return;
-  if(!p){wrap.innerHTML='<div class="sp-hint">Couldn\'t read that link. Copy it directly from Spotify.</div>';return;}
-  const height=(p.type==='track'||p.type==='episode')?152:380;
-  localStorage.setItem('sp_last_url',url);
-  if(tag)tag.textContent='';
-  if(saveToServer){
-    if(tag){tag.textContent='✓ Saved to your account';setTimeout(()=>{if(tag)tag.textContent=''},3000);}
-  }
-  if(_spIFrameAPI){
-    _spMakeController(p,wrap,height);
-  } else {
-    // Fallback iframe while API loads; API takes over if pending embed is still waiting
-    wrap.innerHTML=`<iframe src="https://open.spotify.com/embed/${p.type}/${p.id}?utm_source=generator&theme=0" width="100%" height="${height}" allow="autoplay;clipboard-write;encrypted-media;fullscreen;picture-in-picture" loading="lazy"></iframe>`;
-    _spPending={p,wrap,height};
-    _loadSpApi();
-  }
-}
-
-function loadSpotifyEmbed(){
-  const url=(document.getElementById('spUrlInput').value||'').trim();
-  if(!url){showToast('Paste a Spotify link first','warn');return;}
-  _renderSpEmbed(url,true);
-  _spActivePreset(url);
-}
-// ══════════ END SPOTIFY ══════════
 
 // ══════════ FOUND IT / HUNT / LIVE FEED / LEADERBOARD HERO ══════════
 const RARITY_COLORS={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
@@ -6346,71 +5934,6 @@ function renderLfTicker(finds){
   bar.classList.add('active');
 }
 
-// ── HUNT MODE ──
-const HUNT_TARGETS=[
-  {label:'LEGENDARY find (≤2005)',rarity:'LEGENDARY',maxViews:null,maxYear:2005},
-  {label:'SUPER RARE find (2006)',rarity:'SUPER RARE',maxViews:null,maxYear:2006},
-  {label:'VERY RARE find (2007-2008)',rarity:'VERY RARE',maxViews:null,maxYear:2008},
-  {label:'Zero-view find (any era)',rarity:null,maxViews:0,maxYear:null},
-  {label:'Pre-2006 with under 100 views',rarity:null,maxViews:99,maxYear:2005},
-  {label:'RARE find (2009-2012)',rarity:'RARE',maxViews:null,maxYear:2012},
-  {label:'Vintage zero-view (≤2008)',rarity:null,maxViews:0,maxYear:2008},
-  {label:'LEGENDARY zero-view (≤2005)',rarity:'LEGENDARY',maxViews:0,maxYear:2005},
-];
-let _huntTarget=null,_huntAttempts=[];
-function openHuntMode(){
-  const ov=document.getElementById('huntOv');
-  if(!ov)return;
-  if(!_huntTarget)renderHuntCard();
-  ov.classList.toggle('open');
-}
-function closeHunt(){
-  const ov=document.getElementById('huntOv');
-  if(ov)ov.classList.remove('open');
-}
-function renderHuntCard(){
-  _huntTarget=HUNT_TARGETS[Math.floor(Math.random()*HUNT_TARGETS.length)];
-  _huntAttempts=[];
-  const lbl=document.getElementById('huntTargetLbl');
-  const era=document.getElementById('huntEra');
-  const dots=document.getElementById('huntDots');
-  const status=document.getElementById('huntStatus');
-  if(!lbl)return;
-  const color=_huntTarget.rarity?(RARITY_COLORS[_huntTarget.rarity]||'#ffd700'):'#ffd700';
-  lbl.textContent=_huntTarget.label;lbl.style.color=color;
-  era.textContent=_huntTarget.maxYear?`Target year: ≤${_huntTarget.maxYear}`:'Any year';
-  dots.innerHTML=Array(10).fill(0).map(()=>'<div class="hunt-dot"></div>').join('');
-  if(status){status.textContent='Add a find to attempt';status.style.color='#444';}
-}
-function huntCheckFind(views,isoDate){
-  if(!_huntTarget||!document.getElementById('huntOv'))return;
-  if(_huntAttempts.length>=10)return;
-  const year=isoDate?new Date(isoDate).getFullYear():9999;
-  let hit=true;
-  if(_huntTarget.maxViews!==null&&views>_huntTarget.maxViews)hit=false;
-  if(_huntTarget.maxYear!==null&&year>_huntTarget.maxYear)hit=false;
-  _huntAttempts.push(hit);
-  const dots=document.getElementById('huntDots');
-  const status=document.getElementById('huntStatus');
-  if(dots){
-    dots.querySelectorAll('.hunt-dot').forEach((d,i)=>{
-      if(i<_huntAttempts.length){d.classList.toggle('hit',_huntAttempts[i]);d.classList.toggle('miss',!_huntAttempts[i]);}
-    });
-  }
-  const ov=document.getElementById('huntOv');
-  if(ov&&!ov.classList.contains('open'))ov.classList.add('open');
-  if(hit){
-    if(status){status.textContent='🎉 TARGET HIT!';status.style.color='#2ecc71';}
-    showToast('Hunt target achieved!');
-  }else{
-    const left=10-_huntAttempts.length;
-    if(status){
-      if(left===0&&!_huntAttempts.some(Boolean)){status.textContent='Hunt failed. New target?';status.style.color='#e74c3c';}
-      else{status.textContent=`Miss — ${left} attempt${left!==1?'s':''} left`;status.style.color=left<=2?'#e74c3c':'#444';}
-    }
-  }
-}
-
 // ── LEADERBOARD HERO ──
 function renderLbHero(finds){
   const hero=document.getElementById('lbHero');
@@ -6472,44 +5995,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">
-<!-- ── SPOTIFY FLOATING PLAYER ── -->
-<div id="spotifyPlayer">
-  <div class="sp-handle" id="spHandle">
-    <div class="sp-handle-left">
-      <svg class="sp-logo" width="16" height="16" viewBox="0 0 168 168" fill="#1db954"><path d="M83.996.277C37.747.277.004 37.987.004 84.237c0 46.25 37.743 83.986 83.992 83.986 46.254 0 83.996-37.736 83.996-83.986C167.992 38.0 130.25.277 83.996.277zm38.498 121.02a5.232 5.232 0 0 1-7.203 1.742c-19.716-12.054-44.533-14.777-73.763-8.1a5.233 5.233 0 0 1-6.24-3.924 5.235 5.235 0 0 1 3.926-6.243c32.015-7.312 59.498-4.164 81.703 9.376a5.234 5.234 0 0 1 1.577 7.149zm10.27-22.84c-2.161 3.513-6.75 4.617-10.26 2.457-22.568-13.863-56.955-17.884-83.596-9.79a7.486 7.486 0 0 1-9.35-4.975 7.484 7.484 0 0 1 4.978-9.351c30.474-9.25 68.33-4.773 94.195 11.17 3.512 2.16 4.616 6.75 2.457 10.26l-.424.23zm.882-23.784c-27.06-16.077-71.72-17.556-97.544-9.713a8.98 8.98 0 0 1-11.23-5.966 8.978 8.978 0 0 1 5.965-11.232c29.632-9.015 78.88-7.275 109.975 11.23a8.98 8.98 0 0 1 3.27 12.286 8.977 8.977 0 0 1-10.436 3.395z"/></svg>
-      <span class="sp-handle-title">Sonder Music</span>
-    </div>
-    <div class="sp-handle-btns">
-      <button class="sp-hbtn duck-on" id="spDuckBtn" onclick="event.stopPropagation();toggleSpDuck()" title="Duck audio when a video opens (click to toggle)">&#x1F50A;</button>
-      <button class="sp-hbtn" onclick="event.stopPropagation();toggleSpotifyMini()" title="Minimize">&#x2212;</button>
-      <button class="sp-hbtn" onclick="event.stopPropagation();closeSpotify()" title="Close">&#x2715;</button>
-    </div>
-  </div>
-  <div class="sp-body" id="spBody">
-    <div class="sp-url-row">
-      <input class="sp-url-input" id="spUrlInput" type="text" placeholder="Paste Spotify track / playlist / album link…" onkeydown="if(event.key==='Enter')loadSpotifyEmbed()">
-      <button class="sp-play-btn" onclick="loadSpotifyEmbed()">&#9654; Play</button>
-    </div>
-    <div class="sp-presets" id="spPresets">
-      <button class="sp-preset-btn" onclick="loadSpPreset('album','6hfkz60YEIg1UQFdCQmti3')" title="KVN AUST — Season Thirteen">&#x1F3B5; Season 13</button>
-      <button class="sp-preset-btn" onclick="loadSpPreset('playlist','37i9dQZF1E4k8vrhSk12X8')" title="KVN AUST Radio">&#x1F4FB; KVN Radio</button>
-      <button class="sp-preset-btn sp-preset-custom" id="spPreset3Btn" onclick="loadSpPreset3()" title="Your saved playlist" style="display:none">&#x2605; My List</button>
-    </div>
-    <div id="spEmbed"><div class="sp-hint">Paste any Spotify link above and hit Play.<br>Works with tracks, playlists, albums &amp; artists.<br><a href="https://open.spotify.com" target="_blank" rel="noopener">Browse Spotify &#x2192;</a></div></div>
-    <div class="sp-saved-tag" id="spSavedTag"></div>
-  </div>
-</div>
-
-<!-- ── THEME PICKER PANEL ── -->
-<div id="themePicker">
-  <div class="tp-header">
-    <div class="tp-title">&#127912; Theme</div>
-    <button class="tp-dice" id="tpDiceBtn" onclick="rollRandomTheme()" title="Random theme">&#x1F3B2; Roll</button>
-  </div>
-  <div class="tp-name" id="tpActiveName"></div>
-  <div id="themePickerGrid"></div>
-</div>
+<script type="application/json" id="app-version-data">{"version":"7.14.0","build":"2026-06-04T01:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
@@ -6531,24 +6017,11 @@ window.addEventListener('hashchange',handleHash);
   <div class="lf-track-wrap"><div id="lfTrack"></div></div>
 </div>
 
-<!-- ── Hunt Mode panel ── -->
-<div id="huntOv">
-  <div class="hunt-header">
-    <div class="hunt-title-lbl">&#127919; Hunt Mode</div>
-    <button class="hunt-x" onclick="closeHunt()">&#x2715;</button>
-  </div>
-  <div class="hunt-target" id="huntTargetLbl"></div>
-  <div class="hunt-era" id="huntEra"></div>
-  <div class="hunt-dots" id="huntDots"></div>
-  <div class="hunt-status" id="huntStatus"></div>
-  <button class="hunt-new-btn" onclick="renderHuntCard()">New Target</button>
-</div>
-
 <script type="application/json" id="app-manifest">
 {
   "version": "7.14.0",
   "build": "2026-06-04T01:00:00",
-  "changelog": "Draggable Spotify floating player (♫ header button) — paste any track/playlist/album link, auto-saves last URL server-side for logged-in users.",
+  "changelog": "FOSS build — wrapper-only features stripped.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
