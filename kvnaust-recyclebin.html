@@ -1064,6 +1064,63 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 ::-moz-selection{background:rgba(231,76,60,.3);color:#fff}
 body.deep-dive ::selection{background:rgba(0,188,212,.3);color:#fff}
 body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
+
+/* ── FOUND IT overlay ── */
+#foundOv{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.93);backdrop-filter:blur(6px);align-items:center;justify-content:center;flex-direction:column}
+#foundOv.open{display:flex}
+.found-card{position:relative;text-align:center;padding:32px 28px;max-width:380px;width:90vw}
+.found-thumb-wrap{border-radius:10px;overflow:hidden;margin:0 auto 20px;width:240px;box-shadow:0 0 40px var(--f-color,#ffd700)}
+.found-thumb-wrap img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;filter:grayscale(1);transition:filter .6s .3s}
+#foundOv.open .found-thumb-wrap img{filter:grayscale(0)}
+.found-rarity{font-size:1.55rem;font-weight:900;letter-spacing:.08em;animation:foundSlam .45s cubic-bezier(.17,.67,.24,1.6) .6s both}
+.found-title{font-size:.82rem;color:#ccc;margin-top:8px;max-width:320px;margin-left:auto;margin-right:auto;animation:foundUp .4s ease .85s both}
+.found-sub{font-size:.68rem;margin-top:4px;animation:foundUp .4s ease .95s both}
+.found-btns{display:flex;gap:8px;justify-content:center;margin-top:18px;animation:foundUp .4s ease 1.05s both}
+@keyframes foundSlam{0%{transform:scale(3);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes foundUp{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
+.found-particle{position:fixed;pointer-events:none;border-radius:2px;animation:confettiFall 2.5s ease forwards}
+
+/* ── Live find feed ticker ── */
+#lfBar{position:fixed;bottom:0;left:0;right:0;height:26px;background:rgba(0,0,0,.9);border-top:1px solid #1a1a2a;z-index:800;overflow:hidden;display:none;align-items:center}
+#lfBar.active{display:flex}
+.lf-label{flex-shrink:0;font-size:.52rem;color:#333;padding:0 8px;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
+.lf-track-wrap{flex:1;overflow:hidden;height:100%}
+#lfTrack{display:flex;align-items:center;height:100%;white-space:nowrap;animation:lfScroll 32s linear infinite}
+#lfTrack:hover{animation-play-state:paused}
+.lf-item{display:inline-flex;align-items:center;gap:5px;padding:0 18px;font-size:.62rem}
+.lf-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.lf-item-title{color:#666}
+.lf-item-finder{color:#444}
+@keyframes lfScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── Hunt Mode panel ── */
+#huntOv{display:none;position:fixed;top:62px;right:14px;z-index:850;width:210px;background:#09090e;border:1px solid #1a1a2a;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.75);padding:14px}
+#huntOv.open{display:block}
+.hunt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.hunt-title-lbl{font-size:.58rem;font-weight:900;letter-spacing:.14em;color:#444;text-transform:uppercase}
+.hunt-x{background:none;border:none;color:#333;cursor:pointer;font-size:.9rem;padding:0;line-height:1}
+.hunt-x:hover{color:#888}
+.hunt-target{font-size:.75rem;font-weight:700;margin-bottom:3px}
+.hunt-era{font-size:.6rem;color:#444;margin-bottom:12px}
+.hunt-dots{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
+.hunt-dot{width:10px;height:10px;border-radius:50%;background:#111;border:1px solid #1e1e2e;flex-shrink:0}
+.hunt-dot.hit{background:#2ecc71;border-color:#2ecc71;box-shadow:0 0 5px #2ecc71}
+.hunt-dot.miss{background:#e74c3c;border-color:#e74c3c}
+.hunt-status{font-size:.64rem;color:#444;min-height:1.3em}
+.hunt-new-btn{width:100%;margin-top:10px;padding:5px 0;font-size:.6rem;background:#0d0d18;border:1px solid #1e1e2e;color:#555;border-radius:5px;cursor:pointer}
+.hunt-new-btn:hover{border-color:#333;color:#999}
+
+/* ── Leaderboard hero ── */
+#lbHero{display:none;margin:0 0 12px;border-radius:10px;overflow:hidden;position:relative;background:#040408;border:1px solid #1a1a2a}
+#lbHero.show{display:block}
+.lb-hero-thumb{width:100%;height:110px;object-fit:cover;display:block;opacity:.45}
+.lb-hero-over{position:absolute;inset:0;padding:12px 14px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(0deg,rgba(0,0,0,.96) 10%,transparent 60%)}
+.lb-crown{position:absolute;top:8px;right:10px;font-size:1.3rem;line-height:1;filter:drop-shadow(0 0 8px gold)}
+.lb-hero-rarity{font-size:.58rem;font-weight:900;letter-spacing:.1em;padding:2px 8px;border-radius:8px;border:1px solid;display:inline-block;margin-bottom:4px}
+.lb-hero-date{font-size:1.05rem;font-weight:900;margin-bottom:1px}
+.lb-hero-title{font-size:.68rem;color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+.lb-hero-meta{font-size:.64rem;color:#777}
+.lb-hero-finder{font-weight:900;color:#fff}
 </style>
 </head>
 <body>
@@ -1092,6 +1149,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
     <button class="hdr-btn-icon" onclick="showRecords()" title="Zero-View Records Leaderboard" aria-label="Records" style="color:#e74c3c">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
     </button>
+    <button class="hdr-btn-icon" onclick="openHuntMode()" title="Hunt Mode — get a random rarity target" aria-label="Hunt Mode" style="font-size:.75rem;font-weight:900;letter-spacing:-.02em">🎯</button>
     <button class="hdr-btn-icon" onclick="showStats()" title="Stats Dashboard" aria-label="Stats">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
     </button>
@@ -1466,6 +1524,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
         <button class="s-btn" style="font-size:.58rem;padding:2px 7px" onclick="shareLeaderboard(100,'svg')">100 SVG</button><button class="s-btn" style="font-size:.58rem;padding:2px 7px" onclick="shareLeaderboard(100,'discord')">D</button><button class="s-btn" style="font-size:.58rem;padding:2px 7px;background:linear-gradient(135deg,#5b4fc7,#3d2fa8);border-color:#5b4fc7" onclick="shareLeaderboard(100,'both')">&#9733;</button>
       </span>
     </div>
+    <div id="lbHero"></div>
     <div id="recListWrap" style="max-height:min(60vh,560px);overflow-y:auto;margin-bottom:16px;border:1px solid #1a1a2a;border-radius:10px;padding:8px;background:#030306"><div style="text-align:center;color:#555;font-size:.78rem;padding:32px">Loading community finds&#8230;</div></div>
     <div class="rec-form">
       <input type="url" id="recUrl" placeholder="Paste YouTube link..." style="flex:1;min-width:200px" oninput="onRecordLinkChange(this.value)">
@@ -3598,10 +3657,12 @@ function psRenderResults(){
     const specialClass=isZero?'ps-zero':isAncient?'ps-ancient':'';
     const delay=`${Math.min(idx,.15)*0.08}s`; // max ~12ms stagger cap
     const viewColor=isZero?'#ffd700':views!==null&&views<50?'#e74c3c':views!==null&&views<500?'#e67e22':'#666';
+    const canBank=isZero&&window.__KVN_YT_PROXY__&&window.__KVN_YT_PROXY__.isAvailable&&window.__KVN_YT_PROXY__.isAvailable();
+    const bankBtn=canBank?`<button class=”vt-btn” style=”margin-top:5px;padding:3px 10px;font-size:.6rem;background:linear-gradient(135deg,#0a2a0a,#0d3d0d);border-color:#2ecc7160;color:#2ecc71” onclick=”event.preventDefault();event.stopPropagation();psLogFind('${id}',${JSON.stringify(v.snippet.title||'')},${''+views},'${v.snippet.publishedAt||''}',${JSON.stringify(psCurrentQuery||'')})”>&#x2601; Bank it</button>`:'';
     const specialBadge=isZero
-      ?`<div class=”ps-zero-badge”>⭐ ZERO VIEWS — POTENTIAL FIND</div>`
+      ?`<div class=”ps-zero-badge”>&#11088; ZERO VIEWS — POTENTIAL FIND</div>${bankBtn}`
       :isAncient
-      ?`<div class=”ps-ancient-badge”>📼 VINTAGE · ${year}</div>`:'';
+      ?`<div class=”ps-ancient-badge”>&#x1F4FC; VINTAGE &middot; ${year}</div>`:'';
     return`<div class=”ps-result${specialClass?' '+specialClass:''}” style=”--psd:${delay}”>
       <a href=”${url}” target=”_blank” rel=”noopener” class=”ps-thumb”><img src=”${thumb}” alt=”” loading=”lazy”>${dur?`<span class=”ps-dur”>${dur}</span>`:''}</a>
       <div class=”ps-meta”>
@@ -3876,6 +3937,7 @@ async function fetchVideoMeta(vid){
   const time=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 
   function applyData(d){
+    if(d.title)_vtTitle=d.title;
     if(d.published){const dt=typeof d.published==='number'?new Date(d.published*1000):new Date(d.published);document.getElementById('vtDatePosted').value=dt.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric'})}
     if(d.viewCount!==undefined)document.getElementById('vtViews').value=`${d.viewCount} (found ${today} ${time})`;
     else if(d.views!==undefined)document.getElementById('vtViews').value=`${d.views} (found ${today} ${time})`;
@@ -4590,6 +4652,7 @@ function showRecords(){
   } else {
     renderFullListView(communityFinds);
     renderRecentStrip(communityFinds);
+    renderLbHero(communityFinds);
   }
   setTimeout(()=>{drawRecordsTimeline();initTimelineInteraction()},400);
 }
@@ -4616,7 +4679,8 @@ async function fetchCommunityRecords(){
     communityFinds=data.finds;
     communityFetchedOnce=true;
     renderRecentStrip(data.finds);
-    if(recViewMode==='list')renderFullListView(data.finds);
+    if(recViewMode==='list'){renderFullListView(data.finds);renderLbHero(data.finds);}
+    renderLfTicker(data.finds);
     const rc=data.rarity_colors||{};
     list.innerHTML=data.finds.map((f,i)=>{
       const color=rc[f.rarity]||getRecordColor(new Date(f.date_posted));
@@ -4984,6 +5048,8 @@ function addCurrentToRecords(){
   lastAddedRecordUrl=url;
   showRecords();
   showToast('Added to Records!');
+  showFoundIt(vid,_vtTitle||'',views,isoDate);
+  huntCheckFind(views,isoDate);
 }
 
 function addRecord(){
@@ -5896,6 +5962,200 @@ try{const daubSaved=JSON.parse(localStorage.getItem('kvn_daub'));if(daubSaved){d
 // Restore saved sound preference
 try{const savedSound=localStorage.getItem('kvn_sound');if(savedSound&&savedSound!=='nautical'){soundMode=savedSound;document.getElementById('soundPick').value=savedSound}else if(savedSound==='nautical'){localStorage.removeItem('kvn_sound')}}catch{}
 loadGameSetup();loadWheelTheme();
+// ══════════ FOUND IT / HUNT / LIVE FEED / LEADERBOARD HERO ══════════
+const RARITY_COLORS={'LEGENDARY':'#ffd700','SUPER RARE':'#e74c3c','VERY RARE':'#e67e22','RARE':'#2ecc71','COMMON':'#3498db'};
+function rarityFromDate(iso){
+  if(!iso)return'COMMON';
+  const y=new Date(iso).getFullYear();
+  if(y<=2005)return'LEGENDARY';
+  if(y===2006)return'SUPER RARE';
+  if(y<=2008)return'VERY RARE';
+  if(y<=2012)return'RARE';
+  return'COMMON';
+}
+
+// ── FOUND IT ──
+let _foundItParticles=[];
+function showFoundIt(videoId,title,views,isoDate){
+  const rarity=rarityFromDate(isoDate);
+  const color=RARITY_COLORS[rarity]||'#ffd700';
+  const ov=document.getElementById('foundOv');
+  if(!ov)return;
+  const thumb=document.getElementById('foundThumb');
+  const rarityLbl=document.getElementById('foundRarityLbl');
+  const vTitle=document.getElementById('foundVTitle');
+  const vSub=document.getElementById('foundVSub');
+  const watchBtn=document.getElementById('foundWatchBtn');
+  if(thumb)thumb.src=videoId?`https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`:'';
+  if(rarityLbl){rarityLbl.textContent=rarity;rarityLbl.style.color=color;rarityLbl.style.textShadow=`0 0 24px ${color}`;}
+  if(vTitle)vTitle.textContent=title||'';
+  if(vSub){vSub.textContent=views===0?'ZERO VIEWS — POTENTIAL FIND':`${(views||0).toLocaleString()} views when found`;vSub.style.color=views===0?'#ffd700':'#555';}
+  if(watchBtn)watchBtn.dataset.url=`https://www.youtube.com/watch?v=${videoId}`;
+  ov.style.setProperty('--f-color',color);
+  ov.classList.add('open');
+  document.body.style.overflow='hidden';
+  if(rarity==='LEGENDARY'||views===0)spawnParticles(color);
+}
+function closeFoundIt(){
+  const ov=document.getElementById('foundOv');
+  if(ov)ov.classList.remove('open');
+  document.body.style.overflow='';
+  clearParticles();
+}
+function spawnParticles(color){
+  clearParticles();
+  const colors=[color,'#fff','#ffd700','#e74c3c','#3498db'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='found-particle';
+    const c=colors[i%colors.length];
+    const w=4+Math.random()*6,h=6+Math.random()*8;
+    el.style.cssText=`left:${Math.random()*100}vw;top:-12px;width:${w}px;height:${h}px;background:${c};animation-delay:${Math.random()*1.2}s;animation-duration:${2+Math.random()*1.5}s`;
+    document.body.appendChild(el);
+    _foundItParticles.push(el);
+  }
+  setTimeout(clearParticles,4000);
+}
+function clearParticles(){
+  _foundItParticles.forEach(e=>e.remove());
+  _foundItParticles=[];
+}
+
+// ── BANK IT — Log Find from Power Search ──
+let _vtTitle='';
+async function psLogFind(videoId,title,views,publishedAt,query){
+  const proxy=window.__KVN_YT_PROXY__;
+  if(!proxy||!proxy.isAvailable()){showToast('Log in to save finds to the community leaderboard','warn');return;}
+  const token=proxy.getToken();
+  if(!token)return;
+  try{
+    const res=await fetch('https://kvnaust.falcontechnix.com/finds.php',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-KVN-Token':token},
+      body:JSON.stringify({video_id:videoId,video_title:title,views_when_found:views,date_posted:publishedAt,lead:query||'',source:'sonder'})
+    });
+    const d=await res.json();
+    if(!d||!d.ok){showToast(d&&d.error?d.error:'Could not save find','warn');return;}
+    showToast('Find banked!');
+    showFoundIt(videoId,title,views,publishedAt);
+  }catch{showToast('Network error saving find','warn');}
+}
+
+// ── LIVE FIND FEED ──
+function initLiveFeed(){
+  if(typeof communityFinds!=='undefined'&&communityFinds.length){renderLfTicker(communityFinds);return;}
+  fetch('https://kvnaust.falcontechnix.com/finds.php?limit=12&order=desc').then(r=>r.json()).then(d=>{if(d&&d.finds)renderLfTicker(d.finds);}).catch(()=>{});
+}
+function renderLfTicker(finds){
+  const bar=document.getElementById('lfBar');
+  const track=document.getElementById('lfTrack');
+  if(!bar||!track)return;
+  const recent=[...finds].filter(f=>f.rarity).sort((a,b)=>Number(b.discovered_at)-Number(a.discovered_at)).slice(0,10);
+  if(!recent.length)return;
+  const items=recent.map(f=>{
+    const color=RARITY_COLORS[f.rarity]||'#888';
+    const label=f.video_title||f.lead||(f.date_posted?new Date(f.date_posted).getFullYear()+'':'')||'?';
+    return`<span class="lf-item"><span class="lf-dot" style="background:${color}"></span><span class="lf-item-title">${esc(label.substring(0,48))}</span><span class="lf-item-finder">&nbsp;· ${esc(f.found_by||'?')}</span></span>`;
+  });
+  track.innerHTML=items.join('')+items.join('');
+  bar.classList.add('active');
+}
+
+// ── HUNT MODE ──
+const HUNT_TARGETS=[
+  {label:'LEGENDARY find (≤2005)',rarity:'LEGENDARY',maxViews:null,maxYear:2005},
+  {label:'SUPER RARE find (2006)',rarity:'SUPER RARE',maxViews:null,maxYear:2006},
+  {label:'VERY RARE find (2007-2008)',rarity:'VERY RARE',maxViews:null,maxYear:2008},
+  {label:'Zero-view find (any era)',rarity:null,maxViews:0,maxYear:null},
+  {label:'Pre-2006 with under 100 views',rarity:null,maxViews:99,maxYear:2005},
+  {label:'RARE find (2009-2012)',rarity:'RARE',maxViews:null,maxYear:2012},
+  {label:'Vintage zero-view (≤2008)',rarity:null,maxViews:0,maxYear:2008},
+  {label:'LEGENDARY zero-view (≤2005)',rarity:'LEGENDARY',maxViews:0,maxYear:2005},
+];
+let _huntTarget=null,_huntAttempts=[];
+function openHuntMode(){
+  const ov=document.getElementById('huntOv');
+  if(!ov)return;
+  if(!_huntTarget)renderHuntCard();
+  ov.classList.toggle('open');
+}
+function closeHunt(){
+  const ov=document.getElementById('huntOv');
+  if(ov)ov.classList.remove('open');
+}
+function renderHuntCard(){
+  _huntTarget=HUNT_TARGETS[Math.floor(Math.random()*HUNT_TARGETS.length)];
+  _huntAttempts=[];
+  const lbl=document.getElementById('huntTargetLbl');
+  const era=document.getElementById('huntEra');
+  const dots=document.getElementById('huntDots');
+  const status=document.getElementById('huntStatus');
+  if(!lbl)return;
+  const color=_huntTarget.rarity?(RARITY_COLORS[_huntTarget.rarity]||'#ffd700'):'#ffd700';
+  lbl.textContent=_huntTarget.label;lbl.style.color=color;
+  era.textContent=_huntTarget.maxYear?`Target year: ≤${_huntTarget.maxYear}`:'Any year';
+  dots.innerHTML=Array(10).fill(0).map(()=>'<div class="hunt-dot"></div>').join('');
+  if(status){status.textContent='Add a find to attempt';status.style.color='#444';}
+}
+function huntCheckFind(views,isoDate){
+  if(!_huntTarget||!document.getElementById('huntOv'))return;
+  if(_huntAttempts.length>=10)return;
+  const year=isoDate?new Date(isoDate).getFullYear():9999;
+  let hit=true;
+  if(_huntTarget.maxViews!==null&&views>_huntTarget.maxViews)hit=false;
+  if(_huntTarget.maxYear!==null&&year>_huntTarget.maxYear)hit=false;
+  _huntAttempts.push(hit);
+  const dots=document.getElementById('huntDots');
+  const status=document.getElementById('huntStatus');
+  if(dots){
+    dots.querySelectorAll('.hunt-dot').forEach((d,i)=>{
+      if(i<_huntAttempts.length){d.classList.toggle('hit',_huntAttempts[i]);d.classList.toggle('miss',!_huntAttempts[i]);}
+    });
+  }
+  const ov=document.getElementById('huntOv');
+  if(ov&&!ov.classList.contains('open'))ov.classList.add('open');
+  if(hit){
+    if(status){status.textContent='🎉 TARGET HIT!';status.style.color='#2ecc71';}
+    showToast('Hunt target achieved!');
+  }else{
+    const left=10-_huntAttempts.length;
+    if(status){
+      if(left===0&&!_huntAttempts.some(Boolean)){status.textContent='Hunt failed. New target?';status.style.color='#e74c3c';}
+      else{status.textContent=`Miss — ${left} attempt${left!==1?'s':''} left`;status.style.color=left<=2?'#e74c3c':'#444';}
+    }
+  }
+}
+
+// ── LEADERBOARD HERO ──
+function renderLbHero(finds){
+  const hero=document.getElementById('lbHero');
+  if(!hero||!finds||!finds.length){if(hero)hero.classList.remove('show');return;}
+  const sorted=[...finds].sort((a,b)=>{
+    const az=a.views_when_found===0,bz=b.views_when_found===0;
+    if(az&&!bz)return-1;if(!az&&bz)return 1;
+    const vd=(a.views_when_found??999999)-(b.views_when_found??999999);
+    if(vd!==0)return vd;
+    return new Date(a.date_posted)-new Date(b.date_posted);
+  });
+  const f=sorted[0];
+  const color=RARITY_COLORS[f.rarity]||'#888';
+  const vid=f.video_url?getVideoId(f.video_url):'';
+  const thumb=vid?`https://i.ytimg.com/vi/${vid}/mqdefault.jpg`:'';
+  const dateStr=new Date(f.date_posted).toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  hero.style.borderColor=`${color}30`;
+  hero.style.boxShadow=`0 4px 24px ${color}18`;
+  hero.innerHTML=`${thumb?`<img class="lb-hero-thumb" src="${esc(thumb)}" alt="">`:''}
+<div class="lb-hero-over">
+  <span class="lb-hero-rarity" style="color:${color};border-color:${color}40">${esc(f.rarity||'')}</span>
+  <div class="lb-hero-date" style="color:${color}">${esc(dateStr)}</div>
+  ${f.video_title?`<div class="lb-hero-title">${esc(f.video_title)}</div>`:''}
+  <div class="lb-hero-meta"><span class="lb-hero-finder">${esc(f.found_by||'?')}</span> &middot; ${f.views_when_found===0?'<span style="color:#ffd700">0 views</span>':(f.views_when_found??'?')+' views when found'}</div>
+</div>
+<div class="lb-crown">&#x1F451;</div>`;
+  hero.classList.add('show');
+}
+// ══════════ END FEATURES ══════════
+
 // Load saved app theme before anything renders
 (()=>{const t=localStorage.getItem('app_theme');if(t&&t!=='default')applyAppTheme(t)})();
 loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildFormatPanel();fetchDocFormats();updateNavArrows();updateBingoBtn();refreshKvnVideoDot();psInit();buildThemePills();
@@ -5906,6 +6166,7 @@ checkForUpdates();checkHoliday();
 // Fetch community finds in background, poll every 60s
 setTimeout(fetchCommunityRecords,2000);
 setInterval(fetchCommunityRecords,60000);
+setTimeout(initLiveFeed,3500);
 // Hash routing: #records, #stats, #shortcuts, #credits
 function handleHash(){
   const h=location.hash.toLowerCase().replace('#','');
@@ -5927,10 +6188,44 @@ window.addEventListener('hashchange',handleHash);
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
 <script type="application/json" id="app-version-data">
+<!-- ── FOUND IT overlay ── -->
+<div id="foundOv" onclick="closeFoundIt()">
+  <div class="found-card" onclick="event.stopPropagation()">
+    <div class="found-thumb-wrap"><img id="foundThumb" src="" alt=""></div>
+    <div class="found-rarity" id="foundRarityLbl"></div>
+    <div class="found-title" id="foundVTitle"></div>
+    <div class="found-sub" id="foundVSub"></div>
+    <div class="found-btns">
+      <button class="vt-btn yt-btn" id="foundWatchBtn" onclick="event.stopPropagation();window.open(this.dataset.url,'_blank','noopener')">&#9654; Watch</button>
+      <button class="vt-btn" onclick="closeFoundIt()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Live find feed ticker ── -->
+<div id="lfBar">
+  <div class="lf-label">&#9889; Live</div>
+  <div class="lf-track-wrap"><div id="lfTrack"></div></div>
+</div>
+
+<!-- ── Hunt Mode panel ── -->
+<div id="huntOv">
+  <div class="hunt-header">
+    <div class="hunt-title-lbl">&#127919; Hunt Mode</div>
+    <button class="hunt-x" onclick="closeHunt()">&#x2715;</button>
+  </div>
+  <div class="hunt-target" id="huntTargetLbl"></div>
+  <div class="hunt-era" id="huntEra"></div>
+  <div class="hunt-dots" id="huntDots"></div>
+  <div class="hunt-status" id="huntStatus"></div>
+  <button class="hunt-new-btn" onclick="renderHuntCard()">New Target</button>
+</div>
+
+<script type="application/json" id="app-manifest">
 {
-  "version": "7.10.0",
-  "build": "2026-06-03T22:00:00",
-  "changelog": "⚡ Power Search: auto-sort lowest views, gold shimmer fanfare on 0-view finds, sepia→amber fanfare on pre-2008 vintage videos. 22 app themes w/ swatch grid.",
+  "version": "7.11.0",
+  "build": "2026-06-03T23:00:00",
+  "changelog": "5 new features: FOUND IT rarity reveal on every find, ☁ Bank It button on zero-view Power Search results, live find ticker bar, 🎯 Hunt Mode, leaderboard hero card.",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
