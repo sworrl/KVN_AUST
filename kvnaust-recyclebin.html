@@ -525,12 +525,30 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 .wheel-pointer.locked{top:-6px;animation:pointerBite .25s cubic-bezier(.4,0,.2,1) forwards}
 @keyframes pointerIdle{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(3px)}}
 @keyframes pointerBite{0%{transform:translateX(-50%) translateY(-4px) scale(1)}40%{transform:translateX(-50%) translateY(8px) scale(1.1)}70%{transform:translateX(-50%) translateY(2px) scale(1.05)}100%{transform:translateX(-50%) translateY(4px) scale(1.02)}}
-@keyframes pointerTick{0%{transform:translateX(-50%) rotate(0deg) translateY(0)}28%{transform:translateX(-50%) rotate(16deg) translateY(2px)}62%{transform:translateX(-50%) rotate(-5deg) translateY(0)}100%{transform:translateX(-50%) rotate(0deg) translateY(0)}}
-@keyframes pointerTickCCW{0%{transform:translateX(-50%) rotate(0deg) translateY(0)}28%{transform:translateX(-50%) rotate(-16deg) translateY(2px)}62%{transform:translateX(-50%) rotate(5deg) translateY(0)}100%{transform:translateX(-50%) rotate(0deg) translateY(0)}}
-/* Spin direction toggle */
-.spin-dir-wrap{position:absolute;bottom:19%;left:50%;transform:translateX(-50%);z-index:12;display:flex;gap:6px;align-items:center}
-.spin-dir-btn{background:none;border:none;cursor:pointer;font-size:1.65rem;line-height:1;padding:3px 5px;opacity:.28;transition:opacity .2s,filter .2s;filter:drop-shadow(0 1px 3px rgba(0,0,0,.9));-webkit-text-fill-color:transparent;color:transparent;background-clip:text;-webkit-background-clip:text}
-.spin-dir-btn.active{opacity:1;background:linear-gradient(90deg,hsl(var(--sd-h1,280),85%,72%),hsl(var(--sd-h2,40),85%,72%),hsl(var(--sd-h3,160),85%,72%),hsl(var(--sd-h1,280),85%,72%));background-size:300% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:freeGlowFlow 3s linear infinite;filter:drop-shadow(0 0 8px hsla(var(--sd-h2,40),85%,65%,.6)) drop-shadow(0 1px 3px rgba(0,0,0,.9))}
+/* CW deflects LEFT (incoming segment from left pushes tip left), CCW deflects RIGHT */
+@keyframes pointerTick{0%{transform:translateX(-50%) rotate(0deg) translateY(0)}28%{transform:translateX(-50%) rotate(-15deg) translateY(2px)}62%{transform:translateX(-50%) rotate(4deg) translateY(0)}100%{transform:translateX(-50%) rotate(0deg) translateY(0)}}
+@keyframes pointerTickCCW{0%{transform:translateX(-50%) rotate(0deg) translateY(0)}28%{transform:translateX(-50%) rotate(15deg) translateY(2px)}62%{transform:translateX(-50%) rotate(-4deg) translateY(0)}100%{transform:translateX(-50%) rotate(0deg) translateY(0)}}
+/* Spin direction indicators (inline inside .spin-label) */
+.sdi{font-size:.85rem;line-height:1;opacity:.12;transition:opacity .3s,filter .3s;
+  background:linear-gradient(90deg,hsl(var(--sd-h1,280),80%,70%),hsl(var(--sd-h2,40),80%,70%));
+  background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.sdi.active{opacity:1;background:linear-gradient(90deg,hsl(var(--sd-h1,280),85%,74%),hsl(var(--sd-h2,40),85%,74%),hsl(var(--sd-h3,160),85%,74%),hsl(var(--sd-h1,280),85%,74%));
+  background-size:300% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:freeGlowFlow 3s linear infinite;filter:drop-shadow(0 0 6px hsla(var(--sd-h2,40),85%,65%,.8))}
+/* Lucky Lefty overlay */
+#luckyLefty{position:fixed;inset:0;z-index:900;display:none;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 40%,rgba(28,5,55,.97),rgba(0,0,8,.98));
+  opacity:0;transition:opacity .4s;backdrop-filter:blur(12px)}
+#luckyLefty.show{opacity:1}
+.ll-inner{text-align:center;padding:20px;animation:llPop .55s cubic-bezier(.2,1.4,.4,1) both}
+.ll-arrow{font-size:3.8rem;display:block;animation:llSpinCCW 2s linear infinite;margin-bottom:.5rem}
+.ll-title{font-size:clamp(2.4rem,9vw,4.2rem);font-weight:900;letter-spacing:.04em;
+  background:linear-gradient(90deg,#c77dff,#ff6bcb,#4fc3f7,#43e97b,#ffd60a,#c77dff);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:freeGlowFlow 2s linear infinite;line-height:1}
+.ll-msg{font-size:1.05rem;color:#c0b8d4;font-style:italic;margin-top:1rem;max-width:340px}
+@keyframes llPop{0%{transform:scale(.35) translateY(70px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
+@keyframes llSpinCCW{0%{transform:rotate(0deg)}100%{transform:rotate(-360deg)}}
 /* Big spin button with avatar */
 .spin-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:130px;height:130px;border-radius:50%;
   background:var(--bg);cursor:pointer;z-index:11;border:4px solid var(--accent);
@@ -541,9 +559,13 @@ canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0
 .spin-btn:active img{transform:rotate(-20deg) scale(.9)}
 .spin-btn.spinning img{animation:spinFace .3s ease}
 @keyframes spinFace{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(.7)}100%{transform:rotate(360deg) scale(1)}}
-.spin-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:12;font-weight:900;font-size:.7rem;
-  background:linear-gradient(135deg,#fff 30%,rgba(255,220,200,.8));-webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 2px 4px rgba(0,0,0,.9)) drop-shadow(0 0 8px rgba(0,0,0,.8));letter-spacing:1px;pointer-events:none;text-transform:uppercase}
+.spin-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:12;
+  display:flex;align-items:center;gap:5px;pointer-events:none;text-transform:uppercase}
+.spin-text{font-weight:900;font-size:1rem;letter-spacing:1.5px;
+  background:linear-gradient(90deg,hsl(var(--sd-h1,280),88%,80%),hsl(var(--sd-h2,40),88%,80%),hsl(var(--sd-h3,160),88%,80%),hsl(var(--sd-h1,280),88%,80%));
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  animation:freeGlowFlow 2.5s linear infinite;
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,.95)) drop-shadow(0 0 12px rgba(0,0,0,.9))}
 .spin-hint{margin-top:8px;color:#444;font-size:.75rem}
 
 /* ── FORMAT REVEAL ── */
@@ -1223,11 +1245,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 </svg></div>
       <canvas id="wheelCanvas" width="800" height="800"></canvas>
       <button class="spin-btn" id="spinBtn" onclick="spinWheel()"><img id="spinAvatar" alt="SPIN"></button>
-      <div class="spin-label">SPIN</div>
-      <div class="spin-dir-wrap">
-        <button class="spin-dir-btn active" id="spinDirCW" title="Spin clockwise" onclick="setSpinDir(1)">↻</button>
-        <button class="spin-dir-btn" id="spinDirCCW" title="Spin counter-clockwise" onclick="setSpinDir(-1)">↺</button>
-      </div>
+      <div class="spin-label" id="spinLabel"><span class="sdi active" id="sdiCW">↻</span><span class="spin-text">SPIN</span><span class="sdi" id="sdiCCW">↺</span></div>
     </div>
     <div class="spin-hint">or press Ctrl+Enter</div>
   </div>
@@ -1397,6 +1415,13 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 </div>
 <div class="confetti-container" id="confettiBox"></div>
 <div class="toast ok" id="toast"></div>
+<div id="luckyLefty">
+  <div class="ll-inner">
+    <span class="ll-arrow">↺</span>
+    <div class="ll-title">LUCKY LEFTY</div>
+    <div class="ll-msg" id="llMsg">Fortune favors the left hand tonight.</div>
+  </div>
+</div>
 
 <!-- ERROR LOG -->
 <div class="err-badge" id="errBadge" onclick="toggleErrPanel()">0</div>
@@ -2445,10 +2470,32 @@ function genSpinDirHues(){
   document.documentElement.style.setProperty('--sd-h2',h2);
   document.documentElement.style.setProperty('--sd-h3',h3);
 }
+genSpinDirHues(); // seed colors immediately on load
+const LL_MSGS=[
+  'Fortune favors the left hand tonight.',
+  'The wheel turns against fate…',
+  'Rare forces are at work.',
+  'Against all odds — going left.',
+  'The universe bends counterclockwise.',
+  'Left is a privilege. Spin it wisely.',
+  'Chaos chooses the sinister path.',
+  'One in ten. Today is that day.'
+];
+function showLuckyLefty(cb){
+  const el=document.getElementById('luckyLefty');
+  document.getElementById('llMsg').textContent=LL_MSGS[Math.floor(Math.random()*LL_MSGS.length)];
+  el.style.display='flex';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+  setTimeout(()=>{
+    el.classList.remove('show');
+    setTimeout(()=>{el.style.display='none';cb();},400);
+  },2600);
+}
 function setSpinDir(dir){
   spinDir=dir;
-  document.getElementById('spinDirCW').classList.toggle('active',dir===1);
-  document.getElementById('spinDirCCW').classList.toggle('active',dir===-1);
+  const cw=document.getElementById('sdiCW'),ccw=document.getElementById('sdiCCW');
+  if(cw)cw.classList.toggle('active',dir===1);
+  if(ccw)ccw.classList.toggle('active',dir===-1);
 }
 function startGame(){
   // Close setup panel if open
@@ -2964,7 +3011,10 @@ function getSegmentAtPointer(){
 }
 
 function spinWheel(){
-  if(spinning)return;spinning=true;lastTickSegment=-1;
+  if(spinning)return;
+  // ~10% chance CCW (Lucky Lefty)
+  setSpinDir(Math.random()<0.10?-1:1);
+  spinning=true;lastTickSegment=-1;
   if(!hasSpunOnce){hasSpunOnce=true;document.getElementById('wheelTop').style.display='none'}
   const btn=document.getElementById('spinBtn');btn.style.pointerEvents='none';btn.classList.add('spinning');
   setTimeout(()=>btn.classList.remove('spinning'),300);
@@ -2990,6 +3040,7 @@ function spinWheel(){
   const fullSpins=(5+Math.random()*4)*2*Math.PI;
   const target=fullSpins+dist;
   const dir=spinDir;
+  function doSpin(){
   const start=wheelAngle,dur=4200+Math.random()*1800,t0=performance.now();
   (function anim(now){
     const p=Math.min((now-t0)/dur,1);wheelAngle=start+dir*target*(1-Math.pow(1-p,5));drawWheel();
@@ -3002,8 +3053,7 @@ function spinWheel(){
       const ptr=document.getElementById('wheelPointer');
       if(ptr){
         ptr.style.setProperty('--pointer-glow',segColor);ptr.style.setProperty('--pointer-inner',segColor);
-        ptr.style.animation='none';
-        void ptr.offsetHeight;
+        ptr.getAnimations().forEach(a=>a.cancel());
         const tickMs=Math.max(90,Math.min(180,Math.round((1-p)*200)));
         const tickAnim=dir===1?'pointerTick':'pointerTickCCW';
         ptr.style.animation=`${tickAnim} ${tickMs}ms cubic-bezier(.2,1.5,.4,1) forwards`;
@@ -3030,6 +3080,8 @@ function spinWheel(){
       setTimeout(advanceFromWheel,700);
     }
   })(performance.now());
+  } // end doSpin
+  if(dir===-1){showLuckyLefty(doSpin);}else{doSpin();}
 }
 
 function rebuildWheel(){pickWheelFormats();wheelAngle=0;drawWheel()}
@@ -3697,7 +3749,7 @@ function searchYouTube(){const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE
 // ═══════════════════════════════════
 //  IN-APP SEARCH RESULTS
 // ═══════════════════════════════════
-const INVIDIOUS_INSTANCES=['https://iv.melmac.space'];
+const INVIDIOUS_INSTANCES=['https://iv.melmac.space','https://inv.nadeko.net','https://invidious.privacyredirect.com','https://yt.drgnz.club'];
 const CORS_PROXIES=['https://api.allorigins.win/raw?url='];
 let currentSearchVideos=[]; // {videoId,title,author,viewCount,thumbnail,clicked,rating:{}}
 let searchResultsOpen=false;
@@ -3818,16 +3870,25 @@ function renderInlineResults(){
 }
 
 async function searchInvidious(query){
+  const q=encodeURIComponent(query);
+  // Pass 1: all instances, sorted by upload date
   for(const instance of INVIDIOUS_INSTANCES){
     try{
-      const url=`${instance}/api/v1/search?q=${encodeURIComponent(query)}&sort_by=upload_date&type=video`;
-      const r=await fetch(url);
+      const r=await fetch(`${instance}/api/v1/search?q=${q}&sort_by=upload_date&type=video`);
       if(!r.ok)continue;
       const data=await r.json();
       if(Array.isArray(data)&&data.length)return data.slice(0,20);
     }catch{}
   }
-  // Fallback: try YouTube oEmbed for just the search (won't return results, but we tried)
+  // Pass 2: retry with relevance sort — some queries return 0 by date but have results by relevance
+  for(const instance of INVIDIOUS_INSTANCES){
+    try{
+      const r=await fetch(`${instance}/api/v1/search?q=${q}&sort_by=relevance&type=video`);
+      if(!r.ok)continue;
+      const data=await r.json();
+      if(Array.isArray(data)&&data.length)return data.slice(0,20);
+    }catch{}
+  }
   return null;
 }
 
@@ -6250,7 +6311,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.15.6","build":"2026-06-04T20:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.15.7","build":"2026-06-04T21:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
