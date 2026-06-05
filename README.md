@@ -23,7 +23,7 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-58ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.15.3-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.16.1-1a1a2e?style=flat-square" alt="Changelog"></a>
   <a href="CHANGELOG.md#700--2026-05-03--the-go-rewrite"><img src="https://img.shields.io/badge/Backend-Go_(rewritten_from_PHP)-00ADD8?style=flat-square&logo=go" alt="Go backend"></a>
 </p>
 
@@ -176,22 +176,7 @@ The GitHub Pages build works fine for its intended purpose. For a public daily-d
 
 **FT Mode** intercepts YouTube API calls client-side (fetch interceptor in `nbvs-community.js`) and reroutes them through the Falcon Technix Go backend. The response shapes are identical to YouTube Data API v3 — NBVS's React app never knows the calls were rerouted.
 
-```
-Browser (NBVS React app)              FT Server — Go backend                 Sources
-  │                                        │                                    │
-  │  GET /api/kvn/yt-search?q=…            │                                    │
-  ├───────────────────────────────────────►│  searchViaInvidious()              │
-  │                                        ├───────────────────────────────────►│ Invidious #N (shuffled)
-  │                                        │  ↳ fail → try next instance        │
-  │                                        ├───────────────────────────────────►│ scrapeYouTubeSearch()
-  │                                        │  ↳ CAPTCHA detected → 503          │
-  │◄───────────────────────────────────────┤  youtube#searchListResponse        │
-  │                                        │                                    │
-  │  GET /api/kvn/yt-stats?id=id1,id2,…   │                                    │
-  ├───────────────────────────────────────►│  ytmeta.Fetch() waterfall          │
-  │                                        ├───────────────────────────────────►│ Invidious → oEmbed → scrape
-  │◄───────────────────────────────────────┤  youtube#videoListResponse         │
-```
+When NBVS makes a search call, the fetch interceptor in `nbvs-community.js` silently reroutes it to the FT Go backend at `/api/kvn/yt-search`. The Go backend attempts the search via a shuffled pool of healthy Invidious instances, falling back to direct YouTube scraping if all instances fail; on CAPTCHA detection it returns an upstream error and the UI shows a toast. Stats calls (`/api/kvn/yt-stats`) follow the same waterfall — Invidious first, then oEmbed, then direct scrape. Both endpoints return response shapes identical to YouTube Data API v3, so NBVS's React app never knows the calls were rerouted.
 
 **Visitors with their own API key** can switch to "My API Key" mode. Calls go directly to `googleapis.com` — the FT proxy is not in the path and the key never reaches our servers.
 
@@ -226,51 +211,11 @@ A 16-country dropdown in the FT launch panel restricts YouTube results geographi
 
 ### Auto-Sync Pipeline
 
-```
-api.github.com — latest commit SHA
-  │  (no-op if SHA matches stored /var/lib/nbvs/last_sha)
-  ▼
-raw.githubusercontent.com/kvnaust/YouTube-NonBiasedVideoSearcher/main/index.html
-  │
-  ▼
-/opt/nbvs-patch  (Go binary, built with esbuild — no Node.js, no Python)
-  ├─ Compile <script type="text/babel"> JSX  →  ES2017 inline <script>
-  ├─ Remove Babel standalone loader
-  ├─ Tailwind Play CDN  →  /lib/tailwind.css  (pre-built, self-hosted)
-  ├─ React / ReactDOM unpkg  →  /lib/react.min.js, /lib/react-dom.min.js
-  ├─ Override <title>
-  ├─ Inject FT <meta> block (description, keywords, Open Graph, Twitter Card)
-  ├─ Inject JSON-LD  (WebApplication + WebSite + BreadcrumbList schema)
-  ├─ Inject <noscript> HTML fallback (full feature description, rarity tiers)
-  ├─ Inject <link rel="icon"> — self-hosted FT/KVN favicons
-  └─ Wire <script src="/nbvs-community.js" defer> before </body>
-  │
-  ▼
-/var/www/html/nbvs/index.html
-FORMAT-MAP.md  ←  synced from KVN_AUST webroot (same-origin, no CORS or GitHub rate limits)
-```
-
-Runs on a systemd timer (`nbvs-sync.timer`). SHA stored at `/var/lib/nbvs/last_sha` — syncs only on upstream changes, or on `--force`.
+A systemd timer fires periodically and checks the upstream GitHub commit SHA. If it matches the stored value the run is a no-op. On a new SHA, it fetches the raw `index.html` from `raw.githubusercontent.com` and runs the `nbvs-patch` Go binary (built with esbuild — no Node.js, no Python required). The patcher compiles the inline Babel/JSX block to ES2017, removes the Babel standalone loader, replaces the React/ReactDOM/Tailwind CDN links with self-hosted copies, overrides the page title, injects the full FT meta block (Open Graph, Twitter Card, JSON-LD schema, noscript fallback, favicons), and wires `nbvs-community.js` before `</body>`. The finished `index.html` lands directly in the web root. `FORMAT-MAP.md` is synced from the Sonder webroot on the same server — no CORS or GitHub rate limits involved.
 
 ### Content Security Policy
 
-```
-default-src    'self'
-script-src     'self' 'unsafe-inline'
-               https://static.cloudflareinsights.com
-style-src      'self' 'unsafe-inline'
-img-src        'self' data:
-               https://i.ytimg.com  https://*.ytimg.com        ← YouTube video thumbnails
-               https://yt3.ggpht.com  https://*.ggpht.com      ← YouTube channel avatars
-               https://lh3.googleusercontent.com               ← Google profile images
-               https://kvnaust.falcontechnix.com               ← self-hosted FT favicons
-connect-src    'self' https://www.googleapis.com
-frame-src      'none'
-object-src     'none'
-upgrade-insecure-requests
-```
-
-`unsafe-inline` on `script-src` is unavoidable: the esbuild-compiled JSX block is an inline `<script>`. A nonce-injection pipeline would eliminate it — not implemented.
+The FT mirror enforces a strict CSP with `default-src 'self'`. Scripts are locked to self and inline (`unsafe-inline` is unavoidable because the esbuild-compiled JSX block remains an inline `<script>` — a nonce-injection pipeline would eliminate it but is not implemented). Styles allow self and inline. Images allow self, data URIs, YouTube thumbnail domains (`i.ytimg.com`, `*.ytimg.com`), YouTube channel avatar domains (`yt3.ggpht.com`, `*.ggpht.com`), Google profile images, and self-hosted FT favicons. Connect is restricted to self and `googleapis.com` for users in My API Key mode. Frames and objects are fully blocked. `upgrade-insecure-requests` is set. No external font or script origins are permitted.
 
 ### Community Layer (`nbvs-community.js`)
 
@@ -616,11 +561,7 @@ The community-maintained database of every known default filename keyphrase that
 
 ## Contributing
 
-1. **New format leads**: Add to [FORMAT-MAP.md](FORMAT-MAP.md) via PR. Numbered formats must follow this table syntax for the spinner parser:
-   ```
-   | `formatXXXX` | 0000-9999 | Source | Credit |
-   ```
-   Keyphrase in backticks, ending with 2-4 `X` characters, range as `MIN-MAX` digits.
+1. **New format leads**: Add to [FORMAT-MAP.md](FORMAT-MAP.md) via PR. Each numbered format is a table row with four columns: the keyphrase in backticks ending with 2–4 `X` characters (e.g. `formatXXXX`), the numeric range written as `MIN-MAX` digits (e.g. `0000-9999`), the source device or context, and contributor credit. The spinner parser reads this table directly — incorrect formatting will cause the format to be skipped.
 2. **New bingo categories**: Add to [`bingo-categories.json`](bingo-categories.json) via PR
 3. **Code changes**: Edit [`kvnaust-recyclebin.html`](kvnaust-recyclebin.html) and bump the version block at the bottom of the file
 
