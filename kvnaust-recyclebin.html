@@ -942,7 +942,8 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .sr-inline-date{font-size:.62rem;color:#6a8a9a;line-height:1.4}
 .sr-inline-actions{display:flex;gap:5px;margin-top:auto;padding-top:5px}
 .sr-inline-stars{display:grid;grid-template-columns:1fr 1fr;gap:1px 5px;margin-top:3px}
-.sr-inline-stars .vt-star{padding:2px 3px;min-height:24px}
+.sr-inline-stars .vt-star{font-size:.78rem;padding:1px 2px;min-height:auto}
+.sri-score{font-size:.62rem;font-weight:800;text-align:center;margin-top:3px;letter-spacing:.03em;min-height:1em}
 
 /* ── BINGO SETUP PANEL ── */
 .bingo-setup{position:fixed;top:220px;right:0;bottom:0;width:340px;background:linear-gradient(180deg,var(--card),#111120);border-left:1px solid #2a2a40;z-index:460;
@@ -3856,12 +3857,16 @@ function renderInlineResults(){
       const ageStr=pubDate?(ageYrs>=1?ageYrs+'y ago':ageMos>=1?ageMos+'mo ago':'recent'):'';
       const stars=(['entertainment','weirdness','gem','liked']).map(m=>
         `<div style="display:flex;align-items:center;gap:2px">
-          <span style="font-size:.6rem;color:${METRIC_COLORS[m]};width:2.6em;flex-shrink:0;opacity:.9">${MN[m]}</span>
+          <span style="font-size:.58rem;color:${METRIC_COLORS[m]};width:2.2em;flex-shrink:0;opacity:.9">${MN[m]}</span>
           ${[1,2,3,4,5].map(s=>
             `<span class="vt-star${v.rating[m]>=s?' lit':''}" onclick="rateSearchVideo(${i},'${m}',${s})">&#9733;</span>`
           ).join('')}
         </div>`
       ).join('');
+      const avg=avgMetric(v.rating);
+      const scoreHtml=avg>0
+        ?`<span style="color:#f39c12">★ ${avg.toFixed(1)}</span><span style="color:#555"> / 5</span>`
+        :`<span style="color:#2a2a3a">★ rate me</span>`;
       const hue=cardHue(v,i);
       const isZeroViews=v.viewCount===0;
       const year=pubDate?pubDate.getFullYear():null;
@@ -3884,6 +3889,7 @@ function renderInlineResults(){
           <div class="sr-inline-meta">${metaHtml}</div>
           ${dateStr?`<div class="sr-inline-date">${dateStr} <span style="color:#6a8a7a">· ${ageStr}</span></div>`:''}
           <div class="sr-inline-stars">${stars}</div>
+          <div class="sri-score">${scoreHtml}</div>
           <div class="sr-inline-actions">
             <button class="vt-btn" style="background:var(--accent);flex:1" onclick="watchVideoInline(${i})">Watch</button>
             <button class="vt-btn" style="background:var(--card2);flex:1" onclick="saveVideoFromSearch(${i})">Save</button>
@@ -3962,8 +3968,24 @@ function watchVideoInline(idx){
 function rateSearchVideo(idx,metric,value){
   const v=currentSearchVideos[idx];if(!v)return;
   v.rating[metric]=value;
-  // re-render whichever is active
-  if(searchResultsOpen)renderSearchResults();else renderInlineResults();
+  if(searchResultsOpen){renderSearchResults();return;}
+  // Surgical update — avoid full re-render on every star click
+  const card=document.getElementById(`sri-${idx}`);
+  if(card){
+    const metricIdx=['entertainment','weirdness','gem','liked'].indexOf(metric);
+    const rows=card.querySelectorAll('.sr-inline-stars > div');
+    if(rows[metricIdx])rows[metricIdx].querySelectorAll('.vt-star').forEach((s,si)=>s.classList.toggle('lit',si<value));
+    const scoreEl=card.querySelector('.sri-score');
+    if(scoreEl){
+      const avg=avgMetric(v.rating);
+      scoreEl.innerHTML=avg>0
+        ?`<span style="color:#f39c12">★ ${avg.toFixed(1)}</span><span style="color:#555"> / 5</span>`
+        :`<span style="color:#2a2a3a">★ rate me</span>`;
+    }
+  }else{
+    renderInlineResults();
+  }
+  saveGameState();
 }
 
 function _fillTrackerFromSearchVideo(v){
@@ -6373,7 +6395,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.16.3","build":"2026-06-05T03:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.16.4","build":"2026-06-05T04:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
