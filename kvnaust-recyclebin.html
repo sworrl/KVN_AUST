@@ -2541,7 +2541,8 @@ function saveGameState(){
     sessionStorage.setItem(GAME_STATE_KEY,JSON.stringify({
       gameId:currentGameId,screen:currentScreen,
       chosenFormat:chosenFormat,chosenNumber:chosenNumber,finalString:finalString,
-      sessionRounds:sessionRounds,usedFormatLabels:[...usedFormats],savedAt:Date.now()
+      sessionRounds:sessionRounds,usedFormatLabels:[...usedFormats],savedAt:Date.now(),
+      searchVideos:currentSearchVideos.length?currentSearchVideos:undefined
     }));
   }catch{}
 }
@@ -2609,7 +2610,12 @@ function checkResumeGame(){
       resetTracker();
       showScreen('result-screen'); // internally calls saveGameState — clear it after so no phantom resume prompt
       clearGameState();
-      setTimeout(browseResults,300);
+      if(saved.searchVideos?.length){
+        currentSearchVideos=saved.searchVideos;
+        renderInlineResults();
+      }else{
+        setTimeout(browseResults,300);
+      }
     } else {
       startNextRound(); // calls showScreen internally — clear after for same reason
       clearGameState();
@@ -6367,7 +6373,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.16.2","build":"2026-06-05T02:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.16.3","build":"2026-06-05T03:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
