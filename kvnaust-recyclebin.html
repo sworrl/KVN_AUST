@@ -3881,9 +3881,14 @@ function renderInlineResults(){
       // Every card gets a unique tinted background; rarity cards get stronger glow
       const glowStr=isZeroViews?`.35`:isPre2008?`.22`:`.12`;
       const cardStyle=`style="background:linear-gradient(175deg,hsl(${hue},30%,10%) 0%,hsl(${hue},18%,7%) 100%);border-color:hsl(${hue},52%,32%);box-shadow:0 0 16px hsla(${hue},65%,45%,${glowStr})"`;
-      // Overlay badge on thumbnail for notable videos
-      const badgeHtml=(isZeroViews||isPre2008)
-        ?`<div class="sr-inline-thumb-badge" style="background:hsla(${hue},80%,18%,.92);color:hsl(${hue},90%,70%);border:1px solid hsl(${hue},65%,38%)">${isZeroViews?'0 VIEWS':year+' — VINTAGE'}</div>`
+      // Overlay badge on every card: year + age (tier-coloured)
+      const badgeLabel=isZeroViews
+        ?(year?`0 VIEWS · ${year}`:'0 VIEWS')
+        :isPre2008
+          ?(year?`${year} — VINTAGE`:'VINTAGE')
+          :(year&&ageStr?`${year} · ${ageStr}`:year?String(year):ageStr||'');
+      const badgeHtml=badgeLabel
+        ?`<div class="sr-inline-thumb-badge" style="background:hsla(${hue},80%,18%,.92);color:hsl(${hue},90%,70%);border:1px solid hsl(${hue},65%,38%)">${badgeLabel}</div>`
         :'';
       const metaHtml=`<span style="color:#7ec0e8">${esc(v.author)}</span>${dur?` <span style="color:#444">·</span> <span style="color:#667">${dur}</span>`:''} <span style="color:#444">·</span> <span style="color:#c9934a">${views} views</span>`;
       return`<div class="sr-inline-card${v.clicked?' clicked':''}" id="sri-${i}" ${cardStyle}>
@@ -6415,7 +6420,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.16.6","build":"2026-06-05T08:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.16.7","build":"2026-06-05T10:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
@@ -6440,8 +6445,8 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.16.6",
-  "build": "2026-06-05T08:00:00",
+  "version": "7.16.7",
+  "build": "2026-06-05T10:00:00",
   "changelog": "Format cache fix (118 bug), rarity + era icon in Discord share, resume reconstruct, karaoke F12",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
