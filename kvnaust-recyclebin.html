@@ -2598,7 +2598,7 @@ function checkResumeGame(){
     if(!loadBingoState())pickBingoCategories();
     buildBingoFromPicked();pickGameStamps();updateBingoBtn();
     genSpinDirHues();autoHideFooter();
-    clearGameState();modal.remove();
+    modal.remove();
     // If reloaded mid-round (format already chosen), restore result screen
     if(saved.chosenFormat){
       chosenFormat=saved.chosenFormat;
@@ -2607,10 +2607,12 @@ function checkResumeGame(){
       maxReachedIdx=4;
       document.getElementById('resultPill').textContent=finalString;
       resetTracker();
-      showScreen('result-screen');
+      showScreen('result-screen'); // internally calls saveGameState — clear it after so no phantom resume prompt
+      clearGameState();
       setTimeout(browseResults,300);
     } else {
-      startNextRound();
+      startNextRound(); // calls showScreen internally — clear after for same reason
+      clearGameState();
     }
   };
   document.getElementById('kvn-newgame-btn').onclick=()=>{
@@ -4111,7 +4113,7 @@ function animatedReRandomize(callback){
   requestAnimationFrame(frame);
 }
 
-function reRandomize(){animatedReRandomize(()=>showToast('Re-randomized!'))}
+function reRandomize(){animatedReRandomize(()=>{showToast('Re-randomized!');browseResults();})}
 
 
 
@@ -4200,7 +4202,7 @@ function saveAndReRandomize(){
   clearVtLink();resetTracker();
   // Stay on result screen - just re-roll the number
   if(!chosenFormat){showToast('No format selected','warn');return}
-  animatedReRandomize(()=>showToast('Saved! Re-randomized'));
+  animatedReRandomize(()=>{showToast('Saved! Re-randomized');browseResults();});
 }
 function saveAndEnd(){
   const round=makeRound();
@@ -6365,7 +6367,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.16.1","build":"2026-06-05T01:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.16.2","build":"2026-06-05T02:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
