@@ -2605,7 +2605,10 @@ function checkResumeGame(){
     if(saved.chosenFormat){
       chosenFormat=saved.chosenFormat;
       chosenNumber=saved.chosenNumber;
-      finalString=saved.finalString||'';
+      // Reconstruct finalString if not saved (e.g. reloaded on format/number screen before showResult ran)
+      finalString=saved.finalString||(saved.chosenNumber!=null
+        ?(chosenFormat.sp==='static'?chosenFormat.tpl:chosenFormat.tpl.replace('{V}',saved.chosenNumber))
+        :'');
       maxReachedIdx=4;
       document.getElementById('resultPill').textContent=finalString;
       resetTracker();
@@ -6395,7 +6398,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.16.4","build":"2026-06-05T04:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.16.5","build":"2026-06-05T06:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
