@@ -2767,8 +2767,8 @@ function closeBingoFlash(){
 // browser worldwide to drop its cached parse on next page load
 // and refetch from GitHub. Same trick anytime the parser logic
 // or FORMAT-MAP.md schema changes shape — bump the version.
-const DOC_CACHE_KEY='kvn_fmt_v16';
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v14';
+const DOC_CACHE_KEY='kvn_fmt_v17';
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v17';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -2789,7 +2789,11 @@ function saveCachedFormats(docFormats){
 }
 
 function isCacheStale(){
-  try{const ts=parseInt(localStorage.getItem(DOC_CACHE_TS_KEY)||'0');return Date.now()-ts>DOC_CACHE_TTL}catch{return true}
+  try{
+    if(!localStorage.getItem(DOC_CACHE_KEY))return true; // no content = always fetch
+    const ts=parseInt(localStorage.getItem(DOC_CACHE_TS_KEY)||'0');
+    return Date.now()-ts>DOC_CACHE_TTL;
+  }catch{return true}
 }
 
 async function fetchDocFormats(){
@@ -6059,14 +6063,16 @@ function shareToDiscord(){
   if(!finalString)return showToast('No search string yet','warn');
   const link=document.getElementById('vtLink').value.trim();
   const videoId=link.match(/(?:v=|youtu\.be\/)([^&\s]+)/)?.[1]||'';
+  const datePosted=document.getElementById('vtDatePosted').value.trim();
+  const views=document.getElementById('vtViews').value.trim();
+  const yr=yearFromDatePosted(datePosted);
   const text=buildDiscordShare({
     searchStr:finalString,
     lead:chosenFormat?chosenFormat.label:'',
-    datePosted:document.getElementById('vtDatePosted').value.trim(),
-    views:document.getElementById('vtViews').value.trim(),
+    datePosted,views,
     channelVids:document.getElementById('vtChannelVids').value.trim(),
-    videoId,
-    metrics:currentMetrics
+    videoId,metrics:currentMetrics,
+    rarity:yr?getRarityLabel(yr):''
   });
   navigator.clipboard.writeText(text).then(()=>showToast('Copied for Discord!')).catch(()=>showToast('Copy failed','err'));
 }
@@ -6253,17 +6259,28 @@ function fmtShareDate(s){
   if(iso){const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return`${parseInt(iso[3])} ${M[parseInt(iso[2])-1]} ${iso[1]}`;}
   return s;
 }
-function buildDiscordShare({searchStr,lead,datePosted,isoDate,views,channelVids,videoId,metrics}){
+function yearFromDatePosted(s){
+  if(!s)return null;
+  const iso=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(iso)return parseInt(iso[1]);
+  const dd=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(dd)return parseInt(dd[3]);
+  return null;
+}
+function buildDiscordShare({searchStr,lead,datePosted,isoDate,views,channelVids,videoId,metrics,rarity}){
   const stars=(n,tot=5)=>'⭐'.repeat(n||0)+'✩'.repeat(tot-(n||0));
   const m=metrics||{};
   const date=fmtShareDate(datePosted||isoDate);
   const url=videoId?`https://www.youtube.com/watch?v=${videoId}`:'';
+  const RARITY_EMOJI={'LEGENDARY':'🏆','SUPER RARE':'🔴','VERY RARE':'🟠','RARE':'🟢','COMMON':'🔵'};
+  const DATE_ICON={'LEGENDARY':'🕰️','SUPER RARE':'📜','VERY RARE':'🗓️','RARE':'🗓️','COMMON':'📅'};
+  const rarityLabel=rarity||(()=>{const yr=yearFromDatePosted(datePosted||isoDate);return yr?getRarityLabel(yr):'';})();
+  const dateIcon=DATE_ICON[rarityLabel]||'📅';
   const L=[];
-  L.push(`## 🗑️ YouTube\'s Recycle Bin Find`);
+  const hdRarity=rarityLabel?`${RARITY_EMOJI[rarityLabel]||''} ${rarityLabel} — `:'';
+  L.push(`## 🗑️ ${hdRarity}Recycle Bin Find`);
   if(searchStr)L.push(`\`\`\`${searchStr}\`\`\``);
   L.push('');
   const meta=[];
-  if(date)meta.push(`📅 **${date}**`);
+  if(date)meta.push(`${dateIcon} **${date}**`);
   if(views!==undefined&&views!=='')meta.push(`👁️ **${Number(views).toLocaleString()} views**`);
   if(meta.length)L.push(meta.join('  ·  '));
   if(lead)L.push(`📌 Lead: \`${lead}\``);
@@ -6398,7 +6415,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.16.5","build":"2026-06-05T06:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.16.6","build":"2026-06-05T08:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
