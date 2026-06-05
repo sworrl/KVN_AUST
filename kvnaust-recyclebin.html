@@ -926,10 +926,10 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .sr-bummer-none{font-size:.65rem;color:#333;letter-spacing:.1em;text-transform:uppercase;margin-top:-4px}
 .sr-bummer-sub{font-size:.68rem;color:#444;max-width:260px;line-height:1.5}
 /* inline result cards (top 5, embedded in result screen) */
-#srInline{max-height:min(calc(100vh - 500px),500px);overflow-y:auto;overflow-x:hidden;transition:max-height .35s ease}
-@media(min-width:1100px){#srInline{max-height:min(calc(100vh - 440px),700px)}}
+#srInline{width:100%;max-height:min(calc(100vh - 480px),560px);overflow-y:auto;overflow-x:hidden;transition:max-height .35s ease}
+@media(min-width:1100px){#srInline{max-height:min(calc(100vh - 400px),900px)}}
 .sr-inline-header{font-size:.65rem;font-weight:900;letter-spacing:.1em;color:#555;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.sr-inline-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.sr-inline-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
 .sr-inline-card{border:1.5px solid #2a2a40;border-radius:12px;padding:0;display:flex;flex-direction:column;margin-bottom:0;position:relative;transition:filter .2s,box-shadow .2s;overflow:hidden}
 .sr-inline-card:hover{filter:brightness(1.1)}
 .sr-inline-card.clicked{outline:2px solid var(--accent);outline-offset:-2px}
@@ -2512,6 +2512,7 @@ function startGame(){
   if(setupFreeSpace)bingoState[12]=true;
   gameActive=true;maxReachedIdx=1;usedFormats=new Set();
   genSpinDirHues();
+  autoHideFooter();
   pickGameStamps(); // 25 unique SVG stamps for this game
   // Pick bingo data from BINGO_LIVE (which may have been edited)
   pickBingoCategories();
@@ -2596,8 +2597,21 @@ function checkResumeGame(){
     document.getElementById('wheelTop').style.display='none';
     if(!loadBingoState())pickBingoCategories();
     buildBingoFromPicked();pickGameStamps();updateBingoBtn();
+    genSpinDirHues();autoHideFooter();
     clearGameState();modal.remove();
-    startNextRound();
+    // If reloaded mid-round (format already chosen), restore result screen
+    if(saved.chosenFormat){
+      chosenFormat=saved.chosenFormat;
+      chosenNumber=saved.chosenNumber;
+      finalString=saved.finalString||'';
+      maxReachedIdx=4;
+      document.getElementById('resultPill').textContent=finalString;
+      resetTracker();
+      showScreen('result-screen');
+      setTimeout(browseResults,300);
+    } else {
+      startNextRound();
+    }
   };
   document.getElementById('kvn-newgame-btn').onclick=()=>{
     clearGameState();modal.remove();startGame();
@@ -6351,7 +6365,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.15.9","build":"2026-06-04T23:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.16.0","build":"2026-06-05T00:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
