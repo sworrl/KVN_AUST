@@ -971,6 +971,12 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .credit-footer .ft-wordmark{width:auto;height:22px;border:none;border-radius:0;object-fit:contain}
 .cf-close{background:none;border:none;color:#444;font-size:.9rem;cursor:pointer;padding:2px 6px;margin-left:4px}.cf-close:hover{color:#aaa}
 .cf-sep{color:#333;font-size:.7rem}
+@media(max-width:600px){
+  .credit-footer{padding:16px 12px 8px;gap:8px;flex-wrap:wrap}
+  .credit-footer .ft-wordmark{display:none}
+  .cf-sep{display:none}
+  #versionBadge{display:none!important}
+}
 
 /* ── RECORDS TIMELINE MODAL ── */
 .records-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.92);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -6508,7 +6514,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.17.0","build":"2026-06-06T10:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.17.1","build":"2026-06-06T12:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">

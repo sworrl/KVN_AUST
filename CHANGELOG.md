@@ -14,6 +14,15 @@
 
 ---
 
+## [7.17.1] — 2026-06-06 — Mobile polish + footer date chip
+
+### 🔧 Fixed
+- **Footer date chip** — KVN AUST footer now shows today's date (e.g. "Jun 6") as a live badge so the calendar reference matches the actual current day.
+- **Mobile footer** — Credit-footer hides the FT wordmark and version badge on narrow screens to prevent overflow; flex-wraps cleanly.
+- **Mobile Sonder chat** — On screens under 600px the chat panel opens as a bottom sheet (full-width, 72vh) instead of a corner popup.
+
+---
+
 ## [7.17.0] — 2026-06-06 — Sonder two-part date generation + pill editor
 
 ### ✨ Added
