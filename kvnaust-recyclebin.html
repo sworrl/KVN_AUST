@@ -1770,6 +1770,13 @@ async function checkForUpdates(){
   badge.textContent=`v${APP_VERSION}`;
   badge.title=`Build: ${APP_BUILD}`;
 
+  // Hosted on FT — updates are automated, no banner needed
+  if(isLive){
+    badge.style.cssText='font-size:.55rem;color:#4caf50;padding:2px 6px;border-radius:4px;background:rgba(76,175,80,.1)';
+    badge.title='Up to date!';
+    return;
+  }
+
   // Check GitHub raw for latest version (works from ANY origin including file://)
   try{
     const r=await fetch(`${RAW_URL}/kvnaust-recyclebin.html?_=${Date.now()}`);

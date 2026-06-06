@@ -14,6 +14,123 @@
 
 ---
 
+## [7.16.7] — 2026-06-04 — Year + age badge on every inline card
+
+### ✨ Added
+- **Year + age badge** on every inline video card. Shows upload year and how many years ago the video was posted (e.g. "2011 · 15 yrs ago") in the card footer alongside the view count.
+
+---
+
+## [7.16.6] — 2026-06-04 — Fix format cache (118 bug), rarity + era icon in Discord share
+
+### 🐛 Fixed
+- **Format cache 118 bug** — `DOC_CACHE_KEY` and timestamp key both bumped to `v17`. Mismatch between the two meant a stale timestamp was trusted even after the content key changed, leaving the app stuck on a hardcoded 118-format set instead of loading the full 192+ from FORMAT-MAP.md. `isCacheStale()` now returns `true` when the content key is absent, closing the stale-timestamp bypass entirely.
+
+### ✨ Added
+- **Rarity label + emoji in Discord share header** — e.g. `🔴 SUPER RARE — Recycle Bin Find`. Upload date icon is era-matched: 🕰️ LEGENDARY · 📜 SUPER RARE · 🗓️ VERY/RARE · 📅 COMMON.
+
+---
+
+## [7.16.5] — 2026-06-04 — Resume: reconstruct finalString if reloaded before result screen
+
+### 🐛 Fixed
+- **Resume after mid-result-screen reload** — if the page was reloaded before the result screen was fully rendered, `finalString` was missing from saved state. Game now reconstructs it from the stored search parameters on resume so the result screen renders correctly.
+
+---
+
+## [7.16.4] — 2026-06-04 — Inline card stars visible + live overall score
+
+### 🐛 Fixed
+- **Inline card stars not rendering** — CSS specificity conflict hid the rarity star indicators. Fixed with explicit selector targeting.
+
+### ✨ Added
+- **Live overall score** in the result screen header updates as cards are rated.
+
+---
+
+## [7.16.3] — 2026-06-04 — Cache video cards in game state for instant resume
+
+### ✨ Added
+- **Video card state caching** — rendered inline card data is now persisted to game state. On resume the cards restore instantly without re-fetching from the proxy, including all rarity/stat data.
+
+---
+
+## [7.16.2] — 2026-06-04 — Fix phantom resume button + re-randomize re-searches
+
+### 🐛 Fixed
+- **Phantom "Resume" button** — resume button appeared even when no valid saved game existed. Now checks for a complete saved state before showing the button.
+- **Re-randomize on re-search** — hitting Spin again from the result screen now generates a fresh random string rather than repeating the previous one.
+
+---
+
+## [7.16.1] — 2026-06-04 — Tighter result screen layout, smaller cards for full-screen fit
+
+### ✨ Changed
+- Result screen tracker and inline cards scaled down for better fit at all viewport sizes. Full-screen mode now shows all 5 cards without horizontal scroll on 1080p.
+
+---
+
+## [7.16.0] — 2026-06-04 — Fix resume game, footer auto-hide, 3-column video grid
+
+### 🐛 Fixed
+- **Resume game flow** — mid-game state now restores correctly including format, spin count, and found-it history.
+
+### ✨ Added
+- **Footer auto-hide** — footer collapses when the game is active, expanding back on idle.
+- **3-column video grid** at wide viewports in the result screen.
+
+---
+
+## [7.15.9] — 2026-06-04 — Spin direction arrows fill button interior
+
+### ✨ Changed
+- CW/CCW spin direction arrow icons now fill the full button interior (large, edge-to-edge) for clearer tap targets.
+
+---
+
+## [7.15.8] — 2026-06-04 — Unified Discord share via buildDiscordShare()
+
+### ✨ Changed
+- Extracted `buildDiscordShare()` helper used by both the Tracker row and Found It overlay. Both now produce the same rich Discord format (rarity emoji, title, views, YT link, site credit).
+
+---
+
+## [7.15.7] — 2026-06-04 — Lucky Lefty CCW spin, flashy SPIN label, pointer fix
+
+### ✨ Added
+- **Lucky Lefty mode** — CCW (counter-clockwise) spin direction toggle. Preserves per-game live colors. Pointer tick deflects in the correct direction for each spin mode.
+
+### 🐛 Fixed
+- **Pointer direction and smoothness** — tick animation now deflects with spin direction rather than always right. Easing improved.
+- **Search fallback** — if the primary search string yields no results, a simplified fallback string is tried automatically.
+
+---
+
+## [7.15.6] — 2026-06-04 — Pointer tick deflects with spin direction; CW/CCW toggle
+
+### ✨ Added
+- Pointer tick visually deflects CW or CCW matching the active spin direction. CW/CCW toggle button with per-game live color theming.
+
+---
+
+## [7.15.5] — 2026-06-04 — Vertical 16:9 cards, per-card stat hue, Found It 2×2 grid
+
+### ✨ Added
+- Inline result cards rendered as vertical 16:9 thumbnails with per-card stat hue coloring.
+- Found It share buttons arranged as a 2×2 grid.
+
+---
+
+## [7.15.4] — 2026-06-04 — 16:9 inline thumbs, channel video count fire-and-forget
+
+### ✨ Added
+- Inline result thumbnails cropped to 16:9 aspect ratio.
+
+### 🐛 Fixed
+- **Channel video count timeout** — scrape was blocking the page for 4s+; moved to fire-and-forget so it never stalls the UI.
+
+---
+
 ## [7.15.3] — 2026-06-04 — Found It share buttons, result screen full-width expansion
 
 ### ✨ Added
