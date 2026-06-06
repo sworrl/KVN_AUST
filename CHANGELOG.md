@@ -14,6 +14,15 @@
 
 ---
 
+## [7.17.0] — 2026-06-06 — Sonder two-part date generation + pill editor
+
+### ✨ Added
+- **Sonder two-part date number screen** — Date formats now show Year and Random as two separate animated components, each with its own rolling display and Min/Max labels.
+- **Sonder format reveal split** — Date format preview shows YYYY (year range) and MMDD (random) as two labeled parts instead of one "(random)" label.
+- **Sonder pill editor** — Clicking the result pill on a date format opens an inline editor: set a specific year (clamped to the format's min/max) and a 4-digit MMDD suffix, then hit APPLY to update the search string.
+
+---
+
 ## [7.16.7] — 2026-06-04 — Year + age badge on every inline card
 
 ### ✨ Added

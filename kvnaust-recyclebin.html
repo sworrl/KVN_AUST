@@ -1265,15 +1265,29 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 
   <div id="number-screen" class="screen">
     <div class="number-box">
-      <div class="rolling-number" id="rollingNumber">0000</div>
-      <div class="range-display"><div>Min<br><span id="rangeMin">0</span></div><div>Max<br><span id="rangeMax">9999</span></div></div>
+      <div id="numSingle" style="display:flex;flex-direction:column;align-items:center;gap:20px">
+        <div class="rolling-number" id="rollingNumber">0000</div>
+        <div class="range-display"><div>Min<br><span id="rangeMin">0</span></div><div>Max<br><span id="rangeMax">9999</span></div></div>
+      </div>
+      <div id="numDate" style="display:none;flex-direction:row;gap:24px;align-items:flex-start;flex-wrap:wrap;justify-content:center">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="font-size:.65rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase">Year</div>
+          <div class="rolling-number" id="rollingYear" style="min-width:120px">----</div>
+          <div class="range-display"><div>Min<br><span id="yrMin">2006</span></div><div>Max<br><span id="yrMax">2026</span></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="font-size:.65rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase">Random</div>
+          <div class="rolling-number" id="rollingSuffix" style="min-width:120px">----</div>
+          <div class="range-display"><div>Min<br><span id="sfxMin">0101</span></div><div>Max<br><span id="sfxMax">1228</span></div></div>
+        </div>
+      </div>
       <button class="gen-btn" id="genBtn" onclick="generateNumber()">GENERATE</button>
     </div>
   </div>
 
   <div id="result-screen" class="screen">
     <div class="result-sub">Search YouTube for:</div>
-    <div class="result-pill" id="resultPill" onclick="copyResult()"></div>
+    <div class="result-pill" id="resultPill" onclick="openPillEditor()"></div>
     <div class="video-tracker">
       <div class="vt-row" id="vtBtnRow" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         <button class="vt-btn copy-btn" onclick="copyResult()">Copy</button>
@@ -3357,7 +3371,8 @@ function showFormatReveal(){
   // Build the final HTML to reveal
   let finalHtml;
   if(f.sp==='static')finalHtml=`<span>${esc(f.tpl)}</span>`;
-  else if(f.sp==='date'||f.sp==='monthdate')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (random)</span>`;
+  else if(f.sp==='date'){const pre=f.tpl.replace('{V}','');finalHtml=(pre?`<span>${esc(pre)}</span>`:'') +`<span class="vp">YYYY</span><span class="rng"> (${f.minY||2006}–${f.maxY||2026})</span><span class="vp"> MMDD</span><span class="rng"> (random)</span>`;}
+  else if(f.sp==='monthdate')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (random)</span>`;
   else if(f.sp==='hex4'||f.sp==='hexN')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (hex)</span>`;
   else if(f.sp==='time')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (time of day)</span>`;
   else{const p=f.pad||4;finalHtml=`${f.tpl.replace('{V}',`<span class="vp">${'X'.repeat(p)}</span>`)}<span class="rng">(${String(f.min).padStart(p,'0')}-${String(f.max).padStart(p,'0')})</span>`}
@@ -3381,9 +3396,18 @@ function showFormatReveal(){
 
 function setupNumberScreen(){
   const f=chosenFormat;if(!f)return;
+  const single=document.getElementById('numSingle'),dateParts=document.getElementById('numDate');
+  if(f.sp==='date'){
+    single.style.display='none'; dateParts.style.display='flex';
+    document.getElementById('yrMin').textContent=f.minY||'2006';
+    document.getElementById('yrMax').textContent=f.maxY||'2026';
+    document.getElementById('rollingYear').textContent='----';
+    document.getElementById('rollingSuffix').textContent='----';
+    return;
+  }
+  single.style.display='flex'; dateParts.style.display='none';
   const mn=document.getElementById('rangeMin'),mx=document.getElementById('rangeMax'),nm=document.getElementById('rollingNumber');
-  if(f.sp==='date'){mn.textContent=f.minY||'2006';mx.textContent=f.maxY||'2026';nm.textContent='--------'}
-  else if(f.sp==='monthdate'){mn.textContent='2007';mx.textContent='2013';nm.textContent='--- --, ----'}
+  if(f.sp==='monthdate'){mn.textContent='2007';mx.textContent='2013';nm.textContent='--- --, ----'}
   else if(f.sp==='hex4'){mn.textContent='0000';mx.textContent='FFFF';nm.textContent='----'}
   else if(f.sp==='hexN'){const p=f.pad||3;mn.textContent='0'.repeat(p);mx.textContent='F'.repeat(p);nm.textContent='-'.repeat(p)}
   else if(f.sp==='time'){mn.textContent='000000';mx.textContent='235959';nm.textContent='------'}
@@ -3393,17 +3417,37 @@ function setupNumberScreen(){
 let numberGenerating=false;
 function generateNumber(){
   if(numberGenerating)return;numberGenerating=true;
-  const f=chosenFormat,nm=document.getElementById('rollingNumber'),btn=document.getElementById('genBtn');
+  const f=chosenFormat,btn=document.getElementById('genBtn');
   btn.style.pointerEvents='none';
   const final=generateFinalNumber();
   chosenNumber=final;
   const dur=3000,t0=performance.now();
-  const numChars='0123456789';
   const allChars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
+  if(f.sp==='date'){
+    const yrEl=document.getElementById('rollingYear'),sfxEl=document.getElementById('rollingSuffix');
+    const yrFinal=final.slice(0,4),sfxFinal=final.slice(4);
+    (function frame(now){
+      const elapsed=now-t0,progress=Math.min(elapsed/dur,1);
+      const lock=Math.floor(progress*progress*4);
+      let yh='',sh='';
+      for(let i=0;i<4;i++){
+        if(i<lock){yh+=`<span style="color:#fff">${esc(yrFinal[i])}</span>`;sh+=`<span style="color:#fff">${esc(sfxFinal[i])}</span>`}
+        else{const c1=allChars[Math.floor(Math.random()*allChars.length)],c2=allChars[Math.floor(Math.random()*allChars.length)];
+          yh+=`<span style="color:${SHUFFLE_COLORS[Math.floor(Math.random()*SHUFFLE_COLORS.length)]}">${c1}</span>`;
+          sh+=`<span style="color:${SHUFFLE_COLORS[Math.floor(Math.random()*SHUFFLE_COLORS.length)]}">${c2}</span>`}
+      }
+      yrEl.innerHTML=yh;sfxEl.innerHTML=sh;
+      if(Math.random()<(1-progress)*0.4)playTick(progress);
+      if(progress<1){requestAnimationFrame(frame)}
+      else{yrEl.textContent=yrFinal;sfxEl.textContent=sfxFinal;btn.style.pointerEvents='';numberGenerating=false;playWinSound();setTimeout(goNext,900)}
+    })(performance.now());
+    return;
+  }
+
+  const nm=document.getElementById('rollingNumber');
   (function frame(now){
-    const elapsed=now-t0;
-    const progress=Math.min(elapsed/dur,1);
+    const elapsed=now-t0,progress=Math.min(elapsed/dur,1);
     const lockPoint=Math.floor(progress*progress*final.length);
     let html='';
     for(let i=0;i<final.length;i++){
@@ -4161,6 +4205,43 @@ function animatedReRandomize(callback){
 }
 
 function reRandomize(){animatedReRandomize(()=>{showToast('Re-randomized!');browseResults();})}
+
+function openPillEditor(){
+  const f=chosenFormat;
+  if(!f||f.sp!=='date'){copyResult();return;}
+  const pill=document.getElementById('resultPill');
+  const yr=(chosenNumber||'').slice(0,4),sfx=(chosenNumber||'').slice(4,8);
+  const minY=f.minY||2006,maxY=f.maxY||2026;
+  pill.innerHTML='<div style="display:flex;align-items:flex-end;gap:16px;justify-content:center;flex-wrap:wrap;padding:4px 0">'
+    +'<div style="text-align:center"><div style="font-size:.55rem;color:var(--muted);letter-spacing:1px;margin-bottom:4px">YEAR ('+minY+'–'+maxY+')</div>'
+    +'<input id="pillYrIn" type="number" min="'+minY+'" max="'+maxY+'" value="'+yr+'" '
+    +'style="width:100px;text-align:center;background:transparent;border:none;border-bottom:2px solid var(--accent);'
+    +'color:#fff;font-family:\'Space Mono\',monospace;font-size:1.8rem;font-weight:700;outline:none;-moz-appearance:textfield"></div>'
+    +'<div style="text-align:center"><div style="font-size:.55rem;color:var(--muted);letter-spacing:1px;margin-bottom:4px">MMDD (RANDOM)</div>'
+    +'<input id="pillSfxIn" type="text" maxlength="4" value="'+sfx+'" '
+    +'style="width:100px;text-align:center;background:transparent;border:none;border-bottom:2px solid var(--accent);'
+    +'color:#fff;font-family:\'Space Mono\',monospace;font-size:1.8rem;font-weight:700;outline:none"></div>'
+    +'<div style="display:flex;flex-direction:column;gap:6px">'
+    +'<button onclick="applyPillEdit()" style="background:var(--accent);border:none;color:#fff;padding:7px 18px;border-radius:8px;cursor:pointer;font-weight:700;font-size:.75rem;letter-spacing:1px">APPLY</button>'
+    +'<button onclick="closePillEditor()" style="background:#333;border:1px solid #444;color:#999;padding:5px 14px;border-radius:8px;cursor:pointer;font-size:.7rem">cancel</button>'
+    +'</div></div>';
+  setTimeout(function(){var el=document.getElementById('pillYrIn');if(el)el.select();},50);
+}
+function closePillEditor(){var p=document.getElementById('resultPill');if(p)p.textContent=finalString;}
+function applyPillEdit(){
+  const f=chosenFormat,minY=f.minY||2006,maxY=f.maxY||2026;
+  const yIn=document.getElementById('pillYrIn'),sIn=document.getElementById('pillSfxIn');
+  if(!yIn||!sIn)return;
+  let y=parseInt(yIn.value,10);
+  if(isNaN(y))y=minY;
+  y=Math.max(minY,Math.min(maxY,y));
+  const sfx=sIn.value.trim();
+  if(!/^\d{4}$/.test(sfx)){showToast('Enter 4-digit MMDD (e.g. 0315)','warn');return;}
+  chosenNumber=String(y)+sfx;
+  finalString=buildFinalString(chosenNumber);
+  closePillEditor();
+  browseResults();
+}
 
 
 
@@ -6427,7 +6508,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.16.7","build":"2026-06-05T10:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.17.0","build":"2026-06-06T10:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
