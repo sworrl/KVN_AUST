@@ -16,14 +16,14 @@
 
 KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like sonder, like the way YouTube used to be."* That's the entire pitch for this tool. Every spin pulls up someone's nephew's recital from 2009 that nobody else has ever clicked. Their whole life, one click away, entirely unwitnessed.
 
-> **Heads up — naming.** **Sonder** is the name of *this tool*. **YouTube's Recycle Bin** is **KVN AUST's** term for the *content* (the graveyard of zero-view videos this tool helps you explore). The two names are intentionally distinct so KVN's series identity stays his and we don't claim it.
+> **Heads up: naming.** **Sonder** is the name of *this tool*. **YouTube's Recycle Bin** is **KVN AUST's** term for the *content* (the graveyard of zero-view videos this tool helps you explore). The two names are intentionally distinct so KVN's series identity stays his and we don't claim it.
 
 <p align="center">
   <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-KVN_AUST-red?style=flat-square&logo=youtube" alt="KVN AUST YouTube Channel"></a>
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-58ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.16.7-1a1a2e?style=flat-square" alt="Changelog"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.18.0-1a1a2e?style=flat-square" alt="Changelog"></a>
   <a href="CHANGELOG.md#700--2026-05-03--the-go-rewrite"><img src="https://img.shields.io/badge/Backend-Go_(rewritten_from_PHP)-00ADD8?style=flat-square&logo=go" alt="Go backend"></a>
 </p>
 
@@ -38,7 +38,7 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
 
 ---
 
-YouTube hosts over **20 billion videos**. An estimated **6 billion** have fewer than 10 views. **Over 1 billion** have exactly **zero views** — uploaded and never watched by a single human being. These are videos with default device filenames like `IMG 0001`, `DSCF0042`, or `MOV 0037`, uploaded and immediately forgotten.
+YouTube hosts over **20 billion videos**. An estimated **6 billion** have fewer than 10 views. **Over 1 billion** have exactly **zero views**, uploaded and never watched by a single human being. These are videos with default device filenames like `IMG 0001`, `DSCF0042`, or `MOV 0037`, uploaded and immediately forgotten.
 
 KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of forgotten content. **Sonder** generates random search strings from those default filename patterns to help you discover zero-view YouTube videos yourself.
 
@@ -48,7 +48,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 ## Sonder vs. NBVS — Two Tools, One Mission
 
-> KVN AUST's community built two search tools that approach the same graveyard from different angles. They're complementary — and Sonder now ships with NBVS's engine built in as an optional Power Mode.
+> KVN AUST's community built two search tools that approach the same graveyard from different angles. They're complementary; Sonder now ships with NBVS's engine built in as an optional Power Mode.
 
 <table>
 <tr>
@@ -140,7 +140,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
   <img src="https://img.shields.io/badge/Power_Mode-NBVS_Engine_Built_In-f39c12?style=flat-square&labelColor=1a1a2e" alt="NBVS Power Mode built in">
 </p>
 
-> **Power Mode** is an optional in-page search engine adapted from [NBVS](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher) and built directly into Sonder. Add a free YouTube Data API key in Settings to unlock real view counts, sort by fewest views (the gem-hunting mode), filter Shorts, and load 50 results at a time — right inside the game. No key? Everything works exactly as before: the spinner generates your format, you open it in YouTube. No setup, no limits, no expiry.
+> **Power Mode** is an optional in-page search engine adapted from [NBVS](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher) and built directly into Sonder. Add a free YouTube Data API key in Settings to unlock real view counts, sort by fewest views (the gem-hunting mode), filter Shorts, and load 50 results at a time, right inside the game. No key? Everything works exactly as before: the spinner generates your format, you open it in YouTube. No setup, no limits, no expiry.
 
 
 ---
@@ -149,11 +149,11 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 > **NBVS (YouTube Non-Biased Video Searcher)** is created and owned by **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)).  
 > Source repo: **[kvnaust/YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher)** · License: MIT  
-> This section documents the *Falcon Technix community mirror* only — KVN AUST's tool, hosted and hardened by us.
+> This section documents the *Falcon Technix community mirror* only: KVN AUST's tool, hosted and hardened by us.
 
-> **[nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/)** — A secured, community-enriched hosted deployment of [YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher), operated by [Falcon Technix](https://falcontechnix.com) as a free community service.
+> **[nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/)**: A secured, community-enriched hosted deployment of [YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher), operated by [Falcon Technix](https://falcontechnix.com) as a free community service.
 
-The GitHub Pages build works fine for its intended purpose. For a public daily-driver, loading React, Babel, and Tailwind from third-party CDNs without integrity checks is a real supply-chain risk — a CDN compromise silently injects arbitrary code into every user's browser. The FT mirror eliminates that attack surface entirely, removes the API key requirement, and layers in community tooling — while automatically staying in sync with KVN's upstream.
+The GitHub Pages build works fine for its intended purpose. For a public daily-driver, loading React, Babel, and Tailwind from third-party CDNs without integrity checks is a real supply-chain risk: a CDN compromise silently injects arbitrary code into every user's browser. The FT mirror eliminates that attack surface entirely, removes the API key requirement, and layers in community tooling. It stays in sync with KVN's upstream automatically.
 
 ### What's Different
 
@@ -174,11 +174,11 @@ The GitHub Pages build works fine for its intended purpose. For a public daily-d
 
 ### FT Proxy — No API Key Required
 
-**FT Mode** intercepts YouTube API calls client-side (fetch interceptor in `nbvs-community.js`) and reroutes them through the Falcon Technix Go backend. The response shapes are identical to YouTube Data API v3 — NBVS's React app never knows the calls were rerouted.
+**FT Mode** intercepts YouTube API calls client-side (fetch interceptor in `nbvs-community.js`) and reroutes them through the Falcon Technix Go backend. The response shapes are identical to YouTube Data API v3; NBVS's React app never knows the calls were rerouted.
 
 When NBVS makes a search call, the fetch interceptor in `nbvs-community.js` silently reroutes it to the FT Go backend at `/api/kvn/yt-search`. The Go backend attempts the search via a shuffled pool of healthy Invidious instances, falling back to direct YouTube scraping if all instances fail; on CAPTCHA detection it returns an upstream error and the UI shows a toast. Stats calls (`/api/kvn/yt-stats`) follow the same waterfall — Invidious first, then oEmbed, then direct scrape. Both endpoints return response shapes identical to YouTube Data API v3, so NBVS's React app never knows the calls were rerouted.
 
-**Visitors with their own API key** can switch to "My API Key" mode. Calls go directly to `googleapis.com` — the FT proxy is not in the path and the key never reaches our servers.
+**Visitors with their own API key** can switch to "My API Key" mode. Calls go directly to `googleapis.com`; the FT proxy is not in the path and the key never reaches our servers.
 
 ### Invidious Instance Rotation
 
@@ -239,7 +239,7 @@ Injected before `</body>` on every sync. Domain-locked to `nbvs.falcontechnix.co
 
 **NBVS** (`index.html`) is created by [KVN AUST](https://www.youtube.com/@KVNAUST) and [MIT licensed](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher/blob/main/LICENSE). All credit for the tool's concept, design, and functionality belongs to him.
 
-**Falcon Technix operates two wrappers** — neither is included in this repo and neither is open source:
+**Falcon Technix operates two wrappers.** Neither is included in this repo and neither is open source:
 
 | Wrapper | Deployed at | What it is |
 |:--------|:------------|:-----------|
@@ -254,9 +254,9 @@ The standalone `kvnaust-recyclebin.html` in this repo (GPL-3.0) and KVN AUST's `
 
 ### Upstream Security — Open PR
 
-Falcon Technix submitted a pull request to the upstream NBVS repo to add Subresource Integrity (SRI) hashes for all three CDN-loaded scripts. If merged, GitHub Pages visitors get cryptographic pinning on React 18.3.1, ReactDOM 18.3.1, and Babel 7.29.7 — a CDN compromise would be blocked by the browser rather than silently executing.
+Falcon Technix submitted a pull request to the upstream NBVS repo to add Subresource Integrity (SRI) hashes for all three CDN-loaded scripts. If merged, GitHub Pages visitors get cryptographic pinning on React 18.3.1, ReactDOM 18.3.1, and Babel 7.29.7; a CDN compromise would be blocked by the browser rather than silently executing.
 
-> 🔐 **[kvnaust/YouTube-NonBiasedVideoSearcher — PR #1: Add SRI hashes for CDN scripts](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher/pull/1)**  
+> 🔐 **[kvnaust/YouTube-NonBiasedVideoSearcher PR #1: Add SRI hashes for CDN scripts](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher/pull/1)**  
 > Status: **Open** — submitted 2026-06-04
 
 The FT mirror does not use CDNs at all (replaced at sync time) so this PR specifically protects users of the original GitHub-hosted tool.
@@ -410,13 +410,13 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 
 > **TL;DR — [Download `kvnaust-recyclebin.html`](kvnaust-recyclebin.html), open it in any browser, and you're playing the full game. That's it. No install, no account, no internet required after the first format sync.**
 
-The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`) is **GPL-3.0**. Fork it, host it, mod it, run it offline — do whatever you want. No attribution required to KVN AUST or to us, though it'd be cool of you.
+The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`) is **GPL-3.0**. Fork it, host it, mod it, run it offline; do whatever you want. No attribution required to KVN AUST or to us, though it'd be cool of you.
 
-**We actively encourage you to run it locally.** The whole tool is one HTML file. Drop it on a thumb drive, host it on your own server, embed it in a side project — go nuts. You don't need us, and we don't want you to feel like you do.
+**We actively encourage you to run it locally.** The whole tool is one HTML file. Drop it on a thumb drive, host it on your own server, embed it in a side project. Go nuts. You don't need us, and we don't want you to feel like you do.
 
 **The only reason to play on [kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/) is if you want the community layer:** cloud save across devices, leaderboards, player profiles, multiplayer co-watching, discovery pages, daily challenges, season events. We pay for that hosting out of our own pocket because we think it's fun.
 
-**No ads. No paywalls. No tracking pixels. No "premium" tier. No "donate to unlock." No monetization. Not now, not ever.** If we ever change our minds, the offline copy in this repo will keep working forever — that's what GPL-3.0 protects. Pick whichever side suits you.
+**No ads. No paywalls. No tracking pixels. No "premium" tier. No "donate to unlock." No monetization. Not now, not ever.** If we ever change our minds, the offline copy in this repo will keep working forever; that's what GPL-3.0 protects. Pick whichever side suits you.
 
 ---
 
@@ -426,7 +426,7 @@ The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`)
 
 > **[Play YouTube's Recycle Bin at kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/)** — always up to date, cloud save, community leaderboard, and more.
 
-The hosted version (wrapper v7.7.7) wraps the same HTML (v7.8.1) from this repo with exclusive features:
+The hosted version (wrapper v7.16.0) wraps the same HTML (v7.18.0) from this repo with exclusive features:
 
 | Feature | Hosted | Standalone |
 |:--------|:------:|:----------:|

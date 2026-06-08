@@ -523,7 +523,7 @@ input,select,textarea{-webkit-appearance:none;appearance:none}
 .wheel-container{position:relative;width:min(68vh,68vw,520px);height:min(68vh,68vw,520px)}
 canvas#wheelCanvas{width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 0 20px rgba(0,0,0,.5));pointer-events:none}
 .wheel-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);z-index:10;animation:pointerIdle 2s ease-in-out infinite;transition:top .3s cubic-bezier(.4,0,.2,1)}
-.wheel-pointer svg{filter:drop-shadow(0 4px 8px rgba(0,0,0,.7)) drop-shadow(0 0 6px var(--pointer-glow,transparent));transition:filter .15s}
+.wheel-pointer svg{filter:drop-shadow(0 4px 8px rgba(0,0,0,.7)) drop-shadow(0 0 6px var(--pointer-glow,transparent));transition:filter .15s;transform-origin:50% 0%}
 .wheel-pointer.locked{top:-6px;animation:pointerBite .25s cubic-bezier(.4,0,.2,1) forwards}
 @keyframes pointerIdle{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(3px)}}
 @keyframes pointerBite{0%{transform:translateX(-50%) translateY(-4px) scale(1)}40%{transform:translateX(-50%) translateY(8px) scale(1.1)}70%{transform:translateX(-50%) translateY(2px) scale(1.05)}100%{transform:translateX(-50%) translateY(4px) scale(1.02)}}
@@ -2190,6 +2190,7 @@ let formats=[...ALL_FORMATS],wheelFormats=[],wheelMode='random',selectedFormats=
 let currentScreen='start-screen',chosenFormat=null,chosenNumber=null,finalString='',wheelAngle=0,spinning=false;
 let bingoState=Array(25).fill(false),bingoWinShown=false,currentGameId=null,sessionRounds=[];
 let lastTickSegment=-1;
+let tickerAngle=0,tickerVelocity=0;
 let spinDir=1; // 1=CW, -1=CCW
 let bingoPicked=null;
 let gameActive=false;
@@ -2559,7 +2560,7 @@ function saveGameToHistory(){
 }
 
 function startNextRound(){wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';maxReachedIdx=1;currentSearchVideos=[];showScreen('wheel-screen');pickWheelFormats();drawWheel();resetPointer()}
-function resetPointer(){const ptr=document.getElementById('wheelPointer');if(ptr){ptr.classList.remove('locked');ptr.style.animation='';ptr.style.top='';ptr.style.setProperty('--pointer-glow','transparent');ptr.style.setProperty('--pointer-inner','#444');void ptr.offsetHeight;ptr.style.animation='pointerIdle 2s ease-in-out infinite'}const pf=document.getElementById('ptrFill');if(pf)pf.setAttribute('stroke','#888')}
+function resetPointer(){const ptr=document.getElementById('wheelPointer');if(ptr){ptr.classList.remove('locked');ptr.style.animation='';ptr.style.top='';ptr.style.setProperty('--pointer-glow','transparent');ptr.style.setProperty('--pointer-inner','#444');const svg=ptr.querySelector('svg');if(svg)svg.style.transform='';void ptr.offsetHeight;ptr.style.animation='pointerIdle 2s ease-in-out infinite'}const pf=document.getElementById('ptrFill');if(pf)pf.setAttribute('stroke','#888');tickerAngle=0;tickerVelocity=0;}
 function newSession(){clearGameState();sessionRounds=[];currentGameId=null;wheelAngle=0;chosenFormat=null;chosenNumber=null;finalString='';gameActive=false;maxReachedIdx=0;hasSpunOnce=false;document.getElementById('wheelTop').style.display='';resetTracker();showFooter();showScreen('start-screen')}
 
 const GAME_STATE_KEY='kvn_mid_game';
@@ -3074,7 +3075,7 @@ function spinWheel(){
   if(spinning)return;
   // ~10% chance CCW (Lucky Lefty)
   setSpinDir(Math.random()<0.10?-1:1);
-  spinning=true;lastTickSegment=-1;
+  spinning=true;lastTickSegment=-1;tickerAngle=0;tickerVelocity=0;
   if(!hasSpunOnce){hasSpunOnce=true;document.getElementById('wheelTop').style.display='none'}
   const btn=document.getElementById('spinBtn');btn.style.pointerEvents='none';btn.classList.add('spinning');
   setTimeout(()=>btn.classList.remove('spinning'),300);
@@ -3102,25 +3103,25 @@ function spinWheel(){
   const dir=spinDir;
   function doSpin(){
   const start=wheelAngle,dur=4200+Math.random()*1800,t0=performance.now();
+  const ptr=document.getElementById('wheelPointer');
+  const ptrSvg=ptr?ptr.querySelector('svg'):null;
   (function anim(now){
     const p=Math.min((now-t0)/dur,1);wheelAngle=start+dir*target*(1-Math.pow(1-p,5));drawWheel();
     // Tick sound on segment change
     const curSeg=Math.floor(((wheelAngle%(2*Math.PI))+2*Math.PI)%(2*Math.PI)/arc)%n;
     if(curSeg!==lastTickSegment){
       lastTickSegment=curSeg;playTick(1-p);
-      // Pulse pointer with segment color
+      // Pulse pointer with segment color + spring impulse
       const segColor=activeWheelColors[curSeg%activeWheelColors.length];
-      const ptr=document.getElementById('wheelPointer');
       if(ptr){
         ptr.style.setProperty('--pointer-glow',segColor);ptr.style.setProperty('--pointer-inner',segColor);
-        ptr.getAnimations().forEach(a=>a.cancel());
-        const tickMs=Math.max(90,Math.min(180,Math.round((1-p)*200)));
-        const tickAnim=dir===1?'pointerTick':'pointerTickCCW';
-        ptr.style.animation=`${tickAnim} ${tickMs}ms cubic-bezier(.2,1.5,.4,1) forwards`;
+        tickerVelocity+=dir*(1-p)*8;
       }
       const ptrFill=document.getElementById('ptrFill');
       if(ptrFill)ptrFill.setAttribute('stroke',segColor);
     }
+    tickerVelocity+=-0.22*tickerAngle;tickerVelocity*=0.76;tickerAngle+=tickerVelocity;
+    if(ptrSvg)ptrSvg.style.transform=`rotate(${tickerAngle.toFixed(2)}deg)`;
     if(p<1)requestAnimationFrame(anim);
     else{
       spinning=false;btn.style.pointerEvents='';
@@ -6514,7 +6515,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.17.1","build":"2026-06-06T12:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.18.0","build":"2026-06-07T00:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
@@ -6539,9 +6540,9 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.16.7",
-  "build": "2026-06-05T10:00:00",
-  "changelog": "Format cache fix (118 bug), rarity + era icon in Discord share, resume reconstruct, karaoke F12",
+  "version": "7.18.0",
+  "build": "2026-06-07T00:00:00",
+  "changelog": "Ticker spring physics",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }

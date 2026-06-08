@@ -14,7 +14,7 @@
 
 ---
 
-When diving into YouTube's Recycle Bin, you'll occasionally encounter channels and videos that seem inexplicable — thousands of identical uploads, cryptic titles, machine-generated content. This document explains the ones the community has figured out.
+When diving into YouTube's Recycle Bin, you'll occasionally encounter channels and videos that seem inexplicable: thousands of identical uploads, cryptic titles, machine-generated content. This document explains the ones the community has figured out.
 
 > Have you found something weird that isn't explained here? Share it in the [KVN AUST Discord](https://www.youtube.com/@KVNAUST) or open an issue on [GitHub](https://github.com/sworrl/KVN_AUST/issues).
 
@@ -38,9 +38,7 @@ Titles like `gcs-pkg-20200105-032036-742513` are automated system log IDs and ti
 
 ### The volume
 
-The sheer number is intentional — YouTube uploads hundreds of thousands of these test videos across multiple bot channels to monitor performance at scale across different regions, codecs, and resolutions.
-
-> While the bizarre nature of these videos has sparked many conspiracy theories over the years, they are just behind-the-scenes engineering tools used to ensure the platform is functioning correctly.
+The sheer number is intentional: YouTube uploads hundreds of thousands of these test videos across multiple bot channels to monitor performance at scale across different regions, codecs, and resolutions.
 
 ---
 

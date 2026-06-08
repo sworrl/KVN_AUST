@@ -14,6 +14,13 @@
 
 ---
 
+## [7.18.0] — 2026-06-07 — Ticker spring physics
+
+### ✨ Added
+- **Ticker spring physics** — the pointer arrow now physically deflects when each nail passes during a spin. Impulse magnitude scales with wheel speed (strong at full spin, gentle as it slows). Spring-damping system oscillates the pointer back to center between nails. Rotation pivots from the mounting point (top of the arrow), not the center.
+
+---
+
 ## [7.17.1] — 2026-06-06 — Mobile polish + footer date chip
 
 ### 🔧 Fixed
