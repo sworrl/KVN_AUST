@@ -42,11 +42,11 @@ YouTube hosts over **20 billion videos**. An estimated **6 billion** have fewer 
 
 KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of forgotten content. **Sonder** generates random search strings from those default filename patterns to help you discover zero-view YouTube videos yourself.
 
-> **[The Complete Recycle Bin Format Map](FORMAT-MAP.md)** — Every known default filename keyphrase, range, source device, and contributor credit. Community-maintained.
+> **[The Complete Recycle Bin Format Map](FORMAT-MAP.md)**: Every known default filename keyphrase, range, source device, and contributor credit. Community-maintained.
 
 ---
 
-## Sonder vs. NBVS — Two Tools, One Mission
+## Sonder vs. NBVS: Two Tools, One Mission
 
 > KVN AUST's community built two search tools that approach the same graveyard from different angles. They're complementary; Sonder now ships with NBVS's engine built in as an optional Power Mode.
 
@@ -65,16 +65,16 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 <tr>
 <td><strong>YouTube API key required</strong></td>
 <td align="center">❌ Never</td>
-<td align="center">❌ Optional at FT Mirror — ✅ Required on GitHub Pages</td>
+<td align="center">❌ Optional at FT Mirror, ✅ Required on GitHub Pages</td>
 </tr>
 <tr>
 <td><strong>Rate limits</strong></td>
-<td align="center">None — opens YouTube directly</td>
+<td align="center">None, opens YouTube directly</td>
 <td align="center">None at FT Mirror (server proxy) · ~200/day per Gmail on GitHub Pages</td>
 </tr>
 <tr>
 <td><strong>Algorithm bias</strong></td>
-<td align="center">Bypassed — raw filename search, no watch-history influence</td>
+<td align="center">Bypassed, raw filename search, no watch-history influence</td>
 <td align="center">Still uses YouTube's search index</td>
 </tr>
 <tr>
@@ -145,7 +145,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 ---
 
-## NBVS @ Falcon Technix — Hardened Community Mirror
+## NBVS @ Falcon Technix: Hardened Community Mirror
 
 > **NBVS (YouTube Non-Biased Video Searcher)** is created and owned by **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)).  
 > Source repo: **[kvnaust/YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher)** · License: MIT  
@@ -157,26 +157,26 @@ The GitHub Pages build works fine for its intended purpose. For a public daily-d
 
 ### What's Different
 
-| | GitHub Pages NBVS | FT Mirror — nbvs.falcontechnix.com |
+| | GitHub Pages NBVS | FT Mirror, nbvs.falcontechnix.com |
 |:--|:--:|:--:|
-| **YouTube API key** | ✅ Required | ❌ Optional — FT Proxy works without one |
-| **Rate limits** | ~200 searches/day per Gmail account | None — server-side proxy, no quota exposure |
-| **CDN scripts** (React 18, Babel, Tailwind) | Loaded from `unpkg.com` / `cdn.tailwindcss.com` | Fully self-hosted — CDNs eliminated |
-| **Subresource Integrity** | None | Not needed — CDNs are gone entirely |
-| **Babel transpiler** | Runs in-browser on every page load | Eliminated — JSX pre-compiled at sync time via esbuild |
-| **Content Security Policy** | None | Enforced — `default-src 'self'`, no external script origins |
+| **YouTube API key** | ✅ Required | ❌ Optional, FT Proxy works without one |
+| **Rate limits** | ~200 searches/day per Gmail account | None, server-side proxy, no quota exposure |
+| **CDN scripts** (React 18, Babel, Tailwind) | Loaded from `unpkg.com` / `cdn.tailwindcss.com` | Fully self-hosted, CDNs eliminated |
+| **Subresource Integrity** | None | Not needed, CDNs are gone entirely |
+| **Babel transpiler** | Runs in-browser on every page load | Eliminated, JSX pre-compiled at sync time via esbuild |
+| **Content Security Policy** | None | Enforced, `default-src 'self'`, no external script origins |
 | **Country / region filter** | ❌ | ✅ 16-country dropdown, wired to Invidious `region=` and YouTube `gl=` |
-| **Themes** | Default dark only | 11 themes — VHS Red · Deep Dive · Phosphor · Matrix · Midnight · Ghost · Classic Dark · Classic Light · Aurora · Ember · Prism |
+| **Themes** | Default dark only | 11 themes, VHS Red · Deep Dive · Phosphor · Matrix · Midnight · Ghost · Classic Dark · Classic Light · Aurora · Ember · Prism |
 | **Format Finder panel** | ❌ | ✅ All 267 FORMAT-MAP.md formats, category filter, variable input, inject to search bar |
-| **Auto-sync from upstream** | Manual push | ✅ systemd timer — deploys within ~1 hour of any upstream commit |
+| **Auto-sync from upstream** | Manual push | ✅ systemd timer, deploys within ~1 hour of any upstream commit |
 | **Security headers** | None | ✅ HSTS · X-Frame-Options · X-Content-Type-Options · Referrer-Policy · Permissions-Policy |
 | **Favicon + branding** | ❌ | ✅ KVN AUST / FT favicon, branded tape bar + footer |
 
-### FT Proxy — No API Key Required
+### FT Proxy: No API Key Required
 
-**FT Mode** intercepts YouTube API calls client-side (fetch interceptor in `nbvs-community.js`) and reroutes them through the Falcon Technix Go backend. The response shapes are identical to YouTube Data API v3; NBVS's React app never knows the calls were rerouted.
+**FT Mode** intercepts YouTube API calls client-side (fetch interceptor in `nbvs-community.js`) and reroutes them through the Falcon Technix Go backend. The response shapes are identical to YouTube Data API v3.
 
-When NBVS makes a search call, the fetch interceptor in `nbvs-community.js` silently reroutes it to the FT Go backend at `/api/kvn/yt-search`. The Go backend attempts the search via a shuffled pool of healthy Invidious instances, falling back to direct YouTube scraping if all instances fail; on CAPTCHA detection it returns an upstream error and the UI shows a toast. Stats calls (`/api/kvn/yt-stats`) follow the same waterfall — Invidious first, then oEmbed, then direct scrape. Both endpoints return response shapes identical to YouTube Data API v3, so NBVS's React app never knows the calls were rerouted.
+When NBVS makes a search call, the fetch interceptor in `nbvs-community.js` silently reroutes it to the FT Go backend at `/api/kvn/yt-search`. The Go backend attempts the search via a shuffled pool of healthy Invidious instances, falling back to direct YouTube scraping if all instances fail; on CAPTCHA detection it returns an upstream error and the UI shows a toast. Stats calls (`/api/kvn/yt-stats`) follow the same waterfall: Invidious first, then oEmbed, then direct scrape. Both endpoints return response shapes identical to YouTube Data API v3, so NBVS's React app never knows the calls were rerouted.
 
 **Visitors with their own API key** can switch to "My API Key" mode. Calls go directly to `googleapis.com`; the FT proxy is not in the path and the key never reaches our servers.
 
@@ -187,8 +187,8 @@ The proxy routes through a live, shuffled pool of healthy Invidious instances:
 | Layer | Detail |
 |:------|:-------|
 | **Cold-start fallback pool** | 12 hardcoded known-good HTTPS instances |
-| **Live refresh** | Every 90 min from `api.invidious.io/instances.json` — filtered to HTTPS + API-enabled + ≥75% uptime, capped at 15 instances |
-| **Per-request shuffle** | Fisher-Yates shuffle on every request — load spreads across the pool rather than concentrating on one instance |
+| **Live refresh** | Every 90 min from `api.invidious.io/instances.json`, filtered to HTTPS + API-enabled + ≥75% uptime, capped at 15 instances |
+| **Per-request shuffle** | Fisher-Yates shuffle on every request, load spreads across the pool rather than concentrating on one instance |
 | **Fallback chain** | Invidious → YouTube direct scrape (`ytInitialData` JSON extraction) → CAPTCHA detection |
 
 On CAPTCHA detection the proxy returns `upstream_captcha` and the UI shows a toast.
@@ -211,26 +211,26 @@ A 16-country dropdown in the FT launch panel restricts YouTube results geographi
 
 ### Auto-Sync Pipeline
 
-A systemd timer fires periodically and checks the upstream GitHub commit SHA. If it matches the stored value the run is a no-op. On a new SHA, it fetches the raw `index.html` from `raw.githubusercontent.com` and runs the `nbvs-patch` Go binary (built with esbuild — no Node.js, no Python required). The patcher compiles the inline Babel/JSX block to ES2017, removes the Babel standalone loader, replaces the React/ReactDOM/Tailwind CDN links with self-hosted copies, overrides the page title, injects the full FT meta block (Open Graph, Twitter Card, JSON-LD schema, noscript fallback, favicons), and wires `nbvs-community.js` before `</body>`. The finished `index.html` lands directly in the web root. `FORMAT-MAP.md` is synced from the Sonder webroot on the same server — no CORS or GitHub rate limits involved.
+A systemd timer fires periodically and checks the upstream GitHub commit SHA. If it matches the stored value the run is a no-op. On a new SHA, it fetches the raw `index.html` from `raw.githubusercontent.com` and runs the `nbvs-patch` Go binary (built with esbuild, no Node.js, no Python required). The patcher compiles the inline Babel/JSX block to ES2017, removes the Babel standalone loader, replaces the React/ReactDOM/Tailwind CDN links with self-hosted copies, overrides the page title, injects the full FT meta block (Open Graph, Twitter Card, JSON-LD schema, noscript fallback, favicons), and wires `nbvs-community.js` before `</body>`. The finished `index.html` lands directly in the web root. `FORMAT-MAP.md` is synced from the Sonder webroot on the same server, no CORS or GitHub rate limits involved.
 
 ### Content Security Policy
 
-The FT mirror enforces a strict CSP with `default-src 'self'`. Scripts are locked to self and inline (`unsafe-inline` is unavoidable because the esbuild-compiled JSX block remains an inline `<script>` — a nonce-injection pipeline would eliminate it but is not implemented). Styles allow self and inline. Images allow self, data URIs, YouTube thumbnail domains (`i.ytimg.com`, `*.ytimg.com`), YouTube channel avatar domains (`yt3.ggpht.com`, `*.ggpht.com`), Google profile images, and self-hosted FT favicons. Connect is restricted to self and `googleapis.com` for users in My API Key mode. Frames and objects are fully blocked. `upgrade-insecure-requests` is set. No external font or script origins are permitted.
+The FT mirror enforces a strict CSP with `default-src 'self'`. Scripts are locked to self and inline (`unsafe-inline` is unavoidable because the esbuild-compiled JSX block remains an inline `<script>`, a nonce-injection pipeline would eliminate it but is not implemented). Styles allow self and inline. Images allow self, data URIs, YouTube thumbnail domains (`i.ytimg.com`, `*.ytimg.com`), YouTube channel avatar domains (`yt3.ggpht.com`, `*.ggpht.com`), Google profile images, and self-hosted FT favicons. Connect is restricted to self and `googleapis.com` for users in My API Key mode. Frames and objects are fully blocked. `upgrade-insecure-requests` is set. No external font or script origins are permitted.
 
 ### Community Layer (`nbvs-community.js`)
 
-Injected before `</body>` on every sync. Domain-locked to `nbvs.falcontechnix.com` — proprietary Falcon Technix IP.
+Injected before `</body>` on every sync. Domain-locked to `nbvs.falcontechnix.com`, proprietary Falcon Technix IP.
 
 | Feature | Detail |
 |:--------|:-------|
 | **FT Mode fetch interceptor** | Rewrites `googleapis.com/youtube/v3/search` → `/api/kvn/yt-search` and `/youtube/v3/videos` → `/api/kvn/yt-stats`; handles errors, CAPTCHA toasts, and empty-response fallback |
-| **Source picker** | FT Proxy / My API Key toggle — persisted in `localStorage` |
+| **Source picker** | FT Proxy / My API Key toggle, persisted in `localStorage` |
 | **Country selector** | 16-region `<select>`, wired to `&regionCode=` on every proxied search |
-| **Sort presets** | Oldest First · Fewest Views · Shortest · Most Views · Newest — click fires the search immediately |
-| **11 themes** | VHS Red · Deep Dive · Phosphor (amber CRT) · Matrix · Midnight (synthwave) · Ghost · Classic Dark · Classic Light · Aurora · Ember · Prism — applied as CSS custom properties on `<html>`, persisted in `localStorage` |
+| **Sort presets** | Oldest First · Fewest Views · Shortest · Most Views · Newest, click fires the search immediately |
+| **11 themes** | VHS Red · Deep Dive · Phosphor (amber CRT) · Matrix · Midnight (synthwave) · Ghost · Classic Dark · Classic Light · Aurora · Ember · Prism, applied as CSS custom properties on `<html>`, persisted in `localStorage` |
 | **Format Finder panel** | Parses FORMAT-MAP.md client-side: 267 formats, category filter (Numbered/Date/Extension/Keyphrase/Ancient/Special), live search, variable number/date/hex input with 🎲 randomize, query preview, one-click inject into NBVS search bar, Google Dork ↗ link |
 | **Dark mode hijack** | Intercepts NBVS's built-in dark/light toggle → opens FT theme drawer instead |
-| **Sonder integration** | Cloud ☁ button in tape bar — sign-in prompt (with localStorage dismiss) for unauthenticated users |
+| **Sonder integration** | Cloud ☁ button in tape bar, sign-in prompt (with localStorage dismiss) for unauthenticated users |
 | **KVN AUST tape bar** | Branded header with live clock, theme picker, cloud/Sonder link, bar hide toggle |
 | **FT footer** | KVN AUST · Sonder · FT Wrapper links |
 | **Bar hide/show** | ▲ collapses both bars; `KVN ▼` tab re-expands; state persisted |
@@ -243,21 +243,21 @@ Injected before `</body>` on every sync. Domain-locked to `nbvs.falcontechnix.co
 
 | Wrapper | Deployed at | What it is |
 |:--------|:------------|:-----------|
-| **Sonder Wrapper** | [kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/) | Service worker, shim layer, cloud save backend, community API, multiplayer, leaderboard — everything that makes the hosted version more than the standalone HTML |
+| **Sonder Wrapper** | [kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/) | Service worker, shim layer, cloud save backend, community API, multiplayer, leaderboard, everything that makes the hosted version more than the standalone HTML |
 | **NBVS Wrapper** | [nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/) | `nbvs-patch` Go patcher, `nbvs-community.js` community layer, FT Proxy backend, sync pipeline, Caddy CSP config |
 
 Both are **proprietary software, exclusively licensed to and operated by Falcon Technix**. They are not published, not distributed, and not available under any open-source license. You will not find their source in this repo or anywhere public.
 
-The standalone `kvnaust-recyclebin.html` in this repo (GPL-3.0) and KVN AUST's `index.html` (MIT) are entirely unaffected — those remain freely downloadable and self-hostable as always.
+The standalone `kvnaust-recyclebin.html` in this repo (GPL-3.0) and KVN AUST's `index.html` (MIT) are entirely unaffected; those remain freely downloadable and self-hostable as always.
 
 **[nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/) is free to use.** No registration, no account, no tracking, no conditions. Falcon Technix covers all hosting costs as a community contribution.
 
-### Upstream Security — Open PR
+### Upstream Security: Open PR
 
 Falcon Technix submitted a pull request to the upstream NBVS repo to add Subresource Integrity (SRI) hashes for all three CDN-loaded scripts. If merged, GitHub Pages visitors get cryptographic pinning on React 18.3.1, ReactDOM 18.3.1, and Babel 7.29.7; a CDN compromise would be blocked by the browser rather than silently executing.
 
 > 🔐 **[kvnaust/YouTube-NonBiasedVideoSearcher PR #1: Add SRI hashes for CDN scripts](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher/pull/1)**  
-> Status: **Open** — submitted 2026-06-04
+> Status: **Open**, submitted 2026-06-04
 
 The FT mirror does not use CDNs at all (replaced at sync time) so this PR specifically protects users of the original GitHub-hosted tool.
 ---
@@ -267,13 +267,13 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 | Step | Feature | Description |
 |:----:|:--------|:------------|
 | 1 | **Recycle Bin Bingo** | Randomized 5x5 bingo card with 101 video categories from KVN AUST's series. Slide-puzzle reveal animation. 50 unique SVG daub stamps per game. **Free Space** can be disabled in setup for a 25-category card. |
-| 2 | **Format Spinner** | 3D-textured wheel loaded with 267 filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md) (KVN Map 4.0). No-repeat spins with red dots marking used formats. **Lose-a-Space** penalty segment count is configurable in setup (0–10). Theme auto-rotates daily or every 2 saved games — 30 distinct palettes (Carnival, Pastels, Primaries, Mono, Sunset, Ocean, Forest, Neon, Vaporwave, Cyberpunk, …). Deep Dive mode is the only manually-toggled theme. |
+| 2 | **Format Spinner** | 3D-textured wheel loaded with 267 filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md) (KVN Map 4.0). No-repeat spins with red dots marking used formats. **Lose-a-Space** penalty segment count is configurable in setup (0–10). Theme auto-rotates daily or every 2 saved games, 30 distinct palettes (Carnival, Pastels, Primaries, Mono, Sunset, Ocean, Forest, Neon, Vaporwave, Cyberpunk, …). Deep Dive mode is the only manually-toggled theme. |
 | 3 | **Rainbow Number Generator** | Character-by-character rainbow shuffle animation generates the random search number for your format. |
-| 4 | **Search & Rate** | Copy the search string, open in YouTube, or re-randomize. **Hosted:** top 5 inline results load automatically, sorted by three tiers — **Tier 0** zero-view (rarest); **Tier 1** any views + uploaded before 2008; **Tier 2** everything else — oldest upload date wins tiebreaks within each tier. Cards show author, views, date + age, per-card star ratings, and Watch / Save / Record buttons. A "Top 5 of N found" header with a **View All →** button opens the full results modal. Rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." Share via SVG card or copy for Discord (header shows rarity + era icon). |
-| 5 | **Found It Popup** | When a video is logged, the **Found It** overlay fires with a thumbnail, rarity tier (LEGENDARY · SUPER RARE · RARE · COMMON), view count, and four action buttons: **Watch**, **Discord** (copies a formatted find message with rarity emoji + link), **Copy Link**, and **Close**. Confetti fires on LEGENDARY or zero-view finds. |
+| 4 | **Search & Rate** | Copy the search string, open in YouTube, or re-randomize. **Hosted:** top 5 inline results load automatically, sorted by three tiers, **Tier 0** zero-view (rarest); **Tier 1** any views + uploaded before 2008; **Tier 2** everything else, oldest upload date wins tiebreaks within each tier. Cards show author, views, date + age, per-card star ratings, and Watch / Save / Record buttons. A "Top 5 of N found" header with a **View All →** button opens the full results modal. Rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." Share via SVG card or copy for Discord (header shows rarity + era icon). |
+| 5 | **Found It Popup** | When a video is logged, the **Found It** overlay fires with a thumbnail, rarity tier (LEGENDARY · SUPER RARE · RARE · COMMON), view count, and four action buttons: **Watch**: **Discord** (copies a formatted find message with rarity emoji + link), **Copy Link**: and **Close**. Confetti fires on LEGENDARY or zero-view finds. |
 | 6 | **Mid-Game Resume** | Refreshing mid-session no longer loses progress. A modal detects the interrupted game and shows rounds saved, last format, last search string, with **Resume** and **New Game** options. State is stored in `sessionStorage` (tab-local, expires after 24 hours). |
 | 7 | **Game Summary & Export** | End-of-session recap with video thumbnails, per-metric breakdowns, and averages. Export bingo cards and summaries as SVG. |
-| 8 | **Oldest Zero-View Record** | Track the oldest zero-view videos you discover on a canvas timeline with rarity zones — from YouTube's launch in 2005 to present day. |
+| 8 | **Oldest Zero-View Record** | Track the oldest zero-view videos you discover on a canvas timeline with rarity zones, from YouTube's launch in 2005 to present day. |
 | 9 | **KVN's Video Gallery** | Curated list of every KVN AUST Recycle Bin / 0-View / mapping / Bingo video. Thumbnails, titles, publish dates, click-to-watch. New releases get a pulsing red **NEW** badge for the first 24 hours after publish. |
 
 ---
@@ -282,72 +282,72 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 
 <p align="center">
   <img src="screenshots/01-landing.png" width="720" alt="KVN AUST Recycle Bin - Start Screen">
-  <br><sub>Start Screen — YouTube's Recycle Bin</sub>
+  <br><sub>Start Screen, YouTube's Recycle Bin</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/02-bingo-setup.png" width="720" alt="KVN AUST Recycle Bin - Bingo Category Setup">
-  <br><sub>Bingo Setup — 101 customizable categories</sub>
+  <br><sub>Bingo Setup, 101 customizable categories</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/03-settings.png" width="720" alt="KVN AUST Recycle Bin - Settings">
-  <br><sub>Settings — channel images, spinner options, daub colors</sub>
+  <br><sub>Settings, channel images, spinner options, daub colors</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/04-bingo-reveal.png" width="720" alt="KVN AUST Recycle Bin - Bingo Card Reveal">
-  <br><sub>Bingo Card Reveal — slide puzzle with mosaic</sub>
+  <br><sub>Bingo Card Reveal, slide puzzle with mosaic</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/05-spinner.png" width="720" alt="KVN AUST Recycle Bin - Format Spinner Wheel">
-  <br><sub>3D Format Spinner — 267 formats from the community map (KVN Map 4.0)</sub>
+  <br><sub>3D Format Spinner, 267 formats from the community map (KVN Map 4.0)</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/06-deep-dive.png" width="720" alt="KVN AUST Recycle Bin - Deep Dive Mode">
-  <br><sub>Deep Dive Mode — underwater theme, Before:2010 filter, nautical sounds</sub>
+  <br><sub>Deep Dive Mode, underwater theme, Before:2010 filter, nautical sounds</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/07-format-selected.png" width="720" alt="KVN AUST Recycle Bin - Format Selected">
-  <br><sub>Format Selected — rainbow reveal animation</sub>
+  <br><sub>Format Selected, rainbow reveal animation</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/08-result-screen.png" width="720" alt="KVN AUST Recycle Bin - Result Screen with Inline Video Cards">
-  <br><sub>Result Screen — Top 5 inline results sorted by 0-view → oldest, with Watch / Save / Record and "View All N →"</sub>
+  <br><sub>Result Screen, Top 5 inline results sorted by 0-view → oldest, with Watch / Save / Record and "View All N →"</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/09-bingo-live.png" width="720" alt="KVN AUST Recycle Bin - Live Bingo Card with Daubs">
-  <br><sub>Live Bingo Card — progressive daub stamps that glow near BINGO</sub>
+  <br><sub>Live Bingo Card, progressive daub stamps that glow near BINGO</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/10-records-timeline.png" width="720" alt="KVN AUST Recycle Bin - Records Timeline">
-  <br><sub>Oldest Zero-View Records — community leaderboard with rarity tiers</sub>
+  <br><sub>Oldest Zero-View Records, community leaderboard with rarity tiers</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/11-find-detail.png" width="720" alt="KVN AUST Recycle Bin - Find Detail Modal">
-  <br><sub>Find Detail — click any dot for video info, channel stats, attribution</sub>
+  <br><sub>Find Detail, click any dot for video info, channel stats, attribution</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/12-inline-results-desktop.png" width="720" alt="KVN AUST Recycle Bin - Desktop Inline Results Wide Layout">
-  <br><sub>Desktop Result Screen — result cards expand to fill full width at ≥ 1100px (up to 5 cards in one row at 1920px)</sub>
+  <br><sub>Desktop Result Screen, result cards expand to fill full width at ≥ 1100px (up to 5 cards in one row at 1920px)</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/13-found-it.png" width="720" alt="KVN AUST Recycle Bin - Found It Popup with Share Buttons">
-  <br><sub>Found It — rarity reveal with Watch, Discord, Copy Link, and Close buttons</sub>
+  <br><sub>Found It, rarity reveal with Watch, Discord, Copy Link, and Close buttons</sub>
 </p>
 
 <p align="center">
   <img src="screenshots/14-resume-modal.png" width="720" alt="KVN AUST Recycle Bin - Mid-Game Resume Modal">
-  <br><sub>Mid-Game Resume — refresh recovery modal showing session stats, Resume and New Game options</sub>
+  <br><sub>Mid-Game Resume, refresh recovery modal showing session stats, Resume and New Game options</sub>
 </p>
 
 ---
@@ -358,11 +358,11 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 <tr><td>
 
 **Core**
-- Single HTML file — no install, no build step, no dependencies
+- Single HTML file, no install, no build step, no dependencies
 - Works offline via service worker (full PWA)
-- Runs on Windows, Mac, Linux, Chromebook, mobile — any browser
+- Runs on Windows, Mac, Linux, Chromebook, mobile, any browser
 - 267 formats parsed from FORMAT-MAP.md (KVN Map 4.0), zero hardcoded
-- **Format category filter** — browse by type: Numbered · Keyphrases · Extensions · Date-Based · Ancient YT · Special; stacks with live text search
+- **Format category filter**, browse by type: Numbered · Keyphrases · Extensions · Date-Based · Ancient YT · Special; stacks with live text search
 - Embedded Web Audio (tick, retro, casino, nautical Deep Dive presets)
 - 15 achievements with badge modal, toast + sound on unlock
 
@@ -373,9 +373,9 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 - Password-backed cloud save for game history
 - Community finds leaderboard with live API
 - Auto-updates within 5 minutes of a push
-- **Inline Top Results** — top 5 search results per round, sorted 0-view → pre-2008 → oldest; colored meta; Watch/Save/Record per card; "View All N" full modal
-- **Mid-game resume** — sessionStorage checkpoint survives page refresh; resume modal shows session stats
-- **Found It popup** — Watch, Discord, Copy Link, Close; confetti on LEGENDARY/zero-view
+- **Inline Top Results**, top 5 search results per round, sorted 0-view → pre-2008 → oldest; colored meta; Watch/Save/Record per card; "View All N" full modal
+- **Mid-game resume**, sessionStorage checkpoint survives page refresh; resume modal shows session stats
+- **Found It popup**, Watch, Discord, Copy Link, Close; confetti on LEGENDARY/zero-view
 
 </td></tr>
 <tr><td>
@@ -387,7 +387,7 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 - 50 unique SVG stamp designs, customizable colors
 - **Pre-game setup**: configurable Lose-a-Space slot count (0–10), Free Space toggle
 - **30 auto-rotating spinner themes** (rotate daily or every 2 saved games)
-- **6 full app themes** (Default · Deep Dive · Terminal · VHS · Amber · Void) — skin every color in the UI, persists across sessions
+- **6 full app themes** (Default · Deep Dive · Terminal · VHS · Amber · Void), skin every color in the UI, persists across sessions
 - **Bottom bar auto-hides** during gameplay, returns at game end (unless you've X'd it manually)
 - Export completed cards as SVG
 
@@ -408,7 +408,7 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 
 ## Free, Forever, No Catch
 
-> **TL;DR — [Download `kvnaust-recyclebin.html`](kvnaust-recyclebin.html), open it in any browser, and you're playing the full game. That's it. No install, no account, no internet required after the first format sync.**
+> **TL;DR, [Download `kvnaust-recyclebin.html`](kvnaust-recyclebin.html), open it in any browser, and you're playing the full game. That's it. No install, no account, no internet required after the first format sync.**
 
 The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`) is **GPL-3.0**. Fork it, host it, mod it, run it offline; do whatever you want. No attribution required to KVN AUST or to us, though it'd be cool of you.
 
@@ -424,7 +424,7 @@ The game tool in this repo (`kvnaust-recyclebin.html` + `bingo-categories.json`)
 
 ### Online (Recommended)
 
-> **[Play YouTube's Recycle Bin at kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/)** — always up to date, cloud save, community leaderboard, and more.
+> **[Play YouTube's Recycle Bin at kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/)**, always up to date, cloud save, community leaderboard, and more.
 
 The hosted version (wrapper v7.16.0) wraps the same HTML (v7.18.0) from this repo with exclusive features:
 
@@ -432,28 +432,28 @@ The hosted version (wrapper v7.16.0) wraps the same HTML (v7.18.0) from this rep
 |:--------|:------:|:----------:|
 | Full game (spinner, bingo, achievements, gallery, Deep Dive) | Yes | Yes |
 | Format sync, Share Card / Discord copy | Yes | Yes |
-| **Inline Search Results** — top 5 sorted cards (0-view → pre-2008 → oldest) with Watch/Save/Record; "View All N" modal; full-width on desktop (≥1100px, up to 1500px, smooth CSS transition) | Yes | No |
-| **Mid-Game Resume** — refresh recovery modal with session stats, Resume / New Game options | Yes | No |
-| **Found It Popup** — rarity + title + Watch / Discord / Copy Link / Close buttons; confetti on LEGENDARY | Yes | No |
-| **Cloud Save** — game history, bingo state, settings synced across devices | Yes | No |
-| **Player Profiles** — XP, levels, 28 badges, streaks, [shareable SVG cards](https://kvnaust.falcontechnix.com/profile_card.php?u=root) | Yes | No |
-| **Seasons** — 90-day competitive windows with season leaderboards | Yes | No |
-| **Multiplayer & Co-Watching** — SSE rooms + synchronized video playback on discovery pages | Yes | No |
-| **Daily Challenges** — format-of-the-day with streak tracking and leaderboard | Yes | No |
-| **Find Verification** — server validates videos exist and view count is plausible | Yes | No |
-| **Discovery Pages** — every find gets a [permanent shareable URL](https://kvnaust.falcontechnix.com/discoveries/) with OG card | Yes | No |
-| **Web Push** — notifications for record-broken, season events, verified finds | Yes | No |
-| **Pattern Recommendations** — "users who found X also found Y" co-occurrence analysis | Yes | No |
-| **Personal Webhooks** — Discord/Slack notifications on new finds and streaks | Yes | No |
-| **Atom Feeds** — [community feed](https://kvnaust.falcontechnix.com/feed.xml) + per-user feeds | Yes | No |
-| **JS SDK** — [`sdk.js`](https://kvnaust.falcontechnix.com/sdk.js) for third-party integrations | Yes | No |
-| **Embed Widget** — iframe-ready latest-finds widget for any site | Yes | No |
-| **[OpenAPI Spec](https://kvnaust.falcontechnix.com/openapi.json)** — full API documentation | Yes | No |
-| **[🦫 Go backend](CHANGELOG.md#700--2026-05-03--the-go-rewrite)** (v7.0.0) — single static binary replaces 28 PHP files. p50 latency ~10× lower, hardened systemd sandbox, structured JSON logs. Same URLs, same DB, same response shapes. Wrapper source is proprietary; **none of this affects the standalone download** — that's still GPL-3.0 HTML. | Yes | No |
+| **Inline Search Results**: top 5 sorted cards (0-view → pre-2008 → oldest) with Watch/Save/Record; "View All N" modal; full-width on desktop (≥1100px, up to 1500px, smooth CSS transition) | Yes | No |
+| **Mid-Game Resume**: refresh recovery modal with session stats, Resume / New Game options | Yes | No |
+| **Found It Popup**: rarity + title + Watch / Discord / Copy Link / Close buttons; confetti on LEGENDARY | Yes | No |
+| **Cloud Save**: game history, bingo state, settings synced across devices | Yes | No |
+| **Player Profiles**: XP, levels, 28 badges, streaks, [shareable SVG cards](https://kvnaust.falcontechnix.com/profile_card.php?u=root) | Yes | No |
+| **Seasons**: 90-day competitive windows with season leaderboards | Yes | No |
+| **Multiplayer & Co-Watching**: SSE rooms + synchronized video playback on discovery pages | Yes | No |
+| **Daily Challenges**: format-of-the-day with streak tracking and leaderboard | Yes | No |
+| **Find Verification**: server validates videos exist and view count is plausible | Yes | No |
+| **Discovery Pages**: every find gets a [permanent shareable URL](https://kvnaust.falcontechnix.com/discoveries/) with OG card | Yes | No |
+| **Web Push**: notifications for record-broken, season events, verified finds | Yes | No |
+| **Pattern Recommendations**: "users who found X also found Y" co-occurrence analysis | Yes | No |
+| **Personal Webhooks**: Discord/Slack notifications on new finds and streaks | Yes | No |
+| **Atom Feeds**: [community feed](https://kvnaust.falcontechnix.com/feed.xml) + per-user feeds | Yes | No |
+| **JS SDK**: [`sdk.js`](https://kvnaust.falcontechnix.com/sdk.js) for third-party integrations | Yes | No |
+| **Embed Widget**: iframe-ready latest-finds widget for any site | Yes | No |
+| **[OpenAPI Spec](https://kvnaust.falcontechnix.com/openapi.json)**: full API documentation | Yes | No |
+| **[🦫 Go backend](CHANGELOG.md#700--2026-05-03--the-go-rewrite)** (v7.0.0), single static binary replaces 28 PHP files. p50 latency ~10× lower, hardened systemd sandbox, structured JSON logs. Same URLs, same DB, same response shapes. Wrapper source is proprietary; **none of this affects the standalone download**: that's still GPL-3.0 HTML. | Yes | No |
 
 ### Offline / Standalone
 
-Download [`kvnaust-recyclebin.html`](kvnaust-recyclebin.html) and [`bingo-categories.json`](bingo-categories.json), place them in the same folder, and open in any browser. Everything runs locally — no internet required after download. Formats still sync from GitHub on first load if online.
+Download [`kvnaust-recyclebin.html`](kvnaust-recyclebin.html) and [`bingo-categories.json`](bingo-categories.json), place them in the same folder, and open in any browser. Everything runs locally, no internet required after download. Formats still sync from GitHub on first load if online.
 
 ---
 
@@ -463,7 +463,7 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 
 | Endpoint | What |
 |:---------|:-----|
-| [`/finds.php`](https://kvnaust.falcontechnix.com/finds.php) | Leaderboard JSON — filter by `?category=`, `?source=`, `?found_by=`, `?season=current`, `?order=`, `?limit=` |
+| [`/finds.php`](https://kvnaust.falcontechnix.com/finds.php) | Leaderboard JSON, filter by `?category=`, `?source=`, `?found_by=`, `?season=current`, `?order=`, `?limit=` |
 | [`/finds.php?heatmap=1`](https://kvnaust.falcontechnix.com/finds.php?heatmap=1) | Category × decade heatmap matrix |
 | [`/finds.php?heatmap=date`](https://kvnaust.falcontechnix.com/finds.php?heatmap=date) | Year × month matrix by upload date |
 | `/discoveries/<video_id>` | Permanent shareable page with OG card and co-watch |
@@ -496,11 +496,11 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 
 ### Community Leaderboard
 
-> This table auto-updates every 3 hours from the [Finds API](https://kvnaust.falcontechnix.com/finds.php) via GitHub Actions. Do not edit manually — changes will be overwritten.
+> This table auto-updates every 3 hours from the [Finds API](https://kvnaust.falcontechnix.com/finds.php) via GitHub Actions. Do not edit manually, changes will be overwritten.
 >
-> The sync workflow authenticates with the host using an `X-KVN-Sync-Token` header. The token is stored as the `KVN_SYNC_TOKEN` repo secret; if it's ever rotated, update the secret in **Settings → Secrets and variables → Actions** — the next scheduled run picks it up.
+> The sync workflow authenticates with the host using an `X-KVN-Sync-Token` header. The token is stored as the `KVN_SYNC_TOKEN` repo secret; if it's ever rotated, update the secret in **Settings → Secrets and variables → Actions**, the next scheduled run picks it up.
 >
-> **Get on the leaderboard:** [Play the hosted version](https://kvnaust.falcontechnix.com/) and create an account. Submit a validated zero-view video during gameplay or directly via the [Records timeline](https://kvnaust.falcontechnix.com/#records) — you don't need to play a full game to submit a find. See also: [Discord Integration Guide](DISCORD_INTEGRATION.md)
+> **Get on the leaderboard:** [Play the hosted version](https://kvnaust.falcontechnix.com/) and create an account. Submit a validated zero-view video during gameplay or directly via the [Records timeline](https://kvnaust.falcontechnix.com/#records), you don't need to play a full game to submit a find. See also: [Discord Integration Guide](DISCORD_INTEGRATION.md)
 
 <!-- LEADERBOARD-START -->
 **21 community finds** — oldest: 2005-09-05 · newest: 2025-12-10
@@ -561,7 +561,7 @@ The community-maintained database of every known default filename keyphrase that
 
 ## Contributing
 
-1. **New format leads**: Add to [FORMAT-MAP.md](FORMAT-MAP.md) via PR. Each numbered format is a table row with four columns: the keyphrase in backticks ending with 2–4 `X` characters (e.g. `formatXXXX`), the numeric range written as `MIN-MAX` digits (e.g. `0000-9999`), the source device or context, and contributor credit. The spinner parser reads this table directly — incorrect formatting will cause the format to be skipped.
+1. **New format leads**: Add to [FORMAT-MAP.md](FORMAT-MAP.md) via PR. Each numbered format is a table row with four columns: the keyphrase in backticks ending with 2–4 `X` characters (e.g. `formatXXXX`), the numeric range written as `MIN-MAX` digits (e.g. `0000-9999`), the source device or context, and contributor credit. The spinner parser reads this table directly, incorrect formatting will cause the format to be skipped.
 2. **New bingo categories**: Add to [`bingo-categories.json`](bingo-categories.json) via PR
 3. **Code changes**: Edit [`kvnaust-recyclebin.html`](kvnaust-recyclebin.html) and bump the version block at the bottom of the file
 
@@ -569,9 +569,9 @@ The community-maintained database of every known default filename keyphrase that
 
 ## Credits
 
-- **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)) — Creator of YouTube's Recycle Bin series & the Format Maps
-- **Justin** ([@Chegnus](https://x.com/Chegnus)) / [BASH & BRASS](https://www.youtube.com/@BASHnBRASS) / [FalconTechnix](https://www.falcontechnix.com) — Tool Development
-- **[70+ community contributors](FORMAT-MAP.md#contributors)** — Format discovery & verification
+- **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)), Creator of YouTube's Recycle Bin series & the Format Maps
+- **Justin** ([@Chegnus](https://x.com/Chegnus)) / [BASH & BRASS](https://www.youtube.com/@BASHnBRASS) / [FalconTechnix](https://www.falcontechnix.com), Tool Development
+- **[70+ community contributors](FORMAT-MAP.md#contributors)**, Format discovery & verification
 
 ---
 

@@ -14,131 +14,131 @@
 
 ---
 
-## [7.18.0] — 2026-06-07 — Ticker spring physics
+## [7.18.0] - 2026-06-07 - Ticker spring physics
 
 ### ✨ Added
-- **Ticker spring physics** — the pointer arrow now physically deflects when each nail passes during a spin. Impulse magnitude scales with wheel speed (strong at full spin, gentle as it slows). Spring-damping system oscillates the pointer back to center between nails. Rotation pivots from the mounting point (top of the arrow), not the center.
+- **Ticker spring physics**: the pointer arrow now physically deflects when each nail passes during a spin. Impulse magnitude scales with wheel speed (strong at full spin, gentle as it slows). Spring-damping system oscillates the pointer back to center between nails. Rotation pivots from the mounting point (top of the arrow), not the center.
 
 ---
 
-## [7.17.1] — 2026-06-06 — Mobile polish + footer date chip
+## [7.17.1] - 2026-06-06 - Mobile polish + footer date chip
 
 ### 🔧 Fixed
-- **Footer date chip** — KVN AUST footer now shows today's date (e.g. "Jun 6") as a live badge so the calendar reference matches the actual current day.
-- **Mobile footer** — Credit-footer hides the FT wordmark and version badge on narrow screens to prevent overflow; flex-wraps cleanly.
-- **Mobile Sonder chat** — On screens under 600px the chat panel opens as a bottom sheet (full-width, 72vh) instead of a corner popup.
+- **Footer date chip**: KVN AUST footer now shows today's date (e.g. "Jun 6") as a live badge so the calendar reference matches the actual current day.
+- **Mobile footer**: Credit-footer hides the FT wordmark and version badge on narrow screens to prevent overflow; flex-wraps cleanly.
+- **Mobile Sonder chat**: On screens under 600px the chat panel opens as a bottom sheet (full-width, 72vh) instead of a corner popup.
 
 ---
 
-## [7.17.0] — 2026-06-06 — Sonder two-part date generation + pill editor
+## [7.17.0] - 2026-06-06 - Sonder two-part date generation + pill editor
 
 ### ✨ Added
-- **Sonder two-part date number screen** — Date formats now show Year and Random as two separate animated components, each with its own rolling display and Min/Max labels.
-- **Sonder format reveal split** — Date format preview shows YYYY (year range) and MMDD (random) as two labeled parts instead of one "(random)" label.
-- **Sonder pill editor** — Clicking the result pill on a date format opens an inline editor: set a specific year (clamped to the format's min/max) and a 4-digit MMDD suffix, then hit APPLY to update the search string.
+- **Sonder two-part date number screen**: Date formats now show Year and Random as two separate animated components, each with its own rolling display and Min/Max labels.
+- **Sonder format reveal split**: Date format preview shows YYYY (year range) and MMDD (random) as two labeled parts instead of one "(random)" label.
+- **Sonder pill editor**: Clicking the result pill on a date format opens an inline editor: set a specific year (clamped to the format's min/max) and a 4-digit MMDD suffix, then hit APPLY to update the search string.
 
 ---
 
-## [7.16.7] — 2026-06-04 — Year + age badge on every inline card
+## [7.16.7] - 2026-06-04 - Year + age badge on every inline card
 
 ### ✨ Added
 - **Year + age badge** on every inline video card. Shows upload year and how many years ago the video was posted (e.g. "2011 · 15 yrs ago") in the card footer alongside the view count.
 
 ---
 
-## [7.16.6] — 2026-06-04 — Fix format cache (118 bug), rarity + era icon in Discord share
+## [7.16.6] - 2026-06-04 - Fix format cache (118 bug), rarity + era icon in Discord share
 
 ### 🐛 Fixed
-- **Format cache 118 bug** — `DOC_CACHE_KEY` and timestamp key both bumped to `v17`. Mismatch between the two meant a stale timestamp was trusted even after the content key changed, leaving the app stuck on a hardcoded 118-format set instead of loading the full 192+ from FORMAT-MAP.md. `isCacheStale()` now returns `true` when the content key is absent, closing the stale-timestamp bypass entirely.
+- **Format cache 118 bug**: `DOC_CACHE_KEY` and timestamp key both bumped to `v17`. Mismatch between the two meant a stale timestamp was trusted even after the content key changed, leaving the app stuck on a hardcoded 118-format set instead of loading the full 192+ from FORMAT-MAP.md. `isCacheStale()` now returns `true` when the content key is absent, closing the stale-timestamp bypass entirely.
 
 ### ✨ Added
-- **Rarity label + emoji in Discord share header** — e.g. `🔴 SUPER RARE — Recycle Bin Find`. Upload date icon is era-matched: 🕰️ LEGENDARY · 📜 SUPER RARE · 🗓️ VERY/RARE · 📅 COMMON.
+- **Rarity label + emoji in Discord share header**: e.g. `🔴 SUPER RARE — Recycle Bin Find`. Upload date icon is era-matched: 🕰️ LEGENDARY · 📜 SUPER RARE · 🗓️ VERY/RARE · 📅 COMMON.
 
 ---
 
-## [7.16.5] — 2026-06-04 — Resume: reconstruct finalString if reloaded before result screen
+## [7.16.5] - 2026-06-04 - Resume: reconstruct finalString if reloaded before result screen
 
 ### 🐛 Fixed
-- **Resume after mid-result-screen reload** — if the page was reloaded before the result screen was fully rendered, `finalString` was missing from saved state. Game now reconstructs it from the stored search parameters on resume so the result screen renders correctly.
+- **Resume after mid-result-screen reload**: if the page was reloaded before the result screen was fully rendered, `finalString` was missing from saved state. Game now reconstructs it from the stored search parameters on resume so the result screen renders correctly.
 
 ---
 
-## [7.16.4] — 2026-06-04 — Inline card stars visible + live overall score
+## [7.16.4] - 2026-06-04 - Inline card stars visible + live overall score
 
 ### 🐛 Fixed
-- **Inline card stars not rendering** — CSS specificity conflict hid the rarity star indicators. Fixed with explicit selector targeting.
+- **Inline card stars not rendering**: CSS specificity conflict hid the rarity star indicators. Fixed with explicit selector targeting.
 
 ### ✨ Added
 - **Live overall score** in the result screen header updates as cards are rated.
 
 ---
 
-## [7.16.3] — 2026-06-04 — Cache video cards in game state for instant resume
+## [7.16.3] - 2026-06-04 - Cache video cards in game state for instant resume
 
 ### ✨ Added
-- **Video card state caching** — rendered inline card data is now persisted to game state. On resume the cards restore instantly without re-fetching from the proxy, including all rarity/stat data.
+- **Video card state caching**: rendered inline card data is now persisted to game state. On resume the cards restore instantly without re-fetching from the proxy, including all rarity/stat data.
 
 ---
 
-## [7.16.2] — 2026-06-04 — Fix phantom resume button + re-randomize re-searches
+## [7.16.2] - 2026-06-04 - Fix phantom resume button + re-randomize re-searches
 
 ### 🐛 Fixed
-- **Phantom "Resume" button** — resume button appeared even when no valid saved game existed. Now checks for a complete saved state before showing the button.
-- **Re-randomize on re-search** — hitting Spin again from the result screen now generates a fresh random string rather than repeating the previous one.
+- **Phantom "Resume" button**: resume button appeared even when no valid saved game existed. Now checks for a complete saved state before showing the button.
+- **Re-randomize on re-search**: hitting Spin again from the result screen now generates a fresh random string rather than repeating the previous one.
 
 ---
 
-## [7.16.1] — 2026-06-04 — Tighter result screen layout, smaller cards for full-screen fit
+## [7.16.1] - 2026-06-04 - Tighter result screen layout, smaller cards for full-screen fit
 
 ### ✨ Changed
 - Result screen tracker and inline cards scaled down for better fit at all viewport sizes. Full-screen mode now shows all 5 cards without horizontal scroll on 1080p.
 
 ---
 
-## [7.16.0] — 2026-06-04 — Fix resume game, footer auto-hide, 3-column video grid
+## [7.16.0] - 2026-06-04 - Fix resume game, footer auto-hide, 3-column video grid
 
 ### 🐛 Fixed
-- **Resume game flow** — mid-game state now restores correctly including format, spin count, and found-it history.
+- **Resume game flow**: mid-game state now restores correctly including format, spin count, and found-it history.
 
 ### ✨ Added
-- **Footer auto-hide** — footer collapses when the game is active, expanding back on idle.
+- **Footer auto-hide**: footer collapses when the game is active, expanding back on idle.
 - **3-column video grid** at wide viewports in the result screen.
 
 ---
 
-## [7.15.9] — 2026-06-04 — Spin direction arrows fill button interior
+## [7.15.9] - 2026-06-04 - Spin direction arrows fill button interior
 
 ### ✨ Changed
 - CW/CCW spin direction arrow icons now fill the full button interior (large, edge-to-edge) for clearer tap targets.
 
 ---
 
-## [7.15.8] — 2026-06-04 — Unified Discord share via buildDiscordShare()
+## [7.15.8] - 2026-06-04 - Unified Discord share via buildDiscordShare()
 
 ### ✨ Changed
 - Extracted `buildDiscordShare()` helper used by both the Tracker row and Found It overlay. Both now produce the same rich Discord format (rarity emoji, title, views, YT link, site credit).
 
 ---
 
-## [7.15.7] — 2026-06-04 — Lucky Lefty CCW spin, flashy SPIN label, pointer fix
+## [7.15.7] - 2026-06-04 - Lucky Lefty CCW spin, flashy SPIN label, pointer fix
 
 ### ✨ Added
-- **Lucky Lefty mode** — CCW (counter-clockwise) spin direction toggle. Preserves per-game live colors. Pointer tick deflects in the correct direction for each spin mode.
+- **Lucky Lefty mode**: CCW (counter-clockwise) spin direction toggle. Preserves per-game live colors. Pointer tick deflects in the correct direction for each spin mode.
 
 ### 🐛 Fixed
-- **Pointer direction and smoothness** — tick animation now deflects with spin direction rather than always right. Easing improved.
-- **Search fallback** — if the primary search string yields no results, a simplified fallback string is tried automatically.
+- **Pointer direction and smoothness**: tick animation now deflects with spin direction rather than always right. Easing improved.
+- **Search fallback**: if the primary search string yields no results, a simplified fallback string is tried automatically.
 
 ---
 
-## [7.15.6] — 2026-06-04 — Pointer tick deflects with spin direction; CW/CCW toggle
+## [7.15.6] - 2026-06-04 - Pointer tick deflects with spin direction; CW/CCW toggle
 
 ### ✨ Added
 - Pointer tick visually deflects CW or CCW matching the active spin direction. CW/CCW toggle button with per-game live color theming.
 
 ---
 
-## [7.15.5] — 2026-06-04 — Vertical 16:9 cards, per-card stat hue, Found It 2×2 grid
+## [7.15.5] - 2026-06-04 - Vertical 16:9 cards, per-card stat hue, Found It 2×2 grid
 
 ### ✨ Added
 - Inline result cards rendered as vertical 16:9 thumbnails with per-card stat hue coloring.
@@ -146,196 +146,196 @@
 
 ---
 
-## [7.15.4] — 2026-06-04 — 16:9 inline thumbs, channel video count fire-and-forget
+## [7.15.4] - 2026-06-04 - 16:9 inline thumbs, channel video count fire-and-forget
 
 ### ✨ Added
 - Inline result thumbnails cropped to 16:9 aspect ratio.
 
 ### 🐛 Fixed
-- **Channel video count timeout** — scrape was blocking the page for 4s+; moved to fire-and-forget so it never stalls the UI.
+- **Channel video count timeout**: scrape was blocking the page for 4s+; moved to fire-and-forget so it never stalls the UI.
 
 ---
 
-## [7.15.3] — 2026-06-04 — Found It share buttons, result screen full-width expansion
+## [7.15.3] - 2026-06-04 - Found It share buttons, result screen full-width expansion
 
 ### ✨ Added
-- **Found It overlay share buttons** — Watch, Discord, Copy Link, and Close now all appear in the popup. Discord copies a formatted message (rarity emoji, title, views, YT link, site credit). Copy Link copies the `youtu.be` URL.
-- **Result screen desktop expansion** — at viewports ≥ 1100px the result screen tracker expands to `min(94vw, 1500px)`. At 1920px that gives ~1500px, fitting all 5 inline cards in a single row with no scroll. Transitions smoothly with `width: 0.35s ease` — snaps back to the compact layout when the window narrows below 1100px.
+- **Found It overlay share buttons**: Watch, Discord, Copy Link, and Close now all appear in the popup. Discord copies a formatted message (rarity emoji, title, views, YT link, site credit). Copy Link copies the `youtu.be` URL.
+- **Result screen desktop expansion**: at viewports ≥ 1100px the result screen tracker expands to `min(94vw, 1500px)`. At 1920px that gives ~1500px, fitting all 5 inline cards in a single row with no scroll. Transitions smoothly with `width: 0.35s ease`, snaps back to the compact layout when the window narrows below 1100px.
 
 ---
 
-## [7.15.2] — 2026-06-04 — Inline results: sort fix, wrapper gate, View All modal
+## [7.15.2] - 2026-06-04 - Inline results: sort fix, wrapper gate, View All modal
 
 ### 🐛 Fixed
-- **Sort bug** — was sorting only the first 5 Invidious results instead of all 20. Now maps all returned results, sorts all of them (0-view → pre-2008 → oldest), then slices top 5 for the inline display.
-- **FOSS gate** — inline video list is a wrapper-only feature (requires YT proxy). FOSS build now returns an empty `#srInline` rather than trying to render results.
+- **Sort bug**: was sorting only the first 5 Invidious results instead of all 20. Now maps all returned results, sorts all of them (0-view → pre-2008 → oldest), then slices top 5 for the inline display.
+- **FOSS gate**: inline video list is a wrapper-only feature (requires YT proxy). FOSS build now returns an empty `#srInline` rather than trying to render results.
 
 ### ✨ Added
-- **"Top 5 of N found" header** — inline section now shows total result count and a "View All N →" button when more than 5 results were returned.
-- **View All modal** — clicking "View All →" opens the existing full scrollable results panel with all sorted results.
-- **Colored meta text** — author in light blue, views in amber, date/age in sage green for legibility.
+- **"Top 5 of N found" header**: inline section now shows total result count and a "View All N →" button when more than 5 results were returned.
+- **View All modal**: clicking "View All →" opens the existing full scrollable results panel with all sorted results.
+- **Colored meta text**: author in light blue, views in amber, date/age in sage green for legibility.
 
 ---
 
-## [7.15.1] — 2026-06-04 — Inline cards: wider 2-col layout, compact stars
+## [7.15.1] - 2026-06-04 - Inline cards: wider 2-col layout, compact stars
 
 ### 🐛 Fixed
-- **Inline search cards** — cards were too tall on desktop, preventing all 5 from fitting in the viewport. Now use a 2-column grid at up to 740px wide, with a compact 2×2 star grid, reduced padding, and 1-line title clamp. All 5 cards with action buttons fit comfortably on a standard desktop screen.
+- **Inline search cards**: cards were too tall on desktop, preventing all 5 from fitting in the viewport. Now use a 2-column grid at up to 740px wide, with a compact 2×2 star grid, reduced padding, and 1-line title clamp. All 5 cards with action buttons fit comfortably on a standard desktop screen.
 
 ---
 
-## [7.15.0] — 2026-06-04 — Mid-game resume, login contrast fix, inline card highlights
+## [7.15.0] - 2026-06-04 - Mid-game resume, login contrast fix, inline card highlights
 
 ### ✨ Added
-- **Mid-game resume** — refreshing mid-session no longer loses your progress. A modal detects the interrupted game and shows rounds saved, last format, and last search string, with Resume and New Game options. State expires after 24 hours and is cleared on normal game end.
+- **Mid-game resume**: refreshing mid-session no longer loses your progress. A modal detects the interrupted game and shows rounds saved, last format, and last search string, with Resume and New Game options. State expires after 24 hours and is cleared on normal game end.
 
 ### 🐛 Fixed
-- **Login form contrast** — browser autofill was overriding input backgrounds with a white fill, making near-white text invisible. Fixed via `-webkit-autofill` box-shadow override; placeholder text also darkened for legibility.
-- **Display name Save button** — was clipped on narrow screens. Now stacks full-width below the input instead of sitting inline.
+- **Login form contrast**: browser autofill was overriding input backgrounds with a white fill, making near-white text invisible. Fixed via `-webkit-autofill` box-shadow override; placeholder text also darkened for legibility.
+- **Display name Save button**: was clipped on narrow screens. Now stacks full-width below the input instead of sitting inline.
 
 ### ✨ Changed
-- **Inline search cards** — 0-view and pre-2008 videos now render with a unique per-card gradient background and big stat badge (`0 VIEWS` / `YEAR`), each card getting a distinct hue.
+- **Inline search cards**: 0-view and pre-2008 videos now render with a unique per-card gradient background and big stat badge (`0 VIEWS` / `YEAR`), each card getting a distinct hue.
 
 ---
 
-## [7.14.0] — 2026-06-03 — Spotify ducking: music auto-ducks when a video opens
+## [7.14.0] - 2026-06-03 - Spotify ducking: music auto-ducks when a video opens
 
 ### ✨ Added
-- **Automatic audio ducking** — when the player opens a YouTube video in a new tab, Spotify volume is automatically pulled down to 20% so you can hear the video without killing the music. Volume restores full the moment you switch back to the Sonder tab.
+- **Automatic audio ducking**: when the player opens a YouTube video in a new tab, Spotify volume is automatically pulled down to 20% so you can hear the video without killing the music. Volume restores full the moment you switch back to the Sonder tab.
 - **Duck toggle button** (`🔊`) in the Spotify player handle bar. Green = ducking active (default). Click to turn it off and let music play at full volume through videos. State resets to on each session.
-- **Spotify Embed API** — the player now loads via Spotify's official `iframe-api/v1`, giving a proper `setVolume()` controller for duck/unduck. Falls back to a standard embed iframe until the API script resolves, then upgrades transparently.
+- **Spotify Embed API**: the player now loads via Spotify's official `iframe-api/v1`, giving a proper `setVolume()` controller for duck/unduck. Falls back to a standard embed iframe until the API script resolves, then upgrades transparently.
 
 ---
 
-## [7.13.0] — 2026-06-03 — Spotify floating player
+## [7.13.0] - 2026-06-03 - Spotify floating player
 
 ### ✨ Added
-- **Floating Spotify player** — a draggable `♫` panel anchored to the bottom-right. Drag the handle to park it anywhere on screen. Minimize (`−`) collapses it to a header-only strip without closing; `✕` closes fully. State persists across pages within the session.
-- **Works without a Spotify account** — the embedded Spotify player lets guests play 30-second previews without logging in. Full playback for Spotify Free/Premium users who are already signed in to Spotify.
-- **URL input** — paste any Spotify track, playlist, album, or artist link and hit Play. The player auto-resizes: 152 px for tracks/episodes, 380 px for playlists and albums.
-- **Saved last URL** — the last link you played is saved to `localStorage` and restores automatically when you re-open the player. On the hosted version (Sonder account), the URL is synced to the server so it restores across devices.
+- **Floating Spotify player**: a draggable `♫` panel anchored to the bottom-right. Drag the handle to park it anywhere on screen. Minimize (`−`) collapses it to a header-only strip without closing; `✕` closes fully. State persists across pages within the session.
+- **Works without a Spotify account**: the embedded Spotify player lets guests play 30-second previews without logging in. Full playback for Spotify Free/Premium users who are already signed in to Spotify.
+- **URL input**: paste any Spotify track, playlist, album, or artist link and hit Play. The player auto-resizes: 152 px for tracks/episodes, 380 px for playlists and albums.
+- **Saved last URL**: the last link you played is saved to `localStorage` and restores automatically when you re-open the player. On the hosted version (Sonder account), the URL is synced to the server so it restores across devices.
 
 ---
 
-## [7.12.0] — 2026-06-03 — Deep-theming engine + floating theme picker
+## [7.12.0] - 2026-06-03 - Deep-theming engine + floating theme picker
 
 ### ✨ Changed / Added
-- **Themes now skin the whole UI** — all 22 themes (including the 20 non-default palettes) now override `--surface`, `--border`, and `--screen-inner` in addition to the existing accent/card/bg/text vars. Every screen background, panel header, and card border reflects the active theme instead of staying at the default dark-slate base. Theme impact is now immediately obvious at a glance — flipping to Neon, Vaporwave, or Carnival transforms the entire tool, not just the spinner ring.
-- **Spinner ring is theme-aware** — the spin button border and glow now use `var(--accent)` instead of a hardcoded grey, so the spinner pulses in the active theme colour.
-- **Floating theme picker** (`🎨` header button) — a pop-out panel in the top-right shows the full theme grid without leaving the current screen. The active theme name is shown in the header. Closing the picker returns focus to whatever you were doing.
-- **Dice roll** (`🎲 Roll` button in the picker) — picks a random theme, applies it with a brief scale-bounce animation on the dice button. Lets you cycle through palettes without committing.
+- **Themes now skin the whole UI**: all 22 themes (including the 20 non-default palettes) now override `--surface`, `--border`, and `--screen-inner` in addition to the existing accent/card/bg/text vars. Every screen background, panel header, and card border reflects the active theme instead of staying at the default dark-slate base. Theme impact is now immediately obvious at a glance, flipping to Neon, Vaporwave, or Carnival transforms the entire tool, not just the spinner ring.
+- **Spinner ring is theme-aware**: the spin button border and glow now use `var(--accent)` instead of a hardcoded grey, so the spinner pulses in the active theme colour.
+- **Floating theme picker** (`🎨` header button), a pop-out panel in the top-right shows the full theme grid without leaving the current screen. The active theme name is shown in the header. Closing the picker returns focus to whatever you were doing.
+- **Dice roll** (`🎲 Roll` button in the picker), picks a random theme, applies it with a brief scale-bounce animation on the dice button. Lets you cycle through palettes without committing.
 
 ---
 
-## [7.11.0] — 2026-06-03 — FOUND IT, Bank It, live ticker, Hunt Mode, leaderboard hero
+## [7.11.0] - 2026-06-03 - FOUND IT, Bank It, live ticker, Hunt Mode, leaderboard hero
 
 ### ✨ Added
-- **FOUND IT overlay** — when you log a zero-view video (or any video) via "Bank It", a full-screen rarity reveal fires: thumbnail, rarity badge (LEGENDARY · SUPER RARE · VERY RARE · RARE · COMMON) coloured by upload year, particle burst for LEGENDARY and zero-view finds. Dismiss it to continue.
-- **Bank It button** — on the result/rating screen, a new "🏦 Bank It" button adds the current video to your Records immediately without navigating away. Triggers the FOUND IT animation inline.
-- **Live find ticker** — a slim fixed bar at the bottom of every screen shows the latest community finds as they roll in from the leaderboard API. Click any pill to open the full leaderboard entry. Hides automatically on narrow screens during gameplay.
-- **Hunt Mode** — tap `🎯` in the header to lock into a focused hunting session: a corner panel tracks your current-session spin count, finds banked, and a personal best counter. No navigating away required; the panel floats over the game and can be minimized or closed.
-- **Leaderboard hero card** — the top-ranked community find is featured as a large hero card above the leaderboard list: full thumbnail, rarity glow, date, finder, and a direct Watch link.
+- **FOUND IT overlay**: when you log a zero-view video (or any video) via "Bank It", a full-screen rarity reveal fires: thumbnail, rarity badge (LEGENDARY · SUPER RARE · VERY RARE · RARE · COMMON) coloured by upload year, particle burst for LEGENDARY and zero-view finds. Dismiss it to continue.
+- **Bank It button**: on the result/rating screen, a new "🏦 Bank It" button adds the current video to your Records immediately without navigating away. Triggers the FOUND IT animation inline.
+- **Live find ticker**: a slim fixed bar at the bottom of every screen shows the latest community finds as they roll in from the leaderboard API. Click any pill to open the full leaderboard entry. Hides automatically on narrow screens during gameplay.
+- **Hunt Mode**: tap `🎯` in the header to lock into a focused hunting session: a corner panel tracks your current-session spin count, finds banked, and a personal best counter. No navigating away required; the panel floats over the game and can be minimized or closed.
+- **Leaderboard hero card**: the top-ranked community find is featured as a large hero card above the leaderboard list: full thumbnail, rarity glow, date, finder, and a direct Watch link.
 
 ---
 
-## [7.0.12] — 2026-06-02 — Leaderboard: list is now the default view with full verbose cards
+## [7.0.12] - 2026-06-02 - Leaderboard: list is now the default view with full verbose cards
 
 ### ✨ Changed / Fixed
-- **Community list is now the default view** — the records modal opens directly to the full verbose list instead of hiding it behind a toggle. The list loads community data immediately on open (no tab-click required). "⬜ Timeline" button toggles to the canvas graphic; "☰ List" toggles back.
-- **Verbose card layout** — each list entry now shows: thumbnail (linked to YouTube), full date (weekday + month + year), rarity badge, zero-views badge if applicable, views when found, search lead, channel name + video count, subscriber count, date added to leaderboard, source/server, video title, and finder name. Watch / SVG / Discord / ★ Both buttons on every card.
-- **"Submit a Find" renamed** to "🏆 Community Leaderboard" on the start screen — the old label implied it was submission-only when it actually opens the full leaderboard.
+- **Community list is now the default view**: the records modal opens directly to the full verbose list instead of hiding it behind a toggle. The list loads community data immediately on open (no tab-click required). "⬜ Timeline" button toggles to the canvas graphic; "☰ List" toggles back.
+- **Verbose card layout**: each list entry now shows: thumbnail (linked to YouTube), full date (weekday + month + year), rarity badge, zero-views badge if applicable, views when found, search lead, channel name + video count, subscriber count, date added to leaderboard, source/server, video title, and finder name. Watch / SVG / Discord / ★ Both buttons on every card.
+- **"Submit a Find" renamed** to "🏆 Community Leaderboard" on the start screen, the old label implied it was submission-only when it actually opens the full leaderboard.
 - **Modal title** changed to "Community Leaderboard" with subtitle clarifying it shows all community finds.
 - **Timeline controls** (All Finds / Zero Views / Reset Zoom / scroll hint) are hidden by default and only appear when the Timeline view is active.
 
 ---
 
-## [7.0.11] — 2026-06-02 — Records: share buttons on strip, list rows, and record holder
+## [7.0.11] - 2026-06-02 - Records: share buttons on strip, list rows, and record holder
 
 ### ✨ Added
-- **Inline share buttons on every list-view row** — each row in the ☰ List view has three mini-buttons: `SVG` (exports a shareable card), `D` (copies Discord-formatted text), `★` (does both). Buttons stop propagation so the find-detail modal doesn't open unless you click the row itself.
-- **Share buttons on the recently-added strip cards** — each "🆕 New" strip card now shows the same SVG / D / ★ trio beneath the date/finder line.
-- **Share buttons next to the Record Holder line** — in the timeline/graphic view, the record holder summary bar (🏆 Record Holder: …) now shows SVG / D / ★ inline, targeting the current top-ranked community find. Appears only when community data is loaded.
+- **Inline share buttons on every list-view row**: each row in the ☰ List view has three mini-buttons: `SVG` (exports a shareable card), `D` (copies Discord-formatted text), `★` (does both). Buttons stop propagation so the find-detail modal doesn't open unless you click the row itself.
+- **Share buttons on the recently-added strip cards**: each "🆕 New" strip card now shows the same SVG / D / ★ trio beneath the date/finder line.
+- **Share buttons next to the Record Holder line**: in the timeline/graphic view, the record holder summary bar (🏆 Record Holder: …) now shows SVG / D / ★ inline, targeting the current top-ranked community find. Appears only when community data is loaded.
 
 ---
 
-## [7.0.10] — 2026-06-02 — Records: recently-added strip + list/timeline toggle
+## [7.0.10] - 2026-06-02 - Records: recently-added strip + list/timeline toggle
 
 ### ✨ Added
-- **"🆕 New" strip above the timeline** — when community finds load, the 10 most recently submitted entries (sorted by `discovered_at` desc) appear as a compact horizontal strip of clickable cards above the timeline graphic. Each card shows the added date, posted date, and finder name in the entry's rarity colour. Clicking opens the full find-detail modal.
-- **List ↔ Timeline toggle button** — a "☰ List" button in the records controls row swaps the canvas timeline for a full card-list view of all community finds. Each row shows rank/medal, date (in rarity colour), view count, search lead, channel name, and finder. Clicking any row opens the detail modal. Toggle back with "⬜ Timeline". The All Finds / Zero Views / Reset Zoom buttons hide automatically while in list mode and restore on toggle back.
+- **"🆕 New" strip above the timeline**: when community finds load, the 10 most recently submitted entries (sorted by `discovered_at` desc) appear as a compact horizontal strip of clickable cards above the timeline graphic. Each card shows the added date, posted date, and finder name in the entry's rarity colour. Clicking opens the full find-detail modal.
+- **List ↔ Timeline toggle button**: a "☰ List" button in the records controls row swaps the canvas timeline for a full card-list view of all community finds. Each row shows rank/medal, date (in rarity colour), view count, search lead, channel name, and finder. Clicking any row opens the detail modal. Toggle back with "⬜ Timeline". The All Finds / Zero Views / Reset Zoom buttons hide automatically while in list mode and restore on toggle back.
 
 ---
 
-## [7.0.9] — 2026-05-25 — Setup Bingo button fix + format cache bust
+## [7.0.9] - 2026-05-25 - Setup Bingo button fix + format cache bust
 
 ### 🐛 Fixed
-- **"Setup Bingo" header button rendered as cramped two-line text** inside the 30×30 `.hdr-btn-icon` container, with the SVG bingo-card icon missing. Root cause: `updateBingoBtn()` called `btn.textContent = 'Setup Bingo'` on every state change, which destroyed the inline SVG and replaced the entire button body with raw text that then wrapped to two lines because the icon-button class is sized for a single glyph. Fix: button now carries the existing `is-formats` widen-class (auto-width + 8px padding + 4px icon→text gap, the same pattern the formats counter uses) and an explicit `<span class="lbl">` for the label. `updateBingoBtn()` only swaps the inner `.lbl` text (`"Setup Bingo"` ⇄ `"Bingo"`) plus the `title` / `aria-label` / `.active` class — never the SVG. Idle and active states now render as **icon + label** on one line and the active state lights up via the existing `.active` red gradient instead of a label rewrite.
+- **"Setup Bingo" header button rendered as cramped two-line text** inside the 30×30 `.hdr-btn-icon` container, with the SVG bingo-card icon missing. Root cause: `updateBingoBtn()` called `btn.textContent = 'Setup Bingo'` on every state change, which destroyed the inline SVG and replaced the entire button body with raw text that then wrapped to two lines because the icon-button class is sized for a single glyph. Fix: button now carries the existing `is-formats` widen-class (auto-width + 8px padding + 4px icon→text gap, the same pattern the formats counter uses) and an explicit `<span class="lbl">` for the label. `updateBingoBtn()` only swaps the inner `.lbl` text (`"Setup Bingo"` ⇄ `"Bingo"`) plus the `title` / `aria-label` / `.active` class, never the SVG. Idle and active states now render as **icon + label** on one line and the active state lights up via the existing `.active` red gradient instead of a label rewrite.
 
-- **Format counter pill showed only 118 formats** when the live `FORMAT-MAP.md` actually parses to 266. Root cause: stale `localStorage` cache under the `kvn_fmt_v6` key holding a snapshot from an older buggy parser; the in-app guard `cacheSize >= 100 && !isCacheStale()` happily skipped the network refresh, so existing users never saw the corrected parse. Fix: cache key bumped to `kvn_fmt_v7` (and the matching timestamp key to `kvn_fmt_ts_v7`), invalidating every cached snapshot worldwide on next page load. Subsequent fetches now re-parse `FORMAT-MAP.md` from GitHub fresh — and any future parser-shape changes are a one-line key bump away from the same guaranteed cache-flush.
+- **Format counter pill showed only 118 formats** when the live `FORMAT-MAP.md` actually parses to 266. Root cause: stale `localStorage` cache under the `kvn_fmt_v6` key holding a snapshot from an older buggy parser; the in-app guard `cacheSize >= 100 && !isCacheStale()` happily skipped the network refresh, so existing users never saw the corrected parse. Fix: cache key bumped to `kvn_fmt_v7` (and the matching timestamp key to `kvn_fmt_ts_v7`), invalidating every cached snapshot worldwide on next page load. Subsequent fetches now re-parse `FORMAT-MAP.md` from GitHub fresh, and any future parser-shape changes are a one-line key bump away from the same guaranteed cache-flush.
 
 ---
 
-## [7.0.8] — 2026-05-06 — Share buttons unclipped + 3D button pass
+## [7.0.8] - 2026-05-06 - Share buttons unclipped + 3D button pass
 
 ### 🐛 Fixed
-- **"Watch on YouTube" / "Share SVG" / "Discord" buttons in the find-detail modal were clipped** to "Wa" / "Sh" / "Di". Inline `style="flex:0"` on the buttons combined with the `.vt-btn` class's `min-width:0` expanded to `flex:0 1 0%` (don't grow, *do* shrink, basis 0%) — flexbox happily collapsed each button to fit only the first character that didn't overflow. Inline style is now `flex:0 0 auto;min-width:auto`, so they render their full label.
+- **"Watch on YouTube" / "Share SVG" / "Discord" buttons in the find-detail modal were clipped** to "Wa" / "Sh" / "Di". Inline `style="flex:0"` on the buttons combined with the `.vt-btn` class's `min-width:0` expanded to `flex:0 1 0%` (don't grow, *do* shrink, basis 0%), flexbox happily collapsed each button to fit only the first character that didn't overflow. Inline style is now `flex:0 0 auto;min-width:auto`, so they render their full label.
 
 ### ✨ 3D button pass
-Every interactive button in the UI got the same lifted-and-pressable treatment — the kind that responds when you touch it.
-- **`.vt-btn`** (share/save/skip/end/etc. — the wide pills) — top inner highlight, bottom inner shadow, hard offset shadow underneath (the "lift"), soft ambient bloom, glossy top-half overlay. Hover lifts it 1px and brightens it. Active presses it down 2px and dulls it.
-- **`.hdr-btn-icon`** (the small icon row in the page header) — same pattern at compact scale. Active state (e.g. open Format Browser) gets a colour-tinted hard shadow.
-- **`.wheel-mode-btns button`** (game-mode chips next to the wheel) — depth + lift + press, with the active variant getting an accent-coloured deep shadow.
-- **`.wheel-count-wrap button`** (count adjusters) — same depth pattern, accent-coloured.
+Every interactive button in the UI got the same lifted-and-pressable treatment, the kind that responds when you touch it.
+- **`.vt-btn`** (share/save/skip/end/etc., the wide pills), top inner highlight, bottom inner shadow, hard offset shadow underneath (the "lift"), soft ambient bloom, glossy top-half overlay. Hover lifts it 1px and brightens it. Active presses it down 2px and dulls it.
+- **`.hdr-btn-icon`** (the small icon row in the page header), same pattern at compact scale. Active state (e.g. open Format Browser) gets a colour-tinted hard shadow.
+- **`.wheel-mode-btns button`** (game-mode chips next to the wheel), depth + lift + press, with the active variant getting an accent-coloured deep shadow.
+- **`.wheel-count-wrap button`** (count adjusters), same depth pattern, accent-coloured.
 
-Press-and-release feels physical now instead of a 2D opacity flicker. No layout changes — sizes/spacing identical.
+Press-and-release feels physical now instead of a 2D opacity flicker. No layout changes, sizes/spacing identical.
 
 ---
 
-## [7.0.7] — 2026-05-06 — Records: "Added Invalid Date" fixed
+## [7.0.7] - 2026-05-06 - Records: "Added Invalid Date" fixed
 
 The find detail modal showed `Added Invalid Date` because the API returns `discovered_at` as a string of Unix-seconds (e.g. `"1777816805"`), and `new Date("1777816805")` is `Invalid Date` (JS only auto-detects ISO-ish strings, not numeric epoch strings). Patched both render sites (records list row + find detail modal) to coerce the value: parse to Number, treat values < `1e11` as seconds and `*1000`, fall back to passing the original string for ISO inputs, and skip rendering if the result is still NaN. Existing reseeded entries with epoch-seconds discovered_at now render correctly.
 
 ---
 
-## [7.0.6] — 2026-05-03 — Bingo icon, take three
+## [7.0.6] - 2026-05-03 - Bingo icon, take three
 
-The v7.0.5 bingo SVG used quadratic-curve `Q` paths to draw the letter "B"; in some browsers / size combos the path collapsed and the button fell back to rendering the `aria-label` text ("Setup Bingo"). Replaced with a path-free design: outer ball, inner letter window, centre dot, and four small dimples at NW/NE/SW/SE — pure circles only, no `<path>`, no per-element stroke override. Reads as a bingo ball at every size.
+The v7.0.5 bingo SVG used quadratic-curve `Q` paths to draw the letter "B"; in some browsers / size combos the path collapsed and the button fell back to rendering the `aria-label` text ("Setup Bingo"). Replaced with a path-free design: outer ball, inner letter window, centre dot, and four small dimples at NW/NE/SW/SE, pure circles only, no `<path>`, no per-element stroke override. Reads as a bingo ball at every size.
 
 ---
 
-## [7.0.5] — 2026-05-03 — Bingo icon + repo hygiene pass
+## [7.0.5] - 2026-05-03 - Bingo icon + repo hygiene pass
 
-- **Bingo button finally reads as bingo.** Replaced the 3×3 mini-card SVG (which most testers still read as a generic grid) with a classic **bingo ball** — outer circle, inner letter window, and a stroked **B** in the centre. Universally recognised lottery/bingo iconography at any size.
+- **Bingo button finally reads as bingo.** Replaced the 3×3 mini-card SVG (which most testers still read as a generic grid) with a classic **bingo ball**: outer circle, inner letter window, and a stroked **B** in the centre. Universally recognised lottery/bingo iconography at any size.
 - **CHANGELOG scrubbed.** Removed server-internal references that had crept into earlier 7.0.x entries (filesystem paths, the explicit table list, systemd hardening directive names, the install path of the binary). Entries now describe the symptoms and resolutions in product terms, which is what readers of a public changelog actually need. The proprietary wrapper layer should not be discoverable from this repo's text artefacts.
-- **Wrapper modal — license line gets a colour-cycle pulse.** The "© Justin / Falcon Technix — All Rights Reserved" line in the wrapper-changelog modal now flows through a soft rainbow gradient with a slow brightness breath. Honours `prefers-reduced-motion`. *(Wrapper-only visual change; no GPL HTML touched beyond the version bump.)*
+- **Wrapper modal, license line gets a colour-cycle pulse.** The "© Justin / Falcon Technix, All Rights Reserved" line in the wrapper-changelog modal now flows through a soft rainbow gradient with a slow brightness breath. Honours `prefers-reduced-motion`. *(Wrapper-only visual change; no GPL HTML touched beyond the version bump.)*
 
 ---
 
-## [7.0.4] — 2026-05-03 — Changelog modal: actually serve the markdown
+## [7.0.4] - 2026-05-03 - Changelog modal: actually serve the markdown
 
-The v7.0.3 fix made the parser robust enough to handle the file — but the file was never reaching the parser. Caddy's `handle_path /KVN_AUST/CHANGELOG.md` directive strips the **entire matched prefix** (not just the leading `/KVN_AUST` portion as I'd assumed), which left an empty path. `file_server` then served the directory index — the **938-byte placeholder** `index.html` — with `Content-Type: text/markdown` because the header was already set. Result: the in-app modal received the placeholder HTML, treated it as markdown, the parser found 0 entries (no `## [version]` lines in HTML), and fell through to the `<pre>` raw dump.
+The v7.0.3 fix made the parser robust enough to handle the file, but the file was never reaching the parser. Caddy's `handle_path /KVN_AUST/CHANGELOG.md` directive strips the **entire matched prefix** (not just the leading `/KVN_AUST` portion as I'd assumed), which left an empty path. `file_server` then served the directory index, the **938-byte placeholder** `index.html`, with `Content-Type: text/markdown` because the header was already set. Result: the in-app modal received the placeholder HTML, treated it as markdown, the parser found 0 entries (no `## [version]` lines in HTML), and fell through to the `<pre>` raw dump.
 
 Switched to `handle` + `rewrite *  /CHANGELOG.md` (and the same for WRAPPER-CHANGELOG.md) so the request gets internally rerouted to the actual file in the doc root before `file_server` looks it up. All 4 URL variants (`/CHANGELOG.md`, `/KVN_AUST/CHANGELOG.md`, `/WRAPPER-CHANGELOG.md`, `/KVN_AUST/WRAPPER-CHANGELOG.md`) now serve their real bytes (43755 and 8587 on disk, both match served sizes exactly).
 
-*(Caddy-only fix. shim.js parser improvements from v7.0.3 already shipped — they were correct, the upstream just wasn't feeding them real data.)*
+*(Caddy-only fix. shim.js parser improvements from v7.0.3 already shipped, they were correct, the upstream just wasn't feeding them real data.)*
 
 ---
 
-## [7.0.3] — 2026-05-03 — Changelog modal renders properly
+## [7.0.3] - 2026-05-03 - Changelog modal renders properly
 
-- **In-app version modals were dumping raw markdown.** The `parseChangelog` regex required a literal ASCII hyphen between `## [version]` and the date, but our CHANGELOG entries use ` — ` (em-dash), and Markdown editors silently auto-correct that on save. Result: parser found 0 entries → fallback dumped the raw `.md` text into a `<pre>` block in both the source-changelog modal and the wrapper-changelog modal. Now matches `-`, `–` (en-dash), and `—` (em-dash). Captures any "— Title" suffix as the entry title.
-- **`renderMarkdown` rewrite** — was minimum-viable, missing links, blockquotes, fenced code, tables, italic, em-dash horizontal rules, and the dedented "block element inside `<p>`" cleanup. Now handles all of those, plus pulls fenced ` ```code``` ` blocks out before other regex transforms so their content survives intact. Tables render as a real styled `<table>` (collapsed borders, monospace cells), blockquotes get a left-bar treatment, links open in new tabs.
-- *(Wrapper-only change — `shim.js` deployed direct to the server. No GPL HTML in this fix beyond the version bump.)*
+- **In-app version modals were dumping raw markdown.** The `parseChangelog` regex required a literal ASCII hyphen between `## [version]` and the date, but our CHANGELOG entries use ` — ` (em-dash), and Markdown editors silently auto-correct that on save. Result: parser found 0 entries → fallback dumped the raw `.md` text into a `<pre>` block in both the source-changelog modal and the wrapper-changelog modal. Now matches `-`, `–` (en-dash), and `—` (em-dash). Captures any ", Title" suffix as the entry title.
+- **`renderMarkdown` rewrite**: was minimum-viable, missing links, blockquotes, fenced code, tables, italic, em-dash horizontal rules, and the dedented "block element inside `<p>`" cleanup. Now handles all of those, plus pulls fenced ` ```code``` ` blocks out before other regex transforms so their content survives intact. Tables render as a real styled `<table>` (collapsed borders, monospace cells), blockquotes get a left-bar treatment, links open in new tabs.
+- *(Wrapper-only change, `shim.js` deployed direct to the server. No GPL HTML in this fix beyond the version bump.)*
 
 ---
 
-## [7.0.2] — 2026-05-03 — Header polish
+## [7.0.2] - 2026-05-03 - Header polish
 
-- **Icon row stacks instead of pushing the title.** `.header-right` now caps at `max-width:280px` (200px on mobile) — when the 9 icons + sound picker exceed that, they wrap to a second row underneath instead of squeezing the **Sonder** title off-screen.
-- **Bingo button gets a real bingo icon.** Was a generic 5×5 grid that read as "spreadsheet". Now a 3×3 card outline with the centre cell visibly daubed (filled circle stroke-removed) — reads as *"a bingo card, with one marked space"* at any size, matching what the panel actually does.
+- **Icon row stacks instead of pushing the title.** `.header-right` now caps at `max-width:280px` (200px on mobile), when the 9 icons + sound picker exceed that, they wrap to a second row underneath instead of squeezing the **Sonder** title off-screen.
+- **Bingo button gets a real bingo icon.** Was a generic 5×5 grid that read as "spreadsheet". Now a 3×3 card outline with the centre cell visibly daubed (filled circle stroke-removed), reads as *"a bingo card, with one marked space"* at any size, matching what the panel actually does.
 - **Slightly slimmer icons.** 32×32 → 30×30 with 5px gap (was 6px). Saves ~12% horizontal space, fits more on the first row before wrapping.
 
-## [7.0.1] — 2026-05-03 — **Stabilization pass after the Go rewrite**
+## [7.0.1] - 2026-05-03 - **Stabilization pass after the Go rewrite**
 
 Catches every loose end the Go cutover surfaced in the first 24 hours of production traffic.
 
@@ -347,9 +347,9 @@ Catches every loose end the Go cutover surfaced in the first 24 hours of product
 
 - **Login was broken** (network error). The Go router only matched bare `/sync.php` for cloud-save; the front-end posts to `/KVN_AUST/sync.php` (legacy bookmark prefix). Added the prefixed path variants. Login + cloud save work again.
 - **Channel-videos count** returned 502. The previous fix only enriched single-video metadata; the channel handler still relied on Invidious-only and 502'd when all instances were dead. Added `tryScrapeChannel()` that hits `/channel/<id>/about` and pulls `videoCountText`. Verified live: channels return `videoCount` correctly via scrape.
-- **In-app changelog modals** ("Couldn't load CHANGELOG.md / WRAPPER-CHANGELOG.md") were 403'd by Caddy's `block_sensitive` (which globs all `.md`). Added explicit `handle_path` blocks BEFORE `block_sensitive` for both files at `/CHANGELOG.md`, `/WRAPPER-CHANGELOG.md`, `/KVN_AUST/CHANGELOG.md`, `/KVN_AUST/WRAPPER-CHANGELOG.md` — all 4 URL variants the shim might fetch. All HTTP 200 now.
+- **In-app changelog modals** ("Couldn't load CHANGELOG.md / WRAPPER-CHANGELOG.md") were 403'd by Caddy's `block_sensitive` (which globs all `.md`). Added explicit `handle_path` blocks BEFORE `block_sensitive` for both files at `/CHANGELOG.md`, `/WRAPPER-CHANGELOG.md`, `/KVN_AUST/CHANGELOG.md`, `/KVN_AUST/WRAPPER-CHANGELOG.md`, all 4 URL variants the shim might fetch. All HTTP 200 now.
 - **Embedded `app-version-data` JSON block** wasn't bumped when v7.0.0 was cut, so the version pill kept showing 6.0.0. Bumped to 7.0.0 + added a workflow (below) so it never desyncs from a release tag again.
-- **`statusRecorder` middleware** in the Go backend masked `http.Flusher` (and now `http.Hijacker`) — caused `/version-stream.php` SSE to return HTTP 500 every 6 seconds for every open game tab. Fixed by delegating both interfaces to the wrapped writer.
+- **`statusRecorder` middleware** in the Go backend masked `http.Flusher` (and now `http.Hijacker`), caused `/version-stream.php` SSE to return HTTP 500 every 6 seconds for every open game tab. Fixed by delegating both interfaces to the wrapped writer.
 - **YT metadata `published` timestamp** was being missed because YouTube reshuffled the watch-page HTML. Added `datePublished` and `uploadDate` scrape fallbacks alongside the existing `publishDate` regex. Date-posted field now auto-fills on the rating screen.
 
 ### 🛡️ Operational
@@ -360,27 +360,27 @@ Catches every loose end the Go cutover surfaced in the first 24 hours of product
 ### 🤖 Auto-bump on release tag
 
 - New workflow [`bump-version.yml`](.github/workflows/bump-version.yml) fires on `release: published`, parses the SemVer tag, updates the embedded `app-version-data` block in `kvnaust-recyclebin.html`, and commits back. Stops the v7.0.0-style mistake where the tag and the embedded block can drift. Pre-release tags (`v7.0.1-rc1`) are skipped so the production app version only follows real releases.
-- This release is the workflow's first dogfood run — when v7.0.1 publishes, the auto-bump should land a follow-up commit "Auto-bump app-version-data to 7.0.1" within ~30 seconds.
+- This release is the workflow's first dogfood run, when v7.0.1 publishes, the auto-bump should land a follow-up commit "Auto-bump app-version-data to 7.0.1" within ~30 seconds.
 
 ### 🤝 Wrapper
 
-- Removed the maintainer's last name from the wrapper's version modal copyright notice. The version modal and copyright footer now read "Justin / Falcon Technix" instead of the full name. *(Wrapper is proprietary — change is server-side only, mentioned here for completeness.)*
+- Removed the maintainer's last name from the wrapper's version modal copyright notice. The version modal and copyright footer now read "Justin / Falcon Technix" instead of the full name. *(Wrapper is proprietary, change is server-side only, mentioned here for completeness.)*
 
 ---
 
-## [7.0.0] — 2026-05-03 — **The Go Rewrite**
+## [7.0.0] - 2026-05-03 - **The Go Rewrite**
 
-> **The single biggest backend change in the project's history.** The hosted community wrapper at `kvnaust.falcontechnix.com` is now a single statically-linked Go binary (~23 MB) replacing the previous PHP layer that powered every dynamic endpoint behind the GPL game tool. Same product, same URLs, same data — completely different engine underneath.
+> **The single biggest backend change in the project's history.** The hosted community wrapper at `kvnaust.falcontechnix.com` is now a single statically-linked Go binary (~23 MB) replacing the previous PHP layer that powered every dynamic endpoint behind the GPL game tool. Same product, same URLs, same data, completely different engine underneath.
 
 ### 🦫 Why we did this
 
-The PHP wrapper served us well from v3 → v6 — fast to iterate, easy to deploy, no build step. By v6.1 it had accumulated **~150 KB across 28 files**, a nontrivial dependency surface (php-fpm, php-curl, php-sqlite3, php-mbstring, php-json, php-xml, OPcache config, FPM pool tuning), and a debugging story that was getting harder to reason about as endpoints multiplied. Specific pains that pushed us over:
+The PHP wrapper served us well from v3 → v6, fast to iterate, easy to deploy, no build step. By v6.1 it had accumulated **~150 KB across 28 files**, a nontrivial dependency surface (php-fpm, php-curl, php-sqlite3, php-mbstring, php-json, php-xml, OPcache config, FPM pool tuning), and a debugging story that was getting harder to reason about as endpoints multiplied. Specific pains that pushed us over:
 
 - **Cold path latency.** Even with OPcache hot, every request paid a per-request bootstrap (autoloader, security gate include, PDO open, PDO prepare). Profiling showed steady-state requests spending 40-60% of wall-clock time on framework overhead before the handler even ran.
-- **Concurrency model.** PHP-FPM workers are process-per-request. Our SSE endpoints (`version-stream.php`, `multiplayer.php` long-polling) tied up a worker for up to 4½ minutes. Under burst load — especially around new release announcements — workers exhausted and queued.
+- **Concurrency model.** PHP-FPM workers are process-per-request. Our SSE endpoints (`version-stream.php`, `multiplayer.php` long-polling) tied up a worker for up to 4½ minutes. Under burst load, especially around new release announcements, workers exhausted and queued.
 - **Type drift.** PHP's runtime typing meant entire categories of bugs (typo'd field names, off-by-one column indices, nil-vs-empty-string ambiguity) only surfaced in production. Adding strict types everywhere helped but was inconsistent.
 - **Deployment surface.** Apache mod_php → PHP-FPM → Caddy reverse proxy → Apache vhost rules → .htaccess → 28 PHP files = a lot of moving parts to keep in sync. A single misconfigured allowlist anywhere was a vuln.
-- **No build-time guarantees.** `php -l` only checks syntax. Dead code, broken refactors, missed callers — all silent until exercised.
+- **No build-time guarantees.** `php -l` only checks syntax. Dead code, broken refactors, missed callers, all silent until exercised.
 
 ### ⚡ What Go gave us
 
@@ -390,14 +390,14 @@ The PHP wrapper served us well from v3 → v6 — fast to iterate, easy to deplo
 - **Compile-time guarantees.** `go vet`, `staticcheck`, and `go build` catch nil derefs, unused variables, wrong types, dead code, and mismatched interfaces *before* the binary even gets uploaded. We removed an entire class of "production-only" bugs.
 - **Pure-Go SQLite (`modernc.org/sqlite`).** No CGO. The binary compiles with `CGO_ENABLED=0` and runs on any Linux x86_64 with no shared libraries. SQLite WAL mode, prepared statements, and schema migrations all live in code we own.
 - **Strict OS-level sandbox at the binary level.** The service runs unprivileged with a tightly restricted syscall set, no home access, isolated temp space, locked-down namespaces and address families, and a small explicit allowlist of writable directories. The blast radius of a hypothetical RCE is dramatically smaller than the previous PHP-FPM surface.
-- **One language for everything.** Auth, rate-limit, sqlite, SSE, hCaptcha verification, WebAuthn, ratelimit, video-frame extraction, the Invidious/oEmbed/scrape waterfall — all in `internal/*` Go packages we own. No `composer require`, no transitive dep tree.
+- **One language for everything.** Auth, rate-limit, sqlite, SSE, hCaptcha verification, WebAuthn, ratelimit, video-frame extraction, the Invidious/oEmbed/scrape waterfall, all in `internal/*` Go packages we own. No `composer require`, no transitive dep tree.
 - **Observable by default.** Structured `slog.JSON` logging on every request (`{method, path, status, ip, dur_ms}`) flows straight into journald with zero config. No more grep-fu through interleaved Apache + PHP error logs.
-- **Safer migrations.** The Go version reads the same SQLite file the PHP version wrote. We did the cutover live with no schema migration, no data loss, no downtime — both versions could run side-by-side reading the same DB during testing.
+- **Safer migrations.** The Go version reads the same SQLite file the PHP version wrote. We did the cutover live with no schema migration, no data loss, no downtime, both versions could run side-by-side reading the same DB during testing.
 
 ### 📦 What stayed the same (deliberately)
 
 - **Every URL, every endpoint name, every response shape.** `*.php` paths still resolve (Caddy proxies them to Go's dispatcher which matches on path verbatim). Existing bookmarks, Discord embeds, `gh release` cards, and third-party scripts all keep working with zero changes.
-- **The same SQLite database file**, untouched by the rewrite — same schema, same rows, same indexes. The Go binary opens it read-write the same way the PHP layer did; no migration step was needed for the cutover.
+- **The same SQLite database file**, untouched by the rewrite, same schema, same rows, same indexes. The Go binary opens it read-write the same way the PHP layer did; no migration step was needed for the cutover.
 - **The GPL game tool** (this repo's `kvnaust-recyclebin.html`) is *unchanged* by the rewrite. The wrapper just serves it differently.
 
 ### 🔒 Wrapper licensing reminder
@@ -409,17 +409,17 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 ### 🐛 Bug fixes shipped in this release
 
 - **YouTube metadata fetch now returns full data.** The waterfall (Invidious → oEmbed → scrape) was first-wins, so when oEmbed succeeded with only title/author/thumb, viewCount/published/channelID were never populated. Front-end auto-fill on the rating screen left "Date posted", "Views", and "Ch. videos" blank. The waterfall is now **enriching**: each upstream merges into the result, missing fields are filled by later upstreams. Also added publish-date scrape fallbacks for `datePublished` and `uploadDate` (YouTube reshuffled the watch-page HTML and broke the old `publishDate` regex).
-- **`/version-stream.php` SSE endpoint stopped 500'ing.** The logging middleware's `statusRecorder` wraps `http.ResponseWriter` to capture status code + duration, but it didn't proxy the `http.Flusher` interface — so `w.(http.Flusher)` in the SSE handler always returned `false` and the handler bailed with HTTP 500. Result: every open game tab was hammering the endpoint with a 500 every 6 seconds. Added `Flush()` (and `Hijack()` for future websocket support) delegators on `statusRecorder`. Stream now flushes properly; reconnect storm is over.
+- **`/version-stream.php` SSE endpoint stopped 500'ing.** The logging middleware's `statusRecorder` wraps `http.ResponseWriter` to capture status code + duration, but it didn't proxy the `http.Flusher` interface, so `w.(http.Flusher)` in the SSE handler always returned `false` and the handler bailed with HTTP 500. Result: every open game tab was hammering the endpoint with a 500 every 6 seconds. Added `Flush()` (and `Hijack()` for future websocket support) delegators on `statusRecorder`. Stream now flushes properly; reconnect storm is over.
 
 ---
 
 ## [Unreleased] - 2026-05-01
 
 ### Naming
-- **The tool is now named "Sonder"** — for the John Koenig word ("the realization that each random passerby is living a life as vivid and complex as your own…"). KVN AUST uses the word himself in the preface of his Map: *"This feels like sonder, like the way YouTube used to be."* That callback is the entire pitch — every spin pulls up someone's whole-ass life one click away, entirely unwitnessed.
+- **The tool is now named "Sonder"**: for the John Koenig word ("the realization that each random passerby is living a life as vivid and complex as your own…"). KVN AUST uses the word himself in the preface of his Map: *"This feels like sonder, like the way YouTube used to be."* That callback is the entire pitch, every spin pulls up someone's whole-ass life one click away, entirely unwitnessed.
 - **Sonder = the tool. YouTube's Recycle Bin = KVN AUST's content concept.** The two names are kept distinct on purpose: KVN's series identity stays his, our tool gets its own banner. In-tool branding always pairs them ("Sonder · for KVN AUST's Recycle Bin") so the attribution is unmistakable.
-- Carefully scoped rename: `<title>`, start-screen H1, header bar, all four SEO meta surfaces (description, og, twitter, JSON-LD `name` + new `alternateName`), README h1 + opening prose, GitHub repo description. Filename `kvnaust-recyclebin.html` and repo name `KVN_AUST` deliberately UNCHANGED — renaming either would break the hosted wrapper, every existing bookmark, and every offline-downloaded copy.
-- New **Sonder etymology modal** opens when the player clicks the H1 ("Sonder") on the start screen or the header title — shows the full Koenig poetic passage with attribution + KVN's "feels like sonder" callback. Animated rainbow gradient on the headline word. Esc-friendly close.
+- Carefully scoped rename: `<title>`, start-screen H1, header bar, all four SEO meta surfaces (description, og, twitter, JSON-LD `name` + new `alternateName`), README h1 + opening prose, GitHub repo description. Filename `kvnaust-recyclebin.html` and repo name `KVN_AUST` deliberately UNCHANGED, renaming either would break the hosted wrapper, every existing bookmark, and every offline-downloaded copy.
+- New **Sonder etymology modal** opens when the player clicks the H1 ("Sonder") on the start screen or the header title, shows the full Koenig poetic passage with attribution + KVN's "feels like sonder" callback. Animated rainbow gradient on the headline word. Esc-friendly close.
 
 ### Domain
 - **Hosted at `https://kvnaust.falcontechnix.com`** (canonical). The previous URL `https://falcontechnix.com/KVN_AUST/` still works and redirects to the new subdomain. All in-tool links, SEO meta (`canonical`, `og:url`, `twitter:image`, JSON-LD `url`), API constants (`FINDS_API`, `LIVE_URL`), share-card watermarks, Discord copy strings, READMEs, FORMAT-MAP, SOLVED_MYSTERIES, WRAPPER_CHANGELOG, DISCORD_INTEGRATION, and the leaderboard-sync workflow all point at the new subdomain.
@@ -432,11 +432,11 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 - **Badge counter deduped**: `update-format-count.yml` now counts UNIQUE keyphrases per section, ignoring the "Recently Added" preview rows (which duplicate entries that also live in their proper sections) and the Multi-Variable bullet list (not auto-loaded). Badge total now reflects actual unique format count.
 
 ### Game Tool
-- **KVN Recycle Bin video gallery**: new "KVN's Recycle Bin Videos" button on the start screen opens a slide-in panel with every Recycle Bin / 0-View / mapping / Bingo video on @KVNAUST (18 videos, scraped from the channel and curated to filter out off-topic uploads). Each card shows YouTube thumbnail, title, and publish date; clicking opens the video on YouTube. Videos published in the last 24 hours render with a pulsing red border, a "NEW" corner badge, and a "JUST DROPPED" meta tag — and a small NEW dot lights up on the start-screen button so the player knows there's something fresh without opening the panel. Re-checks every 10 minutes.
-- **Lose-a-Space spinner penalty**: when bingo is active and the player has marked spaces, the wheel now sprinkles configurable `LOSE A SPACE` penalty segments (dark-red). Landing on one opens a dramatic overlay — counts marked spaces, rolls a random index, picks a random cell, plays a sad-trombone descending fanfare and unmarks it. Matches the new mechanic from KVN's Hard Mode video.
-- **Pre-game setup panel** on the start screen: configurable Lose-a-Space slot count (0–10, default 2) and Free Space toggle (on by default — turn off for a 25-category card). Settings persist across sessions.
+- **KVN Recycle Bin video gallery**: new "KVN's Recycle Bin Videos" button on the start screen opens a slide-in panel with every Recycle Bin / 0-View / mapping / Bingo video on @KVNAUST (18 videos, scraped from the channel and curated to filter out off-topic uploads). Each card shows YouTube thumbnail, title, and publish date; clicking opens the video on YouTube. Videos published in the last 24 hours render with a pulsing red border, a "NEW" corner badge, and a "JUST DROPPED" meta tag, and a small NEW dot lights up on the start-screen button so the player knows there's something fresh without opening the panel. Re-checks every 10 minutes.
+- **Lose-a-Space spinner penalty**: when bingo is active and the player has marked spaces, the wheel now sprinkles configurable `LOSE A SPACE` penalty segments (dark-red). Landing on one opens a dramatic overlay, counts marked spaces, rolls a random index, picks a random cell, plays a sad-trombone descending fanfare and unmarks it. Matches the new mechanic from KVN's Hard Mode video.
+- **Pre-game setup panel** on the start screen: configurable Lose-a-Space slot count (0–10, default 2) and Free Space toggle (on by default, turn off for a 25-category card). Settings persist across sessions.
 - **30 auto-rotating spinner themes**: Carnival, Pastels, Primaries, Mono, Sunset, Ocean, Forest, Neon, Earth, Candy, Vaporwave, Autumn, Spring, Cyberpunk, MardiGras, Berry, Tropical, Mute, Royal, Sunrise, Mint, Crimson, Ice, Lava, Galaxy, Jungle, Desert, Eighties, Nineties, Garden, Royal2, Rainbow. Rotation triggers on a calendar-day boundary OR after the player saves 2 full games and starts a 3rd. Theme survives soft refreshes via localStorage. Deep Dive remains the only manually-toggleable theme.
-- **Bottom bar auto-hide**: the credit footer now hides automatically when a game starts and reappears when the game ends (summary screen) or the player returns to the start screen. If the user manually X's the footer, that user choice is respected — auto-show is suppressed.
+- **Bottom bar auto-hide**: the credit footer now hides automatically when a game starts and reappears when the game ends (summary screen) or the player returns to the start screen. If the user manually X's the footer, that user choice is respected, auto-show is suppressed.
 - **Free / non-profit messaging**: README and start screen rewritten to actively encourage downloading the standalone HTML and running it locally. Hosted version is positioned as the optional community layer, not the default. Stronger guarantees: no ads, no paywalls, no tracking, no monetization, ever.
 
 ### Infrastructure
@@ -464,7 +464,7 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 ---
 
 ### Added
-- **Achievement system**: 15 badges tracked in localStorage — First Dive, Veteran Diver, Deep Searcher, First Blood, Ghost Hunter, Record Collector, Legendary Find, Super Rare, Time Traveler, BINGO!, Deep Diver, Bubble Pop, Format Master, Gem Finder, Show & Tell. Toast + triangle fanfare on unlock. Badges modal with grid display. Hash routing `#achievements`/`#badges`.
+- **Achievement system**: 15 badges tracked in localStorage, First Dive, Veteran Diver, Deep Searcher, First Blood, Ghost Hunter, Record Collector, Legendary Find, Super Rare, Time Traveler, BINGO!, Deep Diver, Bubble Pop, Format Master, Gem Finder, Show & Tell. Toast + triangle fanfare on unlock. Badges modal with grid display. Hash routing `#achievements`/`#badges`.
 - **Timeline zoom/pan**: scroll to zoom (1x–10x), drag to pan, touch support, "Reset Zoom" button. Year labels scale with zoom level. Dots, zones, and beams all respond to zoom.
 - **Video gallery**: grid of all found videos with thumbnails. Search, sort by recent/oldest/views/rating. Click to open on YouTube. Accessible via header "Gallery" button or `#gallery` hash.
 - **Service worker**: `sw.js` caches app assets for full offline PWA support. Network-first for API calls, cache-first for static assets. Auto-updates on new version.
@@ -479,7 +479,7 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 ## [5.3.1] - 2026-04-25
 
 ### Fixed
-- **Records entries now include `lead` field** — format label saved when adding from result screen, enables wrapper→finds.php bridge to include the lead/keyphrase used
+- **Records entries now include `lead` field**: format label saved when adding from result screen, enables wrapper→finds.php bridge to include the lead/keyphrase used
 - **SOLVED_MYSTERIES.md** now included in server sync pull list and .htaccess allowlist
 
 ---
@@ -497,7 +497,7 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 ## [5.2.0] - 2026-04-23
 
 ### Changed
-- **Deep Dive pointer**: CSS override uses `var(--pointer-glow)` for stroke — segment colors flash correctly through deep ocean palette during spin
+- **Deep Dive pointer**: CSS override uses `var(--pointer-glow)` for stroke, segment colors flash correctly through deep ocean palette during spin
 - **Anchor wipe major upgrade**: water caustics texture (SVG fractalNoise with screen blend), water surface line, 8 splash droplets with gravity arc, 25 rising particles, 3 sonar rings, taller splash pad, "SEARCHING THE ABYSS" subtitle
 
 ---
@@ -505,23 +505,23 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 ## [5.1.0] - 2026-04-23
 
 ### Added
-- **Holiday easter eggs**: automatic detection for 10 holidays — New Year, Valentine's, St. Patrick's, April Fools, 4th of July, KVN AUST's Birthday (Oct 18), Halloween, Christmas Eve, Christmas, New Year's Eve
+- **Holiday easter eggs**: automatic detection for 10 holidays, New Year, Valentine's, St. Patrick's, April Fools, 4th of July, KVN AUST's Birthday (Oct 18), Halloween, Christmas Eve, Christmas, New Year's Eve
 - Each holiday: themed tagline, toast greeting, holiday-colored confetti, custom free space phrases (Halloween/Christmas)
 - **KVN AUST Day** (Oct 18): auto-confetti + birthday greeting
 - **April Fools**: reversed bingo letters
-- **Poppable bubbles**: click any Deep Dive bubble to burst it — spawns 6-16 HSL particles with gravity + pop sound (high-pass noise + sine ping)
+- **Poppable bubbles**: click any Deep Dive bubble to burst it, spawns 6-16 HSL particles with gravity + pop sound (high-pass noise + sine ping)
 - **Bubble visual upgrade**: per-bubble HSL hue, outer ring rainbow refraction, prismatic refraction arc on large bubbles, pop particles inherit parent hue
 - **Deep Dive background**: swaps to underwater dot texture pattern
 
 ### Changed
-- Visual sweep: 17 elements upgraded with premium treatment — bingo flash, bingo win, bingo cells, confetti, error panels, spin label, format banner, click hint, range display, wheel controls, summary screen/title/cards, plus transitions on all interactive elements
+- Visual sweep: 17 elements upgraded with premium treatment, bingo flash, bingo win, bingo cells, confetti, error panels, spin label, format banner, click hint, range display, wheel controls, summary screen/title/cards, plus transitions on all interactive elements
 - Confetti uses holiday colors when a holiday is active
 
 ---
 
 ## [5.0.0] - 2026-04-23
 
-### Changed — Full Visual Overhaul
+### Changed, Full Visual Overhaul
 - **Header**: deeper gradient, bottom border glow `rgba(231,76,60,.12)`, 2px animated accent line with breathing keyframes, backdrop blur on buttons
 - **Start screen**: animated gradient title (white→red→gold shifting), stronger avatar glow, tagline with letter-spacing, buttons with inset highlights and bottom shadow
 - **Bingo card**: cells have inner shadow for depth + bottom highlight, hover glow, grid gets dark background pad, mosaic desaturated slightly
@@ -543,23 +543,23 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 ## [4.7.0] - 2026-04-23
 
 ### Fixed
-- **All 192 FORMAT-MAP entries now parse** — zero skips, zero hardcoded fallbacks
+- **All 192 FORMAT-MAP entries now parse**: zero skips, zero hardcoded fallbacks
 - **4XXX / Trim 4XXX**: properly detected as hex format (generates AAA-FFF range)
 - **"HHMMSS"**: generates valid time-of-day strings (000000-235959)
 - **Video0XX, Vid0XX, MOV000XX, muuvee00XX, 0_VIDEO_0XX**: small-range Ancient YouTube formats now parse from parenthetical `(00-10)` notation
 - **XXXX.MP4, 0XXXX.MTS, MOVXXXXA**: formats with X at start or suffixes after X now parse correctly
-- **GX01XXXX, YDXJXXXX**: formats with X in the prefix (like GoPro `GX01`) now parse — regex uses lookahead to distinguish prefix-X from variable-X
+- **GX01XXXX, YDXJXXXX**: formats with X in the prefix (like GoPro `GX01`) now parse, regex uses lookahead to distinguish prefix-X from variable-X
 - **Date formats in Search Keyphrases section**: now caught without requiring `>YYYY` column
 - **Spacebar ghost spin**: spacebar on non-number screens no longer activates focused buttons (was triggering spin sounds in background)
 - **OG/Twitter meta image**: fixed broken `screenshots/spinner.png` reference to `screenshots/05-spinner.png`
 
 ### Changed
-- **All hardcoded formats removed** — `ALL_FORMATS=[]`, everything comes from FORMAT-MAP.md fetch + cache
+- **All hardcoded formats removed**: `ALL_FORMATS=[]`, everything comes from FORMAT-MAP.md fetch + cache
 - Numbered regex: `(?:[^X]|X(?!X))*` prefix allows X in format names while correctly identifying the trailing variable X run
 - Cache key bumped to v6
 
 ### Added
-- `sp:'time'` format type — generates HHMMSS with valid hour/minute/second ranges
+- `sp:'time'` format type, generates HHMMSS with valid hour/minute/second ranges
 - Small-range parser for Ancient YouTube formats in `(XX-YY)` parenthetical notation
 
 ---
@@ -568,8 +568,8 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 
 ### Added
 - **Visual overhaul**: bespoke button colors per action (copy/youtube/save/skip/end/share/discord/records), background diamond texture with slow drift animation, gloss overlays on all buttons
-- **"Add to Records" button** on result screen — grabs current video data and opens Records with highlighted entry
-- **"Submit a Find" button** on start screen — opens Records modal directly, no game required
+- **"Add to Records" button** on result screen, grabs current video data and opens Records with highlighted entry
+- **"Submit a Find" button** on start screen, opens Records modal directly, no game required
 
 ### Changed
 - Buttons use named CSS classes instead of inline styles
@@ -620,7 +620,7 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 - **Direct links table** in README for all hash routes
 
 ### Fixed
-- Zone labels no longer overlap — font scales with zone width, hides when too narrow
+- Zone labels no longer overlap, font scales with zone width, hides when too narrow
 - Detail modal now uses `window.open()` for YouTube links instead of `<a>` inside pointer-events:none container
 - Source attribution symbols (D/G/GD/M/K) rendered inside community dots
 
@@ -633,9 +633,9 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 
 ### Changed
 - **Wheel pointer**: upgraded from flat triangle to 3D gradient pointer with metallic gradient fill, specular highlight, idle bob animation, and segment-color glow pulse during spin. Locks to landed segment color after spin.
-- **Bubble z-index**: lowered from 5 to 1 — bubbles now properly render behind all game UI, spinner, and buttons
+- **Bubble z-index**: lowered from 5 to 1, bubbles now properly render behind all game UI, spinner, and buttons
 - **Anchor wipe**: added teal splash radial gradient at bottom when anchor lands, reverse splash on exit
-- **README**: updated YouTube stats — estimated 6 billion videos with <10 views, 1 billion+ with exactly zero views
+- **README**: updated YouTube stats, estimated 6 billion videos with <10 views, 1 billion+ with exactly zero views
 
 ## [4.0.3] - 2026-04-20
 
@@ -646,7 +646,7 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 
 ### Added
 - **Auto-fetch video metadata**: pasting a YouTube URL auto-fills date posted, views when found (with today's date+time), and channel video count via Invidious API
-- **Anchor drop screen wipe**: toggling Deep Dive plays a full-screen transition — anchor icon falls from top, ocean background slides down, theme switches at midpoint. Includes chain rattle + descending tone + splash sound. Reverse wipe on toggle off.
+- **Anchor drop screen wipe**: toggling Deep Dive plays a full-screen transition, anchor icon falls from top, ocean background slides down, theme switches at midpoint. Includes chain rattle + descending tone + splash sound. Reverse wipe on toggle off.
 
 ---
 
@@ -659,7 +659,7 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 ### Added
 - **Community Finds API**: live leaderboard from `finds.php` with 14+ seeded discoveries. Clickable detail overlays with thumbnails, rarity badges, channel info, and attribution. Plotted on the Records timeline as community dots.
 - **Deep Dive mode**: underwater bubble physics, nautical sonar sounds, whale-call win fanfare, ocean teal theme with 30+ CSS overrides, `Before:2010` search filter for targeting VERY RARE and older videos
-- **Video metadata fields**: date posted, views when found, channel video count — saved to history, SVG cards, and Discord copy
+- **Video metadata fields**: date posted, views when found, channel video count, saved to history, SVG cards, and Discord copy
 - **Copy for Discord**: formatted markdown message with ✮ metadata, star ratings, and @KVNAUST branding
 - **Hosted vs Standalone comparison table** and Finds API documentation in README
 
@@ -681,8 +681,8 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 ## [3.3.0] - 2026-04-20
 
 ### Added
-- **Video metadata fields**: date posted, views when found, channel video count — captured on the result screen, saved to history, included in SVG share cards and Discord copy
-- **Copy for Discord**: purple button generates a formatted markdown message with ✮ metadata, star ratings, and @KVNAUST branding — ready to paste in any Discord channel
+- **Video metadata fields**: date posted, views when found, channel video count, captured on the result screen, saved to history, included in SVG share cards and Discord copy
+- **Copy for Discord**: purple button generates a formatted markdown message with ✮ metadata, star ratings, and @KVNAUST branding, ready to paste in any Discord channel
 - **177 format parser**: static keyphrases, file extensions, and Ancient YouTube entries now load from FORMAT-MAP.md as playable spinner formats (was 62, now 177)
 
 ### Changed
@@ -722,7 +722,7 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 ## [2.6.0] - 2026-04-19
 
 ### Fixed
-- **Spinner accuracy**: format is now read from the pointer position AFTER the wheel stops — what you see is what you get
+- **Spinner accuracy**: format is now read from the pointer position AFTER the wheel stops, what you see is what you get
 - **esc() missing quote escaping**: bingo categories with `"` in the name no longer break the setup panel
 - **R key on result screen**: no longer destroys the game without warning (only works on summary screen now)
 - **Number generator keyboard spam**: space/enter during rainbow animation no longer starts overlapping animations
@@ -732,11 +732,11 @@ The Go backend powering the hosted wrapper is **proprietary**, owned by FalconTe
 - **Settings persistence**: daub color, opacity, and sound preference now save to localStorage across reloads
 - **Records timeline upgrade**: larger modal (960px), 55vh canvas, gradient zone fills, glowing dots with ambient halos, metallic rings, gradient beam lines, pill-backed labels
 - **Progressive daub intensity**: stamps glow brighter as you approach BINGO (4 tiers: basic → glow → pulse → rainbow)
-- **KVN's Bingo Picks**: red "KVN Picks" button in format panel — 19 formats KVN AUST personally recommends
+- **KVN's Bingo Picks**: red "KVN Picks" button in format panel, 19 formats KVN AUST personally recommends
 - **Date year limits**: `VID YYYYMMDD` >2008, `Capture YYYYMMDD` >2008 <2018, `WIN YYYYMMDD` >2013, `WP YYYYMMDD` >2011 <2018
 
 ### Changed
-- Wheel rendering rewritten to multi-pass (fills → depth overlay → dividers → text) — eliminates artifacting behind labels
+- Wheel rendering rewritten to multi-pass (fills → depth overlay → dividers → text), eliminates artifacting behind labels
 - Metallic outer bezel with diagonal gradient, center orb with specular highlight
 - Spinner easing: quintic ease-out `(1-p)^5` for smooth deceleration
 - Confetti wobbles laterally with 4-keyframe drift + ease-in timing

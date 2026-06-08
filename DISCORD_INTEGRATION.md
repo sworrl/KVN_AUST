@@ -16,7 +16,7 @@
 
 Everything a Discord bot or server owner needs to pull the live zero-view finds leaderboard from the [Finds API](https://kvnaust.falcontechnix.com/finds.php) and post it into their channel.
 
-**Read-only.** The public API only supports GET. All writes go through the [hosted game tool](https://kvnaust.falcontechnix.com/) or the admin ingest pipeline. Discord bots can pull, display, track, and react to new finds — but cannot alter or delete them.
+**Read-only.** The public API only supports GET. All writes go through the [hosted game tool](https://kvnaust.falcontechnix.com/) or the admin ingest pipeline. Discord bots can pull, display, track, and react to new finds, but cannot alter or delete them.
 
 ---
 
@@ -28,14 +28,14 @@ GET https://kvnaust.falcontechnix.com/finds.php
 
 - Public, no auth required
 - Rate limit: **3 requests per 60 seconds per IP**
-- Conditional GET with `If-None-Match: <etag>` — 304 responses are free (don't count against the budget)
+- Conditional GET with `If-None-Match: <etag>`; 304 responses are free (don't count against the budget)
 - `Cache-Control: public, max-age=60` + `ETag` headers
 
 ## Query Parameters
 
 | Param | Example | Effect |
 |:------|:--------|:-------|
-| `since` | `2026-04-20T00:00:00` | Only finds ingested after this timestamp — detect new additions |
+| `since` | `2026-04-20T00:00:00` | Only finds ingested after this timestamp; detect new additions |
 | `category` | `camera-mvi` | Filter by lead category |
 | `source` | `discord` | Filter by submission source |
 | `found_by` | `fivezies` | Filter by player name |
@@ -49,12 +49,12 @@ GET https://kvnaust.falcontechnix.com/finds.php
 | Endpoint | Use |
 |:---------|:----|
 | `GET /KVN_AUST/profile.php?u=<name>` | Player profile JSON: level, XP, 28 badges, rank, streaks |
-| `GET /KVN_AUST/profile_card.php?u=<name>` | 1200×630 SVG share card — embed directly in Discord |
+| `GET /KVN_AUST/profile_card.php?u=<name>` | 1200×630 SVG share card; embed directly in Discord |
 | `GET /KVN_AUST/badges.php?u=<name>` | Player badges with progress, or `?catalog=1` for full badge list |
 | `GET /KVN_AUST/clusters.php?reco=<name>` | Personalized lead recommendations based on find history |
 | `GET /KVN_AUST/daily.php` | Today's challenge format + streak leaderboard |
 | `GET /KVN_AUST/random.php` | 302 redirect to random discovery (or `?json=1` for metadata) |
-| `GET /KVN_AUST/feed.xml` | Community Atom feed — use for RSS-style alerts |
+| `GET /KVN_AUST/feed.xml` | Community Atom feed; use for RSS-style alerts |
 | `GET /KVN_AUST/feed.php?u=<name>` | Per-user Atom feed |
 | `GET /KVN_AUST/status.php` | Live status: total finds, online users, active season |
 | `GET /KVN_AUST/discoveries/<video_id>` | Permanent shareable page with OG card (auto-embeds in Discord) |
@@ -287,7 +287,7 @@ client.run(TOKEN)
 
 ## Bash / Webhook Only (Simplest)
 
-Post the current top 5 to a channel via an incoming webhook — no bot needed, just a cron job:
+Post the current top 5 to a channel via an incoming webhook, no bot needed, just a cron job:
 
 ```bash
 #!/usr/bin/env bash
@@ -330,20 +330,20 @@ If you get a 429, respect the `Retry-After` header and back off.
 
 ## Detecting New Finds
 
-Each find has `discovered_at` — the timestamp when the server ingested it (not when the video was posted). Track the highest `discovered_at` you've seen, then pass it as `?since=<timestamp>` on the next poll. Only new entries come back. Both bot examples above use this pattern.
+Each find has `discovered_at`: the timestamp when the server ingested it (not when the video was posted). Track the highest `discovered_at` you've seen, then pass it as `?since=<timestamp>` on the next poll. Only new entries come back. Both bot examples above use this pattern.
 
 ---
 
 ## Submission Attribution
 
 Every find includes:
-- **`found_by`** — the Discord username or player handle who submitted it
-- **`source`** — where it came from (`discord`, `game`, `manual`)
-- **`server`** — which Discord server or context
+- **`found_by`**: the Discord username or player handle who submitted it
+- **`source`**: where it came from (`discord`, `game`, `manual`)
+- **`server`**: which Discord server or context
 
 Credit finders in your embeds:
 
-> **MVI 02581** (1 view, posted 2009-04-24) — found by **soph** in KVN AUST Discord
+> **MVI 02581** (1 view, posted 2009-04-24), found by **soph** in KVN AUST Discord
 
 ---
 
