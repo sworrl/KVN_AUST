@@ -14,6 +14,13 @@
 
 ---
 
+## [7.18.1] - 2026-06-12 - IndexedDB upgrade fix
+
+### 🐛 Fixed
+- **Image cache upgrade error**: opening the image cache threw a ConstraintError for players whose browser already had the `images` store from an older database version. The upgrade handler now checks for the store before creating it.
+
+---
+
 ## [7.18.0] - 2026-06-07 - Ticker spring physics
 
 ### ✨ Added
