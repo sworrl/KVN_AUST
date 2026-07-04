@@ -13,8 +13,8 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/TOTAL_FORMATS-267-e74c3c?style=flat-square&labelColor=1a1a2e" alt="267 Total Formats">
-  <img src="https://img.shields.io/badge/Search_Keyphrases-58-3498db?style=flat-square&labelColor=1a1a2e" alt="58 Search Keyphrases">
+  <img src="https://img.shields.io/badge/TOTAL_FORMATS-268-e74c3c?style=flat-square&labelColor=1a1a2e" alt="267 Total Formats">
+  <img src="https://img.shields.io/badge/Search_Keyphrases-59-3498db?style=flat-square&labelColor=1a1a2e" alt="58 Search Keyphrases">
   <img src="https://img.shields.io/badge/File_Extensions-13-9b59b6?style=flat-square&labelColor=1a1a2e" alt="13 File Extensions">
   <img src="https://img.shields.io/badge/Numbered_Formats-126-2ecc71?style=flat-square&labelColor=1a1a2e" alt="126 Numbered Formats">
   <img src="https://img.shields.io/badge/Date--Based-38-e67e22?style=flat-square&labelColor=1a1a2e" alt="38 Date-Based Formats">
