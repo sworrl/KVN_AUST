@@ -2795,8 +2795,8 @@ function closeBingoFlash(){
 // browser worldwide to drop its cached parse on next page load
 // and refetch from GitHub. Same trick anytime the parser logic
 // or FORMAT-MAP.md schema changes shape — bump the version.
-const DOC_CACHE_KEY='kvn_fmt_v17';
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v17';
+const DOC_CACHE_KEY='kvn_fmt_v18';
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v18';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -2931,6 +2931,20 @@ async function fetchDocFormats(){
           }
           continue;
         }
+        // Short slash-date formats: | `My Montage MM/DD/YY` | — MM/DD/YY or MM/DD/YYYY.
+        // Must run before the static catch-all or it'd be searched literally as "MM/DD/YY".
+        const sd=line.match(/\|\s*`([^`]*MM\/DD\/YY(?:YY)?[^`]*)`\s*\|/);
+        if(sd){
+          const lbl=sd[1];
+          if(!existing.has(lbl)){
+            const yr4=/MM\/DD\/YYYY/.test(lbl);
+            const tpl=lbl.replace(/MM\/DD\/YYYY|MM\/DD\/YY/,'{V}');
+            const fmt={label:lbl,tpl:tpl,sp:'shortdate',yr4:yr4,minY:2006,maxY:new Date().getFullYear(),sec:'date'};
+            ALL_FORMATS.push(fmt);fetched.push(fmt);
+            existing.add(lbl);newCount++;
+          }
+          continue;
+        }
         // Static keyphrases/extensions: | `"something"` | or | `.EXT` | — anything in backticks not caught above
         const sm=line.match(/\|\s*`([^`]{2,})`\s*\|/);
         // Skip entries whose label still contains X-blocks (templated formats with non-digit
@@ -2948,7 +2962,11 @@ async function fetchDocFormats(){
           }
         }
       }
-      saveCachedFormats(fetched);
+      // Cache the FULL deduped set, not just `fetched` — the date/static/ancient/keyphrase
+      // branches only add to `fetched` when the label is new, so on a refresh where the cache
+      // already seeded `existing`, `fetched` collapses to the numbered/hex formats (~118) and
+      // would truncate the cache. ALL_FORMATS always holds the complete set.
+      saveCachedFormats(ALL_FORMATS);
       formats=[...ALL_FORMATS];selectedFormats=new Set(formats.map((_,i)=>i));buildFormatPanel();
       if(currentScreen==='wheel-screen'&&!spinning){pickWheelFormats();drawWheel()}
       console.log(`GitHub FORMAT-MAP: parsed ${fetched.length} formats, ${newCount} new`);
@@ -3379,6 +3397,7 @@ function showFormatReveal(){
   let finalHtml;
   if(f.sp==='static')finalHtml=`<span>${esc(f.tpl)}</span>`;
   else if(f.sp==='date'){const pre=f.tpl.replace('{V}','');finalHtml=(pre?`<span>${esc(pre)}</span>`:'') +`<span class="vp">YYYY</span><span class="rng"> (${f.minY||2006}–${f.maxY||2026})</span><span class="vp"> MMDD</span><span class="rng"> (random)</span>`;}
+  else if(f.sp==='shortdate'){const pre=f.tpl.replace('{V}','');finalHtml=(pre?`<span>${esc(pre)}</span>`:'')+`<span class="vp">${f.yr4?'MM/DD/YYYY':'MM/DD/YY'}</span><span class="rng"> (random date)</span>`;}
   else if(f.sp==='monthdate')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (random)</span>`;
   else if(f.sp==='hex4'||f.sp==='hexN')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (hex)</span>`;
   else if(f.sp==='time')finalHtml=`<span>${esc(f.label)}</span><span class="rng"> (time of day)</span>`;
@@ -3414,7 +3433,8 @@ function setupNumberScreen(){
   }
   single.style.display='flex'; dateParts.style.display='none';
   const mn=document.getElementById('rangeMin'),mx=document.getElementById('rangeMax'),nm=document.getElementById('rollingNumber');
-  if(f.sp==='monthdate'){mn.textContent='2007';mx.textContent='2013';nm.textContent='--- --, ----'}
+  if(f.sp==='shortdate'){const lo=String(f.minY||2006),hi=String(f.maxY||2026);mn.textContent=f.yr4?'01/01/'+lo:'01/01/'+lo.slice(-2);mx.textContent=f.yr4?'12/31/'+hi:'12/31/'+hi.slice(-2);nm.textContent=f.yr4?'--/--/----':'--/--/--'}
+  else if(f.sp==='monthdate'){mn.textContent='2007';mx.textContent='2013';nm.textContent='--- --, ----'}
   else if(f.sp==='hex4'){mn.textContent='0000';mx.textContent='FFFF';nm.textContent='----'}
   else if(f.sp==='hexN'){const p=f.pad||3;mn.textContent='0'.repeat(p);mx.textContent='F'.repeat(p);nm.textContent='-'.repeat(p)}
   else if(f.sp==='time'){mn.textContent='000000';mx.textContent='235959';nm.textContent='------'}
@@ -3475,6 +3495,7 @@ function generateNumber(){
 
 function randDate(minY,maxY){const lo=minY||2006,hi=maxY||2026;const y=lo+Math.floor(Math.random()*(hi-lo+1)),m=1+Math.floor(Math.random()*12),d=1+Math.floor(Math.random()*28);return`${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}`}
 function randMonthDate(){const ms=['January','February','March','April','May','June','July','August','September','October','November','December'];return`${ms[Math.floor(Math.random()*12)]} ${String(1+Math.floor(Math.random()*28)).padStart(2,'0')}, ${2007+Math.floor(Math.random()*7)}`}
+function randShortDate(minY,maxY,yr4){const lo=minY||2006,hi=maxY||2026;const y=lo+Math.floor(Math.random()*(hi-lo+1)),m=1+Math.floor(Math.random()*12),d=1+Math.floor(Math.random()*28);const yy=yr4?String(y):String(y).slice(-2);return`${String(m).padStart(2,'0')}/${String(d).padStart(2,'0')}/${yy}`}
 function randHex(n){const len=n||4;let s='';for(let i=0;i<len;i++)s+='0123456789ABCDEF'[Math.floor(Math.random()*16)];return s}
 
 // ─── Power Search — engine adapted from NBVS ─────────────────────────────────
@@ -4146,6 +4167,7 @@ const SHUFFLE_COLORS=['#e74c3c','#f39c12','#2ecc71','#3498db','#9b59b6','#e91e63
 function generateFinalNumber(){
   const f=chosenFormat;
   if(f.sp==='date')return randDate(f.minY,f.maxY);
+  if(f.sp==='shortdate')return randShortDate(f.minY,f.maxY,f.yr4);
   if(f.sp==='monthdate')return randMonthDate();
   if(f.sp==='hex4')return randHex(4);
   if(f.sp==='hexN')return randHex(f.pad||3);
@@ -4753,6 +4775,7 @@ function buildFormatPanel(){
     let type='numbered',typeLabel='';
     if(f.sp==='static'){type='static';typeLabel=f.sec==='extension'?'ext':'phrase'}
     else if(f.sp==='date'){type='date';typeLabel='date'}
+    else if(f.sp==='shortdate'){type='date';typeLabel='date'}
     else if(f.sp==='hex4'||f.sp==='hexN'||f.sp==='monthdate'){type='special';typeLabel=f.sp}
     else{typeLabel=`${String(f.min||0).padStart(f.pad||4,'0')}-${String(f.max||9999).padStart(f.pad||4,'0')}`}
     const rangeHtml=type==='numbered'?`<span class="fp-range">${typeLabel}</span>`:`<span class="fp-type ${type}">${typeLabel}</span>`;
@@ -6515,7 +6538,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.18.1","build":"2026-06-12T00:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.19.0","build":"2026-06-12T00:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">

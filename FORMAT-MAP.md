@@ -134,6 +134,7 @@ Generic keyphrases that surface brand new zero-view uploads when sorted by uploa
 | `Capture YYYYMMDD` | Webcam | | [@thevoid6756](https://youtube.com/@thevoid6756) |
 | `VID YYYYMMDD` | Misc | | |
 | `"My Movie X"` | Misc | e.g. "My Movie 1" | |
+| `My Montage MM/DD/YY` | Video Editor | One True Media montage title with a short slash date, e.g. "My Montage 03/14/09" | |
 | `"My Edited Video"` | Video editor | | [@CharlesMontgomeryBurns.](https://youtube.com/@CharlesMontgomeryBurns.) |
 | `/Storage/Emulated/` | Video editor | | |
 | `PXL` | Smartphone | | [@stickmandaninacan](https://youtube.com/@stickmandaninacan) |

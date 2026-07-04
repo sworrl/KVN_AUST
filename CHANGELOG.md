@@ -14,6 +14,16 @@
 
 ---
 
+## [7.19.0] - 2026-06-12 - Format cache fix + Montage format
+
+### 🐛 Fixed
+- **Format list truncating to 118**: on any refresh where the local cache had already seeded the format set, only the numbered and hex formats were written back to cache, dropping the ~150 date, keyphrase, extension, and ancient formats. The cache now stores the full deduped set instead of the partial parse result. Bumped the cache key to clear already-truncated caches on next load.
+
+### ✨ Added
+- **`My Montage MM/DD/YY` format**: One True Media montage titles with a short slash date (e.g. "My Montage 03/14/09"). New `shortdate` value type generates `MM/DD/YY` or `MM/DD/YYYY` across the 2006 to present range.
+
+---
+
 ## [7.18.1] - 2026-06-12 - IndexedDB upgrade fix
 
 ### 🐛 Fixed
