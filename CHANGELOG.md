@@ -14,6 +14,19 @@
 
 ---
 
+## [7.19.1] - 2026-07-04 - Client performance pass
+
+### 🐛 Fixed
+- **Background poll**: the 60-second community-records refresh now only runs while the tab is visible, and skips its up-to-500-row DOM rebuild when the Records panel is closed. A backgrounded tab previously re-fetched 500 records and rebuilt the list every minute forever.
+- **Timeline listener leak**: the records timeline attached its 7 canvas event listeners on every panel open, stacking redraws. It now attaches them once.
+- **Deep Dive resize leak**: the bubble background added a `resize` listener on every activation without removing it; the old handler is now cleaned up on deactivate.
+- **Dead call removed**: `renderLfTicker` was called on every poll but never defined, throwing a silently-caught error that stopped the timeline and record-holder from refreshing.
+
+### ⚡ Performance
+- **Wheel spin**: the deep-dive color array is no longer reallocated on every animation frame during a spin (hoisted to module scope).
+
+---
+
 ## [7.19.0] - 2026-06-12 - Format cache fix + Montage format
 
 ### 🐛 Fixed

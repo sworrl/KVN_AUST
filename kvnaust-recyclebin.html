@@ -2210,6 +2210,8 @@ let errorLog=[]; // {type:'warn'|'error', msg:string, ts:Date}
 
 const SCREENS=['start-screen','wheel-screen','format-screen','number-screen','result-screen'];
 const WHEEL_COLORS=['#b8860b','#2e8b57','#daa520','#1565c0','#c62828','#6a1b9a','#00838f','#ef6c00','#2e7d32','#ad1457','#4527a0','#00695c','#d84315','#1b5e20','#6d4c41','#37474f','#ff6f00','#283593','#004d40','#bf360c','#4e342e','#0d47a1','#827717','#880e4f','#33691e','#e65100','#1a237e','#3e2723','#006064','#f57f17','#311b92','#01579b'];
+// Deep-dive wheel palette — hoisted to module scope so drawWheel() doesn't reallocate this 32-entry array on every animation frame during a spin.
+const DEEP_COLORS=['#004d40','#006064','#01579b','#0d47a1','#1a237e','#004d40','#00695c','#00838f','#0097a7','#00796b','#00897b','#1565c0','#283593','#003d5b','#005f73','#0a3d62','#1b4332','#2d6a4f','#0b525b','#3a506b','#1c3144','#0f4c5c','#274c77','#044a6e','#03312e','#023047','#1a535c','#184e77','#1b263b','#0d3b66','#14213d','#002855'];
 
 // ── App themes: Default + Deep Dive ──
 const APP_THEMES=[
@@ -3015,7 +3017,6 @@ function drawWheel(){
   const sz=800,cx=400,cy=400,r=390;
   const n=wheelFormats.length;if(!n)return;const arc=2*Math.PI/n;
   ctx.clearRect(0,0,sz,sz);ctx.save();ctx.translate(cx,cy);ctx.rotate(wheelAngle);ctx.translate(-cx,-cy);
-  const DEEP_COLORS=['#004d40','#006064','#01579b','#0d47a1','#1a237e','#004d40','#00695c','#00838f','#0097a7','#00796b','#00897b','#1565c0','#283593','#003d5b','#005f73','#0a3d62','#1b4332','#2d6a4f','#0b525b','#3a506b','#1c3144','#0f4c5c','#274c77','#044a6e','#03312e','#023047','#1a535c','#184e77','#1b263b','#0d3b66','#14213d','#002855'];
   activeWheelColors=deepDiveActive?DEEP_COLORS:(WHEEL_THEMES[currentWheelTheme]||WHEEL_COLORS);
   const colors=activeWheelColors;
   // Pass 1: fill all segments (no strokes yet — prevents bleed-through)
@@ -3241,7 +3242,7 @@ let prevSoundMode=null;
 // ═══════════════════════════════════
 //  BUBBLE PHYSICS (Deep Dive mode)
 // ═══════════════════════════════════
-let bubbles=[];let bubbleAnim=null;let popParticles=[];
+let bubbles=[];let bubbleAnim=null;let popParticles=[];let bubbleResizeHandler=null;
 const MAX_BUBBLES=60;
 
 function spawnBubble(W,H){
@@ -3315,7 +3316,9 @@ function startBubbles(){
     c.width=window.innerWidth*dpr;c.height=window.innerHeight*dpr;
     c.style.width=window.innerWidth+'px';c.style.height=window.innerHeight+'px';
   }
-  resize();window.addEventListener('resize',resize);
+  resize();
+  if(bubbleResizeHandler)window.removeEventListener('resize',bubbleResizeHandler); // drop a stale handler if startBubbles ran without stopBubbles
+  bubbleResizeHandler=resize;window.addEventListener('resize',resize);
   const ctx=c.getContext('2d');
   bubbles=[];popParticles=[];
   for(let i=0;i<MAX_BUBBLES;i++)bubbles.push(spawnBubble(window.innerWidth,window.innerHeight));
@@ -3383,6 +3386,7 @@ function startBubbles(){
 
 function stopBubbles(){
   if(bubbleAnim){cancelAnimationFrame(bubbleAnim);bubbleAnim=null}
+  if(bubbleResizeHandler){window.removeEventListener('resize',bubbleResizeHandler);bubbleResizeHandler=null}
   bubbles=[];popParticles=[];
   const c=document.getElementById('bubbleCanvas');
   if(c){const ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height)}
@@ -5038,9 +5042,15 @@ async function fetchCommunityRecords(){
     if(!data.ok||!data.finds)throw new Error('bad response');
     communityFinds=data.finds;
     communityFetchedOnce=true;
-    renderRecentStrip(data.finds);
+    renderRecentStrip(data.finds);   // always — the recent strip/ticker can be visible outside the Records panel
+    updateRecordHolder();            // cheap; updates the record-holder badge
+    // Everything below rebuilds DOM/canvas that only exists inside the Records overlay. Skip it
+    // when the panel is closed — showRecords() rebuilds the visible views on open, and the
+    // Community tab rebuilds via showRecordTab(). This keeps the 60s poll from tearing down and
+    // rebuilding up to 500 rows while nobody is looking.
+    const recOpen=document.getElementById('recordsOverlay')?.classList.contains('open');
+    if(!recOpen)return;
     if(recViewMode==='list'){renderFullListView(data.finds);renderLbHero(data.finds);}
-    renderLfTicker(data.finds);
     const rc=data.rarity_colors||{};
     list.innerHTML=data.finds.map((f,i)=>{
       const color=rc[f.rarity]||getRecordColor(new Date(f.date_posted));
@@ -5049,8 +5059,8 @@ async function fetchCommunityRecords(){
       const addedStr=f.discovered_at?(()=>{const n=Number(f.discovered_at);const d=isFinite(n)?new Date(n<1e11?n*1000:n):new Date(f.discovered_at);return isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '})():'';
       return`<div class="rec-entry" style="cursor:pointer" onclick="showFindDetail(${i})"><span style="min-width:20px;font-size:.8rem">${medal}</span><span class="rec-date" style="color:${color}">${dateStr}</span><span class="rec-views" title="Views when found">${f.views_when_found??'?'} views</span><span style="color:${color};font-size:.6rem;font-weight:700;min-width:55px">${esc(f.rarity||'')}</span><span style="color:#fff;font-size:.68rem;font-weight:700;min-width:70px;text-shadow:0 0 6px ${color}">${esc(f.found_by||'?')}</span><span style="color:#444;font-size:.55rem">${addedStr}</span></div>`;
     }).join('')+`<div style="text-align:center;font-size:.6rem;color:#333;margin-top:6px">${data.total} finds &#183; oldest: ${data.oldest_post_date} &#183; newest: ${data.newest_post_date}</div>`;
-    // Redraw timeline with community data
-    drawRecordsTimeline();updateRecordHolder();
+    // Redraw timeline with community data (updateRecordHolder already ran above, unconditionally)
+    drawRecordsTimeline();
   }catch(e){
     if(!communityFetchedOnce){
       list.innerHTML=`<div style="text-align:center;color:#555;font-size:.7rem;padding:12px">Could not load community finds.<br><a href="https://kvnaust.falcontechnix.com/" style="color:#5b7fc7">Play on falcontechnix.com</a> for the full leaderboard.</div>`;
@@ -5628,6 +5638,7 @@ function updateRecordHolder(){
 let tlZoom=1,tlPanX=0,tlDragging=false,tlDragStartX=0,tlDragStartPan=0;
 function initTimelineInteraction(){
   const c=document.getElementById('recordsCanvas');if(!c)return;
+  if(c.dataset.tlInit)return;c.dataset.tlInit='1'; // attach the 7 listeners once, not on every Records open
   c.addEventListener('wheel',e=>{
     e.preventDefault();
     const rect=c.getBoundingClientRect();
@@ -6515,9 +6526,12 @@ loadImages();loadBingoCategories();loadPerLetterSetting();buildBingo();buildForm
 setInterval(refreshKvnVideoDot,10*60*1000);
 checkForUpdates();checkHoliday();
 // Service worker registration handled by hosted wrapper (sw.js not bundled in monolithic HTML)
-// Fetch community finds in background, poll every 60s
+// Fetch community finds in background, poll every 60s — but only while the tab is visible
+// (a backgrounded tab did a 500-record fetch + DOM rebuild every minute forever).
 setTimeout(fetchCommunityRecords,2000);
-setInterval(fetchCommunityRecords,60000);
+setInterval(()=>{if(document.visibilityState==='visible')fetchCommunityRecords()},60000);
+// Refresh once immediately when the tab comes back to the foreground.
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&communityFetchedOnce)fetchCommunityRecords()});
 // Hash routing: #records, #stats, #shortcuts, #credits
 function handleHash(){
   const h=location.hash.toLowerCase().replace('#','');
@@ -6538,7 +6552,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.19.0","build":"2026-06-12T00:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.19.1","build":"2026-07-04T00:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
