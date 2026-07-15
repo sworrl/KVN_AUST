@@ -21,19 +21,19 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
 <p align="center">
   <a href="https://www.youtube.com/@KVNAUST"><img src="https://img.shields.io/badge/YouTube-KVN_AUST-red?style=flat-square&logo=youtube" alt="KVN AUST YouTube Channel"></a>
   <a href="https://x.com/MingKasterMK"><img src="https://img.shields.io/badge/X-@MingKasterMK-black?style=flat-square&logo=x" alt="KVN AUST on X Twitter"></a>
-  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-59ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
+  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/FORMAT_MAP-All_Formats_%26_Keyphrases-151ecc71?style=flat-square" alt="YouTube Recycle Bin Format Map"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-GPL_3.0-blue?style=flat-square" alt="GPL-3.0"></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-v7.18.0-1a1a2e?style=flat-square" alt="Changelog"></a>
   <a href="CHANGELOG.md#700--2026-05-03--the-go-rewrite"><img src="https://img.shields.io/badge/Backend-Go_(rewritten_from_PHP)-00ADD8?style=flat-square&logo=go" alt="Go backend"></a>
 </p>
 
 <p align="center">
-  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-432-e74c3c?style=flat-square&labelColor=1a1a2e" alt="432 Total Formats"></a>
+  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-427-e74c3c?style=flat-square&labelColor=1a1a2e" alt="432 Total Formats"></a>
   <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-151-3498db?style=flat-square&labelColor=1a1a2e" alt="151 Search Keyphrases"></a>
   <a href="FORMAT-MAP.md#file-extensions"><img src="https://img.shields.io/badge/Extensions-20-9b59b6?style=flat-square&labelColor=1a1a2e" alt="20 File Extensions"></a>
   <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-169-2ecc71?style=flat-square&labelColor=1a1a2e" alt="169 Numbered Formats"></a>
   <a href="FORMAT-MAP.md#date-based-formats"><img src="https://img.shields.io/badge/Date--Based-45-e67e22?style=flat-square&labelColor=1a1a2e" alt="45 Date-Based Formats"></a>
-  <a href="FORMAT-MAP.md#ancient-youtube-2006-2008"><img src="https://img.shields.io/badge/Ancient_YT-47-f39c12?style=flat-square&labelColor=1a1a2e" alt="47 Ancient YouTube Formats"></a>
+  <a href="FORMAT-MAP.md#ancient-youtube-2006-2008"><img src="https://img.shields.io/badge/Ancient_YT-42-f39c12?style=flat-square&labelColor=1a1a2e" alt="47 Ancient YouTube Formats"></a>
 </p>
 
 ---
