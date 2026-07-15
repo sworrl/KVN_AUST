@@ -20,6 +20,15 @@ The hosted version at [kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.
 
 ---
 
+## 1.12.1 — "Update Etiquette" (2026-07-15)
+
+### Fixed
+- **Stuck "Updating…" overlay** — signed-in sessions could be left behind a permanent full-screen update spinner when a game update landed. Signed-in players now get the dismissible update toast instead, and never auto-reload mid-session.
+- **Update toast respawn** — the "New version available" toast reappeared every few seconds after being dismissed. "Later" is now remembered for the session, per version.
+- **Phantom updates** — the version endpoint could report a stale game version, prompting every session to "update" to a version it was already running.
+
+---
+
 ## 1.12.0 — "Network Effects" (2026-04-27)
 
 ### New Features
