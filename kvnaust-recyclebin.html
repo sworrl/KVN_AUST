@@ -1841,8 +1841,11 @@ async function checkForUpdates(){
 const IMG_URLS={
   banner:'https://yt3.googleusercontent.com/LiJo5TjebDsCHINkNKnctYZISlIyWVCSB1tFtRdB1_NNmKueqGaWogc0hHu1z4zsD93eEkyxFA=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj',
   avatar:'https://yt3.googleusercontent.com/ytc/AIdro_lgUZyOAlroBVjTTS0ERdTxzQ8m_JwBKaUleQYtZAJjtA=s200-c-k-c0x00ffffff-no-rj',
-  footer:'https://yt3.ggpht.com/WWWdvQUKTtkyXrgYUfWVnpf40HPJQCnxLUbCB5FE64uww53DEnhEVc6ENchULE-ioRCqXVqqAX_ahA=w128-h128-p-rw-nd-v1-df'
+  footer:'https://yt3.googleusercontent.com/hEt0minH0EjZs9wZ0iKmLCQuysFbVotELjSc29mwJk60dnnhBzFjD-odqNAnut631n7FEIw7R9A=s200-c-k-c0x00ffffff-no-rj'
 };
+// Old B&B footer URL that rotted and started serving an unrelated image — if a
+// user's saved settings pinned it, drop it so the real logo comes back.
+const DEAD_FOOTER_TOKEN='WWWdvQUKTtkyXrgYUfWVnpf40HPJQCnxLUb';
 const DB_NAME='kvn_img_cache',DB_VER=11;
 function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB_NAME,DB_VER);r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains('images'))d.createObjectStore('images')};r.onsuccess=e=>res(e.target.result);r.onerror=rej})}
 async function getCachedImage(key,url){
@@ -1868,9 +1871,9 @@ async function loadImages(){
   applyImagesToDOM();
   // Try to upgrade to cached blob URLs (faster on subsequent loads when served via http)
   try{
-    // 'footer_bb' key (was 'footer'): old caches could hold KVN's avatar under the
-    // footer key, blending his face into the BASH & BRASS credit. New key = clean slate.
-    const[banner,avatar,footer]=await Promise.all([getCachedImage('banner',IMG_URLS.banner),getCachedImage('avatar',IMG_URLS.avatar),getCachedImage('footer_bb',IMG_URLS.footer)]);
+    // 'footer_bb2' key (was 'footer', then 'footer_bb'): old caches held either KVN's
+    // avatar or the rotted ggpht image under the footer key. New key = clean slate.
+    const[banner,avatar,footer]=await Promise.all([getCachedImage('banner',IMG_URLS.banner),getCachedImage('avatar',IMG_URLS.avatar),getCachedImage('footer_bb2',IMG_URLS.footer)]);
     if(banner.startsWith('blob:'))document.getElementById('bannerImg').src=banner;
     if(avatar.startsWith('blob:')){document.getElementById('avatarImg').src=avatar;document.getElementById('bigAvatarImg').src=avatar;document.getElementById('spinAvatar').src=avatar;document.getElementById('footerKvnAvatar').src=avatar}
     if(footer.startsWith('blob:'))document.getElementById('footerAvatar').src=footer;
@@ -5897,7 +5900,7 @@ function loadSettings(){
     if(s){
       if(s.avatar)IMG_URLS.avatar=s.avatar;
       if(s.banner)IMG_URLS.banner=s.banner;
-      if(s.footer)IMG_URLS.footer=s.footer;
+      if(s.footer&&s.footer.indexOf(DEAD_FOOTER_TOKEN)===-1)IMG_URLS.footer=s.footer;
       if(s.mosaic)IMG_URLS.mosaic=s.mosaic;
     }
   }catch{}
@@ -6563,7 +6566,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.19.2","build":"2026-07-15T00:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.19.3","build":"2026-07-15T00:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
@@ -6588,9 +6591,9 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.19.2",
+  "version": "7.19.3",
   "build": "2026-07-15T00:00:00",
-  "changelog": "Map 5.0 format sync (183 new leads); KVN AUST / builder attribution separated in footer; stuck update overlay fixed",
+  "changelog": "Real BASH & BRASS logo restored in footer (old image URL had rotted); update toast no longer respawns after dismissal",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
