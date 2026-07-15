@@ -13,12 +13,12 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/TOTAL_FORMATS-268-e74c3c?style=flat-square&labelColor=1a1a2e" alt="267 Total Formats">
-  <img src="https://img.shields.io/badge/Search_Keyphrases-59-3498db?style=flat-square&labelColor=1a1a2e" alt="58 Search Keyphrases">
-  <img src="https://img.shields.io/badge/File_Extensions-13-9b59b6?style=flat-square&labelColor=1a1a2e" alt="13 File Extensions">
-  <img src="https://img.shields.io/badge/Numbered_Formats-126-2ecc71?style=flat-square&labelColor=1a1a2e" alt="126 Numbered Formats">
-  <img src="https://img.shields.io/badge/Date--Based-38-e67e22?style=flat-square&labelColor=1a1a2e" alt="38 Date-Based Formats">
-  <img src="https://img.shields.io/badge/Ancient_YouTube-32-f39c12?style=flat-square&labelColor=1a1a2e" alt="32 Ancient YouTube Formats">
+  <img src="https://img.shields.io/badge/TOTAL_FORMATS-432-e74c3c?style=flat-square&labelColor=1a1a2e" alt="432 Total Formats">
+  <img src="https://img.shields.io/badge/Search_Keyphrases-151-3498db?style=flat-square&labelColor=1a1a2e" alt="151 Search Keyphrases">
+  <img src="https://img.shields.io/badge/File_Extensions-20-9b59b6?style=flat-square&labelColor=1a1a2e" alt="20 File Extensions">
+  <img src="https://img.shields.io/badge/Numbered_Formats-169-2ecc71?style=flat-square&labelColor=1a1a2e" alt="169 Numbered Formats">
+  <img src="https://img.shields.io/badge/Date--Based-45-e67e22?style=flat-square&labelColor=1a1a2e" alt="45 Date-Based Formats">
+  <img src="https://img.shields.io/badge/Ancient_YouTube-47-f39c12?style=flat-square&labelColor=1a1a2e" alt="47 Ancient YouTube Formats">
 </p>
 
 ---
@@ -102,6 +102,16 @@ The only way to access these videos is to search for the **keyphrase** associate
 
 ---
 
+## Map 5.0 Sync (July 2026)
+
+> Bulk import of the **183 new leads** from KVN AUST's Map 5.0 doc (452 total leads) — announced in [this X post by @MingKasterMK](https://x.com/MingKasterMK/status/2077144462589895067). Credits flow back to the original contributors named in the doc.
+
+**Highlights:** the EA Sports console-DVR capture IDs (`501A0001`, `NHL14XBX`, `741A0001`, …), a wave of international default titles (Portuguese, Polish, Thai, Korean, Japanese, Chinese, Czech, Hungarian, Indonesian, Dutch), the `Magisto` / `Wondershare` / `WeVideo` editor families, AI-slop keyphrases (`"PixVerse * Image Text *"`, `"Generated File"`, `"vidu video"`), doorbell/security-camera formats (`"RingVideo"`, `CH000000000000XX`), and the VHS-rip wildcard searches (`"VCD" * "0"`).
+
+**Parser note:** single-variable patterns like `"Screencast X"` and odd date orders like `ScreenRecording MM DD YYYY` are listed in the **manual substitution** bullet lists (not tables) so the spinner never ships a half-substituted search.
+
+---
+
 ## Map 4.0 Sync (April 2026)
 
 > Bulk import from KVN AUST's [Map 4.0 Google Doc](https://tinyurl.com/y5xx29bj) — published alongside the *"Exploring 0-View YouTube until I get a Bingo (Hard Mode)"* video. Credits flow back to the original contributors named in the doc.
@@ -182,6 +192,98 @@ Generic keyphrases that surface brand new zero-view uploads when sorted by uploa
 | `720p 1500k` | NSFW Playlist | Filter: Playlist | |
 | `720p 4000k` | NSFW Playlist | Filter: Playlist | |
 | `Clips4Sale` | NSFW Playlist | Filter: Playlist | |
+| `"Sans titre"` | Misc | France — "Untitled" | |
+| `"mobizen"` | Screen Recorder | | [@qrde](https://youtube.com/@qrde) |
+| `"Made with Clipchamp"` | Video Editor | | [@vvvvvvvvvvvvvvv](https://youtube.com/@vvvvvvvvvvvvvvv) |
+| `"Made with Flexclip"` | Video Editor | | [@Paper_Frogg](https://youtube.com/@Paper_Frogg) |
+| `"Untitled Project"` | Misc | | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"ScreenRecording"` | Screen Recorder | | [@mentallystablegaming](https://youtube.com/@mentallystablegaming) |
+| `"Meeting Recording"` | Microsoft Teams | | |
+| `"Meeting in General"` | Microsoft Teams | | [@volevv_](https://youtube.com/@volevv_) |
+| `"New Loom Recording"` | Screen Recorder | Loom | [@volevv_](https://youtube.com/@volevv_) |
+| `"PixVerse * Image Text *"` | AI Editor | AI Hell — wildcard search | [@user-yh1dn4nk1r](https://youtube.com/@user-yh1dn4nk1r) |
+| `"Generated File"` | AI Editor | AI Hell | [@user-yh1dn4nk1r](https://youtube.com/@user-yh1dn4nk1r) |
+| `"mp4 media web"` | AI Editor | AI Hell | [@user-yh1dn4nk1r](https://youtube.com/@user-yh1dn4nk1r) |
+| `"vidu video"` | AI Editor | AI Hell | [@user-yh1dn4nk1r](https://youtube.com/@user-yh1dn4nk1r) |
+| `"VCD" * "0"` | VHS | VHS burned onto DVD — wildcard search | |
+| `"DVD" * "0"` | VHS | Wildcard search | |
+| `"MP1" * "0"` | VHS | Wildcard search | |
+| `"10000000" * * "n"` | Misc | Wildcard search | |
+| `NVEExport` | Misc | | [@yura32tv](https://youtube.com/@yura32tv) |
+| `"100MEDIA"` | File Path | | [@Pagenonfound](https://youtube.com/@Pagenonfound) |
+| `"VR_MOVIE.VRO"` | Camera | DVD camcorder | [@lezyv3104](https://youtube.com/@lezyv3104) |
+| `"DVD_VIDEO_RECORDER"` | Misc | | [@lezyv3104](https://youtube.com/@lezyv3104) |
+| `"VIDEO TS"` | DVD | | [@user-hv8pk9kp6h](https://youtube.com/@user-hv8pk9kp6h) |
+| `"For ipod video and iphone"` | Misc | | [@coolmancool63](https://youtube.com/@coolmancool63) |
+| `"Your Paragraph Text"` | Video Editor | Canva placeholder text | [@cchhey3812](https://youtube.com/@cchhey3812) |
+| `"Kava Injected"` | 360 Video | | |
+| `"story_fbid"` | File Path | Facebook | [@typeone1704](https://youtube.com/@typeone1704) |
+| `"Created with @magisto"` | Video Editor | | [@qrde](https://youtube.com/@qrde) |
+| `"By Magisto"` | Video Editor | | [@qrde](https://youtube.com/@qrde) |
+| `"Created by Magisto - Magical Video Editor"` | Video Editor | | [@qrde](https://youtube.com/@qrde) |
+| `"Film nagrany kamerą internetową w dniu"` | Webcam | Poland | [@qrde](https://youtube.com/@qrde) |
+| `"Personal Microsoft Edge"` | Screen Recorder | | [@qrde](https://youtube.com/@qrde) |
+| `"Profile 1 Microsoft Edge"` | Screen Recorder | | [@qrde](https://youtube.com/@qrde) |
+| `Uploaded with Free Leawo Video Converter` | Misc | | [@reverseflesh](https://youtube.com/@reverseflesh) |
+| `"sent from my iphone"` | iPhone | | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"sent from my ipad"` | iPad | | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"Video Cache"` | Misc | | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"Created using the one true media"` | Video Editor | Dead service — use Before:2015 | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"Movie uploaded from Samsung Intelli-studio"` | Video Editor | | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"Recovered Autosave"` | Video Editor | | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"Video cam direct upload"` | Camera | Video Response era | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"Created with iTimelapse"` | Video Editor | Time-lapse | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"searchstory"` | Video Editor | | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"Made with Explain Everything"` | Video Editor | | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"Video created using fotoslides"` | Video Editor | | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `"H 264 LAN"` | Misc | | [@ethanr_5](https://youtube.com/@ethanr_5) |
+| `"Fiz este vídeo com o Criador de slides do YouTube"` | Video Editor | Brazil/Portugal | [@AymonAdren](https://youtube.com/@AymonAdren) |
+| `"Este vídeo foi enviado de um telefone Android"` | Phone | Brazil/Portugal | [@AymonAdren](https://youtube.com/@AymonAdren) |
+| `"This video was produced with a Swivl!"` | Camera | School lecture capture | [@charlescatyt](https://youtube.com/@charlescatyt) |
+| `"Created with Wondershare Video Editor"` | Video Editor | | [@ravioliboy3759](https://youtube.com/@ravioliboy3759) |
+| `"Created with Wondershare Filmora"` | Video Editor | | [@youtubersingingmoments4402](https://youtube.com/@youtubersingingmoments4402) |
+| `"RingVideo"` | Doorbell Camera | | [@lawnside82](https://youtube.com/@lawnside82) |
+| `"Ring FrontDoor"` | Doorbell Camera | | [@magaz](https://youtube.com/@magaz) |
+| `"Uploaded using 173434605274"` | Video Editor | | [@thebilabialtrill](https://youtube.com/@thebilabialtrill) |
+| `"Slideagram"` | Video Editor | | [@thebilabialtrill](https://youtube.com/@thebilabialtrill) |
+| `"vlcsnap"` | Misc | VLC snapshot exports | [@xfdhcdjxfhjjtgj](https://youtube.com/@xfdhcdjxfhjjtgj) |
+| `"Видео без названия сделано в Clipchamp"` | Video Editor | Russia | [@xfdhcdjxfhjjtgj](https://youtube.com/@xfdhcdjxfhjjtgj) |
+| `"Дизайн без названия"` | Misc | Russia — Canva default | [@xfdhcdjxfhjjtgj](https://youtube.com/@xfdhcdjxfhjjtgj) |
+| `Мое измененное видео` | Video Editor | Russia | [@GPLeast](https://youtube.com/@GPLeast) |
+| `"Dogbook Movie"` | Video Editor | Dead Facebook pet app | [@chipseed](https://youtube.com/@chipseed) |
+| `"Catbook Movie"` | Video Editor | Dead Facebook pet app | [@chipseed](https://youtube.com/@chipseed) |
+| `"Horsebook Movie"` | Video Editor | Dead Facebook pet app | [@chipseed](https://youtube.com/@chipseed) |
+| `"film wideo z telefonu"` | Phone | Poland | [@mazurthc](https://youtube.com/@mazurthc) |
+| `"created at animoto.com"` | Video Editor | | [@diberhaze](https://youtube.com/@diberhaze) |
+| `"My Vidrhythm"` | Video Editor | | [@TrashonicLizard](https://youtube.com/@TrashonicLizard) |
+| `"swf2avi"` | Misc | Flash conversions | [@TrashonicLizard](https://youtube.com/@TrashonicLizard) |
+| `"Shot with Geforce"` | Game Capture | Nvidia | [@vvvvvvvvvvvvvvv](https://youtube.com/@vvvvvvvvvvvvvvv) |
+| `"XDCAM EX HQ"` | Camera | | [@SJursa-ey4tt](https://youtube.com/@SJursa-ey4tt) |
+| `"35 Mbps VBR"` | Bit Rate | | [@SJursa-ey4tt](https://youtube.com/@SJursa-ey4tt) |
+| `"video senza titolo"` | Misc | Italy | [@MilkyBloomet](https://youtube.com/@MilkyBloomet) |
+| `"My tagged photos in Pummelvision"` | Video Editor | Dead service | [@phoenixkh93](https://youtube.com/@phoenixkh93) |
+| `"Mój edytowany film"` | Video Editor | Poland | [@grobokop2357](https://youtube.com/@grobokop2357) |
+| `"のコピー"` | Misc | Japan — "copy of" | [@machine.angel.777](https://youtube.com/@machine.angel.777) |
+| `"無題のビデオ"` | Misc | Japan — "untitled video" | [@machine.angel.777](https://youtube.com/@machine.angel.777) |
+| `"无题"` | Misc | China — "untitled" | [@machine.angel.777](https://youtube.com/@machine.angel.777) |
+| `"My great game My great capture"` | Game Capture | | [@urmom694-X](https://youtube.com/@urmom694-X) |
+| `"Video dari ponsel saya"` | Phone | Indonesia | [@h8erssss](https://youtube.com/@h8erssss) |
+| `"moje upravené video"` | Video Editor | Czechia | [@whosjozikolnik](https://youtube.com/@whosjozikolnik) |
+| `"Sent using a Sony Ericsson mobile phone"` | Phone | | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"Created with WeVideo"` | Video Editor | | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"Klip wideo bez tytułu"` | Screen Recorder | Poland | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"my screencast"` | Screen Recorder | | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"640x360 - SD MP4.mp4"` | Resolution | Music | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"My Video HQ"` | Video Editor | | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"Produced with Cyberlink PhotoDirector"` | Video Editor | | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"HD 1080p 4 8Mbps"` | Resolution | | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `hd 1920 1080` | Resolution | Stock footage | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
+| `"hd 1280 720"` | Resolution | Stock footage | |
+| `"hd 3840 2160"` | Resolution | Stock footage | |
+| `"What do you think of this picture?"` | Video Editor | | [@nerks5135](https://youtube.com/@nerks5135) |
+| `"Minha apresentação de slides"` | Video Editor | Brazil/Portugal | |
+| `"Mijn diavoorstelling"` | Video Editor | Netherlands | [@martijn9560](https://youtube.com/@martijn9560) |
+| `"Messenger creation"` | Phone | Facebook Messenger | [@Ancend](https://youtube.com/@Ancend) |
 
 ---
 
@@ -204,6 +306,13 @@ Generic keyphrases that surface brand new zero-view uploads when sorted by uploa
 | `".WAV"` | User-created music | |
 | `".3g2"` | Early phones | [@Pagenonfound](https://youtube.com/@Pagenonfound) |
 | `".VOB"` | DVD | [@Chernyat5048](https://youtube.com/@Chernyat5048) |
+| `".mpeg"` | MPEG video | |
+| `".mpg"` | MPEG / DVD rips | [@AymonAdren](https://youtube.com/@AymonAdren) |
+| `".flv"` | Flash video | [@JosephVM2](https://youtube.com/@JosephVM2) |
+| `".rmvb"` | RealMedia | [@user-hv8pk9kp6h](https://youtube.com/@user-hv8pk9kp6h) |
+| `".hevc"` | H.265 raw video | [@user-hv8pk9kp6h](https://youtube.com/@user-hv8pk9kp6h) |
+| `".divx"` | DivX encodes | [@NImportant4u](https://youtube.com/@NImportant4u) |
+| `".qt"` | QuickTime | [@NImportant4u](https://youtube.com/@NImportant4u) |
 
 ---
 
@@ -267,7 +376,7 @@ Device-specific filename patterns with numeric ranges. Best for finding old, for
 | `MOVXXXXA` | 0000-3000 | Camera | [@AymonAdren](https://youtube.com/@AymonAdren) |
 | `Zi6 XXXX` | 0001-2000 | Camera | [@misterherman](https://youtube.com/@misterherman) |
 | `ClipXXXX` | 0000-2000 | Misc | [@Techyarchivuma](https://youtube.com/@Techyarchivuma) |
-| `YDXJXXXX` | 0001-2000 | Action Cam | [@saso1901](https://youtube.com/@saso1901) |
+| `YDXJXXXX` | 0001-5000 | Action Cam | [@saso1901](https://youtube.com/@saso1901), range extended by [@isaiah658](https://youtube.com/@isaiah658) |
 | `0XXXX.MTS` | 0000-2000 | Camera | [@YeoungBraxx](https://youtube.com/@YeoungBraxx) |
 | `SSPXXXXX` | 0001-2000 | Camera | |
 | `IMAGXXXX` | 0000-2000 | Camera | [@Piggypiggyyoinkyoink](https://youtube.com/@Piggypiggyyoinkyoink) |
@@ -342,6 +451,56 @@ Device-specific filename patterns with numeric ranges. Best for finding old, for
 | `"Kazam Screencast 000XX"` | 01-50 | Screen Recorder | [@СтаниславШолтанюк](https://youtube.com/@%D0%A1%D1%82%D0%B0%D0%BD%D0%B8%D1%81%D0%BB%D0%B0%D0%B2%D0%A8%D0%BE%D0%BB%D1%82%D0%B0%D0%BD%D1%8E%D0%BA) |
 | `CADDX0000XX` | 01-50 | Drone | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
 | `ZOE 00XX` | 01-50 | Camera | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `101 XXXX` | 0001-6500 | Camera | |
+| `VIDXXXX` | 0000-5000 | Camera | [@isaiah658](https://youtube.com/@isaiah658) |
+| `"PIC XXXX"` | 0001-4000 | Camera | [@Michael_Unce](https://youtube.com/@Michael_Unce) |
+| `102 XXXX` | 0001-4000 | Camera | [@OliveGreen-z9h](https://youtube.com/@OliveGreen-z9h) |
+| `S500XXXX` | 0001-3000 | Camera | [@AymonAdren](https://youtube.com/@AymonAdren) |
+| `Picture XXXX` | 0001-3000 | Camera | |
+| `VídeoXXXX` | 0001-2000 | Camera | Brazil/Portugal. [@AymonAdren](https://youtube.com/@AymonAdren) |
+| `照片 XXX` | 001-1500 | Camera | China. [@AymonAdren](https://youtube.com/@AymonAdren) |
+| `SNC0XXXX` | 0001-1250 | Camera | |
+| `XXXX.mpeg` | 0001-1000 | Camera | |
+| `MOVXXX` | 000-999 | Camera | Hex variants too, e.g. `MOV42A` |
+| `Photo XXX` | 001-900 | Camera | [@berry_xi_](https://youtube.com/@berry_xi_) |
+| `NORM0XXX` | 000-500 | Action Cam | [@faizrisky8](https://youtube.com/@faizrisky8) |
+| `"Obraz XXX"` | 001-500 | Camera | Poland. [@blackshock116](https://youtube.com/@blackshock116) |
+| `MPEG0XXX` | 001-500 | Camera | |
+| `Film0XXX` | 001-300 | Camera | Poland. [@blackshock116](https://youtube.com/@blackshock116) |
+| `DV000XXX` | 001-300 | Camera | [@Piggypiggyyoinkyoink](https://youtube.com/@Piggypiggyyoinkyoink) |
+| `YDTL0XXX` | 001-300 | Time-lapse | [@isaiah658](https://youtube.com/@isaiah658) |
+| `FOTO0XXX` | 001-250 | Camera | [@MagoLuiz56000](https://youtube.com/@MagoLuiz56000) |
+| `"Фильм 0XXX"` | 001-250 | Misc | Russia. [@arteam63](https://youtube.com/@arteam63) |
+| `MovieXXX` | 001-200 | Game Capture | The Sims |
+| `DCFC0XXX` | 001-199 | Camera | [@omfgcake](https://youtube.com/@omfgcake) |
+| `"วิดีโอ0XXX"` | 000-140 | Camera | Thailand. [@AymonAdren](https://youtube.com/@AymonAdren) |
+| `AK000XXX` | 001-100 | Camera | [@Pagenonfound](https://youtube.com/@Pagenonfound) |
+| `EMER0XXX` | 001-100 | Dashcam | [@mattie7856](https://youtube.com/@mattie7856) |
+| `ATNX0XXX` | 001-100 | Hunting Camera | [@magaz](https://youtube.com/@magaz) |
+| `NORMAL000XX` | 00-99 | Camera | [@VoidGear-sh2](https://youtube.com/@VoidGear-sh2) |
+| `Eco 000XX` | 01-99 | Camera | PlayStation Eye. [@parascryptor](https://youtube.com/@parascryptor) |
+| `TLC000XX` | 01-80 | Time-lapse Camera | [@Samfromonline](https://youtube.com/@Samfromonline) |
+| `L00000XX` | 01-60 | Camera | [@magaz](https://youtube.com/@magaz) |
+| `Videoklip 00XX` | 01-50 | Camera | Hungary. [@Partyzan_Pmp](https://youtube.com/@Partyzan_Pmp) |
+| `EKEN00XX` | 01-50 | Action Cam | |
+| `"TVideo_000XX"` | 01-50 | Webcam | [@fujifilms5800](https://youtube.com/@fujifilms5800) |
+| `DV000XX` | 01-30 | Camera | [@plug1707](https://youtube.com/@plug1707) |
+| `CH000000000000XX` | 01-16 | Security Camera | DVR channel dumps |
+
+### Game-Capture IDs (console DVR exports)
+
+Fixed capture IDs from EA Sports-era console game DVRs — search them verbatim.
+
+| Keyphrase | Game |
+|:----------|:-----|
+| `501A0001` | NHL |
+| `NHL14XBX` | NHL 14 |
+| `771A0001` | UFC |
+| `741A0001` | FIFA 10 |
+| `632A0001` | FIFA 11 |
+| `491A0001` | FIFA 12 |
+| `521A0001` | Madden 11 |
+| `NCA14XBX` | NCAA Football 14 |
 
 ### Multi-Variable Patterns (manual substitution required)
 
@@ -357,6 +516,25 @@ These need two values to construct a search and aren't auto-loaded into the spin
 - **"Sequence XX X"** — variable 1: `01–99`, variable 2: `1–3` — Video Editor
 - **"My Project X"** — single variable: `0–50` — Video Editor — [@Coletale](https://youtube.com/@Coletale)
 - **"Il mio filmato X"** — single variable: `1–100` — Misc (Italy)
+- **10X XXXX** — variable 1: `3–9`, variable 2: `0001–2000` — Camera
+- **L10X0XXX** — variable 1: `0–9`, variable 2: `001–120` — Camera — [@magaz](https://youtube.com/@magaz)
+- **MOVXXX.MOD** — variable 1: `0–9`, variable 2: `00–99` / `AA–FF` (e.g. `MOV4AA.MOD`) — Camera
+- **SXXX00XX** — variable 1: `1–8`, variable 2: `00–99`, variable 3: `01–99` (e.g. `S1230011`) — Camera — [@fatalreligion](https://youtube.com/@fatalreligion)
+- **"X.mpg"** — single variable: `1–1000` — Misc — [@AymonAdren](https://youtube.com/@AymonAdren)
+- **(X).mpg** — single variable: `1–500` — Camera — [@yura32tv](https://youtube.com/@yura32tv)
+- **"Produce X"** — single variable: `1–300` — Misc — [@RikkityRikkus](https://youtube.com/@RikkityRikkus)
+- **"Screencast X"** — single variable: `1–200` — Screen Recorder — [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke)
+- **"Untitled Project X"** — single variable: `1–150` — Misc — [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke)
+- **"X.webm"** — single variable: `0–100` — Misc — [@NImportant4u](https://youtube.com/@NImportant4u)
+- **"My Video HD X"** — single variable: `1–100` — Video Editor — [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke)
+- **(X).m2ts** — single variable: `1–100` — Camera — [@yura32tv](https://youtube.com/@yura32tv)
+- **X.rmvb** — single variable: `1–100` — Misc — [@NImportant4u](https://youtube.com/@NImportant4u)
+- **X.divx** — single variable: `1–100` — Misc — [@NImportant4u](https://youtube.com/@NImportant4u)
+- **"X.ogv"** — single variable: `0–50` — Misc — [@NImportant4u](https://youtube.com/@NImportant4u)
+- **TITLE01 X** — single variable: `1–50` — DVD — [@lezyv3104](https://youtube.com/@lezyv3104)
+- **"(X).mkv"** — single variable: `1–45` — Misc (YouTube intros) — [@alephnullify](https://youtube.com/@alephnullify)
+- **XVR CHX** — single variable: `1–30` — Security Camera — [@funni_man23](https://youtube.com/@funni_man23)
+- **"X FLV VIDEO"** — single variable: `0–9` — Game Capture
 
 ---
 
@@ -404,6 +582,23 @@ These need two values to construct a search and aren't auto-loaded into the spin
 | `Simplescreenrecorder YYYY MM DD` | >2023 | Screen Recorder | [@RadieForge](https://youtube.com/@RadieForge) |
 | `720p YYMMDD` | >2023 | VYond / GoAnimate | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
 | `"Project of DD Mth 2011 PDT"` | 2011 | Video Editor | [@Machine___angel](https://x.com/machine___angel) |
+| `RobloxApp YYYYMMDD` | >2009 | Game Capture (Roblox) | [@mingau993rj](https://youtube.com/@mingau993rj) |
+| `RobloxApp YYYY MM DD` | >2009 | Game Capture (Roblox) | [@mingau993rj](https://youtube.com/@mingau993rj) |
+| `VLC Record YYYY MM DD` | >2010 | Misc | [@user-hv8pk9kp6h](https://youtube.com/@user-hv8pk9kp6h) |
+| `Vlcsnap YYYY` | >2010 (<2023) | Misc | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `mobizen YYYYMMDD` | >2014 | Screen Recorder | [@qrde](https://youtube.com/@qrde) |
+| `obs YYYY-MM-DD` | >2018 | Screen Recorder (OBS) | [@olus_owo_uwu](https://youtube.com/@olus_owo_uwu) |
+| `Videoshop YYYY MM` | >2019 | Camera | [@roamingbovine](https://youtube.com/@roamingbovine) |
+
+### Manual date patterns (not auto-loaded)
+
+These use date orders or localized date words the spinner can't auto-substitute — construct the search yourself.
+
+- **VDD MM YY** / **VDDMMYY** — `V` + 2-digit day/month/year, `2008–2017` — Camera
+- **YYYY년 M월 D일** — South Korean date titles, `>2010` — [@crashbender6490](https://youtube.com/@crashbender6490)
+- **YYYY年M月D日** — Japanese date titles, `>2010` — [@crashbender6490](https://youtube.com/@crashbender6490)
+- **ScreenRecording MM DD YYYY** — `>2017` — Screen Recorder — [@mentallystablegaming](https://youtube.com/@mentallystablegaming)
+- **"My Movie (MM DD, 2013)"** — Camera — [@AymonAdren](https://youtube.com/@AymonAdren)
 
 ---
 
@@ -440,7 +635,9 @@ The deepest layer of the Recycle Bin. These keyphrases surface videos from the f
 | `"My Great Movie"` | Video Editor | [@Chernyat5048](https://youtube.com/@Chernyat5048) |
 | `"My First Project"` | Video Editor | |
 | `"Video van Mijn telefoon"` | Phone (Netherlands) | |
-| `"Vdeo desde mi telfono"` | Phone (Spanish) | |
+| `"Vídeo desde mi teléfono"` | Phone (Spanish) | |
+| `"vídeo subido desde mi teléfono móvil"` | Phone (Spanish) | |
+| `"video geüpload van mijn mobiel"` | Phone (Netherlands) | |
 | `"I created this video with the YouTube Slideshow Creator"` | Video Editor | |
 | `"I created this video with the YouTube Video Editor"` | Video Editor | [@Infinitysnapz](https://youtube.com/@Infinitysnapz) |
 | `"Sent from my blackberry smartphone"` | Phone | [@Infinitysnapz](https://youtube.com/@Infinitysnapz) |
@@ -453,6 +650,14 @@ The deepest layer of the Recycle Bin. These keyphrases surface videos from the f
 | `"Dvgrab"` | Camera | [@BastienSante1902](https://youtube.com/@BastienSante1902) |
 | `"XiaoYing video"` | Misc | [@Hrotmaister](https://youtube.com/@Hrotmaister) |
 | `"Temp video for share"` | Drone | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) |
+| `"Cliquez pour ajouter un titre…"` | Misc | France — placeholder title |
+| `"Click here to change title"` | Camera | |
+| `/tmp/upload/ before:2009` | File Path | Server-side upload path |
+| `=?utf-8?b before:2009` | File Path | MIME-encoded MMS subject lines |
+| `=?utf-8?q before:2009` | File Path | MIME-encoded MMS subject lines |
+| `=?iso-8859-1?Q? before:2009` | File Path | MIME-encoded MMS subject lines |
+| `"You have a PXT from"` | Phone | NZ/AU picture messages. [@forwardmomentumn](https://youtube.com/@forwardmomentumn) |
+| `"C:\Documents and Settings"` | File Path | Windows XP path. [@rustyketchup8015](https://youtube.com/@rustyketchup8015) |
 
 ---
 
@@ -464,7 +669,7 @@ The deepest layer of the Recycle Bin. These keyphrases surface videos from the f
 
 > Thank you to everyone who helped discover new format leads. This list grows because of you.
 
-[@Junoeclipse7715](https://youtube.com/@Junoeclipse7715) | [@ZuperDarkk](https://youtube.com/@ZuperDarkk) | [@zxz41_Kristian](https://youtube.com/@zxz41_Kristian) | [@TheLimeyDragon](https://youtube.com/@TheLimeyDragon) | [@nellip.683](https://youtube.com/@nellip.683) | [@Hassan-zw9tb](https://youtube.com/@Hassan-zw9tb) | [@Oopse47](https://youtube.com/@Oopse47) | [@slurrygeyser8133](https://youtube.com/@slurrygeyser8133) | [@denzelkrocker1673](https://youtube.com/@denzelkrocker1673) | [@Set_Your_Handle10](https://youtube.com/@Set_Your_Handle10) | [@StormSplurge](https://youtube.com/@StormSplurge) | [@CharlesMontgomeryBurns.](https://youtube.com/@CharlesMontgomeryBurns.) | [@kyle6266](https://youtube.com/@kyle6266) | [@czechgop7631](https://youtube.com/@czechgop7631) | [@KILOPOWER](https://youtube.com/@KILOPOWER) | [@T1MAGEDDON](https://youtube.com/@T1MAGEDDON) | [@stickmandaninacan](https://youtube.com/@stickmandaninacan) | [@blissom](https://youtube.com/@blissom) | [@thevoid6756](https://youtube.com/@thevoid6756) | [@Jannik323](https://youtube.com/@Jannik323) | [@Coletale](https://youtube.com/@Coletale) | [@Laxesthecorgi9824](https://youtube.com/@Laxesthecorgi9824) | [@Infinitysnapz](https://youtube.com/@Infinitysnapz) | [@AymonAdren](https://youtube.com/@AymonAdren) | [@misterherman](https://youtube.com/@misterherman) | [@Fraigo](https://youtube.com/@Fraigo) | [@UsuallyLime](https://youtube.com/@UsuallyLime) | [@Thatoneguy59-x9l](https://youtube.com/@Thatoneguy59-x9l) | [@Chernyat5048](https://youtube.com/@Chernyat5048) | [@BladeOscReal](https://youtube.com/@BladeOscReal) | [@sScorpioNn1](https://youtube.com/@sScorpioNn1) | [@H2knad](https://youtube.com/@H2knad) | [@Lorenzorentniop717](https://youtube.com/@Lorenzorentniop717) | [@Mort3534](https://youtube.com/@Mort3534) | [@_Mag10_](https://youtube.com/@_Mag10_) | [@EvilyArised](https://youtube.com/@EvilyArised) | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) | [@i664k](https://youtube.com/@i664k) | [@Piggypiggyyoinkyoink](https://youtube.com/@Piggypiggyyoinkyoink) | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) | [@Pagenonfound](https://youtube.com/@Pagenonfound) | [@flizzycat](https://youtube.com/@flizzycat) | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) | [@Ron2600_](https://youtube.com/@Ron2600_) | [@Huebirdfan2.0](https://youtube.com/@Huebirdfan2.0) | [@Hrotmaister](https://youtube.com/@Hrotmaister) | [@Harrisonmoss1310](https://youtube.com/@Harrisonmoss1310) | [@Dayve8977](https://youtube.com/@Dayve8977) | [@Zeebdy](https://youtube.com/@Zeebdy) | [@Lemonposting](https://youtube.com/@Lemonposting) | [@Dontzky](https://youtube.com/@Dontzky) | [@Alexanderhunt9263](https://youtube.com/@Alexanderhunt9263) | [@Techyarchivuma](https://youtube.com/@Techyarchivuma) | [@Mackhill8851](https://youtube.com/@Mackhill8851) | [@A0V1](https://youtube.com/@A0V1) | [@PrimeroAtreides](https://youtube.com/@PrimeroAtreides) | [@YeoungBraxx](https://youtube.com/@YeoungBraxx) | [@BastienSante1902](https://youtube.com/@BastienSante1902) | [@RadieForge](https://youtube.com/@RadieForge) | [@GaspacoZanis](https://youtube.com/@GaspacoZanis) | [@Qrde](https://youtube.com/@Qrde) | [@saso1901](https://youtube.com/@saso1901) | [@__atob__](https://youtube.com/@__atob__) | [@Whenwhowhathow](https://youtube.com/@Whenwhowhathow) | [@Machine___angel](https://youtube.com/@Machine___angel) | [@KappenKonundrum](https://youtube.com/@KappenKonundrum) | [@Chloe.in.mae](https://youtube.com/@Chloe.in.mae) | [@Evanlee1](https://youtube.com/@Evanlee1) | [@Daldosbm](https://youtube.com/@Daldosbm) | [@PnfrmEnm](https://youtube.com/@PnfrmEnm) | [@СтаниславШолтанюк](https://youtube.com/@%D0%A1%D1%82%D0%B0%D0%BD%D0%B8%D1%81%D0%BB%D0%B0%D0%B2%D0%A8%D0%BE%D0%BB%D1%82%D0%B0%D0%BD%D1%8E%D0%BA) | [@Chegnus](https://youtube.com/@BASHnBRASS)
+[@Junoeclipse7715](https://youtube.com/@Junoeclipse7715) | [@ZuperDarkk](https://youtube.com/@ZuperDarkk) | [@zxz41_Kristian](https://youtube.com/@zxz41_Kristian) | [@TheLimeyDragon](https://youtube.com/@TheLimeyDragon) | [@nellip.683](https://youtube.com/@nellip.683) | [@Hassan-zw9tb](https://youtube.com/@Hassan-zw9tb) | [@Oopse47](https://youtube.com/@Oopse47) | [@slurrygeyser8133](https://youtube.com/@slurrygeyser8133) | [@denzelkrocker1673](https://youtube.com/@denzelkrocker1673) | [@Set_Your_Handle10](https://youtube.com/@Set_Your_Handle10) | [@StormSplurge](https://youtube.com/@StormSplurge) | [@CharlesMontgomeryBurns.](https://youtube.com/@CharlesMontgomeryBurns.) | [@kyle6266](https://youtube.com/@kyle6266) | [@czechgop7631](https://youtube.com/@czechgop7631) | [@KILOPOWER](https://youtube.com/@KILOPOWER) | [@T1MAGEDDON](https://youtube.com/@T1MAGEDDON) | [@stickmandaninacan](https://youtube.com/@stickmandaninacan) | [@blissom](https://youtube.com/@blissom) | [@thevoid6756](https://youtube.com/@thevoid6756) | [@Jannik323](https://youtube.com/@Jannik323) | [@Coletale](https://youtube.com/@Coletale) | [@Laxesthecorgi9824](https://youtube.com/@Laxesthecorgi9824) | [@Infinitysnapz](https://youtube.com/@Infinitysnapz) | [@AymonAdren](https://youtube.com/@AymonAdren) | [@misterherman](https://youtube.com/@misterherman) | [@Fraigo](https://youtube.com/@Fraigo) | [@UsuallyLime](https://youtube.com/@UsuallyLime) | [@Thatoneguy59-x9l](https://youtube.com/@Thatoneguy59-x9l) | [@Chernyat5048](https://youtube.com/@Chernyat5048) | [@BladeOscReal](https://youtube.com/@BladeOscReal) | [@sScorpioNn1](https://youtube.com/@sScorpioNn1) | [@H2knad](https://youtube.com/@H2knad) | [@Lorenzorentniop717](https://youtube.com/@Lorenzorentniop717) | [@Mort3534](https://youtube.com/@Mort3534) | [@_Mag10_](https://youtube.com/@_Mag10_) | [@EvilyArised](https://youtube.com/@EvilyArised) | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) | [@i664k](https://youtube.com/@i664k) | [@Piggypiggyyoinkyoink](https://youtube.com/@Piggypiggyyoinkyoink) | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) | [@Pagenonfound](https://youtube.com/@Pagenonfound) | [@flizzycat](https://youtube.com/@flizzycat) | [@PianoScoreVids](https://youtube.com/@PianoScoreVids) | [@Ron2600_](https://youtube.com/@Ron2600_) | [@Huebirdfan2.0](https://youtube.com/@Huebirdfan2.0) | [@Hrotmaister](https://youtube.com/@Hrotmaister) | [@Harrisonmoss1310](https://youtube.com/@Harrisonmoss1310) | [@Dayve8977](https://youtube.com/@Dayve8977) | [@Zeebdy](https://youtube.com/@Zeebdy) | [@Lemonposting](https://youtube.com/@Lemonposting) | [@Dontzky](https://youtube.com/@Dontzky) | [@Alexanderhunt9263](https://youtube.com/@Alexanderhunt9263) | [@Techyarchivuma](https://youtube.com/@Techyarchivuma) | [@Mackhill8851](https://youtube.com/@Mackhill8851) | [@A0V1](https://youtube.com/@A0V1) | [@PrimeroAtreides](https://youtube.com/@PrimeroAtreides) | [@YeoungBraxx](https://youtube.com/@YeoungBraxx) | [@BastienSante1902](https://youtube.com/@BastienSante1902) | [@RadieForge](https://youtube.com/@RadieForge) | [@GaspacoZanis](https://youtube.com/@GaspacoZanis) | [@Qrde](https://youtube.com/@Qrde) | [@saso1901](https://youtube.com/@saso1901) | [@__atob__](https://youtube.com/@__atob__) | [@Whenwhowhathow](https://youtube.com/@Whenwhowhathow) | [@Machine___angel](https://youtube.com/@Machine___angel) | [@KappenKonundrum](https://youtube.com/@KappenKonundrum) | [@Chloe.in.mae](https://youtube.com/@Chloe.in.mae) | [@Evanlee1](https://youtube.com/@Evanlee1) | [@Daldosbm](https://youtube.com/@Daldosbm) | [@PnfrmEnm](https://youtube.com/@PnfrmEnm) | [@СтаниславШолтанюк](https://youtube.com/@%D0%A1%D1%82%D0%B0%D0%BD%D0%B8%D1%81%D0%BB%D0%B0%D0%B2%D0%A8%D0%BE%D0%BB%D1%82%D0%B0%D0%BD%D1%8E%D0%BA) | [@vvvvvvvvvvvvvvv](https://youtube.com/@vvvvvvvvvvvvvvv) | [@Paper_Frogg](https://youtube.com/@Paper_Frogg) | [@mentallystablegaming](https://youtube.com/@mentallystablegaming) | [@user-yh1dn4nk1r](https://youtube.com/@user-yh1dn4nk1r) | [@isaiah658](https://youtube.com/@isaiah658) | [@Michael_Unce](https://youtube.com/@Michael_Unce) | [@OliveGreen-z9h](https://youtube.com/@OliveGreen-z9h) | [@berry_xi_](https://youtube.com/@berry_xi_) | [@faizrisky8](https://youtube.com/@faizrisky8) | [@blackshock116](https://youtube.com/@blackshock116) | [@yura32tv](https://youtube.com/@yura32tv) | [@RikkityRikkus](https://youtube.com/@RikkityRikkus) | [@MagoLuiz56000](https://youtube.com/@MagoLuiz56000) | [@arteam63](https://youtube.com/@arteam63) | [@omfgcake](https://youtube.com/@omfgcake) | [@NImportant4u](https://youtube.com/@NImportant4u) | [@mattie7856](https://youtube.com/@mattie7856) | [@magaz](https://youtube.com/@magaz) | [@fatalreligion](https://youtube.com/@fatalreligion) | [@VoidGear-sh2](https://youtube.com/@VoidGear-sh2) | [@parascryptor](https://youtube.com/@parascryptor) | [@Samfromonline](https://youtube.com/@Samfromonline) | [@Partyzan_Pmp](https://youtube.com/@Partyzan_Pmp) | [@fujifilms5800](https://youtube.com/@fujifilms5800) | [@alephnullify](https://youtube.com/@alephnullify) | [@funni_man23](https://youtube.com/@funni_man23) | [@plug1707](https://youtube.com/@plug1707) | [@lezyv3104](https://youtube.com/@lezyv3104) | [@coolmancool63](https://youtube.com/@coolmancool63) | [@cchhey3812](https://youtube.com/@cchhey3812) | [@typeone1704](https://youtube.com/@typeone1704) | [@reverseflesh](https://youtube.com/@reverseflesh) | [@roamingbovine](https://youtube.com/@roamingbovine) | [@ethanr_5](https://youtube.com/@ethanr_5) | [@charlescatyt](https://youtube.com/@charlescatyt) | [@ravioliboy3759](https://youtube.com/@ravioliboy3759) | [@youtubersingingmoments4402](https://youtube.com/@youtubersingingmoments4402) | [@lawnside82](https://youtube.com/@lawnside82) | [@thebilabialtrill](https://youtube.com/@thebilabialtrill) | [@xfdhcdjxfhjjtgj](https://youtube.com/@xfdhcdjxfhjjtgj) | [@GPLeast](https://youtube.com/@GPLeast) | [@chipseed](https://youtube.com/@chipseed) | [@mazurthc](https://youtube.com/@mazurthc) | [@diberhaze](https://youtube.com/@diberhaze) | [@TrashonicLizard](https://youtube.com/@TrashonicLizard) | [@SJursa-ey4tt](https://youtube.com/@SJursa-ey4tt) | [@MilkyBloomet](https://youtube.com/@MilkyBloomet) | [@phoenixkh93](https://youtube.com/@phoenixkh93) | [@grobokop2357](https://youtube.com/@grobokop2357) | [@machine.angel.777](https://youtube.com/@machine.angel.777) | [@urmom694-X](https://youtube.com/@urmom694-X) | [@h8erssss](https://youtube.com/@h8erssss) | [@whosjozikolnik](https://youtube.com/@whosjozikolnik) | [@volevv_](https://youtube.com/@volevv_) | [@nerks5135](https://youtube.com/@nerks5135) | [@user-hv8pk9kp6h](https://youtube.com/@user-hv8pk9kp6h) | [@JosephVM2](https://youtube.com/@JosephVM2) | [@Ancend](https://youtube.com/@Ancend) | [@martijn9560](https://youtube.com/@martijn9560) | [@crashbender6490](https://youtube.com/@crashbender6490) | [@forwardmomentumn](https://youtube.com/@forwardmomentumn) | [@rustyketchup8015](https://youtube.com/@rustyketchup8015) | [@mingau993rj](https://youtube.com/@mingau993rj) | [@olus_owo_uwu](https://youtube.com/@olus_owo_uwu) | [@Chegnus](https://youtube.com/@BASHnBRASS)
 
 ---
 

@@ -14,6 +14,18 @@
 
 ---
 
+## [7.19.2] - 2026-07-15 - Map 5.0 sync + attribution footer fix
+
+### ✨ Added
+- **KVN Map 5.0 sync**: 183 new leads parsed into [FORMAT-MAP.md](FORMAT-MAP.md) (432 map entries, 426 auto-loaded by the spinner) — announced in [KVN's X post](https://x.com/MingKasterMK/status/2077144462589895067). New sections for EA Sports console-DVR capture IDs, VHS-rip wildcard searches, AI-slop keyphrases, and a wave of international default titles.
+- **Community tools list** in the README, from the Map 5.0 doc.
+
+### 🐛 Fixed
+- **Attribution footer**: KVN AUST now has his own credit group (avatar + channel link) separate from the "Built by Justin / BASH & BRASS / FalconTechnix" credits. The B&B slot no longer falls back to KVN's avatar, and the footer image cache key was rotated so stale caches can't blend the two.
+- **Stuck "Updating…" overlay** (wrapper v7.15.5): signed-in sessions were shown the blocking update spinner and then refused the auto-reload, stranding the overlay forever. Signed-in users now get the dismissible update toast instead, and a refused reload always tears the overlay down.
+
+---
+
 ## [7.19.1] - 2026-07-04 - Client performance pass
 
 ### 🐛 Fixed

@@ -28,12 +28,12 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
 </p>
 
 <p align="center">
-  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-268-e74c3c?style=flat-square&labelColor=1a1a2e" alt="267 Total Formats"></a>
-  <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-59-3498db?style=flat-square&labelColor=1a1a2e" alt="58 Search Keyphrases"></a>
-  <a href="FORMAT-MAP.md#file-extensions"><img src="https://img.shields.io/badge/Extensions-13-9b59b6?style=flat-square&labelColor=1a1a2e" alt="13 File Extensions"></a>
-  <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-126-2ecc71?style=flat-square&labelColor=1a1a2e" alt="126 Numbered Formats"></a>
-  <a href="FORMAT-MAP.md#date-based-formats"><img src="https://img.shields.io/badge/Date--Based-38-e67e22?style=flat-square&labelColor=1a1a2e" alt="38 Date-Based Formats"></a>
-  <a href="FORMAT-MAP.md#ancient-youtube-2006-2008"><img src="https://img.shields.io/badge/Ancient_YT-32-f39c12?style=flat-square&labelColor=1a1a2e" alt="32 Ancient YouTube Formats"></a>
+  <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-432-e74c3c?style=flat-square&labelColor=1a1a2e" alt="432 Total Formats"></a>
+  <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-151-3498db?style=flat-square&labelColor=1a1a2e" alt="151 Search Keyphrases"></a>
+  <a href="FORMAT-MAP.md#file-extensions"><img src="https://img.shields.io/badge/Extensions-20-9b59b6?style=flat-square&labelColor=1a1a2e" alt="20 File Extensions"></a>
+  <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-169-2ecc71?style=flat-square&labelColor=1a1a2e" alt="169 Numbered Formats"></a>
+  <a href="FORMAT-MAP.md#date-based-formats"><img src="https://img.shields.io/badge/Date--Based-45-e67e22?style=flat-square&labelColor=1a1a2e" alt="45 Date-Based Formats"></a>
+  <a href="FORMAT-MAP.md#ancient-youtube-2006-2008"><img src="https://img.shields.io/badge/Ancient_YT-47-f39c12?style=flat-square&labelColor=1a1a2e" alt="47 Ancient YouTube Formats"></a>
 </p>
 
 ---
@@ -42,7 +42,7 @@ YouTube hosts over **20 billion videos**. An estimated **6 billion** have fewer 
 
 KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of forgotten content. **Sonder** generates random search strings from those default filename patterns to help you discover zero-view YouTube videos yourself.
 
-> **[The Complete Recycle Bin Format Map](FORMAT-MAP.md)**: Every known default filename keyphrase, range, source device, and contributor credit. Community-maintained.
+> **[The Complete Recycle Bin Format Map](FORMAT-MAP.md)**: Every known default filename keyphrase, range, source device, and contributor credit. Community-maintained. Now synced with **KVN AUST's Map 5.0** (183 new leads, 452 total) — [announcement post on X](https://x.com/MingKasterMK/status/2077144462589895067).
 
 ---
 
@@ -93,7 +93,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 <td align="center">✅</td>
 </tr>
 <tr>
-<td><strong>267-format spinner</strong></td>
+<td><strong>426-format spinner</strong></td>
 <td align="center">✅</td>
 <td align="center">❌</td>
 </tr>
@@ -145,6 +145,24 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 
 ---
 
+## More Community Tools
+
+> Other tools from KVN AUST's community, as listed in the [Map 5.0 doc](https://x.com/MingKasterMK/status/2077144462589895067). Each approaches the graveyard its own way.
+
+| Tool | By | What it does |
+|:-----|:---|:-------------|
+| [Abysstube](https://youtuube.neocities.org/abysstube) · [YouTube Abyss](https://youtuube.neocities.org/youtube_abyss) | @juulian97 | Randomly search obscure videos by leveraging default filename conventions |
+| [NoViewTube](https://www.noviewtube.com/) | | Uncover hidden, unwatched, and strange videos in YouTube's forgotten corners |
+| [YouTube Recycle Bin Explorer](https://thearmagan.github.io/youtube-recycle-bin/) | @TheArmagan | Hidden gems finder / video graveyard explorer |
+| [YouTube Recycle Bin Bingo Helper](https://github.com/bryanthaboi/) | @bryanthaboi | One-click random 0-view search string generator |
+| [youtuberecyclebin.com](https://www.youtuberecyclebin.com/) | | Find low-view videos that'll never appear in a search |
+| [Random 0-View YouTube Finder](https://youtube0viewfinder.com/) | @TheRaineMusic | Random video + bingo card, no data collection |
+| [VideoLandia](https://videolandia.neocities.org/) | @frodoomsday | Hit the button, get an obscure video |
+| [The YouTube Recycle Bin](https://www.smackaay.com/2024/08/05/the-youtube-recycle-bin/) | @smackaay | Prefix + term picker, generate and search |
+| [youtuberecyclebin.hu](https://youtuberecyclebin.hu/) | @techyarchivuma | Random search term generator with direct watch mode |
+
+---
+
 ## NBVS @ Falcon Technix: Hardened Community Mirror
 
 > **NBVS (YouTube Non-Biased Video Searcher)** is created and owned by **[KVN AUST](https://www.youtube.com/@KVNAUST)** ([@MingKasterMK](https://x.com/MingKasterMK)).  
@@ -167,7 +185,7 @@ The GitHub Pages build works fine for its intended purpose. For a public daily-d
 | **Content Security Policy** | None | Enforced, `default-src 'self'`, no external script origins |
 | **Country / region filter** | ❌ | ✅ 16-country dropdown, wired to Invidious `region=` and YouTube `gl=` |
 | **Themes** | Default dark only | 11 themes, VHS Red · Deep Dive · Phosphor · Matrix · Midnight · Ghost · Classic Dark · Classic Light · Aurora · Ember · Prism |
-| **Format Finder panel** | ❌ | ✅ All 267 FORMAT-MAP.md formats, category filter, variable input, inject to search bar |
+| **Format Finder panel** | ❌ | ✅ All 426 FORMAT-MAP.md formats, category filter, variable input, inject to search bar |
 | **Auto-sync from upstream** | Manual push | ✅ systemd timer, deploys within ~1 hour of any upstream commit |
 | **Security headers** | None | ✅ HSTS · X-Frame-Options · X-Content-Type-Options · Referrer-Policy · Permissions-Policy |
 | **Favicon + branding** | ❌ | ✅ KVN AUST / FT favicon, branded tape bar + footer |
@@ -228,7 +246,7 @@ Injected before `</body>` on every sync. Domain-locked to `nbvs.falcontechnix.co
 | **Country selector** | 16-region `<select>`, wired to `&regionCode=` on every proxied search |
 | **Sort presets** | Oldest First · Fewest Views · Shortest · Most Views · Newest, click fires the search immediately |
 | **11 themes** | VHS Red · Deep Dive · Phosphor (amber CRT) · Matrix · Midnight (synthwave) · Ghost · Classic Dark · Classic Light · Aurora · Ember · Prism, applied as CSS custom properties on `<html>`, persisted in `localStorage` |
-| **Format Finder panel** | Parses FORMAT-MAP.md client-side: 267 formats, category filter (Numbered/Date/Extension/Keyphrase/Ancient/Special), live search, variable number/date/hex input with 🎲 randomize, query preview, one-click inject into NBVS search bar, Google Dork ↗ link |
+| **Format Finder panel** | Parses FORMAT-MAP.md client-side: 426 formats, category filter (Numbered/Date/Extension/Keyphrase/Ancient/Special), live search, variable number/date/hex input with 🎲 randomize, query preview, one-click inject into NBVS search bar, Google Dork ↗ link |
 | **Dark mode hijack** | Intercepts NBVS's built-in dark/light toggle → opens FT theme drawer instead |
 | **Sonder integration** | Cloud ☁ button in tape bar, sign-in prompt (with localStorage dismiss) for unauthenticated users |
 | **KVN AUST tape bar** | Branded header with live clock, theme picker, cloud/Sonder link, bar hide toggle |
@@ -267,7 +285,7 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 | Step | Feature | Description |
 |:----:|:--------|:------------|
 | 1 | **Recycle Bin Bingo** | Randomized 5x5 bingo card with 101 video categories from KVN AUST's series. Slide-puzzle reveal animation. 50 unique SVG daub stamps per game. **Free Space** can be disabled in setup for a 25-category card. |
-| 2 | **Format Spinner** | 3D-textured wheel loaded with 267 filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md) (KVN Map 4.0). No-repeat spins with red dots marking used formats. **Lose-a-Space** penalty segment count is configurable in setup (0–10). Theme auto-rotates daily or every 2 saved games, 30 distinct palettes (Carnival, Pastels, Primaries, Mono, Sunset, Ocean, Forest, Neon, Vaporwave, Cyberpunk, …). Deep Dive mode is the only manually-toggled theme. |
+| 2 | **Format Spinner** | 3D-textured wheel loaded with 426 filename formats from the [Recycle Bin Format Map](FORMAT-MAP.md) (KVN Map 5.0). No-repeat spins with red dots marking used formats. **Lose-a-Space** penalty segment count is configurable in setup (0–10). Theme auto-rotates daily or every 2 saved games, 30 distinct palettes (Carnival, Pastels, Primaries, Mono, Sunset, Ocean, Forest, Neon, Vaporwave, Cyberpunk, …). Deep Dive mode is the only manually-toggled theme. |
 | 3 | **Rainbow Number Generator** | Character-by-character rainbow shuffle animation generates the random search number for your format. |
 | 4 | **Search & Rate** | Copy the search string, open in YouTube, or re-randomize. **Hosted:** top 5 inline results load automatically, sorted by three tiers, **Tier 0** zero-view (rarest); **Tier 1** any views + uploaded before 2008; **Tier 2** everything else, oldest upload date wins tiebreaks within each tier. Cards show author, views, date + age, per-card star ratings, and Watch / Save / Record buttons. A "Top 5 of N found" header with a **View All →** button opens the full results modal. Rate each video on Entertainment, Weirdness, Gem Factor, and "I Just Liked It." Share via SVG card or copy for Discord (header shows rarity + era icon). |
 | 5 | **Found It Popup** | When a video is logged, the **Found It** overlay fires with a thumbnail, rarity tier (LEGENDARY · SUPER RARE · RARE · COMMON), view count, and four action buttons: **Watch**: **Discord** (copies a formatted find message with rarity emoji + link), **Copy Link**: and **Close**. Confetti fires on LEGENDARY or zero-view finds. |
@@ -302,7 +320,7 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 
 <p align="center">
   <img src="screenshots/05-spinner.png" width="720" alt="KVN AUST Recycle Bin - Format Spinner Wheel">
-  <br><sub>3D Format Spinner, 267 formats from the community map (KVN Map 4.0)</sub>
+  <br><sub>3D Format Spinner, 426 formats from the community map (KVN Map 5.0)</sub>
 </p>
 
 <p align="center">
@@ -361,7 +379,7 @@ The FT mirror does not use CDNs at all (replaced at sync time) so this PR specif
 - Single HTML file, no install, no build step, no dependencies
 - Works offline via service worker (full PWA)
 - Runs on Windows, Mac, Linux, Chromebook, mobile, any browser
-- 267 formats parsed from FORMAT-MAP.md (KVN Map 4.0), zero hardcoded
+- 426 formats parsed from FORMAT-MAP.md (KVN Map 5.0), zero hardcoded
 - **Format category filter**, browse by type: Numbered · Keyphrases · Extensions · Date-Based · Ancient YT · Special; stacks with live text search
 - Embedded Web Audio (tick, retro, casino, nautical Deep Dive presets)
 - 15 achievements with badge modal, toast + sound on unlock
@@ -544,7 +562,7 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 
 > **[VIEW THE COMPLETE FORMAT MAP](FORMAT-MAP.md)**
 
-The community-maintained database of every known default filename keyphrase that surfaces YouTube's hidden zero-view video graveyard. Organized by search keyphrases, file extensions, numbered device formats, date-based formats, and ancient YouTube (2006-2008) patterns. **267 unique formats** across all sections (KVN AUST Map 4.0), **70+ contributors**.
+The community-maintained database of every known default filename keyphrase that surfaces YouTube's hidden zero-view video graveyard. Organized by search keyphrases, file extensions, numbered device formats, date-based formats, and ancient YouTube (2006-2008) patterns. **432 unique formats** across all sections (KVN AUST Map 5.0), **135+ contributors**.
 
 ---
 

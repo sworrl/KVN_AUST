@@ -1754,9 +1754,15 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 
 <!-- FOOTER -->
 <div class="credit-footer" id="creditFooter">
+  <span style="color:#888;font-size:.7rem;font-weight:600">for</span>
+  <div class="cf-group">
+    <img id="footerKvnAvatar" alt="KVN AUST" style="border-color:#e74c3c">
+    <a href="https://www.youtube.com/@KVNAUST" target="_blank" style="color:#e74c3c">KVN AUST</a>
+  </div>
+  <span class="cf-sep">&middot;</span>
   <span style="color:#888;font-size:.7rem;font-weight:600">Built by Justin</span>
   <div class="cf-group">
-    <img id="footerAvatar" alt="BASH & BRASS">
+    <img id="footerAvatar" alt="BASH & BRASS" onerror="this.style.display='none'">
     <a href="https://www.youtube.com/@BASHnBRASS" target="_blank">BASH & BRASS</a>
   </div>
   <span class="cf-sep">&middot;</span>
@@ -1862,9 +1868,11 @@ async function loadImages(){
   applyImagesToDOM();
   // Try to upgrade to cached blob URLs (faster on subsequent loads when served via http)
   try{
-    const[banner,avatar,footer]=await Promise.all([getCachedImage('banner',IMG_URLS.banner),getCachedImage('avatar',IMG_URLS.avatar),getCachedImage('footer',IMG_URLS.footer)]);
+    // 'footer_bb' key (was 'footer'): old caches could hold KVN's avatar under the
+    // footer key, blending his face into the BASH & BRASS credit. New key = clean slate.
+    const[banner,avatar,footer]=await Promise.all([getCachedImage('banner',IMG_URLS.banner),getCachedImage('avatar',IMG_URLS.avatar),getCachedImage('footer_bb',IMG_URLS.footer)]);
     if(banner.startsWith('blob:'))document.getElementById('bannerImg').src=banner;
-    if(avatar.startsWith('blob:')){document.getElementById('avatarImg').src=avatar;document.getElementById('bigAvatarImg').src=avatar;document.getElementById('spinAvatar').src=avatar}
+    if(avatar.startsWith('blob:')){document.getElementById('avatarImg').src=avatar;document.getElementById('bigAvatarImg').src=avatar;document.getElementById('spinAvatar').src=avatar;document.getElementById('footerKvnAvatar').src=avatar}
     if(footer.startsWith('blob:'))document.getElementById('footerAvatar').src=footer;
   }catch{}
 }
@@ -5963,7 +5971,10 @@ function applyImagesToDOM(){
   document.getElementById('bannerImg').src=IMG_URLS.banner;
   document.getElementById('avatarImg').src=IMG_URLS.avatar;
   document.getElementById('bigAvatarImg').src=IMG_URLS.avatar;
-  document.getElementById('footerAvatar').src=IMG_URLS.footer||IMG_URLS.avatar;
+  // KVN AUST's avatar and Justin's B&B avatar are separate attributions — never
+  // fall back one onto the other (that's how they got blended in the first place).
+  document.getElementById('footerKvnAvatar').src=IMG_URLS.avatar;
+  document.getElementById('footerAvatar').src=IMG_URLS.footer;
   document.getElementById('spinAvatar').src=IMG_URLS.avatar;
   document.getElementById('favicon').href=IMG_URLS.avatar;
   // Rebuild bingo card if active to update mosaic slices with new image
@@ -6552,7 +6563,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.19.1","build":"2026-07-04T00:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.19.2","build":"2026-07-15T00:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
