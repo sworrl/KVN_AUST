@@ -14,6 +14,14 @@
 
 ---
 
+## [7.19.3] - 2026-07-15 - Real BASH & BRASS logo + toast respawn fix
+
+### 🐛 Fixed
+- **BASH & BRASS footer logo**: the baked-in avatar URL had rotted on YouTube's CDN and was serving an unrelated image. Replaced with the live @BASHnBRASS channel avatar; saved settings that pinned the dead URL are ignored; the image cache key rotated again.
+- **Update toast respawn** (wrapper v7.15.6): the "New version available" toast came back every few seconds for signed-in users — refused auto-reloads no longer re-show it, reload hooks aren't armed for signed-in sessions, and "Later" is remembered per version for the session.
+
+---
+
 ## [7.19.2] - 2026-07-15 - Map 5.0 sync + attribution footer fix
 
 ### ✨ Added
