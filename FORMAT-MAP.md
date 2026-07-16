@@ -34,7 +34,7 @@ The only way to access these videos is to search for the **keyphrase** associate
 > ```
 >
 > - Keyphrase wrapped in backticks (`` ` ``)
-> - Must end with 2-4 `X` characters representing the variable portion
+> - Must contain 1-5 consecutive `X` characters representing the variable portion
 > - Range column must be `MIN-MAX` (digits only, separated by hyphen)
 > - Entries without `X` patterns or ranges (search keyphrases, file extensions, etc.) are not parsed for the spinner — those are loaded from the hardcoded list in the HTML
 
@@ -143,7 +143,6 @@ Generic keyphrases that surface brand new zero-view uploads when sorted by uploa
 | `WIN YYYYMMDD` | Webcam | | |
 | `Capture YYYYMMDD` | Webcam | | [@thevoid6756](https://youtube.com/@thevoid6756) |
 | `VID YYYYMMDD` | Misc | | |
-| `"My Movie X"` | Misc | e.g. "My Movie 1" | |
 | `My Montage MM/DD/YY` | Video Editor | One True Media montage title with a short slash date, e.g. "My Montage 03/14/09" | |
 | `"My Edited Video"` | Video editor | | [@CharlesMontgomeryBurns.](https://youtube.com/@CharlesMontgomeryBurns.) |
 | `/Storage/Emulated/` | Video editor | | |
@@ -451,6 +450,7 @@ Device-specific filename patterns with numeric ranges. Best for finding old, for
 | `"Kazam Screencast 000XX"` | 01-50 | Screen Recorder | [@СтаниславШолтанюк](https://youtube.com/@%D0%A1%D1%82%D0%B0%D0%BD%D0%B8%D1%81%D0%BB%D0%B0%D0%B2%D0%A8%D0%BE%D0%BB%D1%82%D0%B0%D0%BD%D1%8E%D0%BA) |
 | `CADDX0000XX` | 01-50 | Drone | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
 | `ZOE 00XX` | 01-50 | Camera | [@Evanbeckman358](https://youtube.com/@Evanbeckman358) |
+| `"My Movie X"` | 1-100 | Video Editor | e.g. "My Movie 1" |
 | `101 XXXX` | 0001-6500 | Camera | |
 | `VIDXXXX` | 0000-5000 | Camera | [@isaiah658](https://youtube.com/@isaiah658) |
 | `"PIC XXXX"` | 0001-4000 | Camera | [@Michael_Unce](https://youtube.com/@Michael_Unce) |
@@ -581,7 +581,6 @@ These need two values to construct a search and aren't auto-loaded into the spin
 | `Chrome YYYY MM DD` | >2010 | Screen Recorder | [@Lemonposting](https://youtube.com/@Lemonposting) |
 | `Simplescreenrecorder YYYY MM DD` | >2023 | Screen Recorder | [@RadieForge](https://youtube.com/@RadieForge) |
 | `720p YYMMDD` | >2023 | VYond / GoAnimate | [@AFasterSlowpoke](https://youtube.com/@AFasterSlowpoke) |
-| `"Project of DD Mth 2011 PDT"` | 2011 | Video Editor | [@Machine___angel](https://x.com/machine___angel) |
 | `RobloxApp YYYYMMDD` | >2009 | Game Capture (Roblox) | [@mingau993rj](https://youtube.com/@mingau993rj) |
 | `RobloxApp YYYY MM DD` | >2009 | Game Capture (Roblox) | [@mingau993rj](https://youtube.com/@mingau993rj) |
 | `VLC Record YYYY MM DD` | >2010 | Misc | [@user-hv8pk9kp6h](https://youtube.com/@user-hv8pk9kp6h) |
@@ -589,6 +588,7 @@ These need two values to construct a search and aren't auto-loaded into the spin
 | `mobizen YYYYMMDD` | >2014 | Screen Recorder | [@qrde](https://youtube.com/@qrde) |
 | `obs YYYY-MM-DD` | >2018 | Screen Recorder (OBS) | [@olus_owo_uwu](https://youtube.com/@olus_owo_uwu) |
 | `Videoshop YYYY MM` | >2019 | Camera | [@roamingbovine](https://youtube.com/@roamingbovine) |
+| `ScreenRecording MM DD YYYY` | >2017 | Screen Recorder | [@mentallystablegaming](https://youtube.com/@mentallystablegaming) |
 
 ### Manual date patterns (not auto-loaded)
 
@@ -597,8 +597,8 @@ These use date orders or localized date words the spinner can't auto-substitute 
 - **VDD MM YY** / **VDDMMYY** — `V` + 2-digit day/month/year, `2008–2017` — Camera
 - **YYYY년 M월 D일** — South Korean date titles, `>2010` — [@crashbender6490](https://youtube.com/@crashbender6490)
 - **YYYY年M月D日** — Japanese date titles, `>2010` — [@crashbender6490](https://youtube.com/@crashbender6490)
-- **ScreenRecording MM DD YYYY** — `>2017` — Screen Recorder — [@mentallystablegaming](https://youtube.com/@mentallystablegaming)
 - **"My Movie (MM DD, 2013)"** — Camera — [@AymonAdren](https://youtube.com/@AymonAdren)
+- **"Project of DD Mth 2011 PDT"** — `DD Mth` = day + abbreviated month, 2011 only — Video Editor — [@Machine___angel](https://x.com/machine___angel)
 
 ---
 

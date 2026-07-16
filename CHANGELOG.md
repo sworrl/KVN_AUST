@@ -14,6 +14,20 @@
 
 ---
 
+## [7.19.4] - 2026-07-16 - Every format generates a real search
+
+### 🐛 Fixed
+- **Date formats now substitute in the shape the device actually writes** — `Desktop YYYY MM DD` → "Desktop 2014 03 17" (was compact "20140317"), `vlc-record-YYYY-MM-DD` → dashed, `XRecorder DDMMYYYY` → day-first (was broken), `WhatsApp Video YYYY` / `Vlcsnap YYYY` / `"AR.Drone 2.0 Video: YYYY"` → year only (was a full 8-digit date), `KakaoTalk Video YYYY MM` → "2015 06", `720p YYMMDD` → 6-digit date (was searched literally).
+- **Month-name dates work** — `"Month DD, YYYY"`, the Flip camcorder / FlipShare / QuickCapture / webcam-era formats, and `Flipagram Month YYYY` now generate e.g. "Recorded on March 07, 2010 using a Flip Video Camcorder" instead of leaving "Month DD," in the search. Era-clamped to each format's active years.
+- **Single-X formats** — `MUSIC0X.DAT` (1-9) and `"My Movie X"` (1-100) now spin a real number instead of searching a literal X.
+- `ScreenRecording MM DD YYYY` promoted from manual-substitution to auto-loaded (new MM DD YYYY style).
+- Year ranges in a plain "2013-2019" column (Flipagram, WA VID, Iw3mp, …) are now honored as clamps.
+
+### ✅ Verified
+- Full lead-by-lead audit of KVN's Map 5.0 doc against the live parser: **444/444 leads** present and usable (426 auto-loaded formats generate clean searches, the rest documented as manual-substitution patterns).
+
+---
+
 ## [7.19.3] - 2026-07-15 - Real BASH & BRASS logo + toast respawn fix
 
 ### 🐛 Fixed

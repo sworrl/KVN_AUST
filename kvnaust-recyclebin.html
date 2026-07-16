@@ -2808,8 +2808,8 @@ function closeBingoFlash(){
 // browser worldwide to drop its cached parse on next page load
 // and refetch from GitHub. Same trick anytime the parser logic
 // or FORMAT-MAP.md schema changes shape — bump the version.
-const DOC_CACHE_KEY='kvn_fmt_v19';
-const DOC_CACHE_TS_KEY='kvn_fmt_ts_v19';
+const DOC_CACHE_KEY='kvn_fmt_v20';
+const DOC_CACHE_TS_KEY='kvn_fmt_ts_v20';
 const DOC_CACHE_TTL=1000*60*30; // refresh from doc every 30 min
 
 function loadCachedFormats(){
@@ -2870,8 +2870,11 @@ async function fetchDocFormats(){
         }
         // Numbered formats: | `KEYPHRASEXXXX` | 0000-9999 | ...
         // Also matches digit-start like `4XXX`, `0XXXX.MTS`, `100 XXXX`
-        const m=line.match(/\|\s*`((?:[^`X]|X(?!X))*)(X{2,5})([^`]*?)`\s*\|\s*(\d+)-(\d+)/);
-        if(m){
+        // X{1,5}: single-X formats with a range column (MUSIC0X.DAT | 1-9) are real variables too.
+        // Date-token labels are excluded — a leading literal X (XRecorder DDMMYYYY) plus a
+        // years column would otherwise read as a numbered format and eat the X.
+        const m=line.match(/\|\s*`((?:[^`X]|X(?!X))*)(X{1,5})([^`]*?)`\s*\|\s*(\d+)-(\d+)/);
+        if(m&&!/YYYY|YYMMDD/.test(m[1]+m[2]+m[3])){
           const suffix=m[3]||''; // e.g. '.MTS', 'A', ''
           // Reject multi-variable formats: if the suffix still contains X's, the format
           // has more than one variable block (e.g. P1XX0XXX) and we can't auto-substitute.
@@ -2925,22 +2928,64 @@ async function fetchDocFormats(){
           }
           continue;
         }
+        // Year clamps come from ">2013" / "<2018" markers, or a plain "2013-2019" years column
+        const yearClamp=()=>{
+          const minM=line.match(/>\s*(\d{4})/),maxM=line.match(/<\s*(\d{4})/);
+          if(minM||maxM)return[minM?parseInt(minM[1]):2006,maxM?parseInt(maxM[1]):new Date().getFullYear(),!!minM];
+          const rg=line.match(/\|\s*(\d{4})\s*-\s*(\d{4})\s*\|/);
+          if(rg)return[parseInt(rg[1]),parseInt(rg[2]),true];
+          return[2006,new Date().getFullYear(),false];
+        };
+        // Month-name date formats: `... Month D, YYYY ...` / `... Month DD, YYYY ...` / `... Month YYYY ...`
+        // Must run BEFORE the generic YYYY branch or "Month D," survives as literal text in the search.
+        const mo=line.match(/\|\s*`([^`]*Month (?:DD?, )?YYYY[^`]*)`\s*\|/);
+        if(mo){
+          const lbl=mo[1];
+          if(!existing.has(lbl)){
+            let[minY,maxY,hadClamp]=yearClamp();
+            if(!hadClamp){minY=2007;maxY=2013} // Flip-camera / webcam era default
+            const monthOnly=!/Month DD?,/.test(lbl);
+            const tpl=lbl.replace(/Month DD?, YYYY|Month YYYY/,'{V}');
+            const fmt={label:lbl,tpl:tpl,sp:'monthdate',mo:monthOnly,minY:minY,maxY:maxY,sec:'date'};
+            ALL_FORMATS.push(fmt);fetched.push(fmt);
+            existing.add(lbl);newCount++;
+          }
+          continue;
+        }
         // Date-based formats: | `PREFIX YYYYMMDD` | >YYYY | ... OR just has YYYY in label
         const dm=line.match(/\|\s*`([^`]*YYYY[^`]*)`\s*\|/);
         if(dm){
           const lbl=dm[1];
-          // Try to extract year limits from the rest of the line
-          const minM=line.match(/>\s*(\d{4})/);const maxM=line.match(/<\s*(\d{4})/);
-          const minY=minM?parseInt(minM[1]):2006;
-          const maxY=maxM?parseInt(maxM[1]):new Date().getFullYear();
+          const[minY,maxY,hadClamp]=yearClamp();
           if(!existing.has(lbl)){
-            const tpl=lbl.replace('YYYYMMDD','{V}').replace('YYYY MM DD','{V}').replace('YYYY MM','{V}').replace('YYYY-MM-DD','{V}').replace('YYYY','{V}');
-            const fmt={label:lbl,tpl:tpl,sp:'date',minY:minY,maxY:maxY,sec:'date'};
+            // Detect how the date token is written so randDate emits the same shape
+            let style='ymd8';
+            if(lbl.includes('YYYYMMDD'))style='ymd8';
+            else if(lbl.includes('DDMMYYYY'))style='dmy8';
+            else if(lbl.includes('YYYY MM DD'))style='ymd_sp';
+            else if(lbl.includes('YYYY-MM-DD'))style='ymd_dash';
+            else if(lbl.includes('MM DD YYYY'))style='mdy_sp';
+            else if(lbl.includes('YYYY MM'))style='ym_sp';
+            else style='y';
+            const tpl=lbl.replace('YYYYMMDD','{V}').replace('DDMMYYYY','{V}').replace('YYYY MM DD','{V}').replace('MM DD YYYY','{V}').replace('YYYY-MM-DD','{V}').replace('YYYY MM','{V}').replace('YYYY','{V}');
+            const fmt={label:lbl,tpl:tpl,sp:'date',style:style,minY:minY,maxY:maxY,sec:'date'};
             ALL_FORMATS.push(fmt);fetched.push(fmt);
             existing.add(lbl);newCount++;
           }else{
             const ex=ALL_FORMATS.find(f=>f.label===lbl);
-            if(ex&&ex.sp==='date'&&minM){ex.minY=minY;ex.maxY=maxY}
+            if(ex&&ex.sp==='date'&&hadClamp){ex.minY=minY;ex.maxY=maxY}
+          }
+          continue;
+        }
+        // Two-digit-year compact dates without YYYY: | `720p YYMMDD` |
+        const y6=line.match(/\|\s*`([^`]*YYMMDD[^`]*)`\s*\|/);
+        if(y6){
+          const lbl=y6[1];
+          if(!existing.has(lbl)){
+            const[minY,maxY]=yearClamp();
+            const fmt={label:lbl,tpl:lbl.replace('YYMMDD','{V}'),sp:'date',style:'ymd6',minY:minY,maxY:maxY,sec:'date'};
+            ALL_FORMATS.push(fmt);fetched.push(fmt);
+            existing.add(lbl);newCount++;
           }
           continue;
         }
@@ -3508,8 +3553,24 @@ function generateNumber(){
   })(performance.now());
 }
 
-function randDate(minY,maxY){const lo=minY||2006,hi=maxY||2026;const y=lo+Math.floor(Math.random()*(hi-lo+1)),m=1+Math.floor(Math.random()*12),d=1+Math.floor(Math.random()*28);return`${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}`}
-function randMonthDate(){const ms=['January','February','March','April','May','June','July','August','September','October','November','December'];return`${ms[Math.floor(Math.random()*12)]} ${String(1+Math.floor(Math.random()*28)).padStart(2,'0')}, ${2007+Math.floor(Math.random()*7)}`}
+// style: how the date token appeared in the format label, so the search string
+// matches how the device actually writes filenames ("Desktop 2014 03 17", not "20140317").
+function randDate(minY,maxY,style){
+  const lo=minY||2006,hi=maxY||2026;
+  const y=lo+Math.floor(Math.random()*(hi-lo+1)),m=1+Math.floor(Math.random()*12),d=1+Math.floor(Math.random()*28);
+  const MM=String(m).padStart(2,'0'),DD=String(d).padStart(2,'0');
+  switch(style){
+    case'y':return String(y);                          // WhatsApp Video YYYY
+    case'ym_sp':return`${y} ${MM}`;                    // KakaoTalk Video YYYY MM
+    case'ymd_sp':return`${y} ${MM} ${DD}`;             // Desktop YYYY MM DD
+    case'ymd_dash':return`${y}-${MM}-${DD}`;           // vlc-record-YYYY-MM-DD
+    case'dmy8':return`${DD}${MM}${y}`;                 // XRecorder DDMMYYYY
+    case'mdy_sp':return`${MM} ${DD} ${y}`;             // ScreenRecording MM DD YYYY
+    case'ymd6':return`${String(y).slice(-2)}${MM}${DD}`; // 720p YYMMDD
+    default:return`${y}${MM}${DD}`;                    // YYYYMMDD
+  }
+}
+function randMonthDate(minY,maxY,monthOnly){const ms=['January','February','March','April','May','June','July','August','September','October','November','December'];const lo=minY||2007,hi=maxY||2013;const y=lo+Math.floor(Math.random()*(hi-lo+1));const mon=ms[Math.floor(Math.random()*12)];return monthOnly?`${mon} ${y}`:`${mon} ${String(1+Math.floor(Math.random()*28)).padStart(2,'0')}, ${y}`}
 function randShortDate(minY,maxY,yr4){const lo=minY||2006,hi=maxY||2026;const y=lo+Math.floor(Math.random()*(hi-lo+1)),m=1+Math.floor(Math.random()*12),d=1+Math.floor(Math.random()*28);const yy=yr4?String(y):String(y).slice(-2);return`${String(m).padStart(2,'0')}/${String(d).padStart(2,'0')}/${yy}`}
 function randHex(n){const len=n||4;let s='';for(let i=0;i<len;i++)s+='0123456789ABCDEF'[Math.floor(Math.random()*16)];return s}
 
@@ -4181,9 +4242,9 @@ const SHUFFLE_COLORS=['#e74c3c','#f39c12','#2ecc71','#3498db','#9b59b6','#e91e63
 
 function generateFinalNumber(){
   const f=chosenFormat;
-  if(f.sp==='date')return randDate(f.minY,f.maxY);
+  if(f.sp==='date')return randDate(f.minY,f.maxY,f.style);
   if(f.sp==='shortdate')return randShortDate(f.minY,f.maxY,f.yr4);
-  if(f.sp==='monthdate')return randMonthDate();
+  if(f.sp==='monthdate')return randMonthDate(f.minY,f.maxY,f.mo);
   if(f.sp==='hex4')return randHex(4);
   if(f.sp==='hexN')return randHex(f.pad||3);
   if(f.sp==='time'){const h=Math.floor(Math.random()*24),m=Math.floor(Math.random()*60),s=Math.floor(Math.random()*60);return String(h).padStart(2,'0')+String(m).padStart(2,'0')+String(s).padStart(2,'0')}
@@ -6566,7 +6627,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.19.3","build":"2026-07-15T00:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.19.4","build":"2026-07-16T00:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
@@ -6591,9 +6652,9 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.19.3",
-  "build": "2026-07-15T00:00:00",
-  "changelog": "Real BASH & BRASS logo restored in footer (old image URL had rotted); update toast no longer respawns after dismissal",
+  "version": "7.19.4",
+  "build": "2026-07-16T00:00:00",
+  "changelog": "Every format now generates a device-accurate search: month-name dates, spaced/dashed/DDMMYYYY/year-only dates, YYMMDD, and single-X formats all substitute correctly",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
