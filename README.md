@@ -29,9 +29,9 @@ KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like s
 
 <p align="center">
   <a href="FORMAT-MAP.md"><img src="https://img.shields.io/badge/TOTAL_FORMATS-427-e74c3c?style=flat-square&labelColor=1a1a2e" alt="432 Total Formats"></a>
-  <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-151-3498db?style=flat-square&labelColor=1a1a2e" alt="151 Search Keyphrases"></a>
+  <a href="FORMAT-MAP.md#search-keyphrases"><img src="https://img.shields.io/badge/Keyphrases-150-3498db?style=flat-square&labelColor=1a1a2e" alt="151 Search Keyphrases"></a>
   <a href="FORMAT-MAP.md#file-extensions"><img src="https://img.shields.io/badge/Extensions-20-9b59b6?style=flat-square&labelColor=1a1a2e" alt="20 File Extensions"></a>
-  <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-169-2ecc71?style=flat-square&labelColor=1a1a2e" alt="169 Numbered Formats"></a>
+  <a href="FORMAT-MAP.md#numbered-formats"><img src="https://img.shields.io/badge/Numbered-170-2ecc71?style=flat-square&labelColor=1a1a2e" alt="169 Numbered Formats"></a>
   <a href="FORMAT-MAP.md#date-based-formats"><img src="https://img.shields.io/badge/Date--Based-45-e67e22?style=flat-square&labelColor=1a1a2e" alt="45 Date-Based Formats"></a>
   <a href="FORMAT-MAP.md#ancient-youtube-2006-2008"><img src="https://img.shields.io/badge/Ancient_YT-42-f39c12?style=flat-square&labelColor=1a1a2e" alt="47 Ancient YouTube Formats"></a>
 </p>

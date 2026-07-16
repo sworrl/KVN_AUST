@@ -14,9 +14,9 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/TOTAL_FORMATS-427-e74c3c?style=flat-square&labelColor=1a1a2e" alt="432 Total Formats">
-  <img src="https://img.shields.io/badge/Search_Keyphrases-151-3498db?style=flat-square&labelColor=1a1a2e" alt="151 Search Keyphrases">
+  <img src="https://img.shields.io/badge/Search_Keyphrases-150-3498db?style=flat-square&labelColor=1a1a2e" alt="151 Search Keyphrases">
   <img src="https://img.shields.io/badge/File_Extensions-20-9b59b6?style=flat-square&labelColor=1a1a2e" alt="20 File Extensions">
-  <img src="https://img.shields.io/badge/Numbered_Formats-169-2ecc71?style=flat-square&labelColor=1a1a2e" alt="169 Numbered Formats">
+  <img src="https://img.shields.io/badge/Numbered_Formats-170-2ecc71?style=flat-square&labelColor=1a1a2e" alt="169 Numbered Formats">
   <img src="https://img.shields.io/badge/Date--Based-45-e67e22?style=flat-square&labelColor=1a1a2e" alt="45 Date-Based Formats">
   <img src="https://img.shields.io/badge/Ancient_YouTube-42-f39c12?style=flat-square&labelColor=1a1a2e" alt="47 Ancient YouTube Formats">
 </p>
