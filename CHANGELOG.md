@@ -14,6 +14,27 @@
 
 ---
 
+## [7.20.0] - 2026-07-16 - The QoL Drop
+
+### ✨ Added
+- **Era + rarity forecast** — date-based spins show the rolled year's era and how rare a 0-view find there would be (🏆 LEGENDARY → 🔵 COMMON), matching the records rarity tiers. Deep Dive shows its era too.
+- **Highlighted variable** — the rolled part of the search glows red in the result pill, so you can see prefix vs. spin at a glance.
+- **Year-filter chips** — tap `before:2008/2012/2016/2020` on the result screen to add a year dork to Copy and YouTube search.
+- **Format favorites** — star any format (☆→★), filter by ★ Favorites, and load your set onto the wheel with one tap.
+- **NEW badges** — formats added to the map in the last 14 days get a NEW tag in the browser, with a one-time "new formats landed" toast. First visit shows no badges (everything would be new).
+- **Category-colored wheel** — optional mode (Settings → Spinner) tinting slices by format type with a legend.
+- **Fresh-first spins** — optional all-time memory of every format you've ever spun; the wheel fills with never-spun formats first.
+- **Share cards** — generate a PNG card of your spin (search, format, era) straight to clipboard for Discord.
+- **Bingo peek + undo** — right-click / long-press any bingo cell to read it in full; Undo Daub button for misclicks.
+- **Keyboard shortcuts help** — press `?` (all the shortcuts existed; now they're discoverable). Listed in Settings too.
+- **Reduced motion** — honors `prefers-reduced-motion` and adds a manual toggle: ~70% faster spins, no flashy CSS animations.
+
+### 🛠 Improved
+- Date formats in the browser show an **era micro-timeline** (their active years on a 2005–2026 track) instead of a generic "date" chip.
+- Accessibility: the result announces via `aria-live`, overlays are proper dialogs, icon-only close buttons have labels, footer separator contrast bumped.
+
+---
+
 ## [7.19.4] - 2026-07-16 - Every format generates a real search
 
 ### 🐛 Fixed

@@ -957,6 +957,34 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .bs-add{background:var(--card2);border:1px solid #3a3a55;color:#4caf50;padding:2px 8px;border-radius:4px;font-size:.65rem;cursor:pointer;margin-top:4px}
 .bs-close{position:absolute;top:10px;right:10px;background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer}
 
+/* ── 7.20.0 QoL ── */
+.rp-var{color:var(--accent);text-shadow:0 0 14px rgba(231,76,60,.5)}
+.result-meta{margin:6px 0 0;text-align:center}
+.era-chip{display:inline-block;font-size:.66rem;color:#cbd3e1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:3px 10px}
+.dork-chips{display:flex;gap:6px;align-items:center;justify-content:center;margin:8px 0 2px;flex-wrap:wrap}
+.dork-lbl{font-size:.6rem;color:#778}
+.dork-chip{background:var(--card2);border:1px solid #2a2a45;color:#99a;padding:3px 9px;border-radius:12px;font-size:.62rem;font-weight:600;cursor:pointer}
+.dork-chip.active{border-color:var(--accent);color:var(--accent);background:rgba(231,76,60,.1)}
+.fp-new{background:var(--accent);color:#fff;font-size:.5rem;font-weight:800;padding:1px 5px;border-radius:3px;margin-left:6px;letter-spacing:.04em;flex:none}
+.fp-era{position:relative;width:64px;height:14px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;flex:none;margin-left:auto}
+.fp-era i{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,#e67e22,#f1c40f);opacity:.45;border-radius:3px}
+.fp-era em{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.52rem;font-style:normal;color:#dde}
+.fp-fav{background:none;border:none;color:#556;font-size:.85rem;cursor:pointer;padding:0 2px;flex:none;line-height:1}
+.fp-fav.on{color:#f1c40f}
+.wheel-legend{display:none;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:6px;font-size:.58rem;color:#99a}
+.wheel-legend b{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.kb-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.72);z-index:100001;backdrop-filter:blur(4px)}
+.kb-overlay.open{display:flex}
+.kb-modal{background:linear-gradient(160deg,#191927,#131320);border:1px solid #2a2a45;border-radius:14px;padding:22px 26px;max-width:380px;width:92vw;color:#dde}
+.kb-modal h3{margin:0 0 14px;font-size:.95rem}
+.kb-grid{display:grid;grid-template-columns:auto 1fr;gap:9px 14px;font-size:.72rem;margin-bottom:16px;align-items:center}
+.kb-grid kbd{background:var(--card2);border:1px solid #3a3a55;border-bottom-width:2px;border-radius:5px;padding:2px 8px;font-family:inherit;font-size:.66rem;color:#fff;text-align:center}
+.bingo-prevpop{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:100002;background:linear-gradient(160deg,#1c1c30,#151522);border:1px solid var(--accent);border-radius:12px;padding:14px 18px;max-width:320px;width:88vw;text-align:center;box-shadow:0 16px 50px rgba(0,0,0,.6)}
+.bingo-prevpop .bpp-t{font-weight:800;font-size:.85rem;color:#fff;margin-bottom:6px}
+.bingo-prevpop .bpp-s{font-size:.62rem;color:#99a;margin-bottom:10px;line-height:1.45}
+.bingo-prevpop button{background:var(--accent);border:none;color:#fff;border-radius:6px;padding:5px 14px;font-size:.66rem;font-weight:700;cursor:pointer}
+body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after{animation-duration:.001s!important;transition-duration:.05s!important}
+
 /* ── FOOTER ── */
 .credit-footer{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(0deg,rgba(0,0,0,.97) 0%,rgba(0,0,0,.7) 60%,transparent);
   padding:22px 20px 10px;display:flex;align-items:center;justify-content:center;gap:16px;z-index:90;transition:opacity .4s,transform .4s;flex-wrap:wrap;
@@ -970,7 +998,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;opacity:.03;
 .credit-footer .ft-img{border-radius:50%;border-color:#4fc3f7}
 .credit-footer .ft-wordmark{width:auto;height:22px;border:none;border-radius:0;object-fit:contain}
 .cf-close{background:none;border:none;color:#444;font-size:.9rem;cursor:pointer;padding:2px 6px;margin-left:4px}.cf-close:hover{color:#aaa}
-.cf-sep{color:#333;font-size:.7rem}
+.cf-sep{color:#777;font-size:.7rem}
 @media(max-width:600px){
   .credit-footer{padding:16px 12px 8px;gap:8px;flex-wrap:wrap}
   .credit-footer .ft-wordmark{display:none}
@@ -1246,6 +1274,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <div class="wheel-count-wrap"><label>Slots:</label><input type="number" id="wheelCount" value="20" min="4" max="60" oninput="rebuildWheel()" onkeydown="if(event.key==='Enter'){event.preventDefault();rebuildWheel()}" aria-label="Number of wheel slots"><button onclick="rebuildWheel()">Set</button></div>
       <div class="wheel-mode-btns"><button class="active" id="modeRandom" onclick="setWheelMode('random')">Random</button><button id="modeSelected" onclick="setWheelMode('selected')">Selected</button><button id="modeDeepDive" onclick="toggleDeepDive()" style="background:linear-gradient(135deg,#006064,#00838f);color:#b2ebf2">Deep Dive</button></div>
       <span id="wheelSlotCount" style="font-size:.65rem;color:var(--muted)"></span>
+      <div id="wheelLegend" class="wheel-legend"><span><b style="background:#2ecc71"></b>Numbered</span><span><b style="background:#3498db"></b>Keyphrase</span><span><b style="background:#9b59b6"></b>Extension</span><span><b style="background:#e67e22"></b>Date</span><span><b style="background:#f1c40f"></b>Ancient</span><span><b style="background:#e74c3c"></b>Special</span></div>
     </div>
     <div class="wheel-container">
       <div class="wheel-pointer" id="wheelPointer"><svg width="40" height="44" viewBox="0 0 40 44">
@@ -1293,7 +1322,9 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 
   <div id="result-screen" class="screen">
     <div class="result-sub">Search YouTube for:</div>
-    <div class="result-pill" id="resultPill" onclick="openPillEditor()"></div>
+    <div class="result-pill" id="resultPill" onclick="openPillEditor()" role="status" aria-live="polite"></div>
+    <div class="result-meta" id="resultMeta" style="display:none"><span class="era-chip" id="eraChip"></span></div>
+    <div class="dork-chips" id="dorkChips"><span class="dork-lbl">+ year filter:</span><button class="dork-chip" data-y="2008" onclick="setDork(this)">before:2008</button><button class="dork-chip" data-y="2012" onclick="setDork(this)">before:2012</button><button class="dork-chip" data-y="2016" onclick="setDork(this)">before:2016</button><button class="dork-chip" data-y="2020" onclick="setDork(this)">before:2020</button></div>
     <div class="video-tracker">
       <div class="vt-row" id="vtBtnRow" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         <button class="vt-btn copy-btn" onclick="copyResult()">Copy</button>
@@ -1341,6 +1372,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <div class="vt-row">
         <button class="vt-btn endonly" onclick="saveAndEnd()">Save &amp; End Game</button>
         <button class="vt-btn share-discord" onclick="shareToDiscord()">Copy for Discord</button>
+        <button class="vt-btn" onclick="shareResultCard()">&#128444; Share Card</button>
         <button class="vt-btn end" onclick="endSession()">End Game</button>
       </div>
     </div>
@@ -1369,7 +1401,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 <!-- BINGO OVERLAY -->
 <div class="bingo-overlay" id="bingoOverlay" onclick="if(event.target===this)toggleBingo()">
   <div class="bingo-card" id="bingoCardEl">
-    <button class="bingo-close" onclick="toggleBingo()">&times;</button>
+    <button class="bingo-close" onclick="toggleBingo()" aria-label="Close bingo card">&times;</button>
     <div class="bingo-card-header">YouTube's Recycle Bin [KVN AUST]</div>
     <div class="bingo-card-sub">+ new spots &mdash; click to daub!</div>
     <div class="bingo-letters"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
@@ -1379,7 +1411,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
       <label>Op:</label><input type="range" id="daubOpacity" min="30" max="100" value="65" oninput="setDaubOpacity(this.value)">
       <button style="font-size:.6rem;padding:2px 7px;background:var(--card2);border:1px solid #3a3a55;color:#ccc;border-radius:4px;cursor:pointer" onclick="resetBingoCard()">Reset</button>
     </div>
-    <div style="text-align:center;margin-top:6px"><button class="hdr-btn" style="font-size:.62rem;padding:2px 8px" onclick="document.getElementById('colorTool').classList.toggle('show')">Colors</button></div>
+    <div style="text-align:center;margin-top:6px"><button class="hdr-btn" style="font-size:.62rem;padding:2px 8px" onclick="document.getElementById('colorTool').classList.toggle('show')">Colors</button> <button class="hdr-btn" style="font-size:.62rem;padding:2px 8px" onclick="undoDaub()">Undo Daub</button></div>
   </div>
 </div>
 
@@ -1395,7 +1427,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 </div>
 
 <!-- PANELS -->
-<section class="format-panel" id="formatPanel" aria-label="Format Browser"><button class="fp-close" onclick="toggleFormatPanel()">&times;</button><h2 style="font-size:.9rem;margin-bottom:8px;color:#aaa">Format Browser</h2>
+<section class="format-panel" id="formatPanel" aria-label="Format Browser"><button class="fp-close" onclick="toggleFormatPanel()" aria-label="Close format browser">&times;</button><h2 style="font-size:.9rem;margin-bottom:8px;color:#aaa">Format Browser</h2>
   <input class="fp-search" id="fpSearch" type="text" placeholder="Search formats..." oninput="filterFormats(this.value)">
   <div class="fp-cats" id="fpCats">
     <button class="fp-cat active" data-cat="all" onclick="fpSetCat(this)">All</button>
@@ -1405,11 +1437,12 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
     <button class="fp-cat" data-cat="date" onclick="fpSetCat(this)">Date-Based</button>
     <button class="fp-cat" data-cat="ancient" onclick="fpSetCat(this)">Ancient YT</button>
     <button class="fp-cat" data-cat="special" onclick="fpSetCat(this)">Special</button>
+    <button class="fp-cat" data-cat="fav" onclick="fpSetCat(this)">&#9733; Favorites</button>
   </div>
   <div class="fp-count" id="fpCount"></div>
-  <div class="fp-actions"><button onclick="fpSelectAll()">All</button><button onclick="fpSelectNone()">None</button><button onclick="fpSelectRandom()">Random 20</button><button onclick="fpBingoPicks()" style="background:#e74c3c;color:#fff">KVN Picks</button></div><div id="formatList"></div></section>
-<section class="history-panel" id="historyPanel" aria-label="Game History"><button class="hp-close" onclick="toggleHistory()">&times;</button><h2 style="font-size:.9rem;margin-bottom:8px;color:#aaa">Game History</h2><div id="historyList"></div></section>
-<section class="kvn-videos-panel" id="kvnVideosPanel" aria-label="KVN AUST Recycle Bin Videos"><button class="kvp-close" onclick="toggleKvnVideos()">&times;</button>
+  <div class="fp-actions"><button onclick="fpSelectAll()">All</button><button onclick="fpSelectNone()">None</button><button onclick="fpSelectRandom()">Random 20</button><button onclick="fpSelectFavs()" style="color:#f1c40f">&#9733; Favs</button><button onclick="fpBingoPicks()" style="background:#e74c3c;color:#fff">KVN Picks</button></div><div id="formatList"></div></section>
+<section class="history-panel" id="historyPanel" aria-label="Game History"><button class="hp-close" onclick="toggleHistory()" aria-label="Close history">&times;</button><h2 style="font-size:.9rem;margin-bottom:8px;color:#aaa">Game History</h2><div id="historyList"></div></section>
+<section class="kvn-videos-panel" id="kvnVideosPanel" aria-label="KVN AUST Recycle Bin Videos"><button class="kvp-close" onclick="toggleKvnVideos()" aria-label="Close videos panel">&times;</button>
   <h2 style="font-size:.9rem;margin-bottom:4px;color:#aaa">KVN AUST · Recycle Bin Series</h2>
   <div style="font-size:.62rem;color:#666;margin-bottom:10px">Every Recycle Bin / 0-View / mapping video on <a href="https://www.youtube.com/@KVNAUST" target="_blank" style="color:#e74c3c">@KVNAUST</a></div>
   <div id="kvnVideosList"></div>
@@ -1656,7 +1689,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
 
 <!-- SETTINGS MODAL -->
 <div class="settings-overlay" id="settingsOverlay" onclick="if(event.target===this)toggleSettings()">
-  <div class="settings-modal">
+  <div class="settings-modal" role="dialog" aria-modal="true" aria-label="Settings">
     <h3>Settings</h3>
 
     <div class="s-group">
@@ -1717,6 +1750,19 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
         Allow repeat formats on the spinner
       </label>
       <div class="s-note">When off (default), the spinner avoids formats already used this game. Red dots mark used formats.</div>
+      <label style="font-size:.72rem;color:#ccc;cursor:pointer;display:flex;align-items:center;gap:6px;margin-top:8px">
+        <input type="checkbox" id="sCatColor" style="accent-color:var(--accent)" onchange="setQolPref('kvn_wheel_catcolor',this.checked)">
+        Color wheel slices by format category (with legend)
+      </label>
+      <label style="font-size:.72rem;color:#ccc;cursor:pointer;display:flex;align-items:center;gap:6px;margin-top:6px">
+        <input type="checkbox" id="sPreferUnspun" style="accent-color:var(--accent)" onchange="setQolPref('kvn_prefer_unspun',this.checked)">
+        Prefer formats you've never spun (all-time)
+      </label>
+      <label style="font-size:.72rem;color:#ccc;cursor:pointer;display:flex;align-items:center;gap:6px;margin-top:6px">
+        <input type="checkbox" id="sReduceMotion" style="accent-color:var(--accent)" onchange="setQolPref('kvn_reduce_motion',this.checked)">
+        Reduce motion (faster spins, no flashy animations)
+      </label>
+      <button class="s-btn" style="margin-top:10px" onclick="toggleKbHelp()">&#9000; Keyboard Shortcuts</button>
     </div>
 
     <hr class="s-divider">
@@ -1752,6 +1798,24 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
   </div>
 </div>
 
+<!-- KEYBOARD SHORTCUTS -->
+<div class="kb-overlay" id="kbOverlay" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts" onclick="if(event.target===this)toggleKbHelp()">
+  <div class="kb-modal">
+    <h3>&#9000; Keyboard Shortcuts</h3>
+    <div class="kb-grid">
+      <kbd>Space</kbd><span>Generate number (number screen)</span>
+      <kbd>Ctrl+Enter</kbd><span>Spin the wheel</span>
+      <kbd>B</kbd><span>Toggle bingo card</span>
+      <kbd>&#8592;</kbd><span>Previous screen</span>
+      <kbd>&#8594;</kbd><span>Next screen (format screen)</span>
+      <kbd>R</kbd><span>New session (summary screen)</span>
+      <kbd>Esc</kbd><span>Close any panel</span>
+      <kbd>?</kbd><span>This help</span>
+    </div>
+    <button class="s-btn" onclick="toggleKbHelp()">Close</button>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <div class="credit-footer" id="creditFooter">
   <span style="color:#888;font-size:.7rem;font-weight:600">for</span>
@@ -1772,7 +1836,7 @@ body.deep-dive ::-moz-selection{background:rgba(0,188,212,.3);color:#fff}
   </div>
   <button class="hdr-btn" style="font-size:.55rem;padding:2px 8px" onclick="showCredits()">Credits</button>
   <span id="versionBadge" style="font-size:.55rem;color:#555;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.05);cursor:default"></span>
-  <button class="cf-close" onclick="hideFooter()" title="Hide">&times;</button>
+  <button class="cf-close" onclick="hideFooter()" title="Hide" aria-label="Hide footer">&times;</button>
 </div>
 
 <script>
@@ -2215,6 +2279,18 @@ let themeAssignedDate=''; // YYYY-MM-DD when current theme was picked
 let themeGamesSinceAssigned=0; // increments on saveGameToHistory
 let footerUserHidden=false; // true if user clicked X — game-end show should respect this
 let usedFormats=new Set(); // labels of formats already spun this game
+// ── QoL state (7.20.0) ──
+let favFormats=new Set();try{favFormats=new Set(JSON.parse(localStorage.getItem('kvn_fav_formats')||'[]'))}catch{}
+let allTimeSpun=new Set();try{allTimeSpun=new Set(JSON.parse(localStorage.getItem('kvn_spun_labels')||'[]'))}catch{}
+let resultDork=0,lastDaubIdx=null,wheelCatColor=false;
+const SEC_COLORS={numbered:'#2ecc71',keyphrase:'#3498db',extension:'#9b59b6',date:'#e67e22',ancient:'#f1c40f',special:'#e74c3c'};
+function qolPref(k){try{return localStorage.getItem(k)==='1'}catch{return false}}
+function setQolPref(k,v){try{localStorage.setItem(k,v?'1':'0')}catch{}
+  if(k==='kvn_reduce_motion')document.body.classList.toggle('reduce-motion',!!v);
+  if(k==='kvn_wheel_catcolor'){wheelCatColor=!!v;updateWheelLegend();if(currentScreen==='wheel-screen'&&!spinning)drawWheel()}}
+function reduceMotionOn(){return qolPref('kvn_reduce_motion')||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}
+function updateWheelLegend(){const el=document.getElementById('wheelLegend');if(el)el.style.display=(wheelCatColor&&!deepDiveActive)?'flex':'none'}
+function getQ(){return deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:(resultDork?finalString+' before:'+resultDork:finalString)}
 let allowRepeatFormats=false; // user setting
 let maxReachedIdx=0; // farthest screen reached in current flow (can't skip ahead past this)
 let errorLog=[]; // {type:'warn'|'error', msg:string, ts:Date}
@@ -2651,7 +2727,7 @@ function checkResumeGame(){
         ?(chosenFormat.sp==='static'?chosenFormat.tpl:chosenFormat.tpl.replace('{V}',saved.chosenNumber))
         :'');
       maxReachedIdx=4;
-      document.getElementById('resultPill').textContent=finalString;
+      renderResultPill();updateEraChip();
       resetTracker();
       showScreen('result-screen'); // internally calls saveGameState — clear it after so no phantom resume prompt
       clearGameState();
@@ -3045,7 +3121,9 @@ function pickWheelFormats(){
   const raw=document.getElementById('wheelCount').value;
   const count=Math.max(4,Math.min(60,parseInt(raw,10)||20));
   let pool=wheelMode==='selected'?[...selectedFormats].map(i=>formats[i]).filter(Boolean):[...formats];
-  shuffle(pool);wheelFormats=pool.slice(0,count);if(wheelFormats.length<2)wheelFormats=formats.slice(0,count);
+  shuffle(pool);
+  if(qolPref('kvn_prefer_unspun')){const un=[],sp=[];for(const f of pool)(allTimeSpun.has(f.label)?sp:un).push(f);pool=un.concat(sp)}
+  wheelFormats=pool.slice(0,count);if(wheelFormats.length<2)wheelFormats=formats.slice(0,count);
   // When bingo is active, sprinkle "LOSE A SPACE" penalty segments configured in setup (0 = off).
   // Skips injection if there are no marked spaces to lose, or if the wheel is too small to spare slots.
   const hasMarked=bingoState.some((v,i)=>v&&(!setupFreeSpace||i!==12));
@@ -3063,6 +3141,7 @@ function pickWheelFormats(){
   //console.log(`Wheel: input="${raw}" count=${count} mode=${wheelMode} pool=${pool.length} showing=${wheelFormats.length}`);
   const sc=document.getElementById('wheelSlotCount');
   if(sc)sc.textContent=`Showing ${wheelFormats.length} of ${pool.length} formats`;
+  updateWheelLegend();
 }
 
 function drawWheel(){
@@ -3080,7 +3159,7 @@ function drawWheel(){
     const a=i*arc;
     ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+arc);ctx.closePath();
     // Penalty segments get a danger-red so the player can see them coming
-    ctx.fillStyle=wheelFormats[i].isPenalty?'#8b0000':colors[i%colors.length];ctx.fill();
+    ctx.fillStyle=wheelFormats[i].isPenalty?'#8b0000':(wheelCatColor&&!deepDiveActive?(SEC_COLORS[wheelFormats[i].sec]||'#7f8c8d'):colors[i%colors.length]);ctx.fill();
   }
   // Pass 2: depth overlay on all segments
   const grad=ctx.createRadialGradient(cx,cy,r*.1,cx,cy,r);
@@ -3177,7 +3256,7 @@ function spinWheel(){
   const target=fullSpins+dist;
   const dir=spinDir;
   function doSpin(){
-  const start=wheelAngle,dur=4200+Math.random()*1800,t0=performance.now();
+  const start=wheelAngle,dur=(4200+Math.random()*1800)*(reduceMotionOn()?0.3:1),t0=performance.now();
   const ptr=document.getElementById('wheelPointer');
   const ptrSvg=ptr?ptr.querySelector('svg'):null;
   (function anim(now){
@@ -3204,7 +3283,7 @@ function spinWheel(){
       const landed=getSegmentAtPointer();
       chosenFormat=wheelFormats[landed];
       // Don't track penalty segments as "used formats" — they can land repeatedly
-      if(!chosenFormat.isPenalty)usedFormats.add(chosenFormat.label);
+      if(!chosenFormat.isPenalty){usedFormats.add(chosenFormat.label);allTimeSpun.add(chosenFormat.label);try{localStorage.setItem('kvn_spun_labels',JSON.stringify([...allTimeSpun]))}catch{}}
       // Lock pointer — bite down into segment
       const landedColor=activeWheelColors[landed%activeWheelColors.length];
       const ptr=document.getElementById('wheelPointer');
@@ -3697,7 +3776,7 @@ function togglePsSortMenu(force){
 }
 function openPowerSearch(){
   if(!psHasKey()){showToast('Add a YouTube API key in Settings first','warn');toggleSettings();return;}
-  const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:finalString;
+  const q=getQ();
   psCurrentQuery=q;
   const qd=document.getElementById('psQueryDisplay');
   if(qd)qd.textContent=q;
@@ -3920,7 +3999,8 @@ function psRenderResults(){
 function ytSearchUrl(q){return'https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'&sp=CAI%253D'}
 function showResult(){
   finalString=chosenFormat.sp==='static'?chosenFormat.tpl:chosenFormat.tpl.replace('{V}',chosenNumber);
-  document.getElementById('resultPill').textContent=finalString;
+  resultDork=0;updateDorkChips();
+  renderResultPill();updateEraChip();
   resetTracker();
   setTimeout(browseResults,200);
   saveGameState();
@@ -3931,8 +4011,8 @@ function _showManualEntry(){
   if(me)me.style.display='';
   if(rs)rs.style.display='';
 }
-function copyResult(){const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:finalString;navigator.clipboard.writeText(q).then(()=>showToast('Copied!')).catch(()=>{})}
-function searchYouTube(){const q=deepDiveActive?finalString+' Before:'+DEEP_DIVE_YEAR:finalString;window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'&sp=CAI%253D','_blank')}
+function copyResult(){const q=getQ();navigator.clipboard.writeText(q).then(()=>showToast('Copied!')).catch(()=>{})}
+function searchYouTube(){const q=getQ();window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(q)+'&sp=CAI%253D','_blank')}
 
 // ═══════════════════════════════════
 //  IN-APP SEARCH RESULTS
@@ -4259,6 +4339,7 @@ function buildFinalString(num){
 
 function animatedReRandomize(callback){
   if(!chosenFormat||shuffleAnimRunning)return;
+  if(reduceMotionOn()){const nn=generateFinalNumber();chosenNumber=nn;finalString=buildFinalString(nn);renderResultPill();updateEraChip();if(callback)callback();return}
   shuffleAnimRunning=true;
   const pill=document.getElementById('resultPill');
   const newNum=generateFinalNumber();
@@ -4296,7 +4377,7 @@ function animatedReRandomize(callback){
       // Final: set clean text
       chosenNumber=newNum;
       finalString=target;
-      pill.textContent=finalString;
+      renderResultPill();updateEraChip();
       pill.style.borderColor='';
       shuffleAnimRunning=false;
       playWinSound();
@@ -4332,7 +4413,7 @@ function openPillEditor(){
     +'</div></div>';
   setTimeout(function(){var el=document.getElementById('pillYrIn');if(el)el.select();},50);
 }
-function closePillEditor(){var p=document.getElementById('resultPill');if(p)p.textContent=finalString;}
+function closePillEditor(){var p=document.getElementById('resultPill');if(p)renderResultPill();}
 function applyPillEdit(){
   const f=chosenFormat,minY=f.minY||2006,maxY=f.maxY||2026;
   const yIn=document.getElementById('pillYrIn'),sIn=document.getElementById('pillSfxIn');
@@ -4622,7 +4703,13 @@ function buildBingoFromPicked(){
     }else{
       cell.style.animation=`cellReveal .4s ${idx*35}ms ease both, bingoWave 4s ${waveDelay}s ease-in-out infinite`;
     }
-    cell.onclick=()=>toggleDaub(idx,isFree);grid.appendChild(cell);
+    const cellTxt=isFree?'FREE SPACE':bingoPicked[cols[ci]][row];
+    cell.onclick=()=>toggleDaub(idx,isFree);
+    cell.oncontextmenu=ev=>{ev.preventDefault();previewBingoCell(cellTxt,isFree)};
+    cell.addEventListener('touchstart',()=>{window._kvnLpTimer=setTimeout(()=>previewBingoCell(cellTxt,isFree),550)},{passive:true});
+    cell.addEventListener('touchend',()=>clearTimeout(window._kvnLpTimer),{passive:true});
+    cell.addEventListener('touchmove',()=>clearTimeout(window._kvnLpTimer),{passive:true});
+    grid.appendChild(cell);
     if(bingoState[idx])cell.classList.add('daubed');
   }}
   saveBingoState();
@@ -4668,7 +4755,7 @@ function buildBingo(){
   buildBingoFromPicked();
 }
 
-function toggleDaub(idx,isFree){if(isFree)return;bingoState[idx]=!bingoState[idx];document.querySelectorAll('#bingoGrid .bingo-cell')[idx].classList.toggle('daubed',bingoState[idx]);saveBingoState();updateAllProximity();if(bingoState[idx])checkBingo()}
+function toggleDaub(idx,isFree){if(isFree)return;bingoState[idx]=!bingoState[idx];if(bingoState[idx])lastDaubIdx=idx;document.querySelectorAll('#bingoGrid .bingo-cell')[idx].classList.toggle('daubed',bingoState[idx]);saveBingoState();updateAllProximity();if(bingoState[idx])checkBingo()}
 
 // Returns all winning lines (rows, cols, diagonals) as arrays of indices
 function getWinLines(){
@@ -4844,18 +4931,27 @@ function refreshKvnVideoDot(){
 }
 let activeFpCat='all';
 function buildFormatPanel(){
+  markNewFormats();
   const list=document.getElementById('formatList');list.innerHTML='';
   formats.forEach((f,i)=>{
     const d=document.createElement('div');d.className='fp-item';d.dataset.label=f.label.toLowerCase();
-    d.dataset.sec=f.sec||'numbered';
-    let type='numbered',typeLabel='';
+    d.dataset.sec=f.sec||'numbered';d.dataset.idx=i;
+    let type='numbered',typeLabel='',rangeHtml='';
     if(f.sp==='static'){type='static';typeLabel=f.sec==='extension'?'ext':'phrase'}
-    else if(f.sp==='date'){type='date';typeLabel='date'}
-    else if(f.sp==='shortdate'){type='date';typeLabel='date'}
-    else if(f.sp==='hex4'||f.sp==='hexN'||f.sp==='monthdate'){type='special';typeLabel=f.sp}
+    else if(f.sp==='date'||f.sp==='shortdate'||f.sp==='monthdate'){type='date'}
+    else if(f.sp==='hex4'||f.sp==='hexN'){type='special';typeLabel=f.sp}
+    else if(f.sp==='time'){type='special';typeLabel='time'}
     else{typeLabel=`${String(f.min||0).padStart(f.pad||4,'0')}-${String(f.max||9999).padStart(f.pad||4,'0')}`}
-    const rangeHtml=type==='numbered'?`<span class="fp-range">${typeLabel}</span>`:`<span class="fp-type ${type}">${typeLabel}</span>`;
-    d.innerHTML=`<input type="checkbox" ${selectedFormats.has(i)?'checked':''} onchange="toggleFormat(${i},this.checked)"><span>${esc(f.label)}</span>${rangeHtml}`;
+    if(type==='date'){
+      // Era micro-timeline: the format's active years on a 2005–2026 track
+      const lo=f.minY||2006,hi=f.maxY||2026;
+      const left=Math.max(0,Math.min(94,(lo-2005)/21*100)).toFixed(0);
+      const width=Math.max(6,Math.min(100,(hi-lo+1)/21*100)).toFixed(0);
+      rangeHtml=`<span class="fp-era" title="${lo}–${hi}"><i style="left:${left}%;width:${width}%"></i><em>${String(lo).slice(-2)}–${String(hi).slice(-2)}</em></span>`;
+    }else if(type==='numbered'){rangeHtml=`<span class="fp-range">${typeLabel}</span>`}
+    else{rangeHtml=`<span class="fp-type ${type}">${typeLabel}</span>`}
+    const isFav=favFormats.has(f.label);
+    d.innerHTML=`<input type="checkbox" ${selectedFormats.has(i)?'checked':''} onchange="toggleFormat(${i},this.checked)"><span>${esc(f.label)}</span>${f.isNew?'<span class="fp-new">NEW</span>':''}${rangeHtml}<button class="fp-fav${isFav?' on':''}" onclick="toggleFavIdx(${i},this)" aria-label="Favorite" title="Favorite">${isFav?'★':'☆'}</button>`;
     list.appendChild(d);
   });
   applyFpFilter();
@@ -4873,7 +4969,7 @@ function applyFpFilter(){
   const lq=q.toLowerCase();
   document.querySelectorAll('#formatList .fp-item').forEach(d=>{
     const matchText=!lq||d.dataset.label.includes(lq);
-    const matchCat=activeFpCat==='all'||d.dataset.sec===activeFpCat;
+    const matchCat=activeFpCat==='all'||(activeFpCat==='fav'?favFormats.has((formats[+d.dataset.idx]||{}).label):d.dataset.sec===activeFpCat);
     d.classList.toggle('hidden',!matchText||!matchCat);
   });
   updateFpCount();
@@ -6298,6 +6394,130 @@ function downloadFile(name,content,type){
 // ═══════════════════════════════════
 //  KEYBOARD
 // ═══════════════════════════════════
+// ── 7.20.0 QoL functions ──
+function renderResultPill(){
+  const p=document.getElementById('resultPill');if(!p)return;
+  if(chosenFormat&&chosenFormat.sp!=='static'&&chosenNumber!=null&&chosenFormat.tpl&&chosenFormat.tpl.includes('{V}')){
+    const parts=chosenFormat.tpl.split('{V}');
+    p.innerHTML=esc(parts[0])+'<span class="rp-var">'+esc(String(chosenNumber))+'</span>'+esc(parts[1]||'');
+  }else p.textContent=finalString;
+}
+function updateEraChip(){
+  const wrap=document.getElementById('resultMeta'),el=document.getElementById('eraChip');
+  if(!wrap||!el)return;
+  let year=null;const f=chosenFormat,num=String(chosenNumber==null?'':chosenNumber);
+  if(f&&(f.sp==='date'||f.sp==='monthdate'||f.sp==='shortdate')){
+    const m=num.match(/(19|20)\d{2}/);
+    if(m)year=parseInt(m[0]);
+    else if(f.sp==='shortdate'&&/\/(\d{2})$/.test(num))year=2000+parseInt(num.slice(-2));
+    else if(f.style==='ymd6'&&/^\d{6}$/.test(num))year=2000+parseInt(num.slice(0,2));
+  }
+  if(!year&&deepDiveActive)year=DEEP_DIVE_YEAR-1;
+  if(!year){wrap.style.display='none';return}
+  const t=year<=2005?['\u{1F3C6}','LEGENDARY','#f1c40f']:year===2006?['\u{1F534}','SUPER RARE','#e74c3c']:year<=2008?['\u{1F7E0}','VERY RARE','#e67e22']:year<=2012?['\u{1F7E2}','RARE','#2ecc71']:['\u{1F535}','COMMON','#3498db'];
+  el.innerHTML=`${t[0]} ${year} era \u2014 a 0-view find here is <b style="color:${t[2]}">${t[1]}</b>`;
+  wrap.style.display='';
+}
+function setDork(btn){
+  const y=parseInt(btn.dataset.y);
+  resultDork=resultDork===y?0:y;
+  document.querySelectorAll('#dorkChips .dork-chip').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.y)===resultDork));
+  showToast(resultDork?`Copy & YouTube search now include before:${resultDork}`:'Year filter cleared');
+}
+function updateDorkChips(){
+  const row=document.getElementById('dorkChips');if(!row)return;
+  row.style.display=deepDiveActive?'none':'';
+  document.querySelectorAll('#dorkChips .dork-chip').forEach(b=>b.classList.remove('active'));
+}
+function markNewFormats(){
+  try{
+    const KEY='kvn_fmt_seen_v1';
+    if(!ALL_FORMATS.length)return;
+    const stored=localStorage.getItem(KEY);
+    const now=Date.now();
+    if(!stored){const init={};ALL_FORMATS.forEach(f=>init[f.label]=0);localStorage.setItem(KEY,JSON.stringify(init));return}
+    const seen=JSON.parse(stored)||{};
+    let fresh=0;
+    for(const f of ALL_FORMATS){
+      if(!(f.label in seen)){seen[f.label]=now;fresh++}
+      f.isNew=!!seen[f.label]&&(now-seen[f.label])<14*86400000;
+    }
+    if(fresh){
+      localStorage.setItem(KEY,JSON.stringify(seen));
+      if(fresh>=10&&!sessionStorage.getItem('__kvn_new_fmt_toast')){sessionStorage.setItem('__kvn_new_fmt_toast','1');showToast(`\u2728 ${fresh} new formats just landed from the Format Map!`)}
+    }
+  }catch{}
+}
+function toggleFavIdx(i,btn){
+  const lbl=(formats[i]||{}).label;if(!lbl)return;
+  if(favFormats.has(lbl))favFormats.delete(lbl);else favFormats.add(lbl);
+  try{localStorage.setItem('kvn_fav_formats',JSON.stringify([...favFormats]))}catch{}
+  btn.textContent=favFormats.has(lbl)?'\u2605':'\u2606';btn.classList.toggle('on',favFormats.has(lbl));
+  if(activeFpCat==='fav')applyFpFilter();
+}
+function fpSelectFavs(){
+  if(!favFormats.size){showToast('Star some formats first \u2014 tap \u2606 on any format','warn');return}
+  selectedFormats.clear();formats.forEach((f,i)=>{if(favFormats.has(f.label))selectedFormats.add(i)});
+  buildFormatPanel();showToast(`Favorites: ${selectedFormats.size} formats selected`);
+}
+function toggleKbHelp(){document.getElementById('kbOverlay').classList.toggle('open')}
+function previewBingoCell(txt,isFree){
+  closeBingoPreview();
+  const d=document.createElement('div');d.id='bingoPrevPop';d.className='bingo-prevpop';
+  d.innerHTML=`<div class="bpp-t">${isFree?'FREE SPACE':esc(txt)}</div><div class="bpp-s">${isFree?'Automatically yours.':'Find a video matching this to daub the square. Right-click / long-press any cell to peek like this.'}</div><button onclick="closeBingoPreview()">Got it</button>`;
+  document.body.appendChild(d);
+}
+function closeBingoPreview(){const d=document.getElementById('bingoPrevPop');if(d)d.remove()}
+function undoDaub(){
+  if(lastDaubIdx==null||!bingoState[lastDaubIdx]){showToast('Nothing to undo');return}
+  toggleDaub(lastDaubIdx,false);lastDaubIdx=null;showToast('Last daub undone');
+}
+async function shareResultCard(){
+  if(!finalString){showToast('Spin first!','warn');return}
+  const W=800,H=418;
+  const xml=v=>String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const q=finalString;
+  const fsz=q.length>30?Math.max(16,Math.floor(1050/q.length)):34;
+  const fmtLabel=chosenFormat?chosenFormat.label:'';
+  const chipEl=document.getElementById('eraChip'),metaEl=document.getElementById('resultMeta');
+  const chipTxt=(metaEl&&metaEl.style.display!=='none'&&chipEl)?chipEl.textContent:'';
+  let svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">`;
+  svg+=`<rect width="${W}" height="${H}" fill="#12121f"/><rect width="${W}" height="6" fill="#e74c3c"/>`;
+  svg+=`<text x="${W/2}" y="64" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="900" font-size="26" fill="#e74c3c">YOUTUBE'S RECYCLE BIN</text>`;
+  svg+=`<text x="${W/2}" y="92" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="13" fill="#667">the wheel chose\u2026</text>`;
+  svg+=`<rect x="60" y="150" width="${W-120}" height="90" rx="45" fill="#1c1c30" stroke="#e74c3c" stroke-width="2"/>`;
+  svg+=`<text x="${W/2}" y="${195+fsz/3}" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="${fsz}" fill="#fff">${xml(q)}</text>`;
+  if(fmtLabel)svg+=`<text x="${W/2}" y="285" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" fill="#7e9cd8">format: ${xml(fmtLabel)}</text>`;
+  if(chipTxt)svg+=`<text x="${W/2}" y="315" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="14" fill="#f1c40f">${xml(chipTxt)}</text>`;
+  svg+=`<text x="${W/2}" y="${H-28}" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="13" fill="#556">kvnaust.falcontechnix.com \u00b7 YouTube's Recycle Bin \u00b7 @KVNAUST</text></svg>`;
+  try{
+    const img=new Image();
+    const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+    await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=url});
+    const cv=document.createElement('canvas');cv.width=W*2;cv.height=H*2;
+    cv.getContext('2d').drawImage(img,0,0,W*2,H*2);
+    URL.revokeObjectURL(url);
+    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+    if(navigator.clipboard&&window.ClipboardItem){
+      await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);
+      showToast('Card copied \u2014 paste it in Discord!');
+    }else{
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='recyclebin-spin.png';a.click();
+      showToast('Card downloaded');
+    }
+  }catch(e){showToast('Card failed: '+e.message,'warn')}
+}
+(function initQol(){
+  try{
+    wheelCatColor=qolPref('kvn_wheel_catcolor');
+    const c1=document.getElementById('sCatColor');if(c1)c1.checked=wheelCatColor;
+    const c2=document.getElementById('sPreferUnspun');if(c2)c2.checked=qolPref('kvn_prefer_unspun');
+    const c3=document.getElementById('sReduceMotion');if(c3)c3.checked=qolPref('kvn_reduce_motion');
+  }catch{}
+  if(reduceMotionOn())document.body.classList.add('reduce-motion');
+  updateWheelLegend();
+})();
+
 document.addEventListener('keydown',e=>{
   const inInput=document.activeElement.tagName==='INPUT'||document.activeElement.tagName==='SELECT';
   if((e.key==='r'||e.key==='R')&&!inInput&&currentScreen==='summary-screen'&&!e.ctrlKey)newSession();
@@ -6306,12 +6526,15 @@ document.addEventListener('keydown',e=>{
   // Prevent spacebar from activating focused buttons on other screens (which could trigger sounds)
   if(e.key===' '&&!inInput&&currentScreen!=='number-screen'){e.preventDefault()}
   if((e.key==='b'||e.key==='B')&&!inInput)toggleBingo();
+  if(e.key==='?'&&!inInput){e.preventDefault();toggleKbHelp()}
   if(e.key==='ArrowRight'&&!inInput&&(currentScreen==='format-screen'))goNext();
   if(e.key==='ArrowLeft'&&!inInput)goPrev();
   if(e.key==='Escape'){
     if(document.getElementById('bingoOverlay').classList.contains('open'))toggleBingo();
     if(document.getElementById('formatPanel').classList.contains('open'))toggleFormatPanel();
     if(document.getElementById('historyPanel').classList.contains('open'))toggleHistory();
+    if(document.getElementById('kbOverlay').classList.contains('open'))toggleKbHelp();
+    closeBingoPreview();
     if(document.getElementById('bingoWin').classList.contains('show'))dismissBingoWin();
     if(document.getElementById('bingoFlash').classList.contains('show')&&document.getElementById('bfContinue').classList.contains('show'))closeBingoFlash();
     if(document.getElementById('bingoSetup').classList.contains('open'))toggleBingoSetup();
@@ -6627,7 +6850,7 @@ window.addEventListener('hashchange',handleHash);
 </script>
 
 <!-- ═══ EMBEDDED VERSION (monolithic - update here when releasing) ═══ -->
-<script type="application/json" id="app-version-data">{"version":"7.19.4","build":"2026-07-16T00:00:00"}</script>
+<script type="application/json" id="app-version-data">{"version":"7.20.0","build":"2026-07-16T12:00:00"}</script>
 
 <!-- ── FOUND IT overlay ── -->
 <div id="foundOv" onclick="closeFoundIt()">
@@ -6652,9 +6875,9 @@ window.addEventListener('hashchange',handleHash);
 
 <script type="application/json" id="app-manifest">
 {
-  "version": "7.19.4",
+  "version": "7.20.0",
   "build": "2026-07-16T00:00:00",
-  "changelog": "Every format now generates a device-accurate search: month-name dates, spaced/dashed/DDMMYYYY/year-only dates, YYMMDD, and single-X formats all substitute correctly",
+  "changelog": "QoL drop: era+rarity forecast on results, highlighted variables, year-filter chips, format favorites, NEW badges, category-colored wheel, fresh-first spins, share cards, bingo peek+undo, shortcuts help (?), reduced-motion mode",
   "repo": "https://github.com/sworrl/KVN_AUST",
   "live": "https://kvnaust.falcontechnix.com/kvnaust-recyclebin.html"
 }
