@@ -7,12 +7,12 @@
 </h1>
 
 <p align="center">
-  <a href="https://kvnaust.falcontechnix.com/"><img src="https://img.shields.io/badge/%F0%9F%8E%AE_PLAY_NOW-kvnaust.falcontechnix.com-e74c3c?style=for-the-badge&labelColor=1a1a2e" alt="Play Sonder — for KVN AUST's YouTube Recycle Bin"></a>
+  <a href="https://kvnaust.falcontechnix.com/"><img src="https://img.shields.io/badge/%F0%9F%8E%AE_PLAY_NOW-kvnaust.falcontechnix.com-e74c3c?style=for-the-badge&labelColor=1a1a2e" alt="Play Sonder, for KVN AUST's YouTube Recycle Bin"></a>
 </p>
 
-> ***sonder***, *n.* the realization that each random passerby is living a life as vivid and complex as your own — populated with their own ambitions, friends, routines, worries and inherited craziness — an epic story that continues invisibly around you like an anthill sprawling deep underground, with elaborate passageways to thousands of other lives that you'll never know existed, in which you might appear only once, as an extra sipping coffee in the background, as a blur of traffic passing on the highway, as a lighted window at dusk.
+> ***sonder***, *n.* the realization that each random passerby is living a life as vivid and complex as your own, populated with their own ambitions, friends, routines, worries and inherited craziness, an epic story that continues invisibly around you like an anthill sprawling deep underground, with elaborate passageways to thousands of other lives that you'll never know existed, in which you might appear only once, as an extra sipping coffee in the background, as a blur of traffic passing on the highway, as a lighted window at dusk.
 >
-> — John Koenig, *[The Dictionary of Obscure Sorrows](https://www.dictionaryofobscuresorrows.com/post/23536922667/sonder)*
+>, John Koenig, *[The Dictionary of Obscure Sorrows](https://www.dictionaryofobscuresorrows.com/post/23536922667/sonder)*
 
 KVN AUST said it best in the preface of his Recycle Bin Map: *"This feels like sonder, like the way YouTube used to be."* That's the entire pitch for this tool. Every spin pulls up someone's nephew's recital from 2009 that nobody else has ever clicked. Their whole life, one click away, entirely unwitnessed.
 
@@ -42,7 +42,7 @@ YouTube hosts over **20 billion videos**. An estimated **6 billion** have fewer 
 
 KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of forgotten content. **Sonder** generates random search strings from those default filename patterns to help you discover zero-view YouTube videos yourself.
 
-> **[The Complete Recycle Bin Format Map](FORMAT-MAP.md)**: Every known default filename keyphrase, range, source device, and contributor credit. Community-maintained. Now synced with **KVN AUST's Map 5.0** (183 new leads, 452 total) — [announcement post on X](https://x.com/MingKasterMK/status/2077144462589895067).
+> **[The Complete Recycle Bin Format Map](FORMAT-MAP.md)**: Every known default filename keyphrase, range, source device, and contributor credit. Community-maintained. Now synced with **KVN AUST's Map 5.0** (183 new leads, 452 total), [announcement post on X](https://x.com/MingKasterMK/status/2077144462589895067).
 
 ---
 
@@ -521,7 +521,7 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 > **Get on the leaderboard:** [Play the hosted version](https://kvnaust.falcontechnix.com/) and create an account. Submit a validated zero-view video during gameplay or directly via the [Records timeline](https://kvnaust.falcontechnix.com/#records), you don't need to play a full game to submit a find. See also: [Discord Integration Guide](DISCORD_INTEGRATION.md)
 
 <!-- LEADERBOARD-START -->
-**27 community finds** — oldest: 2005-09-05 · newest: 2025-12-10 · [Full record →](RECORDS.md)
+**27 community finds**, oldest: 2005-09-05 · newest: 2025-12-10 · [Full record →](RECORDS.md)
 
 #### ⭐ Zero-View Finds (1)
 
@@ -534,7 +534,7 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 | # | Rarity | Date Posted | Views | Lead | Found By |
 |:-:|:-------|:-----------|------:|:-----|:---------|
 | 1 | 🏆 LEGENDARY | [2005-09-05](https://youtube.com/watch?v=ExMSFNh7Sp0) | 197 | `testing before:2007` | fivezies |
-| 2 | 🔴 SUPER RARE | [2006-01-26](https://youtube.com/watch?v=NmK5LQc8sBs) | 61 | `—` | Ross from wii music |
+| 2 | 🔴 SUPER RARE | [2006-01-26](https://youtube.com/watch?v=NmK5LQc8sBs) | 61 | `, ` | Ross from wii music |
 | 3 | 🔴 SUPER RARE | [2006-02-06](https://youtube.com/watch?v=Q1dL1RtGSGo) | 32 | `james before:2007` | Ross from wii music |
 | 4 | 🔴 SUPER RARE | [2006-03-14](https://youtube.com/watch?v=7tH0sdugVEU) | 25 | `good show` | susgod_bro_69 |
 | 5 | 🔴 SUPER RARE | [2006-03-20](https://youtube.com/watch?v=oP8jSAmt1M8) | 27 | `new` | susgod_bro_69 |
@@ -543,12 +543,12 @@ The hosted version serves a public API of community-discovered zero-view YouTube
 | 8 | 🔴 SUPER RARE | [2006-08-01](https://youtube.com/watch?v=hzvZ2MtjrtA) | 9 | `You have new Picture M...` | fivezies |
 | 9 | 🔴 SUPER RARE | [2006-08-10](https://youtube.com/watch?v=S4us9-y3KPE) | 8 | `taken by before:2007` | Ross from wii music |
 | 10 | 🔴 SUPER RARE | [2006-09-17](https://youtube.com/watch?v=4sjnU5FxoTc) | 30 | `worry before:2007` | Ross from wii music |
-| 11 | 🔴 SUPER RARE | [2006-10-17](https://youtube.com/watch?v=F1BA07OuiaA) | 280 | `—` | Eurrl |
+| 11 | 🔴 SUPER RARE | [2006-10-17](https://youtube.com/watch?v=F1BA07OuiaA) | 280 | `, ` | Eurrl |
 | 12 | 🔴 SUPER RARE | [2006-10-30](https://youtube.com/watch?v=KeOXi_GyFdk) | 12 | `dustin before:2007` | Ross from wii music |
 | 13 | 🔴 SUPER RARE | [2006-11-10](https://youtube.com/watch?v=VTI2rcYCk8k) | 21 | `andre before:2007` | Ross from wii music |
 | 14 | 🔴 SUPER RARE | [2006-11-14](https://youtube.com/watch?v=MHZmEcDUSA0) | 175 | `"My Great Movie"` | Eurrl |
 | 15 | 🔴 SUPER RARE | [2006-11-24](https://youtube.com/watch?v=kj0CI8tQzbE) | 4 | `testing before:2007` | Ross from wii music |
-| 16 | 🔴 SUPER RARE | [2006-11-27](https://youtube.com/watch?v=aldCnMwoQhA) | 253 | `—` | Ross from wii music |
+| 16 | 🔴 SUPER RARE | [2006-11-27](https://youtube.com/watch?v=aldCnMwoQhA) | 253 | `, ` | Ross from wii music |
 | 17 | 🟢 RARE | [2009-01-28](https://youtube.com/watch?v=ktWZiOebkxM) | 112 | `"My Great Movie"` | Eurrl |
 | 18 | 🟢 RARE | [2009-04-24](https://youtube.com/watch?v=o2DY-QOs6RY) | 1 | `MVI` | soph |
 | 19 | 🟢 RARE | [2011-07-09](https://youtube.com/watch?v=z-QCzV5FLWk) | 10 | `.mts` | Ross from wii music |
