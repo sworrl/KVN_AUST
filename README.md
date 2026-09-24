@@ -52,7 +52,7 @@ KVN AUST's **YouTube Recycle Bin** series explores this massive graveyard of for
 | Sonder game HTML (this repo, GPL-3.0) | **7.20.0** "The QoL Drop" (2026-07-16) | [`kvnaust-recyclebin.html`](kvnaust-recyclebin.html) · [changelog](CHANGELOG.md) |
 | Sonder hosted wrapper (proprietary) | **7.15.6** | [kvnaust.falcontechnix.com](https://kvnaust.falcontechnix.com/) · [wrapper changelog](WRAPPER_CHANGELOG.md) |
 | NBVS upstream (KVN AUST, GPL-3.0) | commit `6824f25` (2026-07-15) | [kvnaust/YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher) |
-| NBVS Falcon Technix mirror wrapper | **2.7.0** (2026-09-24) | [nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/), version shown in the page footer |
+| NBVS Falcon Technix mirror wrapper | **2.7.1** (2026-09-24) | [nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/), version shown in the page footer |
 | Format Map | KVN Map 5.0 sync | [`FORMAT-MAP.md`](FORMAT-MAP.md) |
 
 The game version and the wrapper versions move independently. A change to the HTML bumps the game version; a change to hosting, proxying or the community layer bumps a wrapper version. The hosted pages print all of them in their footers so you can tell what you're running.
@@ -196,7 +196,7 @@ The game version and the wrapper versions move independently. A change to the HT
 > Source repo: **[kvnaust/YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher)** · License: GPL-3.0  
 > This section documents the *Falcon Technix community mirror* only: KVN AUST's tool, hosted and hardened by us.
 
-> **[nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/)**: A secured, community-enriched hosted deployment of [YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher), operated by [Falcon Technix](https://falcontechnix.com) as a free community service. Mirror wrapper **v2.7.0**, tracking upstream commit `6824f25` (2026-07-15), and it re-syncs itself every 30 minutes.
+> **[nbvs.falcontechnix.com](https://nbvs.falcontechnix.com/)**: A secured, community-enriched hosted deployment of [YouTube-NonBiasedVideoSearcher](https://github.com/kvnaust/YouTube-NonBiasedVideoSearcher), operated by [Falcon Technix](https://falcontechnix.com) as a free community service. Mirror wrapper **v2.7.1**, tracking upstream commit `6824f25` (2026-07-15), and it re-syncs itself every 30 minutes.
 
 The GitHub Pages build works fine for its intended purpose. For a public daily-driver, loading React, Babel and Tailwind from third-party CDNs and compiling JSX in the visitor's browser on every page load is a real supply-chain surface: a CDN compromise silently injects arbitrary code into every user's browser. The FT mirror removes that surface entirely, removes the API key requirement, and layers in community tooling. It stays in sync with KVN's upstream automatically, and it refuses to publish a build that fails its own checks.
 
@@ -217,7 +217,7 @@ The GitHub Pages build works fine for its intended purpose. For a public daily-d
 | **Auto-sync from upstream** | Manual push | ✅ systemd timer every 30 min, exact-commit download, sanity-checked atomic deploy, one-command rollback |
 | **Shorts detection** | Thumbnail check loads a URL that 404s (`oardefault.jpg`), so the aspect-ratio test never fires | Patched at sync time to `maxresdefault.jpg` |
 | **Security headers** | None | ✅ HSTS · X-Frame-Options · X-Content-Type-Options · Referrer-Policy · Permissions-Policy · CSP |
-| **Unknown paths** | GitHub Pages 404 | 404 (no SPA fallback echoing the app page) |
+| **Unknown paths** | GitHub Pages 404 | 404 (no SPA fallback echoing the app page); dotfiles and shell scripts are refused on both FT vhosts |
 | **Favicon + branding** | ❌ | ✅ KVN AUST / FT favicon, branded tape bar + footer with live version badges |
 
 ### FT Proxy: No API Key Required
@@ -274,10 +274,10 @@ A 16-country dropdown in the FT launch panel restricts YouTube results geographi
 A systemd timer fires every 30 minutes and asks GitHub for the latest commit on KVN's `main`. If the SHA matches the stored one the run is a no-op. On a new SHA it:
 
 1. Downloads `index.html` **at that exact commit** (the branch URL on the raw CDN can lag a few minutes behind the API), and refuses anything that doesn't look like the NBVS page.
-2. Runs the `nbvs-patch` Go binary (esbuild inside; no Node.js or Python on the host). The patcher compiles the inline JSX block to ES2017 and writes it out as `nbvs-app.js` with a content-hash query string, removes the Babel standalone loader, swaps the Tailwind Play CDN for the pre-built static stylesheet, rewrites React/ReactDOM to the self-hosted copies and recomputes their SRI hashes from the files on disk, overrides the title, injects the FT meta block (Open Graph, Twitter Card, JSON-LD, noscript fallback), patches the Shorts thumbnail bug, and wires `nbvs-community.js` plus a `#nbvs-wrapper-data` block carrying the wrapper version and the synced upstream SHA.
+2. Runs the `nbvs-patch` Go binary (esbuild inside; no Node.js or Python on the host). The patcher compiles the inline JSX block to ES2017 and writes it out as `nbvs-app.js` with a content-hash query string, removes the Babel standalone loader, swaps the Tailwind Play CDN for a static stylesheet that the sync just rebuilt from that exact commit with the Tailwind v3 standalone CLI, rewrites React/ReactDOM to the self-hosted copies and recomputes their SRI hashes from the files on disk, overrides the title, injects the FT meta block (Open Graph, Twitter Card, JSON-LD, noscript fallback), patches the Shorts thumbnail bug, and wires `nbvs-community.js` plus a `#nbvs-wrapper-data` block carrying the wrapper version and the synced upstream SHA.
 3. Sanity-checks the result (root element present, no CDN references left, no inline Babel, app bundle referenced, plausible sizes) and only then swaps it into the webroot with an atomic rename. The previous build is kept for a one-command rollback.
 4. Mirrors `FORMAT-MAP.md` from the Sonder webroot on the same host, so the Format Finder fetches it same-origin with no CORS or GitHub rate limits.
-5. Warns in the log if upstream started using a Tailwind utility class the static stylesheet doesn't contain.
+5. Warns in the log if, despite the rebuild, a Tailwind utility class used upstream is missing from the stylesheet (a backstop in case the CLI step ever fails and the previous stylesheet is kept).
 
 The job runs as an unprivileged user in a sandboxed unit (`ProtectSystem=strict`, `PrivateTmp`, `NoNewPrivileges`) that can only write to its state directory and the NBVS webroot.
 
